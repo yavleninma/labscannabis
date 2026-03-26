@@ -76,7 +76,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="scroll-smooth">
       <head>
-        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         {routing.locales.map((l) => (
           <link
             key={l}

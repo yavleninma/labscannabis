@@ -14,7 +14,7 @@ export function JsonLd({ locale }: { locale: Locale }) {
     description: descriptions[locale],
     // TODO: Replace with actual domain
     url: `https://labscannabis.com/${locale}`,
-    telephone: "", // TODO: Add phone number
+    telephone: "+66660806784",
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",
@@ -39,9 +39,8 @@ export function JsonLd({ locale }: { locale: Locale }) {
         "Saturday",
         "Sunday",
       ],
-      // TODO: Confirm exact hours
-      opens: "12:00",
-      closes: "01:00",
+      opens: "00:00",
+      closes: "23:59",
     },
     priceRange: "$$",
     // TODO: Add actual image URL

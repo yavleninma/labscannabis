@@ -42,9 +42,10 @@ export function Location() {
               <h3 className="text-sm font-medium text-emerald-500 uppercase tracking-wider mb-2">
                 Hours
               </h3>
-              {/* TODO: Confirm exact hours */}
-              <p className="text-text-primary font-medium">{t("hours")}</p>
-              <p className="text-text-muted text-sm mt-1">{t("hoursNote")}</p>
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <p className="text-text-primary font-medium">{t("hours")}</p>
+              </div>
             </div>
 
             <div>

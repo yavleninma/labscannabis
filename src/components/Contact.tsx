@@ -6,8 +6,8 @@ export function Contact() {
   const channels = [
     {
       name: t("line"),
-      // TODO: Replace with actual LINE link
-      href: "https://line.me/ti/p/TODO",
+      // TODO: Replace with LINE ID link when available (LINE doesn't support phone-based deep links)
+      href: "tel:+66660806784",
       color: "bg-[#06C755]",
       icon: (
         <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
@@ -17,8 +17,7 @@ export function Contact() {
     },
     {
       name: t("whatsapp"),
-      // TODO: Replace with actual WhatsApp link
-      href: "https://wa.me/TODO",
+      href: "https://wa.me/66660806784",
       color: "bg-[#25D366]",
       icon: (
         <svg className="w-8 h-8" viewBox="0 0 24 24" fill="currentColor">
@@ -52,6 +51,17 @@ export function Contact() {
         <p className="text-text-secondary mb-12 max-w-xl mx-auto">
           {t("intro")}
         </p>
+
+        {/* Phone number */}
+        <a
+          href="tel:+66660806784"
+          className="inline-flex items-center gap-3 text-2xl font-medium text-emerald-400 hover:text-emerald-300 transition-colors mb-10"
+        >
+          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+          </svg>
+          +66 66 080 6784
+        </a>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           {channels.map((channel) => (

@@ -21,6 +21,36 @@ export function About() {
           <p>{t("p4")}</p>
         </div>
 
+        {/* Photo placeholders — TODO: Replace with actual photos */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-14">
+          {[
+            {
+              gradient: "from-emerald-900/40 to-emerald-950/60",
+              label: "Premium cannabis flower — Labs Cannabis dispensary Pattaya",
+              text: "Premium Flower",
+            },
+            {
+              gradient: "from-emerald-800/30 to-bg-card",
+              label: "Boutique dispensary interior — Labs Cannabis Soi Hollywood",
+              text: "Our Space",
+            },
+            {
+              gradient: "from-emerald-950/50 to-emerald-900/30",
+              label: "Medical consultation — licensed practitioner Pattaya cannabis",
+              text: "Consultation",
+            },
+          ].map((photo) => (
+            <div
+              key={photo.text}
+              className={`aspect-[4/3] rounded-xl bg-gradient-to-br ${photo.gradient} border border-border flex items-end p-4`}
+              role="img"
+              aria-label={photo.label}
+            >
+              <span className="text-sm text-text-muted font-medium">{photo.text}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Feature highlights */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-14">
           {[
