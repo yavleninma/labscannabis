@@ -28,10 +28,10 @@ export function SocialProofStrip({
           <span className="text-yellow-400 shrink-0" aria-hidden="true">
             {"★".repeat(fullStars)}{"☆".repeat(5 - fullStars)}
           </span>
-          <span className="basis-full sm:basis-auto text-xs sm:text-sm leading-snug">
+          <span className="basis-full sm:basis-auto text-sm leading-snug">
             {t("reviewCount", { count: safeReviewCount })}
           </span>
-          <span className="text-emerald-400 text-xs sm:text-sm sm:ml-auto group-hover:text-emerald-300 transition-colors">
+          <span className="text-emerald-400 text-sm sm:ml-auto group-hover:text-emerald-300 transition-colors">
             → {t("seeAll")}
           </span>
         </a>
