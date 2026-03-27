@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { getAllStrainSlugs } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
+  const baseUrl = getSiteUrl();
   const locales = ["en", "ru", "th"];
 
   const entries: MetadataRoute.Sitemap = [];

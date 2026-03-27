@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { PortableText } from "@portabletext/react";
 import { routing } from "@/i18n/routing";
 import { getStrainBySlug, getAllStrainSlugs } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
 import { urlFor } from "@/sanity/image";
 import { Footer } from "@/components/Footer";
 
@@ -43,7 +44,7 @@ export async function generateMetadata({
 
   if (!strain) return {};
 
-  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
+  const baseUrl = getSiteUrl();
   const title = `${strain.name} — ${t("metaTitleSuffix")}`;
   const description = strain.shortDescription || `${strain.name} ${strain.type} cannabis strain. THC ${strain.thcPercent}%. Available at Labs Cannabis Pattaya.`;
 

@@ -7,6 +7,7 @@ import "../globals.css";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { getShopSettings } from "@/lib/queries";
+import { getSiteUrl } from "@/lib/site-url";
 
 type Locale = "en" | "ru" | "th";
 
@@ -22,7 +23,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
 
-  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
+  const baseUrl = getSiteUrl();
 
   return {
     title: t("title"),
@@ -82,13 +83,13 @@ export default async function LocaleLayout({
             key={l}
             rel="alternate"
             hrefLang={l}
-            href={`https://labscannabis.com/${l}`}
+            href={`${getSiteUrl()}/${l}`}
           />
         ))}
         <link
           rel="alternate"
           hrefLang="x-default"
-          href="https://labscannabis.com/en"
+          href={`${getSiteUrl()}/en`}
         />
       </head>
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">

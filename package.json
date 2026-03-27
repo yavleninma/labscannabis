@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,10 @@
     "sanity": "^5.18.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "eslint": "^9.37.0",
+    "eslint-config-next": "^16.2.1"
   }
 }

@@ -8,8 +8,7 @@ interface OpenIndicatorProps {
   closeTime?: string;
 }
 
-function isOpen(openTime: string, closeTime: string): boolean {
-  const now = new Date();
+function isOpen(openTime: string, closeTime: string, now: Date): boolean {
   const bangkokTime = new Date(
     now.toLocaleString("en-US", { timeZone: "Asia/Bangkok" })
   );
@@ -33,19 +32,15 @@ export function OpenIndicator({
   closeTime = "01:00",
 }: OpenIndicatorProps) {
   const t = useTranslations("header");
-  const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [currentTimestamp, setCurrentTimestamp] = useState(() => Date.now());
+  const open = isOpen(openTime, closeTime, new Date(currentTimestamp));
 
   useEffect(() => {
-    setMounted(true);
-    setOpen(isOpen(openTime, closeTime));
     const interval = setInterval(() => {
-      setOpen(isOpen(openTime, closeTime));
+      setCurrentTimestamp(Date.now());
     }, 60000);
     return () => clearInterval(interval);
-  }, [openTime, closeTime]);
-
-  if (!mounted) return null;
+  }, []);
 
   return (
     <div className="flex items-center gap-1.5 text-sm">

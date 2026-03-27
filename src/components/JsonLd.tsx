@@ -1,3 +1,5 @@
+import { getSiteUrl } from "@/lib/site-url";
+
 type Locale = "en" | "ru" | "th";
 
 interface JsonLdProps {
@@ -5,7 +7,7 @@ interface JsonLdProps {
 }
 
 export function JsonLd({ locale }: JsonLdProps) {
-  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
+  const baseUrl = getSiteUrl();
 
   const jsonLd = {
     "@context": "https://schema.org",
