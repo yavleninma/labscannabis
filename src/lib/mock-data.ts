@@ -43,6 +43,7 @@ export interface Strain {
   terpeneProfile?: { name: string; amount: number }[] | null;
   isStaffPick: boolean;
   isSoldOut: boolean;
+  isHidden?: boolean;
   sortOrder: number;
 }
 

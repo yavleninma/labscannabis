@@ -2,31 +2,31 @@ import { defineField, defineType } from "sanity";
 
 export const shopSettings = defineType({
   name: "shopSettings",
-  title: "Shop Settings",
+  title: "Настройки магазина",
   type: "document",
   fields: [
     defineField({
       name: "openTime",
-      title: "Opening Time",
+      title: "Время открытия",
       type: "string",
       initialValue: "12:00",
-      description: "Format HH:mm, for example 09:30",
+      description: "Формат ЧЧ:мм, например 09:30",
       hidden: ({ document }) => Boolean(document?.isOpen24h),
     }),
     defineField({
       name: "closeTime",
-      title: "Closing Time",
+      title: "Время закрытия",
       type: "string",
       initialValue: "01:00",
-      description: "Format HH:mm, for example 21:00",
+      description: "Формат ЧЧ:мм, например 21:00",
       hidden: ({ document }) => Boolean(document?.isOpen24h),
     }),
     defineField({
       name: "isOpen24h",
-      title: "Open 24/7",
+      title: "Открыто 24/7",
       type: "boolean",
       initialValue: false,
-      description: "Turn on for round-the-clock opening. Time fields are ignored when enabled.",
+      description: "Если включено, магазин работает круглосуточно. Поля времени игнорируются.",
     }),
     defineField({
       name: "lineUrl",
@@ -37,7 +37,7 @@ export const shopSettings = defineType({
       name: "lineId",
       title: "LINE ID",
       type: "string",
-      description: "Optional. Used to build LINE links when LINE URL is not set.",
+      description: "Необязательно. Используется для ссылок LINE, когда URL не указан.",
     }),
     defineField({
       name: "whatsappUrl",
@@ -46,9 +46,9 @@ export const shopSettings = defineType({
     }),
     defineField({
       name: "whatsappNumber",
-      title: "WhatsApp Number",
+      title: "WhatsApp номер",
       type: "string",
-      description: "Optional. Include country code. Used when WhatsApp URL is not set.",
+      description: "Необязательно. Укажите код страны. Используется, когда URL не указан.",
     }),
     defineField({
       name: "telegramUrl",
@@ -57,56 +57,56 @@ export const shopSettings = defineType({
     }),
     defineField({
       name: "telegramId",
-      title: "Telegram Username/ID",
+      title: "Telegram имя/ID",
       type: "string",
-      description: "Optional. Used to build Telegram links when Telegram URL is not set.",
+      description: "Необязательно. Используется для ссылок Telegram, когда URL не указан.",
     }),
     defineField({
       name: "phone",
-      title: "Phone Number",
+      title: "Номер телефона",
       type: "string",
-      description: "Optional. Used for call link and as fallback for WhatsApp/LINE.",
+      description: "Необязательно. Используется для звонков и как запасной вариант для WhatsApp/LINE.",
     }),
     defineField({
       name: "announcement",
-      title: "Announcement Banner",
+      title: "Баннер объявлений",
       type: "string",
-      description: "Optional announcement text shown at the top of the site",
+      description: "Необязательный текст объявления вверху сайта",
     }),
     defineField({
       name: "googleRating",
-      title: "Google Rating",
+      title: "Рейтинг Google",
       type: "number",
       initialValue: 4.8,
-      description: "Current Google Maps rating (e.g. 4.8). Update manually when it changes.",
+      description: "Текущий рейтинг на Google Maps (напр. 4.8). Обновляйте вручную.",
       validation: (rule) => rule.min(1).max(5).precision(1),
     }),
     defineField({
       name: "googleReviewCount",
-      title: "Google Review Count",
+      title: "Кол-во отзывов Google",
       type: "number",
       initialValue: 91,
-      description: "Total number of Google reviews. Update manually.",
+      description: "Общее число отзывов на Google. Обновляйте вручную.",
       validation: (rule) => rule.min(0).integer(),
     }),
     defineField({
       name: "guidePhoto",
-      title: "Guide Photo (Dmitry)",
+      title: "Фото гида (Дмитрий)",
       type: "image",
-      description: "Photo of the cannabis guide / consultant shown on the homepage.",
+      description: "Фото консультанта, отображается на главной.",
       options: { hotspot: true },
     }),
     defineField({
       name: "teamPhoto",
-      title: "Team Photo",
+      title: "Фото команды",
       type: "image",
-      description: "Photo of the shop team shown on the homepage.",
+      description: "Фото команды магазина, отображается на главной.",
       options: { hotspot: true },
     }),
   ],
   preview: {
     prepare() {
-      return { title: "Shop Settings" };
+      return { title: "Настройки магазина" };
     },
   },
 });

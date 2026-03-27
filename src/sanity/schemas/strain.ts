@@ -2,31 +2,31 @@ import { defineField, defineType } from "sanity";
 
 export const strain = defineType({
   name: "strain",
-  title: "Strain",
+  title: "Товар",
   type: "document",
   fields: [
     defineField({
       name: "name",
-      title: "Name",
+      title: "Название",
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "slug",
-      title: "Slug",
+      title: "Slug (URL)",
       type: "slug",
       options: { source: "name", maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: "image",
-      title: "Photo",
+      title: "Фото",
       type: "image",
       options: { hotspot: true },
     }),
     defineField({
       name: "type",
-      title: "Type",
+      title: "Тип",
       type: "string",
       options: {
         list: [
@@ -39,7 +39,7 @@ export const strain = defineType({
     }),
     defineField({
       name: "effect",
-      title: "Effect (legacy)",
+      title: "Эффект (устар.)",
       type: "string",
       options: {
         list: [
@@ -55,11 +55,11 @@ export const strain = defineType({
           { title: "Hungry", value: "hungry" },
         ],
       },
-      description: "Deprecated. Prefer 'Effects profile' below.",
+      description: "Устаревшее. Используйте «Профиль эффектов» ниже.",
     }),
     defineField({
       name: "effects",
-      title: "Effects profile",
+      title: "Профиль эффектов",
       type: "array",
       of: [
         {
@@ -67,7 +67,7 @@ export const strain = defineType({
           fields: [
             defineField({
               name: "key",
-              title: "Effect",
+              title: "Эффект",
               type: "string",
               options: {
                 list: [
@@ -87,7 +87,7 @@ export const strain = defineType({
             }),
             defineField({
               name: "amount",
-              title: "Intensity (1-5)",
+              title: "Интенсивность (1-5)",
               type: "number",
               validation: (Rule) => Rule.required().integer().min(1).max(5),
             }),
@@ -123,56 +123,56 @@ export const strain = defineType({
     }),
     defineField({
       name: "pricePerGram",
-      title: "Price per gram (THB)",
+      title: "Цена за грамм (THB)",
       type: "number",
       validation: (Rule) => Rule.required().min(0),
     }),
     defineField({
       name: "shortDescription",
-      title: "Short Description (for card)",
+      title: "Короткое описание (EN, для карточки)",
       type: "string",
       validation: (Rule) => Rule.max(150),
     }),
     defineField({
       name: "shortDescriptionRu",
-      title: "Short Description (RU)",
+      title: "Короткое описание (RU, для карточки)",
       type: "string",
       validation: (Rule) => Rule.max(150),
     }),
     defineField({
       name: "shortDescriptionTh",
-      title: "Short Description (TH)",
+      title: "Короткое описание (TH, для карточки)",
       type: "string",
       validation: (Rule) => Rule.max(150),
     }),
     defineField({
       name: "fullDescription",
-      title: "Full Description (for detail page)",
+      title: "Полное описание (EN, страница товара)",
       type: "array",
       of: [{ type: "block" }],
     }),
     defineField({
       name: "fullDescriptionRu",
-      title: "Full Description (RU)",
+      title: "Полное описание (RU, страница товара)",
       type: "array",
       of: [{ type: "block" }],
     }),
     defineField({
       name: "fullDescriptionTh",
-      title: "Full Description (TH)",
+      title: "Полное описание (TH, страница товара)",
       type: "array",
       of: [{ type: "block" }],
     }),
     defineField({
       name: "terpenes",
-      title: "Terpenes",
+      title: "Терпены (устар.)",
       type: "array",
       of: [{ type: "string" }],
-      description: "Legacy text list. Prefer 'Terpene profile' below.",
+      description: "Устаревший список. Используйте «Профиль терпенов» ниже.",
     }),
     defineField({
       name: "terpeneProfile",
-      title: "Terpene profile",
+      title: "Профиль терпенов",
       type: "array",
       of: [
         {
@@ -180,7 +180,7 @@ export const strain = defineType({
           fields: [
             defineField({
               name: "name",
-              title: "Terpene",
+              title: "Терпен",
               type: "string",
               options: {
                 list: [
@@ -201,7 +201,7 @@ export const strain = defineType({
             }),
             defineField({
               name: "amount",
-              title: "Share (%)",
+              title: "Доля (%)",
               type: "number",
               validation: (Rule) => Rule.required().min(0).max(100),
             }),
@@ -224,26 +224,33 @@ export const strain = defineType({
     }),
     defineField({
       name: "isStaffPick",
-      title: "☆ Staff Pick",
+      title: "☆ Выбор персонала",
       type: "boolean",
       initialValue: false,
     }),
     defineField({
       name: "isSoldOut",
-      title: "Sold Out",
+      title: "Нет в наличии",
       type: "boolean",
       initialValue: false,
     }),
     defineField({
+      name: "isHidden",
+      title: "Скрыть из каталога",
+      type: "boolean",
+      initialValue: false,
+      description: "Если включено, товар не показывается на сайте.",
+    }),
+    defineField({
       name: "sortOrder",
-      title: "Sort Order",
+      title: "Порядок сортировки",
       type: "number",
       initialValue: 0,
     }),
   ],
   orderings: [
     {
-      title: "Sort Order",
+      title: "Порядок сортировки",
       name: "sortOrder",
       by: [{ field: "sortOrder", direction: "asc" }],
     },
