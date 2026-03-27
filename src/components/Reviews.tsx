@@ -3,6 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
+const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
+
 const reviews = [
   {
     name: "Mike R.",
@@ -127,9 +129,14 @@ export function Reviews() {
           <div className="text-3xl sm:text-4xl font-bold mb-1">
             4.8 <span className="text-yellow-400">★★★★★</span>
           </div>
-          <p className="text-text-secondary text-sm">
-            {t("subtitle")}
-          </p>
+          <a
+            href={GOOGLE_REVIEWS_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary text-sm hover:text-emerald-400 transition-colors"
+          >
+            {t("subtitle")} →
+          </a>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

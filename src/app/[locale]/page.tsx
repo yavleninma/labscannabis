@@ -1,8 +1,11 @@
 import { Hero } from "@/components/Hero";
+import { SocialProofStrip } from "@/components/SocialProofStrip";
 import { NoPrescription } from "@/components/NoPrescription";
+import { AboutTeam } from "@/components/AboutTeam";
+import { FAQ } from "@/components/FAQ";
+import { Reviews } from "@/components/Reviews";
 import { StaffPick } from "@/components/StaffPick";
 import { StrainCatalog } from "@/components/StrainCatalog";
-import { Reviews } from "@/components/Reviews";
 import { LocationSection } from "@/components/LocationSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
@@ -25,10 +28,13 @@ export default async function HomePage({
   return (
     <>
       <Hero />
+      <SocialProofStrip />
       <NoPrescription />
+      <AboutTeam />
+      <FAQ />
+      <Reviews />
       {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} />
-      <Reviews />
       <LocationSection
         openTime={shopSettings.openTime}
         closeTime={shopSettings.closeTime}
