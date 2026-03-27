@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { SocialProofStrip } from "@/components/SocialProofStrip";
+import { QuickMenu } from "@/components/QuickMenu";
 import { NoPrescription } from "@/components/NoPrescription";
 import { AboutTeam } from "@/components/AboutTeam";
 import { FAQ } from "@/components/FAQ";
@@ -32,6 +33,7 @@ export default async function HomePage({
         rating={shopSettings.googleRating}
         reviewCount={shopSettings.googleReviewCount}
       />
+      <QuickMenu strains={strains} />
       <NoPrescription />
       <AboutTeam shopSettings={shopSettings} />
       <FAQ />

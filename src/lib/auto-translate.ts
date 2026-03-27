@@ -3,6 +3,20 @@ import type { Strain } from "./mock-data";
 type Locale = "en" | "ru" | "th";
 
 const translationCache = new Map<string, string>();
+const inflightTranslations = new Map<string, Promise<string>>();
+const MAX_CACHE_ENTRIES = 1000;
+const TRANSLATION_TIMEOUT_MS = 6000;
+
+function setTranslationCache(cacheKey: string, value: string) {
+  if (translationCache.size >= MAX_CACHE_ENTRIES) {
+    const oldestKey = translationCache.keys().next().value;
+    if (oldestKey) {
+      translationCache.delete(oldestKey);
+    }
+  }
+
+  translationCache.set(cacheKey, value);
+}
 
 function parseGoogleTranslateResponse(payload: unknown): string | null {
   if (!Array.isArray(payload) || !Array.isArray(payload[0])) {
@@ -30,42 +44,52 @@ export async function translateText(text: string, targetLocale: Locale): Promise
     return cached;
   }
 
-  try {
-    const params = new URLSearchParams({
-      client: "gtx",
-      sl: "auto",
-      tl: targetLocale,
-      dt: "t",
-      q: normalized,
-    });
-
-    const response = await fetch(`https://translate.googleapis.com/translate_a/single?${params.toString()}`, {
-      next: { revalidate: 60 * 60 * 24 },
-    });
-
-    if (!response.ok) {
-      return text;
-    }
-
-    const payload = (await response.json()) as unknown;
-    const translated = parseGoogleTranslateResponse(payload);
-    if (!translated) {
-      return text;
-    }
-
-    translationCache.set(cacheKey, translated);
-    return translated;
-  } catch {
-    return text;
+  const inflight = inflightTranslations.get(cacheKey);
+  if (inflight) {
+    return inflight;
   }
-}
 
-type PortableTextChild = {
-  _type: string;
-  _key?: string;
-  text?: string;
-  marks?: string[];
-};
+  const translatePromise = (async () => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TRANSLATION_TIMEOUT_MS);
+
+    try {
+      const params = new URLSearchParams({
+        client: "gtx",
+        sl: "auto",
+        tl: targetLocale,
+        dt: "t",
+        q: normalized,
+      });
+
+      const response = await fetch(`https://translate.googleapis.com/translate_a/single?${params.toString()}`, {
+        next: { revalidate: 60 * 60 * 24 },
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        return text;
+      }
+
+      const payload = (await response.json()) as unknown;
+      const translated = parseGoogleTranslateResponse(payload);
+      if (!translated) {
+        return text;
+      }
+
+      setTranslationCache(cacheKey, translated);
+      return translated;
+    } catch {
+      return text;
+    } finally {
+      clearTimeout(timeoutId);
+      inflightTranslations.delete(cacheKey);
+    }
+  })();
+
+  inflightTranslations.set(cacheKey, translatePromise);
+  return translatePromise;
+}
 
 export async function translatePortableTextBlocks(
   blocks: Strain["fullDescription"],

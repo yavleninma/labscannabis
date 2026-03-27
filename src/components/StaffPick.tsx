@@ -26,7 +26,9 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
   const effectHref = createTagHref(locale, "effect", strain.effect);
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as "en" | "ru" | "th");
   const translatedShortDescription =
-    locale === "en" ? localizedShortDescription : await translateText(localizedShortDescription, locale as "ru" | "th");
+    locale === "en" || !localizedShortDescription
+      ? localizedShortDescription
+      : await translateText(localizedShortDescription, locale as "ru" | "th");
 
   return (
     <section className="py-8 px-4">

@@ -105,14 +105,14 @@ export default async function StrainPage({
   const tCommon = await getTranslations({ locale: locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(800).height(600).url() : null;
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as Locale);
-  const translatedShortDescription = localizedShortDescription
-    ? await translateText(localizedShortDescription, locale as Locale)
-    : "";
   const localizedFullDescription = getLocalizedFullDescription(strain, locale as Locale);
-  const translatedFullDescription = await translatePortableTextBlocks(
-    localizedFullDescription,
-    locale as Locale
-  );
+  const localeValue = locale as Locale;
+  const [translatedShortDescription, translatedFullDescription] = await Promise.all([
+    localizedShortDescription ? translateText(localizedShortDescription, localeValue) : Promise.resolve(""),
+    localizedFullDescription
+      ? translatePortableTextBlocks(localizedFullDescription, localeValue)
+      : Promise.resolve(localizedFullDescription),
+  ]);
   const typeHref = createTagHref(locale, "type", strain.type);
   const effectHref = createTagHref(locale, "effect", strain.effect);
   const contactLinks = buildContactLinks(
