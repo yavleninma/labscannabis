@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
+import { GOOGLE_PLACE_QUERY } from "@/lib/constants";
 
-const PLACE_QUERY = "LABS DISPENSARY Pattaya";
-const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(PLACE_QUERY)}`;
-const MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(PLACE_QUERY)}&output=embed`;
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GOOGLE_PLACE_QUERY)}`;
+const MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(GOOGLE_PLACE_QUERY)}&output=embed`;
 
 interface LocationSectionProps {
   openTime?: string;

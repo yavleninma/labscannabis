@@ -32,6 +32,10 @@ export interface ShopSettings {
   telegramId?: string | null;
   phone?: string | null;
   announcement: string | null;
+  googleRating?: number;
+  googleReviewCount?: number;
+  guidePhoto?: { asset: { _ref: string } } | null;
+  teamPhoto?: { asset: { _ref: string } } | null;
 }
 
 export const mockStrains: Strain[] = [
@@ -185,4 +189,8 @@ export const mockShopSettings: ShopSettings = {
   telegramId: null,
   phone: "+66 66 080 6784",
   announcement: null,
+  googleRating: 4.8,
+  googleReviewCount: 91,
+  guidePhoto: null,
+  teamPhoto: null,
 };

@@ -1,17 +1,17 @@
 {
   "meta": {
-    "title": "Labs Cannabis — Premium Cannabis Dispensary in Pattaya",
-    "description": "Licensed medical cannabis shop in South Pattaya. Curated strains, on-site medical card assistance. Walk in, no appointment needed. 5 min from Walking Street.",
+    "title": "Labs Cannabis — Cannabis Shop in South Pattaya",
+    "description": "Licensed cannabis shop in South Pattaya. On-site medical card in 2 minutes, walk-in friendly, 5 min from Walking Street. Russian- and English-speaking staff.",
     "ogTitle": "Labs Cannabis — Cannabis Shop Pattaya",
-    "ogDescription": "Licensed medical cannabis dispensary in South Pattaya. Curated selection of premium strains. Walk in — we handle everything on the spot."
+    "ogDescription": "Licensed cannabis shop in South Pattaya. Walk in, get your medical card on the spot, pick your strain. 5 min from Walking Street."
   },
   "header": {
     "openNow": "Open now",
     "closed": "Closed"
   },
   "hero": {
-    "title": "Curated cannabis, handpicked for you",
-    "subtitle": "Licensed medical dispensary in South Pattaya. Walk in — we'll take care of the rest.",
+    "title": "Cannabis shop in South Pattaya",
+    "subtitle": "5 minutes from Walking Street. Medical card sorted on the spot in 2 minutes. No appointment needed.",
     "getDirections": "Get Directions",
     "messageUs": "Message Us"
   },
@@ -30,11 +30,11 @@
   },
   "staffPick": {
     "badge": "Expert Pick",
-    "reserve": "Reserve",
+    "reserve": "Ask about it",
     "viewDetails": "View details"
   },
   "catalog": {
-    "title": "Our Selection",
+    "title": "What's in Stock",
     "count": "{count} strains available",
     "filter_all": "All",
     "filter_relax": "Relax",
@@ -42,14 +42,14 @@
     "filter_creative": "Creative",
     "filter_euphoria": "Euphoria",
     "filter_sleep": "Sleep",
-    "reserve": "Reserve",
+    "reserve": "Ask about it",
     "soldOut": "Sold Out",
     "noResults": "No strains match this filter right now.",
     "activeFilter": "Filtered by {tagType}: {tagLabel}",
     "clearFilter": "Clear filter"
   },
   "reviews": {
-    "subtitle": "91 reviews on Google",
+    "subtitle": "{count} reviews on Google",
     "sourceGoogle": "via Google",
     "showOriginal": "Original",
     "showTranslation": "Translation",
@@ -83,17 +83,48 @@
   },
   "contact": {
     "title": "Get in Touch",
-    "subtitle": "Reserve a strain or ask us anything — we reply fast."
+    "subtitle": "Ask a question or check what's available — we usually reply within 5 minutes during working hours."
   },
   "footer": {
-    "disclaimer": "For adults 20+ only. Medical cannabis is legal in Thailand under the regulated medical framework. A medical consultation is required before purchase. Labs Cannabis operates under a valid Thai medical cannabis license.",
+    "disclaimer": "Adults 20+ only. Licensed cannabis shop operating under the Thai medical cannabis framework.",
     "rights": "All rights reserved."
+  },
+  "socialProof": {
+    "reviewCount": "{count} reviews on Google",
+    "seeAll": "See all reviews"
+  },
+  "about": {
+    "title": "Who We Are",
+    "guideName": "Dmitry",
+    "guideRole": "Your Cannabis Guide",
+    "guideDescription": "Dmitry personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
+    "teamTitle": "Our Team",
+    "teamDescription": "We speak Russian, English, and Thai. Happy to help with strain selection and medical card — no pressure, no rush.",
+    "guidePhotoAlt": "Dmitry — cannabis guide at Labs Cannabis",
+    "teamPhotoAlt": "Labs Cannabis team"
+  },
+  "faq": {
+    "title": "Common Questions",
+    "q1": "Do I need a prescription or medical card?",
+    "a1": "Thailand requires a medical card for cannabis purchases. We help you get one on the spot — it's a quick digital form on your phone, takes about 2 minutes. Our staff walks you through every step.",
+    "q2": "Is it legal for tourists?",
+    "a2": "Yes. Tourists can legally purchase medical cannabis in Thailand with a medical card, which we help you obtain right here at the shop.",
+    "q3": "What payment methods do you accept?",
+    "a3": "Cash (Thai Baht) and QR bank transfer. No credit cards at this time.",
+    "q4": "Can I smoke here or is it takeaway only?",
+    "a4": "Takeaway only. We sell product for personal use — there's no smoking area on site.",
+    "q5": "How do I find you from Walking Street?",
+    "a5": "5-minute walk. Head into Soi Hollywood (Pattaya 13 Alley), look for LABS signage on the left side. We're near the South Pattaya end of the lane.",
+    "q6": "What are your hours?",
+    "a6": "We're open every day, no appointment needed. Check the hours in the header — they update in real time.",
+    "q7": "I've never tried cannabis. Can your staff help me choose?",
+    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time."
   },
   "strainPage": {
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
     "backToCatalog": "Back to selection",
-    "reserve": "Reserve This Strain",
-    "reserveVia": "Reserve via",
+    "reserve": "Ask About This Strain",
+    "reserveVia": "Contact via",
     "call": "Call",
     "soldOut": "Sold Out",
     "terpenes": "Terpene Profile",
