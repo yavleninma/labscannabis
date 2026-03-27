@@ -47,30 +47,31 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
           : "bg-transparent"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-        <a href={`/${locale}`} className="flex items-center gap-1">
-          <span className="text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 min-h-14 py-2 flex items-center justify-between gap-2">
+        <a href={`/${locale}`} className="flex items-center gap-1 shrink-0">
+          <span className="text-lg sm:text-xl font-bold tracking-tight" style={{ fontFamily: "var(--font-heading)" }}>
             LABS
           </span>
-          <span className="text-emerald-500 text-sm font-medium">Cannabis</span>
+          <span className="text-emerald-500 text-xs sm:text-sm font-medium">Cannabis</span>
         </a>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <a
             href={pathname === "/" ? "#catalog" : `/${locale}#catalog`}
-            className="text-xs font-medium px-3 py-1.5 rounded-full border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 transition-colors"
+            className="inline-flex items-center gap-1 whitespace-nowrap text-[11px] sm:text-xs font-medium px-2.5 sm:px-3 py-1.5 rounded-full border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 transition-colors"
           >
+            <span className="text-[10px]">🌿</span>
             {tHeader("menu")}
           </a>
           <OpenIndicator openTime={openTime} closeTime={closeTime} isOpen24h={isOpen24h} />
-          <div className="flex items-center gap-1 text-xs">
+          <div className="flex items-center gap-0.5 sm:gap-1 text-[11px] sm:text-xs">
             {locales.map((l) => (
               <button
                 key={l}
                 onClick={() => switchLocale(l)}
                 disabled={isPending}
                 aria-busy={isPending}
-                className={`px-2 py-1 rounded transition-colors disabled:cursor-not-allowed ${
+                className={`px-1.5 sm:px-2 py-1 rounded transition-colors disabled:cursor-not-allowed ${
                   locale === l
                     ? "bg-emerald-500/20 text-emerald-400"
                     : "text-text-muted hover:text-text-secondary"
@@ -82,7 +83,7 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
               </button>
             ))}
             {isPending && (
-              <span className="ml-2 inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-emerald-300/90">
+              <span className="ml-1 sm:ml-2 hidden sm:inline-flex items-center gap-1 text-[10px] uppercase tracking-wide text-emerald-300/90">
                 <span className="h-2 w-2 rounded-full border border-emerald-300/80 border-t-transparent animate-spin" />
                 {tHeader("switching")}
               </span>

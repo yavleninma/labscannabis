@@ -66,14 +66,14 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
   return (
     <section id="catalog" className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 mb-5 sm:mb-6">
           <h2
-            className="text-2xl sm:text-3xl font-bold"
+            className="text-2xl sm:text-3xl font-bold leading-tight"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            {t("title")}{" "}
-            <span className="text-text-muted text-lg font-normal">
-              · {t("count", { count: available })}
+            {t("title")}
+            <span className="block sm:inline sm:ml-2 text-text-muted text-sm sm:text-lg font-normal mt-1 sm:mt-0">
+              {t("count", { count: available })}
             </span>
           </h2>
         </div>
@@ -112,7 +112,7 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {filtered.map((strain, i) => (
             <StrainCard
               key={strain._id}

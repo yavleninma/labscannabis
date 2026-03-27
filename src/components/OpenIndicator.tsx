@@ -45,15 +45,17 @@ export function OpenIndicator({
     return () => clearInterval(interval);
   }, []);
 
+  const statusLabel = open ? t("openNow") : t("closed");
+
   return (
-    <div className="flex items-center gap-1.5 text-sm">
+    <div className="flex items-center gap-1 sm:gap-1.5 text-xs sm:text-sm" aria-label={statusLabel}>
       <span
         className={`h-2 w-2 rounded-full ${
           open ? "bg-emerald-500 animate-pulse-green" : "bg-text-muted"
         }`}
       />
-      <span className={open ? "text-emerald-400" : "text-text-muted"}>
-        {open ? t("openNow") : t("closed")}
+      <span className={`${open ? "text-emerald-400" : "text-text-muted"} hidden sm:inline`}>
+        {statusLabel}
       </span>
     </div>
   );

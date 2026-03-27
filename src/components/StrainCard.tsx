@@ -91,7 +91,7 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
             event.stopPropagation();
             openTagFilter(effectHref);
           }}
-          className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full ${
+          className={`absolute top-2 right-2 max-w-[78%] whitespace-nowrap overflow-hidden text-ellipsis text-[11px] sm:text-xs px-2 py-0.5 rounded-full ${
             effectColors[strain.effect] || "bg-emerald-500/20 text-emerald-400"
           }`}
         >
@@ -107,11 +107,11 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
         )}
       </div>
 
-      <div className="p-3">
-        <h3 className="font-semibold text-text-primary mb-1 group-hover:text-emerald-400 transition-colors">
+      <div className="p-2.5 sm:p-3">
+        <h3 className="font-semibold text-sm sm:text-base text-text-primary mb-1 group-hover:text-emerald-400 transition-colors">
           {strain.name}
         </h3>
-        <div className="flex items-center gap-2 text-xs text-text-muted mb-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-text-muted mb-2">
           <button
             type="button"
             onClick={(event) => {
@@ -132,12 +132,12 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
             </>
           ) : null}
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-emerald-400 font-semibold">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-emerald-400 font-semibold text-sm sm:text-base">
             {tCommon("pricePerGram", { price: strain.pricePerGram })}
           </span>
           {strain.isSoldOut ? (
-            <span className="text-xs text-text-muted px-3 py-1.5 rounded-lg bg-bg-secondary cursor-not-allowed">
+            <span className="text-[11px] sm:text-xs text-text-muted px-2.5 sm:px-3 py-1.5 rounded-lg bg-bg-secondary cursor-not-allowed whitespace-nowrap">
               {soldOutLabel}
             </span>
           ) : (
@@ -147,7 +147,7 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
                 e.stopPropagation();
                 window.location.href = reserveUrl;
               }}
-              className="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer"
+              className="text-[11px] sm:text-xs text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               {reserveLabel}
             </span>
