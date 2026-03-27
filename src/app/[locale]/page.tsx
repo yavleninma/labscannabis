@@ -6,7 +6,7 @@ import { Reviews } from "@/components/Reviews";
 import { LocationSection } from "@/components/LocationSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
-import { getAllStrains, getStaffPick } from "@/lib/queries";
+import { getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
 
 export default async function HomePage({
   params,
@@ -14,9 +14,10 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const [strains, staffPick] = await Promise.all([
+  const [strains, staffPick, shopSettings] = await Promise.all([
     getAllStrains(),
     getStaffPick(),
+    getShopSettings(),
   ]);
 
   return (
@@ -27,7 +28,11 @@ export default async function HomePage({
       <StrainCatalog strains={strains} />
       <Reviews />
       <LocationSection />
-      <ContactSection />
+      <ContactSection
+        lineUrl={shopSettings.lineUrl}
+        whatsappUrl={shopSettings.whatsappUrl}
+        telegramUrl={shopSettings.telegramUrl}
+      />
       <Footer />
     </>
   );

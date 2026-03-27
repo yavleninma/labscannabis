@@ -1,12 +1,26 @@
 import { useTranslations } from "next-intl";
 
-export function ContactSection() {
+interface ContactSectionProps {
+  lineUrl?: string | null;
+  whatsappUrl?: string | null;
+  telegramUrl?: string | null;
+}
+
+export function ContactSection({
+  lineUrl,
+  whatsappUrl,
+  telegramUrl,
+}: ContactSectionProps) {
   const t = useTranslations("contact");
+
+  const fallbackLineUrl = "tel:+66660806784";
+  const fallbackWhatsappUrl = "https://wa.me/66660806784";
+  const fallbackTelegramUrl = "https://t.me/TODO";
 
   const channels = [
     {
       name: "LINE",
-      href: "#", // TODO: Add LINE deep link
+      href: lineUrl || fallbackLineUrl,
       color: "bg-[#06C755] hover:bg-[#05b34d]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -16,7 +30,7 @@ export function ContactSection() {
     },
     {
       name: "WhatsApp",
-      href: "#", // TODO: Add WhatsApp deep link
+      href: whatsappUrl || fallbackWhatsappUrl,
       color: "bg-[#25D366] hover:bg-[#20bd5a]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -26,7 +40,7 @@ export function ContactSection() {
     },
     {
       name: "Telegram",
-      href: "#", // TODO: Add Telegram deep link
+      href: telegramUrl || fallbackTelegramUrl,
       color: "bg-[#0088cc] hover:bg-[#007ab8]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">

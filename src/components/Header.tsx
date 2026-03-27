@@ -7,7 +7,12 @@ import { OpenIndicator } from "./OpenIndicator";
 
 const locales = ["en", "ru", "th"] as const;
 
-export function Header() {
+interface HeaderProps {
+  openTime?: string;
+  closeTime?: string;
+}
+
+export function Header({ openTime, closeTime }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
@@ -40,7 +45,7 @@ export function Header() {
         </a>
 
         <div className="flex items-center gap-4">
-          <OpenIndicator />
+          <OpenIndicator openTime={openTime} closeTime={closeTime} />
           <div className="flex items-center gap-1 text-xs">
             {locales.map((l) => (
               <button

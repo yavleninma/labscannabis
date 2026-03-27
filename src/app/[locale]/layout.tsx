@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
+import { getShopSettings } from "@/lib/queries";
 
 type Locale = "en" | "ru" | "th";
 
@@ -64,6 +65,7 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
+  const shopSettings = await getShopSettings();
 
   return (
     <html lang={locale} className="scroll-smooth">
@@ -92,7 +94,7 @@ export default async function LocaleLayout({
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">
         <NextIntlClientProvider messages={messages}>
           <JsonLd locale={locale as Locale} />
-          <Header />
+          <Header openTime={shopSettings.openTime} closeTime={shopSettings.closeTime} />
           <main>{children}</main>
         </NextIntlClientProvider>
       </body>
