@@ -19,9 +19,9 @@ export async function getAllStrains(): Promise<Strain[]> {
         isStaffPick, isSoldOut, sortOrder
       }`
     );
-    return strains.length > 0 ? strains : mockStrains;
+    return strains;
   } catch {
-    return mockStrains;
+    return [];
   }
 }
 
@@ -41,9 +41,9 @@ export async function getStrainBySlug(slug: string): Promise<Strain | null> {
       }`,
       { slug }
     );
-    return strain || mockStrains.find((s) => s.slug.current === slug) || null;
+    return strain || null;
   } catch {
-    return mockStrains.find((s) => s.slug.current === slug) || null;
+    return null;
   }
 }
 
@@ -53,8 +53,8 @@ export async function getStaffPick(): Promise<Strain | null> {
   }
 
   try {
-    const strain = await sanityClient.fetch<Strain | null>(
-      `*[_type == "strain" && isStaffPick == true][0] {
+    const staffPick = await sanityClient.fetch<Strain | null>(
+      `*[_type == "strain" && isStaffPick == true] | order(sortOrder asc)[0] {
         _id, name, slug, image, type, effect,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
@@ -62,9 +62,25 @@ export async function getStaffPick(): Promise<Strain | null> {
         isStaffPick, isSoldOut, sortOrder
       }`
     );
-    return strain || mockStrains.find((s) => s.isStaffPick) || null;
+
+    if (staffPick) return staffPick;
+
+    const strainsCount = await sanityClient.fetch<number>(`count(*[_type == "strain"])`);
+    if (strainsCount !== 1) return null;
+
+    const onlyStrain = await sanityClient.fetch<Strain | null>(
+      `*[_type == "strain"] | order(sortOrder asc)[0] {
+        _id, name, slug, image, type, effect,
+        thcPercent, cbdPercent, pricePerGram,
+        shortDescription, shortDescriptionRu, shortDescriptionTh,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
+        isStaffPick, isSoldOut, sortOrder
+      }`
+    );
+
+    return onlyStrain || null;
   } catch {
-    return mockStrains.find((s) => s.isStaffPick) || null;
+    return null;
   }
 }
 

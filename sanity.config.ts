@@ -8,6 +8,8 @@ const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
 export default defineConfig({
   name: "labs-cannabis",
   title: "Labs Cannabis",
+  // Must match app route at src/app/studio/[[...tool]]/page.tsx
+  basePath: "/studio",
   projectId,
   dataset,
   plugins: [structureTool()],
