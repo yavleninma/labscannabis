@@ -26,9 +26,6 @@ export function QuickMenu({ strains }: QuickMenuProps) {
       <div className="max-w-6xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 mb-3">
           <div className="inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg overflow-hidden border border-border bg-bg-card shrink-0 flex items-center justify-center text-sm">
-              🌿
-            </div>
             <p className="text-sm text-text-muted">{t("title")}</p>
           </div>
           <a
