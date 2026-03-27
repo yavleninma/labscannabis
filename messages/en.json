@@ -45,6 +45,11 @@
     "filter_creative": "Creative",
     "filter_euphoria": "Euphoria",
     "filter_sleep": "Sleep",
+    "filter_focus": "Focus",
+    "filter_happy": "Happy",
+    "filter_uplifted": "Uplifted",
+    "filter_talkative": "Talkative",
+    "filter_hungry": "Hungry",
     "reserve": "Ask about it",
     "soldOut": "Sold Out",
     "noResults": "No strains match this filter right now.",
@@ -137,7 +142,8 @@
     "soldOut": "Sold Out",
     "terpenes": "Terpene Profile",
     "about": "About This Strain",
-    "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya."
+    "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available at Labs Cannabis Pattaya."
   },
   "strainCommon": {
     "type_indica": "Indica",
@@ -148,6 +154,11 @@
     "effect_creative": "Creative",
     "effect_sleep": "Sleep",
     "effect_euphoria": "Euphoria",
+    "effect_focus": "Focus",
+    "effect_happy": "Happy",
+    "effect_uplifted": "Uplifted",
+    "effect_talkative": "Talkative",
+    "effect_hungry": "Hungry",
     "thc": "THC",
     "cbd": "CBD",
     "pricePerGram": "฿{price}/g",

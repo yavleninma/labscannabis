@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "migrate:strain-profiles": "node scripts/migrate-strain-profiles.mjs"
   },
   "repository": {
     "type": "git",

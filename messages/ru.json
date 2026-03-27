@@ -45,6 +45,11 @@
     "filter_creative": "Креатив",
     "filter_euphoria": "Эйфория",
     "filter_sleep": "Сон",
+    "filter_focus": "Фокус",
+    "filter_happy": "Радость",
+    "filter_uplifted": "Подъём",
+    "filter_talkative": "Общительность",
+    "filter_hungry": "Аппетит",
     "reserve": "Спросить",
     "soldOut": "Нет в наличии",
     "noResults": "Пока нет сортов с таким эффектом.",
@@ -137,7 +142,8 @@
     "soldOut": "Нет в наличии",
     "terpenes": "Терпеновый профиль",
     "about": "Об этом сорте",
-    "metaDescriptionFallback": "{name} ({type}) — сорт каннабиса с THC {thc}%. Доступен в Labs Cannabis Паттайя."
+    "metaDescriptionFallback": "{name} ({type}) — сорт каннабиса с THC {thc}%. Доступен в Labs Cannabis Паттайя.",
+    "metaDescriptionFallbackNoThc": "{name} ({type}) — сорт каннабиса. Доступен в Labs Cannabis Паттайя."
   },
   "strainCommon": {
     "type_indica": "Индика",
@@ -148,6 +154,11 @@
     "effect_creative": "Творчество",
     "effect_sleep": "Сон",
     "effect_euphoria": "Эйфория",
+    "effect_focus": "Фокус",
+    "effect_happy": "Радость",
+    "effect_uplifted": "Подъём",
+    "effect_talkative": "Общительность",
+    "effect_hungry": "Аппетит",
     "thc": "THC",
     "cbd": "CBD",
     "pricePerGram": "฿{price}/г",

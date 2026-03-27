@@ -7,7 +7,19 @@ import type { Strain } from "@/lib/mock-data";
 import { normalizeTagValue, parseTagFromSearchParams, strainMatchesTag } from "@/lib/strain-tags";
 import { StrainCard } from "./StrainCard";
 
-const effects = ["all", "relax", "energy", "creative", "sleep"] as const;
+const effects = [
+  "all",
+  "relax",
+  "energy",
+  "creative",
+  "sleep",
+  "euphoria",
+  "focus",
+  "happy",
+  "uplifted",
+  "talkative",
+  "hungry",
+] as const;
 
 const effectEmoji: Record<string, string> = {
   all: "🌿",
@@ -15,6 +27,12 @@ const effectEmoji: Record<string, string> = {
   energy: "⚡",
   creative: "🎨",
   sleep: "😴",
+  euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 interface StrainCatalogProps {
@@ -60,8 +78,9 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
         : (tag ?? "")
       : tagType === "type"
         ? tCommon(`type_${tag ?? ""}`)
-        : (strains.find((strain) => strain.terpenes?.some((terpene) => normalizeTagValue(terpene) === tag))
-            ?.terpenes?.find((terpene) => normalizeTagValue(terpene) === tag) ?? (tag ?? ""));
+        : (strains
+            .flatMap((strain) => strain.terpeneProfile?.map((item) => item.name) || strain.terpenes || [])
+            .find((terpene) => normalizeTagValue(terpene) === tag) ?? (tag ?? ""));
 
   return (
     <section id="catalog" className="py-12 px-4">

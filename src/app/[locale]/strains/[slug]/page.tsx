@@ -20,6 +20,11 @@ const effectEmoji: Record<string, string> = {
   creative: "🎨",
   sleep: "😴",
   euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 const gradients = [
@@ -64,11 +69,16 @@ export async function generateMetadata({
     : "";
   const description =
     translatedShortDescription ||
-    t("metaDescriptionFallback", {
-      name: strain.name,
-      type: tCommon(`type_${strain.type}`),
-      thc: strain.thcPercent,
-    });
+    (typeof strain.thcPercent === "number"
+      ? t("metaDescriptionFallback", {
+          name: strain.name,
+          type: tCommon(`type_${strain.type}`),
+          thc: strain.thcPercent,
+        })
+      : t("metaDescriptionFallbackNoThc", {
+          name: strain.name,
+          type: tCommon(`type_${strain.type}`),
+        }));
 
   return {
     title,
@@ -114,7 +124,16 @@ export default async function StrainPage({
       : Promise.resolve(localizedFullDescription),
   ]);
   const typeHref = createTagHref(locale, "type", strain.type);
-  const effectHref = createTagHref(locale, "effect", strain.effect);
+  const effectEntries = strain.effects?.length
+    ? [...strain.effects].sort((a, b) => b.amount - a.amount)
+    : strain.effect
+      ? [{ key: strain.effect, amount: 1 }]
+      : [];
+  const terpeneEntries = strain.terpeneProfile?.length
+    ? [...strain.terpeneProfile].sort((a, b) => b.amount - a.amount)
+    : (strain.terpenes || []).map((name) => ({ name, amount: 0 }));
+  const hasThc = typeof strain.thcPercent === "number";
+  const hasCbd = typeof strain.cbdPercent === "number";
   const contactLinks = buildContactLinks(
     shopSettings,
     toContactLocale(locale),
@@ -176,12 +195,22 @@ export default async function StrainPage({
               >
                 {tCommon(`type_${strain.type}`)}
               </a>
-              <span>{tCommon("thc")} {strain.thcPercent}%</span>
-              {strain.cbdPercent ? <span>{tCommon("cbd")} {strain.cbdPercent}%</span> : null}
-              <a href={effectHref} className="hover:text-emerald-300 transition-colors">
-                {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
-              </a>
+              {hasThc ? <span>{tCommon("thc")} {strain.thcPercent}%</span> : null}
+              {hasCbd ? <span>{tCommon("cbd")} {strain.cbdPercent}%</span> : null}
             </div>
+            {effectEntries.length > 0 && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {effectEntries.map((effect) => (
+                  <a
+                    key={`${effect.key}-${effect.amount}`}
+                    href={createTagHref(locale, "effect", effect.key)}
+                    className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border hover:text-emerald-300 transition-colors"
+                  >
+                    {effectEmoji[effect.key]} {tCommon(`effect_${effect.key}`)} {effect.amount}/5
+                  </a>
+                ))}
+              </div>
+            )}
 
             {translatedShortDescription && (
               <p className="text-text-secondary mb-4">{translatedShortDescription}</p>
@@ -218,17 +247,17 @@ export default async function StrainPage({
               </div>
             )}
 
-            {strain.terpenes && strain.terpenes.length > 0 && (
+            {terpeneEntries.length > 0 && (
               <div className="mt-6">
                 <p className="text-sm text-text-muted mb-2">{t("terpenes")}</p>
                 <div className="flex flex-wrap gap-2">
-                  {strain.terpenes.map((terpene) => (
+                  {terpeneEntries.map((terpene) => (
                     <a
-                      key={terpene}
-                      href={createTagHref(locale, "terpene", terpene)}
+                      key={`${terpene.name}-${terpene.amount}`}
+                      href={createTagHref(locale, "terpene", terpene.name)}
                       className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border hover:text-emerald-300 transition-colors"
                     >
-                      {terpene}
+                      {terpene.name}{terpene.amount > 0 ? ` ${terpene.amount}%` : ""}
                     </a>
                   ))}
                 </div>

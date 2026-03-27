@@ -45,6 +45,11 @@
     "filter_creative": "สร้างสรรค์",
     "filter_euphoria": "อารมณ์ดี",
     "filter_sleep": "นอนหลับ",
+    "filter_focus": "โฟกัส",
+    "filter_happy": "มีความสุข",
+    "filter_uplifted": "กระปรี้กระเปร่า",
+    "filter_talkative": "ช่างคุย",
+    "filter_hungry": "อยากอาหาร",
     "reserve": "สอบถาม",
     "soldOut": "หมดแล้ว",
     "noResults": "ยังไม่มีสายพันธุ์ที่ตรงกับตัวกรองนี้",
@@ -137,7 +142,8 @@
     "soldOut": "หมดแล้ว",
     "terpenes": "โปรไฟล์เทอร์พีน",
     "about": "เกี่ยวกับสายพันธุ์นี้",
-    "metaDescriptionFallback": "{name} สายพันธุ์ {type} มี THC {thc}%. พร้อมจำหน่ายที่ Labs Cannabis พัทยา"
+    "metaDescriptionFallback": "{name} สายพันธุ์ {type} มี THC {thc}%. พร้อมจำหน่ายที่ Labs Cannabis พัทยา",
+    "metaDescriptionFallbackNoThc": "{name} สายพันธุ์ {type} พร้อมจำหน่ายที่ Labs Cannabis พัทยา"
   },
   "strainCommon": {
     "type_indica": "อินดิกา",
@@ -148,6 +154,11 @@
     "effect_creative": "สร้างสรรค์",
     "effect_sleep": "ช่วยการนอน",
     "effect_euphoria": "อารมณ์ดี",
+    "effect_focus": "โฟกัส",
+    "effect_happy": "มีความสุข",
+    "effect_uplifted": "กระปรี้กระเปร่า",
+    "effect_talkative": "ช่างคุย",
+    "effect_hungry": "อยากอาหาร",
     "thc": "THC",
     "cbd": "CBD",
     "pricePerGram": "฿{price}/กรัม",

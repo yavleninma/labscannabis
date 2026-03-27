@@ -12,10 +12,10 @@ export async function getAllStrains(): Promise<Strain[]> {
   try {
     const strains = await sanityClient.fetch<Strain[]>(
       `*[_type == "strain"] | order(sortOrder asc) {
-        _id, name, slug, image, type, effect,
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
         isStaffPick, isSoldOut, sortOrder
       }`
     );
@@ -33,10 +33,10 @@ export async function getStrainBySlug(slug: string): Promise<Strain | null> {
   try {
     const strain = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain" && slug.current == $slug][0] {
-        _id, name, slug, image, type, effect,
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
         isStaffPick, isSoldOut, sortOrder
       }`,
       { slug }
@@ -55,10 +55,10 @@ export async function getStaffPick(): Promise<Strain | null> {
   try {
     const staffPick = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain" && isStaffPick == true] | order(sortOrder asc)[0] {
-        _id, name, slug, image, type, effect,
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
         isStaffPick, isSoldOut, sortOrder
       }`
     );
@@ -70,10 +70,10 @@ export async function getStaffPick(): Promise<Strain | null> {
 
     const onlyStrain = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain"] | order(sortOrder asc)[0] {
-        _id, name, slug, image, type, effect,
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
         isStaffPick, isSoldOut, sortOrder
       }`
     );

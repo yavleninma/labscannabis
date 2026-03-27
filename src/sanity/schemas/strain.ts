@@ -39,7 +39,7 @@ export const strain = defineType({
     }),
     defineField({
       name: "effect",
-      title: "Effect",
+      title: "Effect (legacy)",
       type: "string",
       options: {
         list: [
@@ -48,9 +48,66 @@ export const strain = defineType({
           { title: "Creative", value: "creative" },
           { title: "Sleep", value: "sleep" },
           { title: "Euphoria", value: "euphoria" },
+          { title: "Focus", value: "focus" },
+          { title: "Happy", value: "happy" },
+          { title: "Uplifted", value: "uplifted" },
+          { title: "Talkative", value: "talkative" },
+          { title: "Hungry", value: "hungry" },
         ],
       },
-      validation: (Rule) => Rule.required(),
+      description: "Deprecated. Prefer 'Effects profile' below.",
+    }),
+    defineField({
+      name: "effects",
+      title: "Effects profile",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "key",
+              title: "Effect",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Relax", value: "relax" },
+                  { title: "Energy", value: "energy" },
+                  { title: "Creative", value: "creative" },
+                  { title: "Sleep", value: "sleep" },
+                  { title: "Euphoria", value: "euphoria" },
+                  { title: "Focus", value: "focus" },
+                  { title: "Happy", value: "happy" },
+                  { title: "Uplifted", value: "uplifted" },
+                  { title: "Talkative", value: "talkative" },
+                  { title: "Hungry", value: "hungry" },
+                ],
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "amount",
+              title: "Intensity (1-5)",
+              type: "number",
+              validation: (Rule) => Rule.required().integer().min(1).max(5),
+            }),
+          ],
+          preview: {
+            select: {
+              key: "key",
+              amount: "amount",
+            },
+            prepare(selection) {
+              const { key, amount } = selection as { key?: string; amount?: number };
+              return {
+                title: key || "Effect",
+                subtitle: typeof amount === "number" ? `Intensity: ${amount}/5` : "No intensity",
+              };
+            },
+          },
+        },
+      ],
+      validation: (Rule) => Rule.min(1),
     }),
     defineField({
       name: "thcPercent",
@@ -111,6 +168,59 @@ export const strain = defineType({
       title: "Terpenes",
       type: "array",
       of: [{ type: "string" }],
+      description: "Legacy text list. Prefer 'Terpene profile' below.",
+    }),
+    defineField({
+      name: "terpeneProfile",
+      title: "Terpene profile",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "name",
+              title: "Terpene",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Myrcene", value: "Myrcene" },
+                  { title: "Caryophyllene", value: "Caryophyllene" },
+                  { title: "Limonene", value: "Limonene" },
+                  { title: "Pinene", value: "Pinene" },
+                  { title: "Terpinolene", value: "Terpinolene" },
+                  { title: "Ocimene", value: "Ocimene" },
+                  { title: "Linalool", value: "Linalool" },
+                  { title: "Humulene", value: "Humulene" },
+                  { title: "Nerolidol", value: "Nerolidol" },
+                  { title: "Bisabolol", value: "Bisabolol" },
+                  { title: "Fenchol", value: "Fenchol" },
+                ],
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "amount",
+              title: "Share (%)",
+              type: "number",
+              validation: (Rule) => Rule.required().min(0).max(100),
+            }),
+          ],
+          preview: {
+            select: {
+              name: "name",
+              amount: "amount",
+            },
+            prepare(selection) {
+              const { name, amount } = selection as { name?: string; amount?: number };
+              return {
+                title: name || "Terpene",
+                subtitle: typeof amount === "number" ? `${amount}%` : "No amount",
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "isStaffPick",

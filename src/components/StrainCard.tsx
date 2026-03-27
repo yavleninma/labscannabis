@@ -11,6 +11,11 @@ const effectColors: Record<string, string> = {
   creative: "bg-purple-500/20 text-purple-400",
   sleep: "bg-indigo-500/20 text-indigo-400",
   euphoria: "bg-pink-500/20 text-pink-400",
+  focus: "bg-cyan-500/20 text-cyan-400",
+  happy: "bg-amber-500/20 text-amber-400",
+  uplifted: "bg-emerald-500/20 text-emerald-400",
+  talkative: "bg-orange-500/20 text-orange-400",
+  hungry: "bg-rose-500/20 text-rose-400",
 };
 
 const effectEmoji: Record<string, string> = {
@@ -19,6 +24,11 @@ const effectEmoji: Record<string, string> = {
   creative: "🎨",
   sleep: "😴",
   euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 const gradients = [
@@ -46,7 +56,16 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
   const gradient = gradients[index % gradients.length];
   const detailsHref = `/${locale}/strains/${strain.slug.current}`;
   const typeHref = createTagHref(locale, "type", strain.type);
-  const effectHref = createTagHref(locale, "effect", strain.effect);
+  const effectEntries = strain.effects?.length
+    ? [...strain.effects].sort((a, b) => b.amount - a.amount)
+    : strain.effect
+      ? [{ key: strain.effect, amount: 1 }]
+      : [];
+  const primaryEffect = effectEntries[0] || null;
+  const effectHref = primaryEffect ? createTagHref(locale, "effect", primaryEffect.key) : null;
+  const extraEffectsCount = Math.max(0, effectEntries.length - 1);
+  const hasThc = typeof strain.thcPercent === "number";
+  const hasCbd = typeof strain.cbdPercent === "number";
 
   // TODO: Replace with actual messenger URL
   // TODO: Replace with actual messenger URL with pre-filled message
@@ -84,19 +103,23 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
           </div>
         )}
 
-        <button
-          type="button"
-          onClick={(event) => {
-            event.preventDefault();
-            event.stopPropagation();
-            openTagFilter(effectHref);
-          }}
-          className={`absolute top-2 right-2 max-w-[78%] whitespace-nowrap overflow-hidden text-ellipsis text-[11px] sm:text-xs px-2 py-0.5 rounded-full ${
-            effectColors[strain.effect] || "bg-emerald-500/20 text-emerald-400"
-          }`}
-        >
-          {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
-        </button>
+        {primaryEffect && effectHref && (
+          <button
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              openTagFilter(effectHref);
+            }}
+            className={`absolute top-2 right-2 max-w-[78%] whitespace-nowrap overflow-hidden text-ellipsis text-[11px] sm:text-xs px-2 py-0.5 rounded-full ${
+              effectColors[primaryEffect.key] || "bg-emerald-500/20 text-emerald-400"
+            }`}
+            title={`${tCommon(`effect_${primaryEffect.key}`)} (${primaryEffect.amount}/5)`}
+          >
+            {effectEmoji[primaryEffect.key]} {tCommon(`effect_${primaryEffect.key}`)} {primaryEffect.amount}/5
+            {extraEffectsCount > 0 ? ` +${extraEffectsCount}` : ""}
+          </button>
+        )}
 
         {strain.isSoldOut && (
           <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
@@ -123,14 +146,18 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
           >
             {tCommon(`type_${strain.type}`)}
           </button>
-          <span>·</span>
-          <span>{tCommon("thc")} {strain.thcPercent}%</span>
-          {strain.cbdPercent ? (
+          {hasThc && (
+            <>
+              <span>·</span>
+              <span>{tCommon("thc")} {strain.thcPercent}%</span>
+            </>
+          )}
+          {hasCbd && (
             <>
               <span>·</span>
               <span>{tCommon("cbd")} {strain.cbdPercent}%</span>
             </>
-          ) : null}
+          )}
         </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-emerald-400 font-semibold text-sm sm:text-base">
