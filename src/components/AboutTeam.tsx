@@ -16,7 +16,7 @@ export function AboutTeam({ shopSettings }: AboutTeamProps) {
   return (
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="max-w-2xl">
+        <div className="max-w-2xl w-full mx-auto">
           <div className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col items-center text-center">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border-2 border-emerald-500/30 overflow-hidden">
               {guideImageUrl ? (
