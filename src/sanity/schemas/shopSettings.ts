@@ -73,6 +73,36 @@ export const shopSettings = defineType({
       type: "string",
       description: "Optional announcement text shown at the top of the site",
     }),
+    defineField({
+      name: "googleRating",
+      title: "Google Rating",
+      type: "number",
+      initialValue: 4.8,
+      description: "Current Google Maps rating (e.g. 4.8). Update manually when it changes.",
+      validation: (rule) => rule.min(1).max(5).precision(1),
+    }),
+    defineField({
+      name: "googleReviewCount",
+      title: "Google Review Count",
+      type: "number",
+      initialValue: 91,
+      description: "Total number of Google reviews. Update manually.",
+      validation: (rule) => rule.min(0).integer(),
+    }),
+    defineField({
+      name: "guidePhoto",
+      title: "Guide Photo (Dmitry)",
+      type: "image",
+      description: "Photo of the cannabis guide / consultant shown on the homepage.",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "teamPhoto",
+      title: "Team Photo",
+      type: "image",
+      description: "Photo of the shop team shown on the homepage.",
+      options: { hotspot: true },
+    }),
   ],
   preview: {
     prepare() {

@@ -49,7 +49,7 @@
     "clearFilter": "ล้างตัวกรอง"
   },
   "reviews": {
-    "subtitle": "91 รีวิวบน Google",
+    "subtitle": "{count} รีวิวบน Google",
     "sourceGoogle": "จาก Google",
     "showOriginal": "ต้นฉบับ",
     "showTranslation": "คำแปล",
@@ -90,18 +90,17 @@
     "rights": "สงวนลิขสิทธิ์"
   },
   "socialProof": {
-    "rating": "4.8",
-    "reviewCount": "91 รีวิวบน Google",
+    "reviewCount": "{count} รีวิวบน Google",
     "seeAll": "ดูรีวิวทั้งหมด"
   },
   "about": {
     "title": "เกี่ยวกับเรา",
-    "ownerName": "ชื่อเจ้าของ",
-    "ownerRole": "ผู้ก่อตั้งและผู้คัดสรร",
-    "ownerDescription": "เลือกทุกสายพันธุ์ด้วยตัวเอง ถ้าไม่แน่ใจว่าจะเลือกอะไร แค่ถาม เขาจะช่วยแนะนำ",
+    "guideName": "Dmitry",
+    "guideRole": "ผู้เชี่ยวชาญกัญชาของคุณ",
+    "guideDescription": "Dmitry เลือกทุกสายพันธุ์ด้วยตัวเองและควบคุมคุณภาพสิ่งที่อยู่บนชั้นวาง พูดรัสเซียและอังกฤษได้ ครั้งแรกเหรอ? เขาจะแนะนำทุกอย่าง — จะเจออะไร เลือกอะไรดี เริ่มยังไง ไม่กดดัน แค่คำแนะนำจริงๆ",
     "teamTitle": "ทีมงานของเรา",
-    "teamDescription": "เราพูดได้ทั้งรัสเซีย อังกฤษ และไทย พร้อมช่วยเลือกสายพันธุ์และทำบัตรทางการแพทย์ ไม่มีแรงกดดัน ไม่เร่งรีบ",
-    "ownerPhotoAlt": "เจ้าของ Labs Cannabis",
+    "teamDescription": "เราพูดได้ทั้งรัสเซีย อังกฤษ และไทย พร้อมช่วยเลือกสายพันธุ์และทำบัตรทางการแพทย์ สบายๆ ไม่เร่งรีบ ไม่กดดัน",
+    "guidePhotoAlt": "Dmitry — ผู้เชี่ยวชาญกัญชาที่ Labs Cannabis",
     "teamPhotoAlt": "ทีมงาน Labs Cannabis"
   },
   "faq": {

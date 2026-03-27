@@ -1,6 +1,5 @@
 import { useTranslations } from "next-intl";
-
-const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
+import { GOOGLE_LISTING_URL } from "@/lib/constants";
 
 export function Hero() {
   const t = useTranslations("hero");
@@ -19,7 +18,7 @@ export function Hero() {
         </p>
         <div className="flex flex-wrap gap-3">
           <a
-            href={GOOGLE_MAPS_URL}
+            href={GOOGLE_LISTING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2.5 rounded-lg text-sm font-medium transition-colors"

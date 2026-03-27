@@ -1,7 +1,21 @@
 import { useTranslations } from "next-intl";
+import type { ShopSettings } from "@/lib/mock-data";
+import { urlFor } from "@/sanity/image";
 
-export function AboutTeam() {
+interface AboutTeamProps {
+  shopSettings?: ShopSettings;
+}
+
+export function AboutTeam({ shopSettings }: AboutTeamProps) {
   const t = useTranslations("about");
+
+  const guideImageUrl = shopSettings?.guidePhoto
+    ? urlFor(shopSettings.guidePhoto)?.width(200).height(200).url()
+    : null;
+
+  const teamImageUrl = shopSettings?.teamPhoto
+    ? urlFor(shopSettings.teamPhoto)?.width(200).height(200).url()
+    : null;
 
   return (
     <section className="py-12 px-4">
@@ -16,22 +30,36 @@ export function AboutTeam() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <div className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col items-center text-center">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border-2 border-emerald-500/30 overflow-hidden">
-              {/* TODO: Replace with actual owner photo <img src="..." alt={t("ownerPhotoAlt")} className="w-full h-full object-cover" /> */}
-              <span className="text-3xl opacity-50">👤</span>
+              {guideImageUrl ? (
+                <img
+                  src={guideImageUrl}
+                  alt={t("guidePhotoAlt")}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-3xl opacity-50" aria-hidden="true">👤</span>
+              )}
             </div>
             <h3 className="font-semibold text-text-primary text-lg mb-0.5">
-              {t("ownerName")}
+              {t("guideName")}
             </h3>
-            <p className="text-emerald-400 text-sm mb-3">{t("ownerRole")}</p>
+            <p className="text-emerald-400 text-sm mb-3">{t("guideRole")}</p>
             <p className="text-text-secondary text-sm leading-relaxed">
-              {t("ownerDescription")}
+              {t("guideDescription")}
             </p>
           </div>
 
           <div className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col items-center text-center">
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border-2 border-emerald-500/30 overflow-hidden">
-              {/* TODO: Replace with actual team photo <img src="..." alt={t("teamPhotoAlt")} className="w-full h-full object-cover" /> */}
-              <span className="text-3xl opacity-50">👥</span>
+              {teamImageUrl ? (
+                <img
+                  src={teamImageUrl}
+                  alt={t("teamPhotoAlt")}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <span className="text-3xl opacity-50" aria-hidden="true">👥</span>
+              )}
             </div>
             <h3 className="font-semibold text-text-primary text-lg mb-3">
               {t("teamTitle")}

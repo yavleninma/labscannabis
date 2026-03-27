@@ -95,7 +95,11 @@ export async function getShopSettings(): Promise<ShopSettings> {
         whatsappUrl, whatsappNumber,
         telegramUrl, telegramId,
         phone,
-        announcement
+        announcement,
+        googleRating,
+        googleReviewCount,
+        guidePhoto,
+        teamPhoto
       }`
     );
     return settings || mockShopSettings;

@@ -1,4 +1,6 @@
+import { getTranslations } from "next-intl/server";
 import { getSiteUrl } from "@/lib/site-url";
+import { DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
 
 type Locale = "en" | "ru" | "th";
 
@@ -7,27 +9,36 @@ interface JsonLdProps {
   openTime?: string;
   closeTime?: string;
   isOpen24h?: boolean;
+  googleRating?: number;
+  googleReviewCount?: number;
 }
 
-export function JsonLd({
+const descriptions: Record<Locale, string> = {
+  en: "Licensed cannabis shop in South Pattaya. On-site medical card in 2 minutes, walk-in friendly. 5 min from Walking Street. Russian- and English-speaking staff.",
+  ru: "Лицензированный каннабис-шоп в Южной Паттайе. Медкарта за 2 минуты на месте, без записи. 5 минут от Walking Street. Говорим по-русски.",
+  th: "ร้านกัญชาที่ได้รับอนุญาตในพัทยาใต้ บัตรทางการแพทย์ภายใน 2 นาที เดินเข้ามาได้เลย 5 นาทีจาก Walking Street",
+};
+
+export async function JsonLd({
   locale,
   openTime = "12:00",
   closeTime = "01:00",
   isOpen24h = false,
+  googleRating,
+  googleReviewCount,
 }: JsonLdProps) {
-  const baseUrl = getSiteUrl();
+  const t = await getTranslations({ locale, namespace: "faq" });
 
-  const jsonLd = {
+  const baseUrl = getSiteUrl();
+  const rating = googleRating ?? DEFAULT_GOOGLE_RATING;
+  const reviewCount = googleReviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
+
+  const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "@id": `${baseUrl}/${locale}`,
     name: "Labs Cannabis",
-    description:
-      locale === "ru"
-        ? "Лицензированный медицинский каннабис-диспансер в Южной Паттайе. Кураторский выбор сортов, помощь с оформлением на месте."
-        : locale === "th"
-          ? "ร้านกัญชาทางการแพทย์ที่ได้รับอนุญาตในพัทยาใต้ สายพันธุ์คัดสรร บริการช่วยเหลือจัดทำเอกสารทันที"
-          : "Licensed medical cannabis dispensary in South Pattaya. Curated strain selection, on-site medical card assistance.",
+    description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
     telephone: "", // TODO: Add phone number
     image: `${baseUrl}/og-image.svg`,
@@ -60,19 +71,39 @@ export function JsonLd({
     },
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "91",
+      ratingValue: String(rating),
+      reviewCount: String(reviewCount),
       bestRating: "5",
     },
     priceRange: "฿฿",
     currenciesAccepted: "THB",
-    paymentAccepted: "Cash, Credit Card",
+    paymentAccepted: "Cash, QR Bank Transfer",
+  };
+
+  const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqKeys.map((key) => ({
+      "@type": "Question",
+      name: t(`q${key}`),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: t(`a${key}`),
+      },
+    })),
   };
 
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+      />
+    </>
   );
 }

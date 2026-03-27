@@ -22,6 +22,8 @@ export function FAQ() {
         <div className="space-y-2">
           {faqKeys.map((key, i) => {
             const isOpen = openIndex === i;
+            const questionId = `faq-question-${key}`;
+            const panelId = `faq-panel-${key}`;
             return (
               <div
                 key={key}
@@ -29,6 +31,9 @@ export function FAQ() {
               >
                 <button
                   type="button"
+                  id={questionId}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
                 >
@@ -42,6 +47,7 @@ export function FAQ() {
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       strokeLinecap="round"
@@ -52,6 +58,9 @@ export function FAQ() {
                   </svg>
                 </button>
                 <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={questionId}
                   className={`overflow-hidden transition-all duration-200 ${
                     isOpen ? "max-h-96" : "max-h-0"
                   }`}

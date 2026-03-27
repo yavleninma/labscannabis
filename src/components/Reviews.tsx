@@ -2,8 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-
-const GOOGLE_REVIEWS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
+import { GOOGLE_LISTING_URL, DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
 
 const reviews = [
   {
@@ -41,7 +40,15 @@ function Stars({ count }: { count: number }) {
   );
 }
 
-export function Reviews() {
+interface ReviewsProps {
+  rating?: number;
+  reviewCount?: number;
+}
+
+export function Reviews({
+  rating = DEFAULT_GOOGLE_RATING,
+  reviewCount = DEFAULT_GOOGLE_REVIEW_COUNT,
+}: ReviewsProps) {
   const t = useTranslations("reviews");
   const locale = useLocale() as "en" | "ru" | "th";
   const [translatedByName, setTranslatedByName] = useState<Record<string, string>>({});
@@ -126,16 +133,19 @@ export function Reviews() {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <div className="text-3xl sm:text-4xl font-bold mb-1">
-            4.8 <span className="text-yellow-400">★★★★★</span>
+          <div className="text-3xl sm:text-4xl font-bold mb-1" aria-label={`${rating} out of 5 stars`}>
+            {rating}{" "}
+            <span className="text-yellow-400" aria-hidden="true">
+              {"★".repeat(Math.round(rating))}{"☆".repeat(5 - Math.round(rating))}
+            </span>
           </div>
           <a
-            href={GOOGLE_REVIEWS_URL}
+            href={GOOGLE_LISTING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="text-text-secondary text-sm hover:text-emerald-400 transition-colors"
           >
-            {t("subtitle")} →
+            {t("subtitle", { count: reviewCount })} →
           </a>
         </div>
 

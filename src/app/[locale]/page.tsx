@@ -28,11 +28,17 @@ export default async function HomePage({
   return (
     <>
       <Hero />
-      <SocialProofStrip />
+      <SocialProofStrip
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
+      />
       <NoPrescription />
-      <AboutTeam />
+      <AboutTeam shopSettings={shopSettings} />
       <FAQ />
-      <Reviews />
+      <Reviews
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
+      />
       {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} />
       <LocationSection
