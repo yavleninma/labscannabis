@@ -4,9 +4,17 @@ type Locale = "en" | "ru" | "th";
 
 interface JsonLdProps {
   locale: Locale;
+  openTime?: string;
+  closeTime?: string;
+  isOpen24h?: boolean;
 }
 
-export function JsonLd({ locale }: JsonLdProps) {
+export function JsonLd({
+  locale,
+  openTime = "12:00",
+  closeTime = "01:00",
+  isOpen24h = false,
+}: JsonLdProps) {
   const baseUrl = getSiteUrl();
 
   const jsonLd = {
@@ -47,8 +55,8 @@ export function JsonLd({ locale }: JsonLdProps) {
         "Saturday",
         "Sunday",
       ],
-      opens: "12:00",
-      closes: "01:00",
+      opens: isOpen24h ? "00:00" : openTime,
+      closes: isOpen24h ? "23:59" : closeTime,
     },
     aggregateRating: {
       "@type": "AggregateRating",

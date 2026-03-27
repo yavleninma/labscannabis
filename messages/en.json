@@ -61,7 +61,8 @@
     "landmark": "Landmark",
     "landmarkDesc": "5 min walk from Walking Street",
     "hours": "Hours",
-    "hoursValue": "Daily 12:00 PM – 1:00 AM",
+    "hoursValueDynamic": "Daily {open} - {close}",
+    "hoursValue24_7": "Open 24/7",
     "openInMaps": "Open in Google Maps"
   },
   "contact": {

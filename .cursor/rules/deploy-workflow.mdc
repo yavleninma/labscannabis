@@ -1,0 +1,24 @@
+---
+description: Deployment workflow and verification for this project
+alwaysApply: true
+---
+
+# Deploy Workflow
+
+- Production updates are delivered by pushing to `origin/main`.
+- The canonical deployment trigger is a successful `git push origin main`.
+- After push, confirm remote branch head:
+  - `git ls-remote origin refs/heads/main`
+  - Ensure hash matches local `git rev-parse HEAD`.
+
+# Verification Steps After Push
+
+- If CI/check tooling is available, verify checks for latest `main` commit.
+- If GitHub CLI (`gh`) is unavailable in the environment, use Git host UI to confirm checks/deploy state.
+- If hosting platform has auto-deploy from GitHub (for example Vercel), expect deploy to start immediately after push.
+- Report commit hash in status updates so the team can map deploys to code.
+
+# Safety Notes
+
+- Do not force-push `main` unless explicitly requested.
+- Keep deploy-related updates concise: branch, commit hash, push result, and deploy-check path.

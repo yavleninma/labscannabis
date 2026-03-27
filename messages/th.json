@@ -61,7 +61,8 @@
     "landmark": "จุดสังเกต",
     "landmarkDesc": "เดิน 5 นาทีจากถนนวอล์กกิ้งสตรีท",
     "hours": "เวลาทำการ",
-    "hoursValue": "ทุกวัน 12:00 – 01:00",
+    "hoursValueDynamic": "ทุกวัน {open} - {close}",
+    "hoursValue24_7": "เปิดตลอด 24 ชั่วโมง (24/7)",
     "openInMaps": "เปิดใน Google Maps"
   },
   "contact": {

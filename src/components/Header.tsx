@@ -10,9 +10,10 @@ const locales = ["en", "ru", "th"] as const;
 interface HeaderProps {
   openTime?: string;
   closeTime?: string;
+  isOpen24h?: boolean;
 }
 
-export function Header({ openTime, closeTime }: HeaderProps) {
+export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const locale = useLocale();
   const pathname = usePathname();
@@ -45,7 +46,7 @@ export function Header({ openTime, closeTime }: HeaderProps) {
         </a>
 
         <div className="flex items-center gap-4">
-          <OpenIndicator openTime={openTime} closeTime={closeTime} />
+          <OpenIndicator openTime={openTime} closeTime={closeTime} isOpen24h={isOpen24h} />
           <div className="flex items-center gap-1 text-xs">
             {locales.map((l) => (
               <button

@@ -4,8 +4,31 @@ const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
 const MAPS_EMBED_URL =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.!2d100.8825!3d12.9236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sLabs%20Cannabis!5e0!3m2!1sen!2sth!4v1";
 
-export function LocationSection() {
+interface LocationSectionProps {
+  openTime?: string;
+  closeTime?: string;
+  isOpen24h?: boolean;
+}
+
+function getHoursLabel(
+  t: ReturnType<typeof useTranslations>,
+  openTime: string,
+  closeTime: string,
+  isOpen24h: boolean
+): string {
+  if (isOpen24h || openTime === closeTime) {
+    return t("hoursValue24_7");
+  }
+  return t("hoursValueDynamic", { open: openTime, close: closeTime });
+}
+
+export function LocationSection({
+  openTime = "12:00",
+  closeTime = "01:00",
+  isOpen24h = false,
+}: LocationSectionProps) {
   const t = useTranslations("location");
+  const hoursLabel = getHoursLabel(t, openTime, closeTime, isOpen24h);
 
   return (
     <section id="location" className="py-12 px-4">
@@ -57,7 +80,7 @@ export function LocationSection() {
                 {t("hours")}
               </p>
               <p className="text-text-secondary text-sm">
-                {t("hoursValue")}
+                {hoursLabel}
               </p>
             </div>
 

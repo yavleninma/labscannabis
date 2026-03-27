@@ -67,15 +67,6 @@ type PortableTextChild = {
   marks?: string[];
 };
 
-type PortableTextBlock = {
-  _type: string;
-  _key?: string;
-  style?: string;
-  markDefs?: unknown[];
-  children?: PortableTextChild[];
-  [key: string]: unknown;
-};
-
 export async function translatePortableTextBlocks(
   blocks: Strain["fullDescription"],
   targetLocale: Locale

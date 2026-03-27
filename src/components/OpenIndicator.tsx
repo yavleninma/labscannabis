@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 interface OpenIndicatorProps {
   openTime?: string;
   closeTime?: string;
+  isOpen24h?: boolean;
 }
 
 function isOpen(openTime: string, closeTime: string, now: Date): boolean {
@@ -30,10 +31,12 @@ function isOpen(openTime: string, closeTime: string, now: Date): boolean {
 export function OpenIndicator({
   openTime = "12:00",
   closeTime = "01:00",
+  isOpen24h = false,
 }: OpenIndicatorProps) {
   const t = useTranslations("header");
   const [currentTimestamp, setCurrentTimestamp] = useState(() => Date.now());
-  const open = isOpen(openTime, closeTime, new Date(currentTimestamp));
+  const open =
+    isOpen24h || openTime === closeTime || isOpen(openTime, closeTime, new Date(currentTimestamp));
 
   useEffect(() => {
     const interval = setInterval(() => {

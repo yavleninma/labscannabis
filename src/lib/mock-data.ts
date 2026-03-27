@@ -23,6 +23,7 @@ export interface Strain {
 export interface ShopSettings {
   openTime: string;
   closeTime: string;
+  isOpen24h?: boolean;
   lineUrl: string | null;
   whatsappUrl: string | null;
   telegramUrl: string | null;
@@ -171,6 +172,7 @@ export const mockStrains: Strain[] = [
 export const mockShopSettings: ShopSettings = {
   openTime: "12:00",
   closeTime: "01:00",
+  isOpen24h: false,
   lineUrl: null, // TODO: Add LINE URL
   whatsappUrl: null, // TODO: Add WhatsApp URL
   telegramUrl: null, // TODO: Add Telegram URL

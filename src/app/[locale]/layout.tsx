@@ -10,6 +10,7 @@ import { getShopSettings } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 
 type Locale = "en" | "ru" | "th";
+export const revalidate = 60;
 
 export async function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -94,8 +95,17 @@ export default async function LocaleLayout({
       </head>
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">
         <NextIntlClientProvider messages={messages}>
-          <JsonLd locale={locale as Locale} />
-          <Header openTime={shopSettings.openTime} closeTime={shopSettings.closeTime} />
+          <JsonLd
+            locale={locale as Locale}
+            openTime={shopSettings.openTime}
+            closeTime={shopSettings.closeTime}
+            isOpen24h={shopSettings.isOpen24h}
+          />
+          <Header
+            openTime={shopSettings.openTime}
+            closeTime={shopSettings.closeTime}
+            isOpen24h={shopSettings.isOpen24h}
+          />
           <main>{children}</main>
         </NextIntlClientProvider>
       </body>

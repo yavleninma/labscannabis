@@ -8,6 +8,8 @@ import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
 
+export const revalidate = 60;
+
 export default async function HomePage({
   params,
 }: {
@@ -27,7 +29,11 @@ export default async function HomePage({
       {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} />
       <Reviews />
-      <LocationSection />
+      <LocationSection
+        openTime={shopSettings.openTime}
+        closeTime={shopSettings.closeTime}
+        isOpen24h={shopSettings.isOpen24h}
+      />
       <ContactSection
         lineUrl={shopSettings.lineUrl}
         whatsappUrl={shopSettings.whatsappUrl}
