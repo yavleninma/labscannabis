@@ -16,20 +16,24 @@ export function SocialProofStrip({
   const fullStars = Math.round(safeRating);
 
   return (
-    <section className="px-4 pb-2" aria-label={`${safeRating} out of 5 stars, ${safeReviewCount} reviews`}>
+    <section className="px-4 pb-3 sm:pb-2" aria-label={`${safeRating} out of 5 stars, ${safeReviewCount} reviews`}>
       <div className="max-w-6xl mx-auto">
         <a
           href={GOOGLE_LISTING_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
+          className="group inline-flex flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-border bg-bg-card/40 px-3 py-2 text-sm text-text-secondary hover:text-text-primary transition-colors"
         >
-          <span className="font-semibold text-text-primary">{safeRating}</span>
-          <span className="text-yellow-400" aria-hidden="true">
+          <span className="font-semibold text-text-primary shrink-0">{safeRating}</span>
+          <span className="text-yellow-400 shrink-0" aria-hidden="true">
             {"★".repeat(fullStars)}{"☆".repeat(5 - fullStars)}
           </span>
-          <span>{t("reviewCount", { count: safeReviewCount })}</span>
-          <span className="text-emerald-400 text-xs">→ {t("seeAll")}</span>
+          <span className="basis-full sm:basis-auto text-xs sm:text-sm leading-snug">
+            {t("reviewCount", { count: safeReviewCount })}
+          </span>
+          <span className="text-emerald-400 text-xs sm:text-sm sm:ml-auto group-hover:text-emerald-300 transition-colors">
+            → {t("seeAll")}
+          </span>
         </a>
       </div>
     </section>

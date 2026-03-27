@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
+import { urlFor } from "@/sanity/image";
 
 interface QuickMenuProps {
   strains: Strain[];
@@ -17,14 +18,35 @@ export function QuickMenu({ strains }: QuickMenuProps) {
     () => [strains.filter((strain) => !strain.isSoldOut), strains.filter((strain) => strain.isSoldOut)],
     [strains],
   );
+  const featuredStrain = availableStrains[0];
+  const featuredImageUrl = featuredStrain?.image
+    ? urlFor(featuredStrain.image)?.width(80).height(80).url()
+    : null;
 
   return (
-    <section className="px-4 pb-6">
+    <section className="px-4 pb-6 pt-1 sm:pt-0">
       <div className="max-w-6xl mx-auto">
-        <div className="flex items-center justify-between gap-3 mb-3">
-          <p className="text-sm text-text-muted">{t("title")}</p>
-          <a href="#catalog" className="text-sm text-emerald-400 hover:text-emerald-300 transition-colors">
-            {t("seeAll")} →
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-3 mb-3">
+          <div className="inline-flex items-center gap-2">
+            <div className="h-8 w-8 rounded-lg overflow-hidden border border-border bg-bg-card shrink-0">
+              {featuredImageUrl ? (
+                <img
+                  src={featuredImageUrl}
+                  alt={featuredStrain?.name ?? t("title")}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="h-full w-full flex items-center justify-center text-sm">🌿</div>
+              )}
+            </div>
+            <p className="text-sm text-text-muted">{t("title")}</p>
+          </div>
+          <a
+            href="#catalog"
+            className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-300 border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-full px-3 py-1.5 transition-colors self-start sm:self-auto"
+          >
+            {t("seeAll")}
+            <span className="text-[11px] group-hover:translate-x-0.5 transition-transform">↗</span>
           </a>
         </div>
 
