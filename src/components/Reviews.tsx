@@ -1,26 +1,32 @@
-import { useTranslations } from "next-intl";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 const reviews = [
   {
     name: "Mike R.",
     initial: "M",
     stars: 5,
-    text: "Best dispensary in Pattaya hands down. The staff really knows their strains and helped me pick the perfect one. Clean shop, great vibes.",
-    lang: "en",
+    originalText:
+      "Best dispensary in Pattaya hands down. The staff really knows their strains and helped me pick the perfect one. Clean shop, great vibes.",
+    originalLang: "en",
   },
   {
     name: "Алексей К.",
     initial: "А",
     stars: 5,
-    text: "Отличный магазин! Ребята помогли с оформлением карты прямо на месте за пару минут. Выбор сортов хороший, цены адекватные. Рекомендую.",
-    lang: "ru",
+    originalText:
+      "Отличный магазин! Ребята помогли с оформлением карты прямо на месте за пару минут. Выбор сортов хороший, цены адекватные. Рекомендую.",
+    originalLang: "ru",
   },
   {
     name: "Sarah T.",
     initial: "S",
     stars: 5,
-    text: "So easy! I was nervous about the medical card thing but they walked me through everything. Great selection and very knowledgeable staff.",
-    lang: "en",
+    originalText:
+      "So easy! I was nervous about the medical card thing but they walked me through everything. Great selection and very knowledgeable staff.",
+    originalLang: "en",
   },
 ];
 
@@ -35,6 +41,84 @@ function Stars({ count }: { count: number }) {
 
 export function Reviews() {
   const t = useTranslations("reviews");
+  const locale = useLocale() as "en" | "ru" | "th";
+  const [translatedByName, setTranslatedByName] = useState<Record<string, string>>({});
+  const [showOriginalByName, setShowOriginalByName] = useState<Record<string, boolean>>({});
+  const [isTranslating, setIsTranslating] = useState(false);
+
+  const needsTranslation = locale !== "en";
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadTranslations() {
+      if (!needsTranslation) {
+        setTranslatedByName({});
+        return;
+      }
+
+      setIsTranslating(true);
+      const entries = await Promise.all(
+        reviews.map(async (review) => {
+          if (review.originalLang === locale) {
+            return [review.name, review.originalText] as const;
+          }
+
+          try {
+            const response = await fetch("/api/translate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                text: review.originalText,
+                targetLocale: locale,
+              }),
+            });
+
+            if (!response.ok) {
+              return [review.name, review.originalText] as const;
+            }
+
+            const payload = (await response.json()) as { translatedText?: string };
+            return [review.name, payload.translatedText || review.originalText] as const;
+          } catch {
+            return [review.name, review.originalText] as const;
+          }
+        })
+      );
+
+      if (!isActive) {
+        return;
+      }
+
+      setTranslatedByName(Object.fromEntries(entries));
+      setIsTranslating(false);
+    }
+
+    void loadTranslations();
+    return () => {
+      isActive = false;
+    };
+  }, [locale, needsTranslation]);
+
+  const cards = useMemo(
+    () =>
+      reviews.map((review) => {
+        const translated = translatedByName[review.name];
+        const shouldShowOriginal = showOriginalByName[review.name] || false;
+        const renderedText =
+          needsTranslation && translated && !shouldShowOriginal ? translated : review.originalText;
+
+        return {
+          ...review,
+          renderedText,
+          canToggle: needsTranslation && translated && translated !== review.originalText,
+          shouldShowOriginal,
+        };
+      }),
+    [needsTranslation, showOriginalByName, translatedByName]
+  );
 
   return (
     <section className="py-12 px-4">
@@ -49,7 +133,7 @@ export function Reviews() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          {reviews.map((review) => (
+          {cards.map((review) => (
             <div
               key={review.name}
               className="bg-bg-card border border-border rounded-xl p-5"
@@ -66,9 +150,25 @@ export function Reviews() {
                 </div>
               </div>
               <p className="text-text-secondary text-sm leading-relaxed">
-                &ldquo;{review.text}&rdquo;
+                &ldquo;{isTranslating && needsTranslation && !translatedByName[review.name] ? t("translating") : review.renderedText}&rdquo;
               </p>
-              <p className="text-text-muted text-xs mt-3">via Google</p>
+              <div className="mt-3 flex items-center justify-between gap-2">
+                <p className="text-text-muted text-xs">{t("sourceGoogle")}</p>
+                {review.canToggle && (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setShowOriginalByName((prev) => ({
+                        ...prev,
+                        [review.name]: !review.shouldShowOriginal,
+                      }))
+                    }
+                    className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+                  >
+                    {review.shouldShowOriginal ? t("showTranslation") : t("showOriginal")}
+                  </button>
+                )}
+              </div>
             </div>
           ))}
         </div>

@@ -29,7 +29,7 @@
     "badge3": "Бесплатная консультация"
   },
   "staffPick": {
-    "badge": "Выбор команды",
+    "badge": "Выбор экспертов",
     "reserve": "Забронировать",
     "viewDetails": "Подробнее"
   },
@@ -40,13 +40,20 @@
     "filter_relax": "Релакс",
     "filter_energy": "Энергия",
     "filter_creative": "Креатив",
+    "filter_euphoria": "Эйфория",
     "filter_sleep": "Сон",
     "reserve": "Забронировать",
     "soldOut": "Нет в наличии",
-    "noResults": "Пока нет сортов с таким эффектом."
+    "noResults": "Пока нет сортов с таким эффектом.",
+    "activeFilter": "Фильтр: {tagType} — {tagLabel}",
+    "clearFilter": "Сбросить фильтр"
   },
   "reviews": {
-    "subtitle": "91 отзыв на Google"
+    "subtitle": "91 отзыв в Google",
+    "sourceGoogle": "из Google",
+    "showOriginal": "Оригинал",
+    "showTranslation": "Перевод",
+    "translating": "Переводим..."
   },
   "location": {
     "title": "Как нас найти",
@@ -71,6 +78,26 @@
     "reserve": "Забронировать этот сорт",
     "soldOut": "Нет в наличии",
     "terpenes": "Терпеновый профиль",
-    "about": "Об этом сорте"
+    "about": "Об этом сорте",
+    "metaDescriptionFallback": "{name} ({type}) — сорт каннабиса с THC {thc}%. Доступен в Labs Cannabis Паттайя."
+  },
+  "strainCommon": {
+    "type_indica": "Индика",
+    "type_sativa": "Сатива",
+    "type_hybrid": "Гибрид",
+    "effect_relax": "Расслабление",
+    "effect_energy": "Энергия",
+    "effect_creative": "Творчество",
+    "effect_sleep": "Сон",
+    "effect_euphoria": "Эйфория",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/г",
+    "cardAltText": "{name} — сорт каннабиса в Labs Cannabis Паттайя",
+    "staffPickAltText": "{name} — выбор экспертов в Labs Cannabis Паттайя",
+    "strainAltText": "{name} — сорт каннабиса, доступный в Labs Cannabis Паттайя",
+    "tagType_effect": "Эффект",
+    "tagType_type": "Тип",
+    "tagType_terpene": "Терпен"
   }
 }

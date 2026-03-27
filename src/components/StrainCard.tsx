@@ -1,4 +1,8 @@
+"use client";
+
+import { useTranslations } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
+import { createTagHref } from "@/lib/strain-tags";
 import { urlFor } from "@/sanity/image";
 
 const effectColors: Record<string, string> = {
@@ -37,23 +41,39 @@ interface StrainCardProps {
 }
 
 export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }: StrainCardProps) {
+  const tCommon = useTranslations("strainCommon");
   const imageUrl = strain.image ? urlFor(strain.image)?.width(400).height(300).url() : null;
   const gradient = gradients[index % gradients.length];
+  const detailsHref = `/${locale}/strains/${strain.slug.current}`;
+  const typeHref = createTagHref(locale, "type", strain.type);
+  const effectHref = createTagHref(locale, "effect", strain.effect);
 
   // TODO: Replace with actual messenger URL
   // TODO: Replace with actual messenger URL with pre-filled message
   const reserveUrl = `#contact`;
 
+  const openTagFilter = (href: string) => {
+    window.location.assign(href);
+  };
+
   return (
-    <a
-      href={`/${locale}/strains/${strain.slug.current}`}
-      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all"
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={() => window.location.assign(detailsHref)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          window.location.assign(detailsHref);
+        }
+      }}
+      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all cursor-pointer"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {imageUrl ? (
           <img
             src={imageUrl}
-            alt={`${strain.name} cannabis strain — ${strain.effect} effect, available at Labs Cannabis Pattaya`}
+            alt={tCommon("cardAltText", { name: strain.name })}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
@@ -64,13 +84,19 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
           </div>
         )}
 
-        <span
+        <button
+          type="button"
+          onClick={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openTagFilter(effectHref);
+          }}
           className={`absolute top-2 right-2 text-xs px-2 py-0.5 rounded-full ${
             effectColors[strain.effect] || "bg-emerald-500/20 text-emerald-400"
           }`}
         >
-          {effectEmoji[strain.effect]} {strain.effect}
-        </span>
+          {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
+        </button>
 
         {strain.isSoldOut && (
           <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
@@ -86,19 +112,29 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
           {strain.name}
         </h3>
         <div className="flex items-center gap-2 text-xs text-text-muted mb-2">
-          <span className="capitalize">{strain.type}</span>
+          <button
+            type="button"
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              openTagFilter(typeHref);
+            }}
+            className="capitalize hover:text-emerald-300 transition-colors"
+          >
+            {tCommon(`type_${strain.type}`)}
+          </button>
           <span>·</span>
-          <span>THC {strain.thcPercent}%</span>
+          <span>{tCommon("thc")} {strain.thcPercent}%</span>
           {strain.cbdPercent ? (
             <>
               <span>·</span>
-              <span>CBD {strain.cbdPercent}%</span>
+              <span>{tCommon("cbd")} {strain.cbdPercent}%</span>
             </>
           ) : null}
         </div>
         <div className="flex items-center justify-between">
           <span className="text-emerald-400 font-semibold">
-            ฿{strain.pricePerGram}/g
+            {tCommon("pricePerGram", { price: strain.pricePerGram })}
           </span>
           {strain.isSoldOut ? (
             <span className="text-xs text-text-muted px-3 py-1.5 rounded-lg bg-bg-secondary cursor-not-allowed">
@@ -108,6 +144,7 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
             <span
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 window.location.href = reserveUrl;
               }}
               className="text-xs text-emerald-400 border border-emerald-500/30 px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer"
@@ -117,6 +154,6 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
           )}
         </div>
       </div>
-    </a>
+    </div>
   );
 }

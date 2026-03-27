@@ -13,8 +13,8 @@
   --color-text-secondary: #a3a3a3;
   --color-text-muted: #737373;
   --color-border: #262626;
-  --font-heading: "Playfair Display", Georgia, serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-heading: "Noto Serif", "Noto Serif Thai", Georgia, serif;
+  --font-body: "Noto Sans", "Noto Sans Thai", system-ui, sans-serif;
 }
 
 html {

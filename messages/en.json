@@ -29,7 +29,7 @@
     "badge3": "Free consultation"
   },
   "staffPick": {
-    "badge": "Staff Pick",
+    "badge": "Expert Pick",
     "reserve": "Reserve",
     "viewDetails": "View details"
   },
@@ -40,13 +40,20 @@
     "filter_relax": "Relax",
     "filter_energy": "Energy",
     "filter_creative": "Creative",
+    "filter_euphoria": "Euphoria",
     "filter_sleep": "Sleep",
     "reserve": "Reserve",
     "soldOut": "Sold Out",
-    "noResults": "No strains match this filter right now."
+    "noResults": "No strains match this filter right now.",
+    "activeFilter": "Filtered by {tagType}: {tagLabel}",
+    "clearFilter": "Clear filter"
   },
   "reviews": {
-    "subtitle": "91 reviews on Google"
+    "subtitle": "91 reviews on Google",
+    "sourceGoogle": "via Google",
+    "showOriginal": "Original",
+    "showTranslation": "Translation",
+    "translating": "Translating..."
   },
   "location": {
     "title": "Find Us",
@@ -71,6 +78,26 @@
     "reserve": "Reserve This Strain",
     "soldOut": "Sold Out",
     "terpenes": "Terpene Profile",
-    "about": "About This Strain"
+    "about": "About This Strain",
+    "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya."
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid",
+    "effect_relax": "Relax",
+    "effect_energy": "Energy",
+    "effect_creative": "Creative",
+    "effect_sleep": "Sleep",
+    "effect_euphoria": "Euphoria",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabis strain at Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Expert Pick at Labs Cannabis Pattaya",
+    "strainAltText": "{name} cannabis strain available at Labs Cannabis dispensary Pattaya",
+    "tagType_effect": "Effect",
+    "tagType_type": "Type",
+    "tagType_terpene": "Terpene"
   }
 }

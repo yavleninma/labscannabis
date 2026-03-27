@@ -14,7 +14,8 @@ export async function getAllStrains(): Promise<Strain[]> {
       `*[_type == "strain"] | order(sortOrder asc) {
         _id, name, slug, image, type, effect,
         thcPercent, cbdPercent, pricePerGram,
-        shortDescription, fullDescription, terpenes,
+        shortDescription, shortDescriptionRu, shortDescriptionTh,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
         isStaffPick, isSoldOut, sortOrder
       }`
     );
@@ -34,7 +35,8 @@ export async function getStrainBySlug(slug: string): Promise<Strain | null> {
       `*[_type == "strain" && slug.current == $slug][0] {
         _id, name, slug, image, type, effect,
         thcPercent, cbdPercent, pricePerGram,
-        shortDescription, fullDescription, terpenes,
+        shortDescription, shortDescriptionRu, shortDescriptionTh,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
         isStaffPick, isSoldOut, sortOrder
       }`,
       { slug }
@@ -55,7 +57,8 @@ export async function getStaffPick(): Promise<Strain | null> {
       `*[_type == "strain" && isStaffPick == true][0] {
         _id, name, slug, image, type, effect,
         thcPercent, cbdPercent, pricePerGram,
-        shortDescription, fullDescription, terpenes,
+        shortDescription, shortDescriptionRu, shortDescriptionTh,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
         isStaffPick, isSoldOut, sortOrder
       }`
     );

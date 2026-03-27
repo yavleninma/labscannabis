@@ -77,8 +77,32 @@ export const strain = defineType({
       validation: (Rule) => Rule.max(150),
     }),
     defineField({
+      name: "shortDescriptionRu",
+      title: "Short Description (RU)",
+      type: "string",
+      validation: (Rule) => Rule.max(150),
+    }),
+    defineField({
+      name: "shortDescriptionTh",
+      title: "Short Description (TH)",
+      type: "string",
+      validation: (Rule) => Rule.max(150),
+    }),
+    defineField({
       name: "fullDescription",
       title: "Full Description (for detail page)",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "fullDescriptionRu",
+      title: "Full Description (RU)",
+      type: "array",
+      of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "fullDescriptionTh",
+      title: "Full Description (TH)",
       type: "array",
       of: [{ type: "block" }],
     }),

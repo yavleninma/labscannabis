@@ -1,5 +1,8 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { translateText } from "@/lib/auto-translate";
 import type { Strain } from "@/lib/mock-data";
+import { getLocalizedShortDescription } from "@/lib/strain-localization";
+import { createTagHref } from "@/lib/strain-tags";
 import { urlFor } from "@/sanity/image";
 
 const effectEmoji: Record<string, string> = {
@@ -15,9 +18,15 @@ interface StaffPickProps {
   locale: string;
 }
 
-export function StaffPick({ strain, locale }: StaffPickProps) {
-  const t = useTranslations("staffPick");
+export async function StaffPick({ strain, locale }: StaffPickProps) {
+  const t = await getTranslations({ locale, namespace: "staffPick" });
+  const tCommon = await getTranslations({ locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(600).height(400).url() : null;
+  const typeHref = createTagHref(locale, "type", strain.type);
+  const effectHref = createTagHref(locale, "effect", strain.effect);
+  const localizedShortDescription = getLocalizedShortDescription(strain, locale as "en" | "ru" | "th");
+  const translatedShortDescription =
+    locale === "en" ? localizedShortDescription : await translateText(localizedShortDescription, locale as "ru" | "th");
 
   return (
     <section className="py-8 px-4">
@@ -28,7 +37,7 @@ export function StaffPick({ strain, locale }: StaffPickProps) {
               {imageUrl ? (
                 <img
                   src={imageUrl}
-                  alt={`${strain.name} — Staff Pick at Labs Cannabis Pattaya`}
+                  alt={tCommon("staffPickAltText", { name: strain.name })}
                   className="w-full h-full object-cover"
                 />
               ) : (
@@ -49,24 +58,28 @@ export function StaffPick({ strain, locale }: StaffPickProps) {
                 {strain.name}
               </h2>
               <div className="flex items-center gap-2 text-sm text-text-muted mb-3">
-                <span className="capitalize">{strain.type}</span>
+                <a href={typeHref} className="capitalize hover:text-emerald-300 transition-colors">
+                  {tCommon(`type_${strain.type}`)}
+                </a>
                 <span>·</span>
-                <span>THC {strain.thcPercent}%</span>
+                <span>{tCommon("thc")} {strain.thcPercent}%</span>
                 {strain.cbdPercent ? (
                   <>
                     <span>·</span>
-                    <span>CBD {strain.cbdPercent}%</span>
+                    <span>{tCommon("cbd")} {strain.cbdPercent}%</span>
                   </>
                 ) : null}
                 <span>·</span>
-                <span>{effectEmoji[strain.effect]} {strain.effect}</span>
+                <a href={effectHref} className="hover:text-emerald-300 transition-colors">
+                  {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
+                </a>
               </div>
               <p className="text-text-secondary text-sm mb-4">
-                {strain.shortDescription}
+                {translatedShortDescription}
               </p>
               <div className="flex items-center gap-4">
                 <span className="text-2xl font-bold text-emerald-400">
-                  ฿{strain.pricePerGram}/g
+                  {tCommon("pricePerGram", { price: strain.pricePerGram })}
                 </span>
                 {/* TODO: Replace with actual messenger URL */}
                 <a
@@ -79,12 +92,13 @@ export function StaffPick({ strain, locale }: StaffPickProps) {
               {strain.terpenes && strain.terpenes.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-1.5">
                   {strain.terpenes.map((terpene) => (
-                    <span
+                    <a
                       key={terpene}
+                      href={createTagHref(locale, "terpene", terpene)}
                       className="text-xs bg-bg-secondary text-text-muted px-2 py-0.5 rounded-full"
                     >
                       {terpene}
-                    </span>
+                    </a>
                   ))}
                 </div>
               )}

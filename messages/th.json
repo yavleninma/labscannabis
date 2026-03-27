@@ -29,7 +29,7 @@
     "badge3": "ปรึกษาฟรี"
   },
   "staffPick": {
-    "badge": "แนะนำโดยทีมงาน",
+    "badge": "ทีมผู้เชี่ยวชาญแนะนำ",
     "reserve": "จอง",
     "viewDetails": "ดูรายละเอียด"
   },
@@ -40,19 +40,26 @@
     "filter_relax": "ผ่อนคลาย",
     "filter_energy": "พลังงาน",
     "filter_creative": "สร้างสรรค์",
+    "filter_euphoria": "อารมณ์ดี",
     "filter_sleep": "นอนหลับ",
     "reserve": "จอง",
     "soldOut": "หมดแล้ว",
-    "noResults": "ยังไม่มีสายพันธุ์ที่ตรงกับตัวกรองนี้"
+    "noResults": "ยังไม่มีสายพันธุ์ที่ตรงกับตัวกรองนี้",
+    "activeFilter": "ตัวกรอง: {tagType} — {tagLabel}",
+    "clearFilter": "ล้างตัวกรอง"
   },
   "reviews": {
-    "subtitle": "91 รีวิวบน Google"
+    "subtitle": "91 รีวิวบน Google",
+    "sourceGoogle": "จาก Google",
+    "showOriginal": "ต้นฉบับ",
+    "showTranslation": "คำแปล",
+    "translating": "กำลังแปล..."
   },
   "location": {
     "title": "ที่ตั้งของเรา",
     "address": "ที่อยู่",
     "landmark": "จุดสังเกต",
-    "landmarkDesc": "เดิน 5 นาทีจาก Walking Street",
+    "landmarkDesc": "เดิน 5 นาทีจากถนนวอล์กกิ้งสตรีท",
     "hours": "เวลาทำการ",
     "hoursValue": "ทุกวัน 12:00 – 01:00",
     "openInMaps": "เปิดใน Google Maps"
@@ -71,6 +78,26 @@
     "reserve": "จองสายพันธุ์นี้",
     "soldOut": "หมดแล้ว",
     "terpenes": "โปรไฟล์เทอร์พีน",
-    "about": "เกี่ยวกับสายพันธุ์นี้"
+    "about": "เกี่ยวกับสายพันธุ์นี้",
+    "metaDescriptionFallback": "{name} สายพันธุ์ {type} มี THC {thc}%. พร้อมจำหน่ายที่ Labs Cannabis พัทยา"
+  },
+  "strainCommon": {
+    "type_indica": "อินดิกา",
+    "type_sativa": "ซาติวา",
+    "type_hybrid": "ไฮบริด",
+    "effect_relax": "ผ่อนคลาย",
+    "effect_energy": "พลังงาน",
+    "effect_creative": "สร้างสรรค์",
+    "effect_sleep": "ช่วยการนอน",
+    "effect_euphoria": "อารมณ์ดี",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/กรัม",
+    "cardAltText": "{name} สายพันธุ์กัญชาที่ Labs Cannabis พัทยา",
+    "staffPickAltText": "{name} — ทีมผู้เชี่ยวชาญแนะนำที่ Labs Cannabis พัทยา",
+    "strainAltText": "{name} สายพันธุ์กัญชาที่พร้อมจำหน่ายที่ Labs Cannabis พัทยา",
+    "tagType_effect": "เอฟเฟกต์",
+    "tagType_type": "ประเภท",
+    "tagType_terpene": "เทอร์พีน"
   }
 }

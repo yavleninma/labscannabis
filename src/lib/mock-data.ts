@@ -9,7 +9,11 @@ export interface Strain {
   cbdPercent: number | null;
   pricePerGram: number;
   shortDescription: string;
+  shortDescriptionRu?: string | null;
+  shortDescriptionTh?: string | null;
   fullDescription: { _type: string; _key?: string; [key: string]: unknown }[] | null;
+  fullDescriptionRu?: { _type: string; _key?: string; [key: string]: unknown }[] | null;
+  fullDescriptionTh?: { _type: string; _key?: string; [key: string]: unknown }[] | null;
   terpenes: string[] | null;
   isStaffPick: boolean;
   isSoldOut: boolean;

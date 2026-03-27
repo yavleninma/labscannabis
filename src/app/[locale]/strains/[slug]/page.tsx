@@ -3,10 +3,15 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { PortableText } from "@portabletext/react";
 import { routing } from "@/i18n/routing";
+import { translatePortableTextBlocks, translateText } from "@/lib/auto-translate";
+import { getLocalizedFullDescription, getLocalizedShortDescription } from "@/lib/strain-localization";
+import { createTagHref } from "@/lib/strain-tags";
 import { getStrainBySlug, getAllStrainSlugs } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 import { urlFor } from "@/sanity/image";
 import { Footer } from "@/components/Footer";
+
+type Locale = "en" | "ru" | "th";
 
 const effectEmoji: Record<string, string> = {
   relax: "😌",
@@ -41,12 +46,23 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const strain = await getStrainBySlug(slug);
   const t = await getTranslations({ locale, namespace: "strainPage" });
+  const tCommon = await getTranslations({ locale, namespace: "strainCommon" });
 
   if (!strain) return {};
 
   const baseUrl = getSiteUrl();
   const title = `${strain.name} — ${t("metaTitleSuffix")}`;
-  const description = strain.shortDescription || `${strain.name} ${strain.type} cannabis strain. THC ${strain.thcPercent}%. Available at Labs Cannabis Pattaya.`;
+  const localizedShortDescription = getLocalizedShortDescription(strain, locale as Locale);
+  const translatedShortDescription = localizedShortDescription
+    ? await translateText(localizedShortDescription, locale as Locale)
+    : "";
+  const description =
+    translatedShortDescription ||
+    t("metaDescriptionFallback", {
+      name: strain.name,
+      type: tCommon(`type_${strain.type}`),
+      thc: strain.thcPercent,
+    });
 
   return {
     title,
@@ -80,7 +96,19 @@ export default async function StrainPage({
   if (!strain) notFound();
 
   const t = await getTranslations({ locale: locale, namespace: "strainPage" });
+  const tCommon = await getTranslations({ locale: locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(800).height(600).url() : null;
+  const localizedShortDescription = getLocalizedShortDescription(strain, locale as Locale);
+  const translatedShortDescription = localizedShortDescription
+    ? await translateText(localizedShortDescription, locale as Locale)
+    : "";
+  const localizedFullDescription = getLocalizedFullDescription(strain, locale as Locale);
+  const translatedFullDescription = await translatePortableTextBlocks(
+    localizedFullDescription,
+    locale as Locale
+  );
+  const typeHref = createTagHref(locale, "type", strain.type);
+  const effectHref = createTagHref(locale, "effect", strain.effect);
 
   return (
     <>
@@ -100,7 +128,7 @@ export default async function StrainPage({
             {imageUrl ? (
               <img
                 src={imageUrl}
-                alt={`${strain.name} cannabis strain available at Labs Cannabis dispensary Pattaya`}
+                alt={tCommon("strainAltText", { name: strain.name })}
                 className="w-full h-full object-cover"
               />
             ) : (
@@ -125,18 +153,25 @@ export default async function StrainPage({
             </h1>
 
             <div className="flex flex-wrap items-center gap-2 text-sm text-text-muted mb-4">
-              <span className="capitalize bg-bg-card px-2 py-0.5 rounded">{strain.type}</span>
-              <span>THC {strain.thcPercent}%</span>
-              {strain.cbdPercent ? <span>CBD {strain.cbdPercent}%</span> : null}
-              <span>{effectEmoji[strain.effect]} {strain.effect}</span>
+              <a
+                href={typeHref}
+                className="capitalize bg-bg-card px-2 py-0.5 rounded hover:text-emerald-300 transition-colors"
+              >
+                {tCommon(`type_${strain.type}`)}
+              </a>
+              <span>{tCommon("thc")} {strain.thcPercent}%</span>
+              {strain.cbdPercent ? <span>{tCommon("cbd")} {strain.cbdPercent}%</span> : null}
+              <a href={effectHref} className="hover:text-emerald-300 transition-colors">
+                {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
+              </a>
             </div>
 
-            {strain.shortDescription && (
-              <p className="text-text-secondary mb-4">{strain.shortDescription}</p>
+            {translatedShortDescription && (
+              <p className="text-text-secondary mb-4">{translatedShortDescription}</p>
             )}
 
             <div className="text-3xl font-bold text-emerald-400 mb-4">
-              ฿{strain.pricePerGram}/g
+              {tCommon("pricePerGram", { price: strain.pricePerGram })}
             </div>
 
             {!strain.isSoldOut && (
@@ -152,10 +187,14 @@ export default async function StrainPage({
               <div className="mt-6">
                 <p className="text-sm text-text-muted mb-2">{t("terpenes")}</p>
                 <div className="flex flex-wrap gap-2">
-                  {strain.terpenes.map((t) => (
-                    <span key={t} className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border">
-                      {t}
-                    </span>
+                  {strain.terpenes.map((terpene) => (
+                    <a
+                      key={terpene}
+                      href={createTagHref(locale, "terpene", terpene)}
+                      className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border hover:text-emerald-300 transition-colors"
+                    >
+                      {terpene}
+                    </a>
                   ))}
                 </div>
               </div>
@@ -163,12 +202,12 @@ export default async function StrainPage({
           </div>
         </div>
 
-        {strain.fullDescription && (
+        {translatedFullDescription && (
           <div className="mt-10 prose prose-invert prose-emerald max-w-none">
             <h2 className="text-xl font-bold mb-4" style={{ fontFamily: "var(--font-heading)" }}>
               {t("about")}
             </h2>
-            <PortableText value={strain.fullDescription} />
+            <PortableText value={translatedFullDescription} />
           </div>
         )}
       </article>

@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
+import { normalizeTagValue, parseTagFromSearchParams, strainMatchesTag } from "@/lib/strain-tags";
 import { StrainCard } from "./StrainCard";
 
 const effects = ["all", "relax", "energy", "creative", "sleep"] as const;
@@ -21,15 +23,45 @@ interface StrainCatalogProps {
 
 export function StrainCatalog({ strains }: StrainCatalogProps) {
   const t = useTranslations("catalog");
+  const tCommon = useTranslations("strainCommon");
   const locale = useLocale();
-  const [filter, setFilter] = useState<string>("all");
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const { tagType, tag } = parseTagFromSearchParams(searchParams);
 
-  const filtered =
-    filter === "all"
-      ? strains
-      : strains.filter((s) => s.effect === filter);
+  const filtered = useMemo(() => {
+    if (!tagType || !tag) {
+      return strains;
+    }
+    return strains.filter((strain) => strainMatchesTag(strain, tagType, tag));
+  }, [strains, tagType, tag]);
 
   const available = strains.filter((s) => !s.isSoldOut).length;
+  const activeEffectFilter = tagType === "effect" ? tag : null;
+
+  const updateFilter = (effect: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (effect === "all") {
+      params.delete("tagType");
+      params.delete("tag");
+    } else {
+      params.set("tagType", "effect");
+      params.set("tag", effect);
+    }
+    const query = params.toString();
+    router.replace(`${pathname}${query ? `?${query}` : ""}#catalog`, { scroll: false });
+  };
+
+  const activeTagLabel =
+    tagType === "effect"
+      ? effects.includes(tag as (typeof effects)[number])
+        ? t(`filter_${tag}`)
+        : (tag ?? "")
+      : tagType === "type"
+        ? tCommon(`type_${tag ?? ""}`)
+        : (strains.find((strain) => strain.terpenes?.some((terpene) => normalizeTagValue(terpene) === tag))
+            ?.terpenes?.find((terpene) => normalizeTagValue(terpene) === tag) ?? (tag ?? ""));
 
   return (
     <section id="catalog" className="py-12 px-4">
@@ -50,9 +82,9 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
           {effects.map((e) => (
             <button
               key={e}
-              onClick={() => setFilter(e)}
+              onClick={() => updateFilter(e)}
               className={`flex-shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-full text-sm transition-colors ${
-                filter === e
+                (e === "all" && !activeEffectFilter) || activeEffectFilter === e
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : "bg-bg-card text-text-muted border border-border hover:text-text-secondary"
               }`}
@@ -62,6 +94,23 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
             </button>
           ))}
         </div>
+
+        {tagType && tag && (
+          <div className="mb-4 flex items-center gap-2 text-sm">
+            <span className="text-text-secondary">
+              {t("activeFilter", {
+                tagType: tCommon(`tagType_${tagType}`),
+                tagLabel: activeTagLabel,
+              })}
+            </span>
+            <button
+              onClick={() => updateFilter("all")}
+              className="text-emerald-400 hover:text-emerald-300 transition-colors"
+            >
+              {t("clearFilter")}
+            </button>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {filtered.map((strain, i) => (
