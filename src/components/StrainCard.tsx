@@ -6,16 +6,16 @@ import { createTagHref } from "@/lib/strain-tags";
 import { urlFor } from "@/sanity/image";
 
 const effectColors: Record<string, string> = {
-  relax: "bg-blue-500/20 text-blue-400",
-  energy: "bg-yellow-500/20 text-yellow-400",
-  creative: "bg-purple-500/20 text-purple-400",
-  sleep: "bg-indigo-500/20 text-indigo-400",
-  euphoria: "bg-pink-500/20 text-pink-400",
-  focus: "bg-cyan-500/20 text-cyan-400",
-  happy: "bg-amber-500/20 text-amber-400",
-  uplifted: "bg-emerald-500/20 text-emerald-400",
-  talkative: "bg-orange-500/20 text-orange-400",
-  hungry: "bg-rose-500/20 text-rose-400",
+  relax: "bg-blue-500/15 text-blue-600",
+  energy: "bg-yellow-500/15 text-yellow-700",
+  creative: "bg-purple-500/15 text-purple-600",
+  sleep: "bg-indigo-500/15 text-indigo-600",
+  euphoria: "bg-pink-500/15 text-pink-600",
+  focus: "bg-cyan-500/15 text-cyan-700",
+  happy: "bg-amber-500/15 text-amber-700",
+  uplifted: "bg-emerald-500/15 text-emerald-600",
+  talkative: "bg-orange-500/15 text-orange-600",
+  hungry: "bg-rose-500/15 text-rose-600",
 };
 
 const effectEmoji: Record<string, string> = {
