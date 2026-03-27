@@ -1,19 +1,45 @@
 import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Location } from "@/components/Location";
-import { Contact } from "@/components/Contact";
+import { NoPrescription } from "@/components/NoPrescription";
+import { StaffPick } from "@/components/StaffPick";
+import { StrainCatalog } from "@/components/StrainCatalog";
+import { Reviews } from "@/components/Reviews";
+import { LocationSection } from "@/components/LocationSection";
+import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
 
-export default function HomePage() {
+export const revalidate = 60;
+
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const [strains, staffPick, shopSettings] = await Promise.all([
+    getAllStrains(),
+    getStaffPick(),
+    getShopSettings(),
+  ]);
+
   return (
-    <main>
+    <>
       <Hero />
-      <About />
-      <HowItWorks />
-      <Location />
-      <Contact />
+      <NoPrescription />
+      {staffPick && <StaffPick strain={staffPick} locale={locale} />}
+      <StrainCatalog strains={strains} />
+      <Reviews />
+      <LocationSection
+        openTime={shopSettings.openTime}
+        closeTime={shopSettings.closeTime}
+        isOpen24h={shopSettings.isOpen24h}
+      />
+      <ContactSection
+        lineUrl={shopSettings.lineUrl}
+        whatsappUrl={shopSettings.whatsappUrl}
+        telegramUrl={shopSettings.telegramUrl}
+      />
       <Footer />
-    </main>
+    </>
   );
 }

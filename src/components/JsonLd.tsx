@@ -1,24 +1,40 @@
+import { getSiteUrl } from "@/lib/site-url";
+
 type Locale = "en" | "ru" | "th";
 
-const descriptions: Record<Locale, string> = {
-  en: "Licensed medical cannabis dispensary on Soi Hollywood, South Pattaya. Premium flower, free consultations with licensed practitioner. Best weed shop in Pattaya.",
-  ru: "Лицензированный медицинский каннабис-диспансер на Сои Голливуд, Южная Паттайя. Премиальные сорта, бесплатные консультации лицензированного специалиста.",
-  th: "ร้านกัญชาทางการแพทย์ที่ได้รับใบอนุญาต ซอยฮอลลีวูด พัทยาใต้ ดอกกัญชาพรีเมียม ปรึกษาแพทย์แผนไทยฟรี",
-};
+interface JsonLdProps {
+  locale: Locale;
+  openTime?: string;
+  closeTime?: string;
+  isOpen24h?: boolean;
+}
 
-export function JsonLd({ locale }: { locale: Locale }) {
+export function JsonLd({
+  locale,
+  openTime = "12:00",
+  closeTime = "01:00",
+  isOpen24h = false,
+}: JsonLdProps) {
+  const baseUrl = getSiteUrl();
+
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "MedicalBusiness",
+    "@type": "LocalBusiness",
+    "@id": `${baseUrl}/${locale}`,
     name: "Labs Cannabis",
-    description: descriptions[locale],
-    // TODO: Replace with actual domain
-    url: `https://labscannabis.com/${locale}`,
-    telephone: "+66660806784",
+    description:
+      locale === "ru"
+        ? "Лицензированный медицинский каннабис-диспансер в Южной Паттайе. Кураторский выбор сортов, помощь с оформлением на месте."
+        : locale === "th"
+          ? "ร้านกัญชาทางการแพทย์ที่ได้รับอนุญาตในพัทยาใต้ สายพันธุ์คัดสรร บริการช่วยเหลือจัดทำเอกสารทันที"
+          : "Licensed medical cannabis dispensary in South Pattaya. Curated strain selection, on-site medical card assistance.",
+    url: `${baseUrl}/${locale}`,
+    telephone: "", // TODO: Add phone number
+    image: `${baseUrl}/og-image.svg`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",
-      addressLocality: "Pattaya City",
+      addressLocality: "South Pattaya",
       addressRegion: "Chon Buri",
       postalCode: "20150",
       addressCountry: "TH",
@@ -39,28 +55,18 @@ export function JsonLd({ locale }: { locale: Locale }) {
         "Saturday",
         "Sunday",
       ],
-      opens: "00:00",
-      closes: "23:59",
+      opens: isOpen24h ? "00:00" : openTime,
+      closes: isOpen24h ? "23:59" : closeTime,
     },
-    priceRange: "$$",
-    // TODO: Add actual image URL
-    image: "https://labscannabis.com/og-image.jpg",
-    sameAs: [
-      // TODO: Add social media links
-    ],
     aggregateRating: {
       "@type": "AggregateRating",
-      ratingValue: "4.9",
-      reviewCount: "50",
+      ratingValue: "4.8",
+      reviewCount: "91",
       bestRating: "5",
     },
-    medicalSpecialty: "Thai Traditional Medicine",
+    priceRange: "฿฿",
     currenciesAccepted: "THB",
     paymentAccepted: "Cash, Credit Card",
-    areaServed: {
-      "@type": "City",
-      name: "Pattaya",
-    },
   };
 
   return (
