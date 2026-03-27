@@ -115,11 +115,17 @@ export default async function StrainPage({
   );
   const typeHref = createTagHref(locale, "type", strain.type);
   const effectHref = createTagHref(locale, "effect", strain.effect);
-  const reserveUrl = buildContactLinks(
+  const contactLinks = buildContactLinks(
     shopSettings,
     toContactLocale(locale),
     { kind: "purchase", productName: strain.name }
-  ).reserve;
+  );
+  const reserveChannels = [
+    { id: "line", label: "LINE", href: contactLinks.line },
+    { id: "whatsapp", label: "WhatsApp", href: contactLinks.whatsapp },
+    { id: "telegram", label: "Telegram", href: contactLinks.telegram },
+  ].filter((channel) => Boolean(channel.href) && !(channel.id === "line" && channel.href?.startsWith("tel:")));
+  const phoneDisplay = shopSettings.phone?.trim() || contactLinks.phone?.replace(/^tel:/, "") || null;
 
   return (
     <>
@@ -185,15 +191,31 @@ export default async function StrainPage({
               {tCommon("pricePerGram", { price: strain.pricePerGram })}
             </div>
 
-            {!strain.isSoldOut && (
-              <a
-                href={reserveUrl || "#"}
-                target={reserveUrl?.startsWith("http") ? "_blank" : undefined}
-                rel={reserveUrl?.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-medium transition-colors w-fit"
-              >
-                {t("reserve")}
-              </a>
+            {!strain.isSoldOut && (reserveChannels.length > 0 || contactLinks.phone) && (
+              <div className="mb-2">
+                <p className="text-xs uppercase tracking-wide text-text-muted mb-2">{t("reserveVia")}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  {reserveChannels.map((channel) => (
+                    <a
+                      key={channel.id}
+                      href={channel.href || "#"}
+                      target={channel.href?.startsWith("http") ? "_blank" : undefined}
+                      rel={channel.href?.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+                    >
+                      {channel.label}
+                    </a>
+                  ))}
+                  {contactLinks.phone && (
+                    <a
+                      href={contactLinks.phone}
+                      className="inline-flex items-center rounded-full border border-border bg-bg-card px-3 py-1 text-xs font-medium text-text-secondary hover:text-white transition-colors"
+                    >
+                      {t("call")}{phoneDisplay ? `: ${phoneDisplay}` : ""}
+                    </a>
+                  )}
+                </div>
+              </div>
             )}
 
             {strain.terpenes && strain.terpenes.length > 0 && (

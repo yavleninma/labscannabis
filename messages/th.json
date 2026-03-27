@@ -60,6 +60,22 @@
     "address": "ที่อยู่",
     "landmark": "จุดสังเกต",
     "landmarkDesc": "เดิน 5 นาทีจากถนนวอล์กกิ้งสตรีท",
+    "directions": {
+      "title": "เส้นทางเดินที่แนะนำ",
+      "step1": "เดินเข้าซอย Pattaya 13 Alley (Soi Hollywood) จาก Walking Street",
+      "step2": "เดินตรงไปตามซอยและมองหาป้าย LABS DISPENSARY",
+      "step3": "ร้านอยู่ฝั่งซ้าย ใกล้โซน South Pattaya ของซอย"
+    },
+    "photoGuide": {
+      "title": "คู่มือภาพเส้นทาง",
+      "subtitle": "เร็วๆ นี้จะเพิ่มรูปทีละขั้นตอนเพื่อให้หาร้านได้ง่ายขึ้น",
+      "photo1Title": "ภาพที่ 1 — จุดเริ่มต้น",
+      "photo1Desc": "จุดเลี้ยวจากถนนหลักเข้าสู่ซอย",
+      "photo2Title": "ภาพที่ 2 — จุดสังเกตระหว่างทาง",
+      "photo2Desc": "จุดสังเกตสำคัญกลางซอย",
+      "photo3Title": "ภาพที่ 3 — หน้าร้าน",
+      "photo3Desc": "มุมมองหน้าร้านจากถนน"
+    },
     "hours": "เวลาทำการ",
     "hoursValueDynamic": "ทุกวัน {open} - {close}",
     "hoursValue24_7": "เปิดตลอด 24 ชั่วโมง (24/7)",
@@ -77,6 +93,8 @@
     "metaTitleSuffix": "ซื้อที่ Labs Cannabis พัทยา",
     "backToCatalog": "กลับไปยังรายการ",
     "reserve": "จองสายพันธุ์นี้",
+    "reserveVia": "จองผ่าน",
+    "call": "โทร",
     "soldOut": "หมดแล้ว",
     "terpenes": "โปรไฟล์เทอร์พีน",
     "about": "เกี่ยวกับสายพันธุ์นี้",

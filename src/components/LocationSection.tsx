@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
 
-const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
-const MAPS_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.!2d100.8825!3d12.9236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sLabs%20Cannabis!5e0!3m2!1sen!2sth!4v1";
+const PLACE_QUERY = "LABS DISPENSARY Pattaya";
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(PLACE_QUERY)}`;
+const MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(PLACE_QUERY)}&output=embed`;
 
 interface LocationSectionProps {
   openTime?: string;
@@ -29,6 +29,12 @@ export function LocationSection({
 }: LocationSectionProps) {
   const t = useTranslations("location");
   const hoursLabel = getHoursLabel(t, openTime, closeTime, isOpen24h);
+  const directionSteps = [t("directions.step1"), t("directions.step2"), t("directions.step3")];
+  const routePhotoCards = [
+    { title: t("photoGuide.photo1Title"), description: t("photoGuide.photo1Desc") },
+    { title: t("photoGuide.photo2Title"), description: t("photoGuide.photo2Desc") },
+    { title: t("photoGuide.photo3Title"), description: t("photoGuide.photo3Desc") },
+  ];
 
   return (
     <section id="location" className="py-12 px-4">
@@ -54,7 +60,7 @@ export function LocationSection({
             />
           </div>
 
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col justify-center gap-5">
             <div>
               <p className="text-text-primary font-medium mb-1">
                 {t("address")}
@@ -76,12 +82,43 @@ export function LocationSection({
             </div>
 
             <div>
+              <p className="text-text-primary font-medium mb-2">{t("directions.title")}</p>
+              <ul className="space-y-2">
+                {directionSteps.map((step) => (
+                  <li key={step} className="flex items-start gap-2 text-text-secondary text-sm">
+                    <span
+                      className="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
               <p className="text-text-primary font-medium mb-1">
                 {t("hours")}
               </p>
               <p className="text-text-secondary text-sm">
                 {hoursLabel}
               </p>
+            </div>
+
+            <div>
+              <p className="text-text-primary font-medium mb-2">{t("photoGuide.title")}</p>
+              <p className="text-text-secondary text-sm mb-3">{t("photoGuide.subtitle")}</p>
+              <div className="grid grid-cols-1 gap-2">
+                {routePhotoCards.map((card) => (
+                  <div
+                    key={card.title}
+                    className="rounded-lg border border-dashed border-border px-3 py-2 bg-bg-card/40"
+                  >
+                    <p className="text-text-primary text-sm font-medium">{card.title}</p>
+                    <p className="text-text-secondary text-xs mt-0.5">{card.description}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <a

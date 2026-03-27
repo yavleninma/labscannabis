@@ -60,6 +60,22 @@
     "address": "Address",
     "landmark": "Landmark",
     "landmarkDesc": "5 min walk from Walking Street",
+    "directions": {
+      "title": "Best route on foot",
+      "step1": "Head to Pattaya 13 Alley (Soi Hollywood) from Walking Street.",
+      "step2": "Stay on the alley and look for LABS DISPENSARY signage.",
+      "step3": "We're on your left side near the South Pattaya side of the lane."
+    },
+    "photoGuide": {
+      "title": "Photo route guide",
+      "subtitle": "Soon we'll add step-by-step photos so you can find us even faster.",
+      "photo1Title": "Photo 1 — Entry point",
+      "photo1Desc": "Where to turn from the main road.",
+      "photo2Title": "Photo 2 — Midway landmark",
+      "photo2Desc": "Reference point in the middle of the alley.",
+      "photo3Title": "Photo 3 — Final storefront",
+      "photo3Desc": "How the shop entrance looks from the street."
+    },
     "hours": "Hours",
     "hoursValueDynamic": "Daily {open} - {close}",
     "hoursValue24_7": "Open 24/7",
@@ -77,6 +93,8 @@
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
     "backToCatalog": "Back to selection",
     "reserve": "Reserve This Strain",
+    "reserveVia": "Reserve via",
+    "call": "Call",
     "soldOut": "Sold Out",
     "terpenes": "Terpene Profile",
     "about": "About This Strain",
