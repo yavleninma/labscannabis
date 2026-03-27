@@ -41,16 +41,18 @@ function Stars({ count }: { count: number }) {
 }
 
 interface ReviewsProps {
-  rating?: number;
-  reviewCount?: number;
+  rating?: number | null;
+  reviewCount?: number | null;
 }
 
 export function Reviews({
-  rating = DEFAULT_GOOGLE_RATING,
-  reviewCount = DEFAULT_GOOGLE_REVIEW_COUNT,
+  rating,
+  reviewCount,
 }: ReviewsProps) {
   const t = useTranslations("reviews");
   const locale = useLocale() as "en" | "ru" | "th";
+  const safeRating = rating ?? DEFAULT_GOOGLE_RATING;
+  const safeReviewCount = reviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
   const [translatedByName, setTranslatedByName] = useState<Record<string, string>>({});
   const [showOriginalByName, setShowOriginalByName] = useState<Record<string, boolean>>({});
   const [isTranslating, setIsTranslating] = useState(false);
@@ -133,10 +135,10 @@ export function Reviews({
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <div className="text-3xl sm:text-4xl font-bold mb-1" aria-label={`${rating} out of 5 stars`}>
-            {rating}{" "}
+          <div className="text-3xl sm:text-4xl font-bold mb-1" aria-label={`${safeRating} out of 5 stars`}>
+            {safeRating}{" "}
             <span className="text-yellow-400" aria-hidden="true">
-              {"★".repeat(Math.round(rating))}{"☆".repeat(5 - Math.round(rating))}
+              {"★".repeat(Math.round(safeRating))}{"☆".repeat(5 - Math.round(safeRating))}
             </span>
           </div>
           <a
@@ -145,7 +147,7 @@ export function Reviews({
             rel="noopener noreferrer"
             className="text-text-secondary text-sm hover:text-emerald-400 transition-colors"
           >
-            {t("subtitle", { count: reviewCount })} →
+            {t("subtitle", { count: safeReviewCount })} →
           </a>
         </div>
 
