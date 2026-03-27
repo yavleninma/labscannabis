@@ -15,9 +15,9 @@ interface JsonLdProps {
 }
 
 const descriptions: Record<Locale, string> = {
-  en: "Licensed cannabis shop in South Pattaya. On-site medical card in 2 minutes, walk-in friendly. 5 min from Walking Street. Russian- and English-speaking staff.",
-  ru: "Лицензированный каннабис-шоп в Южной Паттайе. Медкарта за 2 минуты на месте, без записи. 5 минут от Walking Street. Говорим по-русски.",
-  th: "ร้านกัญชาที่ได้รับอนุญาตในพัทยาใต้ บัตรทางการแพทย์ภายใน 2 นาที เดินเข้ามาได้เลย 5 นาทีจาก Walking Street",
+  en: "Licensed cannabis shop in Pattaya. On-site medical card in 2 minutes, walk-in friendly. 5 min from Walking Street. Russian- and English-speaking staff.",
+  ru: "Лицензированный каннабис-шоп в Паттайе. Медкарта за 2 минуты на месте, без записи. 5 минут от Walking Street. Говорим по-русски.",
+  th: "ร้านกัญชาที่ได้รับอนุญาตในพัทยา บัตรทางการแพทย์ภายใน 2 นาที เดินเข้ามาได้เลย 5 นาทีจาก Walking Street",
 };
 
 export async function JsonLd({
@@ -47,7 +47,7 @@ export async function JsonLd({
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",
-      addressLocality: "South Pattaya",
+      addressLocality: "Pattaya",
       addressRegion: "Chon Buri",
       postalCode: "20150",
       addressCountry: "TH",

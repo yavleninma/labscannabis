@@ -26,9 +26,12 @@ export function QuickMenu({ strains }: QuickMenuProps) {
   return (
     <section className="px-4 pb-6 pt-1 sm:pt-0">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 sm:gap-3 mb-3">
-          <div className="inline-flex items-center gap-2">
-            <div className="h-8 w-8 rounded-lg overflow-hidden border border-border bg-bg-card shrink-0">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 mb-3">
+          <a
+            href={featuredStrain ? `/${locale}/strains/${featuredStrain.slug.current}` : "#catalog"}
+            className="group inline-flex items-center gap-2 rounded-xl border border-border bg-bg-card/60 px-2.5 py-2 min-w-0 hover:border-emerald-500/30 transition-colors"
+          >
+            <div className="h-9 w-9 rounded-lg overflow-hidden border border-border bg-bg-card shrink-0">
               {featuredImageUrl ? (
                 <img
                   src={featuredImageUrl}
@@ -39,8 +42,16 @@ export function QuickMenu({ strains }: QuickMenuProps) {
                 <div className="h-full w-full flex items-center justify-center text-sm">🌿</div>
               )}
             </div>
-            <p className="text-sm text-text-muted">{t("title")}</p>
-          </div>
+            <div className="min-w-0">
+              <p className="text-[11px] text-text-muted leading-none">{t("title")}</p>
+              <p className="text-sm text-text-primary truncate">{featuredStrain?.name ?? "LABS"}</p>
+            </div>
+            {featuredStrain ? (
+              <span className="ml-auto text-xs text-emerald-300 border border-emerald-500/30 rounded-full px-2 py-0.5 shrink-0">
+                {tCommon("pricePerGram", { price: featuredStrain.pricePerGram })}
+              </span>
+            ) : null}
+          </a>
           <a
             href="#catalog"
             className="group inline-flex items-center gap-1.5 text-xs sm:text-sm text-emerald-300 border border-emerald-500/30 bg-emerald-500/10 hover:bg-emerald-500/20 rounded-full px-3 py-1.5 transition-colors self-start sm:self-auto"

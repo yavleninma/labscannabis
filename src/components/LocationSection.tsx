@@ -68,7 +68,7 @@ export function LocationSection({
               <p className="text-text-secondary text-sm">
                 32 Pattaya 13 Alley (Soi Hollywood)
                 <br />
-                South Pattaya, Chon Buri 20150
+                Pattaya, Chon Buri 20150
               </p>
             </div>
 

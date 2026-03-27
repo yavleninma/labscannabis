@@ -1,6 +1,6 @@
 # Labs Cannabis — Website
 
-Landing page for Labs Cannabis, a licensed medical cannabis dispensary in South Pattaya, Thailand.
+Landing page for Labs Cannabis, a licensed medical cannabis dispensary in Pattaya, Thailand.
 
 ## Tech Stack
 
