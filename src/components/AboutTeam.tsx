@@ -10,7 +10,7 @@ export function AboutTeam({ shopSettings }: AboutTeamProps) {
   const t = useTranslations("about");
 
   const guideImageUrl = shopSettings?.guidePhoto
-    ? urlFor(shopSettings.guidePhoto)?.width(200).height(200).url()
+    ? urlFor(shopSettings.guidePhoto)?.width(600).height(400).url()
     : null;
 
   return (
@@ -18,7 +18,7 @@ export function AboutTeam({ shopSettings }: AboutTeamProps) {
       <div className="max-w-6xl mx-auto">
         <div className="max-w-2xl w-full mx-auto">
           <div className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col items-center text-center">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border-2 border-emerald-500/30 overflow-hidden">
+            <div className="w-full rounded-xl bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border border-emerald-500/30 overflow-hidden aspect-[3/2]">
               {guideImageUrl ? (
                 <img
                   src={guideImageUrl}
@@ -26,7 +26,7 @@ export function AboutTeam({ shopSettings }: AboutTeamProps) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="text-3xl opacity-50" aria-hidden="true">👤</span>
+                <span className="text-5xl opacity-50" aria-hidden="true">👤</span>
               )}
             </div>
             <h3 className="font-semibold text-text-primary text-lg mb-0.5">
