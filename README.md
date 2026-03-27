@@ -1,6 +1,6 @@
 # Labs Cannabis — Website
 
-Landing page for Labs Cannabis, a licensed medical cannabis dispensary in South Pattaya, Thailand.
+Landing page for Labs Cannabis, a licensed medical cannabis dispensary in Pattaya, Thailand.
 
 ## Tech Stack
 
@@ -23,7 +23,10 @@ Open [http://localhost:3000](http://localhost:3000).
 
 1. Push this repo to GitHub
 2. Import the repo at [vercel.com/new](https://vercel.com/new)
-3. No environment variables needed — deploy as-is
+3. Set `NEXT_PUBLIC_SITE_URL` in Vercel environment variables
+4. (Optional) add Sanity variables if CMS should be enabled:
+   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
+   - `NEXT_PUBLIC_SANITY_DATASET`
 4. Vercel auto-detects Next.js and deploys
 
 ## Domain Recommendations
@@ -39,27 +42,50 @@ The domain has not been purchased yet. Recommendations:
 
 **Recommended registrars:** Cloudflare Registrar (cheapest renewals, free DNS) or Namecheap.
 
-After purchasing, update the `baseUrl` in these files (search for `labscannabis.com`):
-- `src/app/[locale]/layout.tsx`
-- `src/app/sitemap.ts`
-- `src/app/robots.ts`
-- `src/components/JsonLd.tsx`
+Site URL is centralized via `NEXT_PUBLIC_SITE_URL` (`src/lib/site-url.ts`).
 
 ## TODOs
 
 Search for `TODO` in the codebase to find all placeholders:
 
 ```bash
-grep -r "TODO" src/ --include="*.tsx" --include="*.ts"
+rg "TODO" src
 ```
 
 Key items to fill in:
-- LINE / WhatsApp / Telegram links (`src/components/Contact.tsx`)
-- Exact working hours (`src/components/Location.tsx`, `src/components/JsonLd.tsx`)
+- LINE / WhatsApp / Telegram links (`src/lib/mock-data.ts` or Sanity shop settings)
+- Exact working hours (`src/lib/mock-data.ts`, `src/components/JsonLd.tsx`)
 - Logo image (`src/components/Hero.tsx`)
 - OG image (`src/app/[locale]/layout.tsx`)
 - Phone number (`src/components/JsonLd.tsx`)
-- Domain URL (multiple files)
+
+## Data Migration (Sanity)
+
+For migration from legacy `effect` / `terpenes` to new `effects` / `terpeneProfile` fields:
+
+1. Preview changes (no writes):
+
+```bash
+npm run migrate:strain-profiles -- --dry-run
+```
+
+Preview with legacy cleanup:
+
+```bash
+npm run migrate:strain-profiles -- --dry-run --cleanup-legacy
+```
+
+2. Apply changes:
+
+```bash
+SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles
+```
+
+Apply and remove legacy fields (`effect`, `terpenes`) when new fields are present:
+
+```bash
+SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles -- --cleanup-legacy
+```
 
 ## Project Structure
 
@@ -69,23 +95,30 @@ src/
 │   ├── [locale]/
 │   │   ├── layout.tsx    # Root layout with metadata & hreflang
 │   │   └── page.tsx      # Home page
+│   │   └── strains/[slug]/page.tsx
 │   ├── globals.css       # Tailwind + theme
 │   ├── sitemap.ts
 │   └── robots.ts
 ├── components/
-│   ├── Navbar.tsx        # Fixed nav with language switcher
+│   ├── Header.tsx        # Fixed header with locale switcher
 │   ├── Hero.tsx          # Hero section
-│   ├── About.tsx         # About section with feature cards
-│   ├── HowItWorks.tsx    # 4-step process
-│   ├── Location.tsx      # Google Maps embed + info
-│   ├── Contact.tsx       # Messenger buttons
+│   ├── NoPrescription.tsx
+│   ├── StrainCatalog.tsx
+│   ├── StaffPick.tsx
+│   ├── Reviews.tsx
+│   ├── LocationSection.tsx
+│   ├── ContactSection.tsx
 │   ├── Footer.tsx        # Disclaimer + copyright
 │   └── JsonLd.tsx        # Structured data
+├── lib/
+│   ├── queries.ts
+│   ├── mock-data.ts
+│   └── site-url.ts
 ├── i18n/
 │   ├── request.ts
 │   ├── routing.ts
 │   └── navigation.ts
-└── middleware.ts         # Locale routing
+└── proxy.ts              # Locale routing
 messages/
 ├── en.json
 ├── ru.json

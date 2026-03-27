@@ -1,64 +1,158 @@
 {
   "meta": {
-    "title": "Labs Cannabis — Licensed Medical Cannabis Dispensary in Pattaya | Best Weed Shop South Pattaya",
-    "description": "Labs Cannabis is a licensed medical cannabis dispensary on Soi Hollywood, South Pattaya. Premium quality flower, on-site medical practitioner consultations. Visit the best weed shop in Pattaya today.",
-    "ogTitle": "Labs Cannabis — Premium Cannabis Dispensary Pattaya",
-    "ogDescription": "Licensed medical dispensary on Soi Hollywood, South Pattaya. Free consultation with a licensed practitioner. Premium flower, knowledgeable staff."
+    "title": "Labs Cannabis — Cannabis Shop in Pattaya",
+    "description": "Licensed cannabis shop in Pattaya. On-site medical card in 2 minutes, walk-in friendly, 5 min from Walking Street. Russian- and English-speaking staff.",
+    "ogTitle": "Labs Cannabis — Cannabis Shop Pattaya",
+    "ogDescription": "Licensed cannabis shop in Pattaya. Walk in, get your medical card on the spot, pick your strain. 5 min from Walking Street."
   },
-  "nav": {
-    "about": "About",
-    "howItWorks": "How It Works",
-    "location": "Location",
-    "contact": "Contact"
+  "header": {
+    "openNow": "Open now",
+    "closed": "Closed",
+    "switching": "Switching",
+    "menu": "Catalog"
   },
   "hero": {
-    "title": "Labs Cannabis",
-    "subtitle": "Licensed Medical Cannabis Dispensary in South Pattaya",
-    "tagline": "Premium flower. Expert consultations. Soi Hollywood.",
-    "cta": "Get Directions"
+    "title": "Cannabis shop in Pattaya",
+    "subtitle": "Fresh buds & pre-rolls — 5 min from Walking Street. Walk in, we'll help you pick.",
+    "getDirections": "Get Directions",
+    "messageUs": "Message Us",
+    "seeMenu": "What's in Stock"
   },
-  "about": {
-    "sectionTitle": "About Us",
-    "p1": "Labs Cannabis is a licensed medical cannabis dispensary located on Soi Hollywood (Pattaya 13), one of the most well-known streets in the heart of South Pattaya. We operate fully within the Thai medical cannabis framework, offering a safe, legal, and welcoming environment for both first-time visitors and experienced cannabis users.",
-    "p2": "Our dispensary features an on-site licensed practitioner of Thai traditional medicine who provides free consultations to every customer. Whether you're a tourist exploring Pattaya or a long-term resident, our knowledgeable staff will guide you through our curated selection of premium-quality flower to find what suits your needs.",
-    "p3": "We believe in a clean, professional approach to cannabis — no hype, no gimmicks. Just carefully sourced, lab-tested product served in a comfortable, boutique atmosphere. Every strain in our collection is selected for quality, potency, and flavor profile.",
-    "p4": "Walk in, talk to our practitioner, and discover why Labs Cannabis is the dispensary Pattaya trusts. We're open daily and conveniently located just a 5-minute walk from Walking Street."
+  "noPrescription": {
+    "title": "No prescription? We've got you.",
+    "subtitle": "Thailand requires a medical card — but don't worry, we handle everything on the spot. Just walk in.",
+    "step1Title": "Walk in",
+    "step1Desc": "No appointment needed. Just come to the shop any time we're open.",
+    "step2Title": "Scan & fill",
+    "step2Desc": "Quick form on your phone — takes 2 minutes. Our staff will guide you through every step.",
+    "step3Title": "Done",
+    "step3Desc": "Pick your strain, pay, and enjoy. That's it.",
+    "badge1": "100% legal",
+    "badge2": "Takes 2 min",
+    "badge3": "Free consultation"
   },
-  "howItWorks": {
-    "sectionTitle": "How It Works",
-    "intro": "New to cannabis in Thailand? Here's what to expect when you visit our dispensary:",
-    "step1Title": "Visit Our Shop",
-    "step1Desc": "Find us on Soi Hollywood (Pattaya 13 Alley) in South Pattaya — a 5-minute walk from Walking Street. Walk-ins are welcome, no appointment needed.",
-    "step2Title": "Free Consultation",
-    "step2Desc": "Meet our licensed Thai traditional medicine practitioner for a complimentary consultation. They will assess your needs and answer any questions.",
-    "step3Title": "Medical Recommendation",
-    "step3Desc": "Receive your personalized medical recommendation from our licensed practitioner — this is required under Thai law and included at no extra cost.",
-    "step4Title": "Choose Your Flower",
-    "step4Desc": "Browse our curated selection of premium cannabis flower. Our staff will help you pick the strain that's right for you based on your consultation."
+  "staffPick": {
+    "badge": "Expert Pick",
+    "reserve": "Ask about it",
+    "viewDetails": "View details"
+  },
+  "catalog": {
+    "title": "What's in Stock",
+    "count": "{count} strains available",
+    "filter_all": "All",
+    "filter_relax": "Relax",
+    "filter_energy": "Energy",
+    "filter_creative": "Creative",
+    "filter_euphoria": "Euphoria",
+    "filter_sleep": "Sleep",
+    "filter_focus": "Focus",
+    "filter_happy": "Happy",
+    "filter_uplifted": "Uplifted",
+    "filter_talkative": "Talkative",
+    "filter_hungry": "Hungry",
+    "reserve": "Ask about it",
+    "soldOut": "Sold Out",
+    "noResults": "No strains match this filter right now.",
+    "activeFilter": "Filtered by {tagType}: {tagLabel}",
+    "clearFilter": "Clear filter"
+  },
+  "reviews": {
+    "subtitle": "{count} reviews on Google",
+    "sourceGoogle": "via Google",
+    "showOriginal": "Original",
+    "showTranslation": "Translation",
+    "translating": "Translating..."
   },
   "location": {
-    "sectionTitle": "Location & Hours",
-    "address": "32 Pattaya 13 Alley (Soi Hollywood), South Pattaya, Pattaya City, Chon Buri 20150",
-    "hours": "Open 24/7 — Always Open",
-    "hoursNote": "",
-    "landmark": "Soi Hollywood, South Pattaya — 5 min walk from Walking Street",
-    "getDirections": "Get Directions"
+    "title": "Find Us",
+    "address": "Address",
+    "landmark": "Landmark",
+    "landmarkDesc": "5 min walk from Walking Street",
+    "directions": {
+      "title": "Best route on foot",
+      "step1": "Head to Pattaya 13 Alley (Soi Hollywood) from Walking Street.",
+      "step2": "Stay on the alley and look for LABS DISPENSARY signage.",
+      "step3": "We're on your left side, around the middle of Pattaya 13 Alley."
+    },
+    "hours": "Hours",
+    "hoursValueDynamic": "Daily {open} - {close}",
+    "hoursValue24_7": "Open 24/7",
+    "openInMaps": "Open in Google Maps"
   },
   "contact": {
-    "sectionTitle": "Contact Us",
-    "intro": "Walk-ins are always welcome! Have a question before your visit? Reach out through any of our channels:",
-    "line": "LINE",
-    "whatsapp": "WhatsApp",
-    "telegram": "Telegram"
+    "title": "Get in Touch",
+    "subtitle": "Ask a question or check what's available — we usually reply within 5 minutes during working hours."
   },
   "footer": {
-    "copyright": "© 2025 Labs Cannabis. All rights reserved.",
-    "disclaimer": "Cannabis products are available only to individuals aged 20 and above with a valid medical recommendation from a licensed practitioner. Labs Cannabis operates under the Thai medical cannabis framework as a controlled herb dispensary. This is not a recreational facility. Please consume responsibly.",
-    "medical": "Licensed Medical Cannabis Dispensary — Pattaya, Thailand"
+    "disclaimer": "Adults 20+ only. Licensed cannabis shop operating under the Thai medical cannabis framework.",
+    "rights": "All rights reserved."
   },
-  "langSwitcher": {
-    "en": "EN",
-    "ru": "RU",
-    "th": "TH"
+  "quickMenu": {
+    "title": "In stock now",
+    "seeAll": "View catalog",
+    "soldOut": "Sold out"
+  },
+  "socialProof": {
+    "reviewCount": "{count} reviews on Google",
+    "seeAll": "See all reviews"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis consultant and your cannabis guide",
+    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
+    "guidePhotoAlt": "Dima — Labs Cannabis consultant"
+  },
+  "faq": {
+    "title": "Common Questions",
+    "q1": "Do I need a prescription or medical card?",
+    "a1": "Thailand requires a medical card for cannabis purchases. We help you get one on the spot — it's a quick digital form on your phone, takes about 2 minutes. Our staff walks you through every step.",
+    "q2": "Is it legal for tourists?",
+    "a2": "Yes. Tourists can legally purchase medical cannabis in Thailand with a medical card, which we help you obtain right here at the shop.",
+    "q3": "What payment methods do you accept?",
+    "a3": "Cash (Thai Baht) and QR bank transfer. No credit cards at this time.",
+    "q4": "Can I smoke here or is it takeaway only?",
+    "a4": "Takeaway only. We sell product for personal use — there's no smoking area on site.",
+    "q5": "How do I find you from Walking Street?",
+    "a5": "5-minute walk. Head into Soi Hollywood (Pattaya 13 Alley), look for LABS signage on the left side. We're around the middle of the lane.",
+    "q6": "What are your hours?",
+    "a6": "We're open every day, no appointment needed. Check the hours in the header — they update in real time.",
+    "q7": "I've never tried cannabis. Can your staff help me choose?",
+    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
+    "backToCatalog": "Back to selection",
+    "reserve": "Ask About This Strain",
+    "reserveVia": "Contact via",
+    "call": "Call",
+    "soldOut": "Sold Out",
+    "terpenes": "Terpene Profile",
+    "about": "About This Strain",
+    "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available at Labs Cannabis Pattaya."
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid",
+    "effect_relax": "Relax",
+    "effect_energy": "Energy",
+    "effect_creative": "Creative",
+    "effect_sleep": "Sleep",
+    "effect_euphoria": "Euphoria",
+    "effect_focus": "Focus",
+    "effect_happy": "Happy",
+    "effect_uplifted": "Uplifted",
+    "effect_talkative": "Talkative",
+    "effect_hungry": "Hungry",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabis strain at Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Expert Pick at Labs Cannabis Pattaya",
+    "strainAltText": "{name} cannabis strain available at Labs Cannabis dispensary Pattaya",
+    "tagType_effect": "Effect",
+    "tagType_type": "Type",
+    "tagType_terpene": "Terpene"
   }
 }

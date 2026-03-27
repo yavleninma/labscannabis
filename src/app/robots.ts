@@ -1,13 +1,14 @@
 import type { MetadataRoute } from "next";
+import { getSiteUrl } from "@/lib/site-url";
 
 export default function robots(): MetadataRoute.Robots {
-  // TODO: Replace with actual domain when purchased
-  const baseUrl = "https://labscannabis.com";
+  const baseUrl = getSiteUrl();
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: "/studio",
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

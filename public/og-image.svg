@@ -26,7 +26,7 @@
   </text>
   <!-- Location -->
   <text x="600" y="420" text-anchor="middle" fill="#737373" font-family="system-ui, sans-serif" font-size="18">
-    Soi Hollywood, South Pattaya — Open 24/7
+    Soi Hollywood, Pattaya — Open 24/7
   </text>
   <!-- Bottom accent line -->
   <rect x="500" y="470" width="200" height="2" rx="1" fill="#10b981" opacity="0.5"/>
