@@ -4,9 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { PortableText } from "@portabletext/react";
 import { routing } from "@/i18n/routing";
 import { translatePortableTextBlocks, translateText } from "@/lib/auto-translate";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 import { getLocalizedFullDescription, getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
-import { getStrainBySlug, getAllStrainSlugs } from "@/lib/queries";
+import { getStrainBySlug, getAllStrainSlugs, getShopSettings } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 import { urlFor } from "@/sanity/image";
 import { Footer } from "@/components/Footer";
@@ -19,6 +20,11 @@ const effectEmoji: Record<string, string> = {
   creative: "🎨",
   sleep: "😴",
   euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 const gradients = [
@@ -26,6 +32,11 @@ const gradients = [
   "from-purple-900/40 to-purple-700/20",
   "from-blue-900/40 to-blue-700/20",
 ];
+
+function toContactLocale(value: string): ContactLocale {
+  if (value === "ru" || value === "th") return value;
+  return "en";
+}
 
 export async function generateStaticParams() {
   const slugs = await getAllStrainSlugs();
@@ -58,11 +69,16 @@ export async function generateMetadata({
     : "";
   const description =
     translatedShortDescription ||
-    t("metaDescriptionFallback", {
-      name: strain.name,
-      type: tCommon(`type_${strain.type}`),
-      thc: strain.thcPercent,
-    });
+    (typeof strain.thcPercent === "number"
+      ? t("metaDescriptionFallback", {
+          name: strain.name,
+          type: tCommon(`type_${strain.type}`),
+          thc: strain.thcPercent,
+        })
+      : t("metaDescriptionFallbackNoThc", {
+          name: strain.name,
+          type: tCommon(`type_${strain.type}`),
+        }));
 
   return {
     title,
@@ -91,7 +107,7 @@ export default async function StrainPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const strain = await getStrainBySlug(slug);
+  const [strain, shopSettings] = await Promise.all([getStrainBySlug(slug), getShopSettings()]);
 
   if (!strain) notFound();
 
@@ -99,16 +115,36 @@ export default async function StrainPage({
   const tCommon = await getTranslations({ locale: locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(800).height(600).url() : null;
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as Locale);
-  const translatedShortDescription = localizedShortDescription
-    ? await translateText(localizedShortDescription, locale as Locale)
-    : "";
   const localizedFullDescription = getLocalizedFullDescription(strain, locale as Locale);
-  const translatedFullDescription = await translatePortableTextBlocks(
-    localizedFullDescription,
-    locale as Locale
-  );
+  const localeValue = locale as Locale;
+  const [translatedShortDescription, translatedFullDescription] = await Promise.all([
+    localizedShortDescription ? translateText(localizedShortDescription, localeValue) : Promise.resolve(""),
+    localizedFullDescription
+      ? translatePortableTextBlocks(localizedFullDescription, localeValue)
+      : Promise.resolve(localizedFullDescription),
+  ]);
   const typeHref = createTagHref(locale, "type", strain.type);
-  const effectHref = createTagHref(locale, "effect", strain.effect);
+  const effectEntries = strain.effects?.length
+    ? [...strain.effects].sort((a, b) => b.amount - a.amount)
+    : strain.effect
+      ? [{ key: strain.effect, amount: 1 }]
+      : [];
+  const terpeneEntries = strain.terpeneProfile?.length
+    ? [...strain.terpeneProfile].sort((a, b) => b.amount - a.amount)
+    : (strain.terpenes || []).map((name) => ({ name, amount: 0 }));
+  const hasThc = typeof strain.thcPercent === "number";
+  const hasCbd = typeof strain.cbdPercent === "number";
+  const contactLinks = buildContactLinks(
+    shopSettings,
+    toContactLocale(locale),
+    { kind: "purchase", productName: strain.name }
+  );
+  const reserveChannels = [
+    { id: "line", label: "LINE", href: contactLinks.line },
+    { id: "whatsapp", label: "WhatsApp", href: contactLinks.whatsapp },
+    { id: "telegram", label: "Telegram", href: contactLinks.telegram },
+  ].filter((channel) => Boolean(channel.href) && !(channel.id === "line" && channel.href?.startsWith("tel:")));
+  const phoneDisplay = shopSettings.phone?.trim() || contactLinks.phone?.replace(/^tel:/, "") || null;
 
   return (
     <>
@@ -159,12 +195,22 @@ export default async function StrainPage({
               >
                 {tCommon(`type_${strain.type}`)}
               </a>
-              <span>{tCommon("thc")} {strain.thcPercent}%</span>
-              {strain.cbdPercent ? <span>{tCommon("cbd")} {strain.cbdPercent}%</span> : null}
-              <a href={effectHref} className="hover:text-emerald-300 transition-colors">
-                {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
-              </a>
+              {hasThc ? <span>{tCommon("thc")} {strain.thcPercent}%</span> : null}
+              {hasCbd ? <span>{tCommon("cbd")} {strain.cbdPercent}%</span> : null}
             </div>
+            {effectEntries.length > 0 && (
+              <div className="mb-4 flex flex-wrap gap-2">
+                {effectEntries.map((effect) => (
+                  <a
+                    key={`${effect.key}-${effect.amount}`}
+                    href={createTagHref(locale, "effect", effect.key)}
+                    className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border hover:text-emerald-300 transition-colors"
+                  >
+                    {effectEmoji[effect.key]} {tCommon(`effect_${effect.key}`)} {effect.amount}/5
+                  </a>
+                ))}
+              </div>
+            )}
 
             {translatedShortDescription && (
               <p className="text-text-secondary mb-4">{translatedShortDescription}</p>
@@ -174,26 +220,44 @@ export default async function StrainPage({
               {tCommon("pricePerGram", { price: strain.pricePerGram })}
             </div>
 
-            {!strain.isSoldOut && (
-              <a
-                href="#contact"
-                className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-medium transition-colors w-fit"
-              >
-                {t("reserve")}
-              </a>
+            {!strain.isSoldOut && (reserveChannels.length > 0 || contactLinks.phone) && (
+              <div className="mb-2">
+                <p className="text-xs uppercase tracking-wide text-text-muted mb-2">{t("reserveVia")}</p>
+                <div className="flex flex-wrap items-center gap-2">
+                  {reserveChannels.map((channel) => (
+                    <a
+                      key={channel.id}
+                      href={channel.href || "#"}
+                      target={channel.href?.startsWith("http") ? "_blank" : undefined}
+                      rel={channel.href?.startsWith("http") ? "noopener noreferrer" : undefined}
+                      className="inline-flex items-center rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-xs font-medium text-emerald-300 hover:bg-emerald-500/20 transition-colors"
+                    >
+                      {channel.label}
+                    </a>
+                  ))}
+                  {contactLinks.phone && (
+                    <a
+                      href={contactLinks.phone}
+                      className="inline-flex items-center rounded-full border border-border bg-bg-card px-3 py-1 text-xs font-medium text-text-secondary hover:text-white transition-colors"
+                    >
+                      {t("call")}{phoneDisplay ? `: ${phoneDisplay}` : ""}
+                    </a>
+                  )}
+                </div>
+              </div>
             )}
 
-            {strain.terpenes && strain.terpenes.length > 0 && (
+            {terpeneEntries.length > 0 && (
               <div className="mt-6">
                 <p className="text-sm text-text-muted mb-2">{t("terpenes")}</p>
                 <div className="flex flex-wrap gap-2">
-                  {strain.terpenes.map((terpene) => (
+                  {terpeneEntries.map((terpene) => (
                     <a
-                      key={terpene}
-                      href={createTagHref(locale, "terpene", terpene)}
+                      key={`${terpene.name}-${terpene.amount}`}
+                      href={createTagHref(locale, "terpene", terpene.name)}
                       className="text-xs bg-bg-card text-text-secondary px-3 py-1 rounded-full border border-border hover:text-emerald-300 transition-colors"
                     >
-                      {terpene}
+                      {terpene.name}{terpene.amount > 0 ? ` ${terpene.amount}%` : ""}
                     </a>
                   ))}
                 </div>
@@ -211,7 +275,7 @@ export default async function StrainPage({
           </div>
         )}
       </article>
-      <Footer />
+      <Footer shopSettings={shopSettings} />
     </>
   );
 }

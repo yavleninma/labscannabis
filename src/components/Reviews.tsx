@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { GOOGLE_LISTING_URL, DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
 
 const reviews = [
   {
@@ -32,16 +33,26 @@ const reviews = [
 
 function Stars({ count }: { count: number }) {
   return (
-    <span className="text-yellow-400 text-sm">
+    <span className="text-yellow-400 text-sm" aria-hidden="true">
       {"★".repeat(count)}
       {"☆".repeat(5 - count)}
     </span>
   );
 }
 
-export function Reviews() {
+interface ReviewsProps {
+  rating?: number | null;
+  reviewCount?: number | null;
+}
+
+export function Reviews({
+  rating,
+  reviewCount,
+}: ReviewsProps) {
   const t = useTranslations("reviews");
   const locale = useLocale() as "en" | "ru" | "th";
+  const safeRating = rating ?? DEFAULT_GOOGLE_RATING;
+  const safeReviewCount = reviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
   const [translatedByName, setTranslatedByName] = useState<Record<string, string>>({});
   const [showOriginalByName, setShowOriginalByName] = useState<Record<string, boolean>>({});
   const [isTranslating, setIsTranslating] = useState(false);
@@ -124,12 +135,20 @@ export function Reviews() {
     <section className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <div className="text-3xl sm:text-4xl font-bold mb-1">
-            4.8 <span className="text-yellow-400">★★★★★</span>
+          <div className="text-3xl sm:text-4xl font-bold mb-1" aria-label={`${safeRating} out of 5 stars`}>
+            {safeRating}{" "}
+            <span className="text-yellow-400" aria-hidden="true">
+              {"★".repeat(Math.round(safeRating))}{"☆".repeat(5 - Math.round(safeRating))}
+            </span>
           </div>
-          <p className="text-text-secondary text-sm">
-            {t("subtitle")}
-          </p>
+          <a
+            href={GOOGLE_LISTING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-text-secondary text-sm hover:text-emerald-400 transition-colors"
+          >
+            {t("subtitle", { count: safeReviewCount })} →
+          </a>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

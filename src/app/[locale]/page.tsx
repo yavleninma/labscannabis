@@ -1,8 +1,11 @@
 import { Hero } from "@/components/Hero";
+import { SocialProofStrip } from "@/components/SocialProofStrip";
 import { NoPrescription } from "@/components/NoPrescription";
+import { AboutTeam } from "@/components/AboutTeam";
+import { FAQ } from "@/components/FAQ";
+import { Reviews } from "@/components/Reviews";
 import { StaffPick } from "@/components/StaffPick";
 import { StrainCatalog } from "@/components/StrainCatalog";
-import { Reviews } from "@/components/Reviews";
 import { LocationSection } from "@/components/LocationSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
@@ -25,21 +28,28 @@ export default async function HomePage({
   return (
     <>
       <Hero />
-      <NoPrescription />
+      <SocialProofStrip
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
+      />
       {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} />
-      <Reviews />
+      <NoPrescription />
+      <AboutTeam shopSettings={shopSettings} />
+      <FAQ />
+      <Reviews
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
+      />
       <LocationSection
         openTime={shopSettings.openTime}
         closeTime={shopSettings.closeTime}
         isOpen24h={shopSettings.isOpen24h}
       />
       <ContactSection
-        lineUrl={shopSettings.lineUrl}
-        whatsappUrl={shopSettings.whatsappUrl}
-        telegramUrl={shopSettings.telegramUrl}
+        shopSettings={shopSettings}
       />
-      <Footer />
+      <Footer shopSettings={shopSettings} />
     </>
   );
 }

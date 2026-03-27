@@ -37,12 +37,14 @@ export function parseTagFromSearchParams(searchParams: { get: (name: string) => 
 
 export function strainMatchesTag(strain: Strain, tagType: StrainTagType, tag: string): boolean {
   if (tagType === "effect") {
-    return normalizeTagValue(strain.effect) === tag;
+    const effects = strain.effects?.map((item) => item.key) || (strain.effect ? [strain.effect] : []);
+    return effects.some((effect) => normalizeTagValue(effect) === tag);
   }
 
   if (tagType === "type") {
     return normalizeTagValue(strain.type) === tag;
   }
 
-  return (strain.terpenes || []).some((terpene) => normalizeTagValue(terpene) === tag);
+  const terpeneNames = strain.terpeneProfile?.map((item) => item.name) || strain.terpenes || [];
+  return terpeneNames.some((terpene) => normalizeTagValue(terpene) === tag);
 }

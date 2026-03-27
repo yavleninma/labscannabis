@@ -11,6 +11,11 @@ const effectEmoji: Record<string, string> = {
   creative: "🎨",
   sleep: "😴",
   euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 interface StaffPickProps {
@@ -23,10 +28,21 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
   const tCommon = await getTranslations({ locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(600).height(400).url() : null;
   const typeHref = createTagHref(locale, "type", strain.type);
-  const effectHref = createTagHref(locale, "effect", strain.effect);
+  const effectEntries = strain.effects?.length
+    ? [...strain.effects].sort((a, b) => b.amount - a.amount)
+    : strain.effect
+      ? [{ key: strain.effect, amount: 1 }]
+      : [];
+  const terpeneEntries = strain.terpeneProfile?.length
+    ? [...strain.terpeneProfile].sort((a, b) => b.amount - a.amount)
+    : (strain.terpenes || []).map((name) => ({ name, amount: 0 }));
+  const hasThc = typeof strain.thcPercent === "number";
+  const hasCbd = typeof strain.cbdPercent === "number";
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as "en" | "ru" | "th");
   const translatedShortDescription =
-    locale === "en" ? localizedShortDescription : await translateText(localizedShortDescription, locale as "ru" | "th");
+    locale === "en" || !localizedShortDescription
+      ? localizedShortDescription
+      : await translateText(localizedShortDescription, locale as "ru" | "th");
 
   return (
     <section className="py-8 px-4">
@@ -61,19 +77,32 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
                 <a href={typeHref} className="capitalize hover:text-emerald-300 transition-colors">
                   {tCommon(`type_${strain.type}`)}
                 </a>
-                <span>·</span>
-                <span>{tCommon("thc")} {strain.thcPercent}%</span>
-                {strain.cbdPercent ? (
+                {hasThc && (
+                  <>
+                    <span>·</span>
+                    <span>{tCommon("thc")} {strain.thcPercent}%</span>
+                  </>
+                )}
+                {hasCbd && (
                   <>
                     <span>·</span>
                     <span>{tCommon("cbd")} {strain.cbdPercent}%</span>
                   </>
-                ) : null}
-                <span>·</span>
-                <a href={effectHref} className="hover:text-emerald-300 transition-colors">
-                  {effectEmoji[strain.effect]} {tCommon(`effect_${strain.effect}`)}
-                </a>
+                )}
               </div>
+              {effectEntries.length > 0 && (
+                <div className="mb-3 flex flex-wrap gap-1.5">
+                  {effectEntries.map((effect) => (
+                    <a
+                      key={`${effect.key}-${effect.amount}`}
+                      href={createTagHref(locale, "effect", effect.key)}
+                      className="text-xs bg-bg-secondary text-text-muted px-2 py-0.5 rounded-full hover:text-emerald-300 transition-colors"
+                    >
+                      {effectEmoji[effect.key]} {tCommon(`effect_${effect.key}`)} {effect.amount}/5
+                    </a>
+                  ))}
+                </div>
+              )}
               <p className="text-text-secondary text-sm mb-4">
                 {translatedShortDescription}
               </p>
@@ -89,15 +118,15 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
                   {t("reserve")}
                 </a>
               </div>
-              {strain.terpenes && strain.terpenes.length > 0 && (
+              {terpeneEntries.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-1.5">
-                  {strain.terpenes.map((terpene) => (
+                  {terpeneEntries.map((terpene) => (
                     <a
-                      key={terpene}
-                      href={createTagHref(locale, "terpene", terpene)}
+                      key={`${terpene.name}-${terpene.amount}`}
+                      href={createTagHref(locale, "terpene", terpene.name)}
                       className="text-xs bg-bg-secondary text-text-muted px-2 py-0.5 rounded-full"
                     >
-                      {terpene}
+                      {terpene.name}{terpene.amount > 0 ? ` ${terpene.amount}%` : ""}
                     </a>
                   ))}
                 </div>

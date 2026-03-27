@@ -1,6 +1,6 @@
 # Labs Cannabis — Website
 
-Landing page for Labs Cannabis, a licensed medical cannabis dispensary in South Pattaya, Thailand.
+Landing page for Labs Cannabis, a licensed medical cannabis dispensary in Pattaya, Thailand.
 
 ## Tech Stack
 
@@ -58,6 +58,34 @@ Key items to fill in:
 - Logo image (`src/components/Hero.tsx`)
 - OG image (`src/app/[locale]/layout.tsx`)
 - Phone number (`src/components/JsonLd.tsx`)
+
+## Data Migration (Sanity)
+
+For migration from legacy `effect` / `terpenes` to new `effects` / `terpeneProfile` fields:
+
+1. Preview changes (no writes):
+
+```bash
+npm run migrate:strain-profiles -- --dry-run
+```
+
+Preview with legacy cleanup:
+
+```bash
+npm run migrate:strain-profiles -- --dry-run --cleanup-legacy
+```
+
+2. Apply changes:
+
+```bash
+SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles
+```
+
+Apply and remove legacy fields (`effect`, `terpenes`) when new fields are present:
+
+```bash
+SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles -- --cleanup-legacy
+```
 
 ## Project Structure
 

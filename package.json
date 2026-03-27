@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "migrate:strain-profiles": "node scripts/migrate-strain-profiles.mjs"
   },
   "repository": {
     "type": "git",
@@ -19,12 +20,14 @@
     "@portabletext/react": "^6.0.3",
     "@sanity/client": "^7.20.0",
     "@sanity/image-url": "^2.0.3",
+    "@sanity/locale-ru-kz": "^1.1.28",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "next": "^16.2.1",
     "next-intl": "^4.8.3",
     "next-sanity": "^12.1.6",
+    "openai": "^6.33.0",
     "postcss": "^8.5.8",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",

@@ -70,8 +70,9 @@ export default async function LocaleLayout({
   const shopSettings = await getShopSettings();
 
   return (
-    <html lang={locale} className="scroll-smooth">
+    <html lang={locale}>
       <head>
+        <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -100,6 +101,9 @@ export default async function LocaleLayout({
             openTime={shopSettings.openTime}
             closeTime={shopSettings.closeTime}
             isOpen24h={shopSettings.isOpen24h}
+            googleRating={shopSettings.googleRating}
+            googleReviewCount={shopSettings.googleReviewCount}
+            phone={shopSettings.phone}
           />
           <Header
             openTime={shopSettings.openTime}

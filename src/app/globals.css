@@ -1,18 +1,18 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #111111;
-  --color-bg-card: #1a1a1a;
-  --color-bg-card-hover: #222222;
+  --color-bg-primary: #f8f7f3;
+  --color-bg-secondary: #eeede8;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f5f4ef;
   --color-emerald-400: #34d399;
   --color-emerald-500: #10b981;
   --color-emerald-600: #059669;
   --color-emerald-700: #047857;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a3a3a3;
-  --color-text-muted: #737373;
-  --color-border: #262626;
+  --color-text-primary: #1c1c1a;
+  --color-text-secondary: #525250;
+  --color-text-muted: #86857f;
+  --color-border: #dddcd6;
   --font-heading: "Noto Serif", "Noto Serif Thai", Georgia, serif;
   --font-body: "Noto Sans", "Noto Sans Thai", system-ui, sans-serif;
 }
@@ -25,10 +25,24 @@ body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading), Georgia, serif;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #111111;
+  --color-bg-card: #1a1a1a;
+  --color-bg-card-hover: #222222;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a3a3a3;
+  --color-text-muted: #737373;
+  --color-border: #262626;
 }
 
 @keyframes pulse-green {
@@ -42,4 +56,13 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-pulse-green {
   animation: pulse-green 2s ease-in-out infinite;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }

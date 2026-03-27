@@ -11,17 +11,17 @@ export async function getAllStrains(): Promise<Strain[]> {
 
   try {
     const strains = await sanityClient.fetch<Strain[]>(
-      `*[_type == "strain"] | order(sortOrder asc) {
-        _id, name, slug, image, type, effect,
+      `*[_type == "strain" && isHidden != true] | order(sortOrder asc) {
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
-        isStaffPick, isSoldOut, sortOrder
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
+        isStaffPick, isSoldOut, isHidden, sortOrder
       }`
     );
-    return strains.length > 0 ? strains : mockStrains;
+    return strains;
   } catch {
-    return mockStrains;
+    return [];
   }
 }
 
@@ -32,18 +32,18 @@ export async function getStrainBySlug(slug: string): Promise<Strain | null> {
 
   try {
     const strain = await sanityClient.fetch<Strain | null>(
-      `*[_type == "strain" && slug.current == $slug][0] {
-        _id, name, slug, image, type, effect,
+      `*[_type == "strain" && slug.current == $slug && isHidden != true][0] {
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
-        isStaffPick, isSoldOut, sortOrder
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
+        isStaffPick, isSoldOut, isHidden, sortOrder
       }`,
       { slug }
     );
-    return strain || mockStrains.find((s) => s.slug.current === slug) || null;
+    return strain || null;
   } catch {
-    return mockStrains.find((s) => s.slug.current === slug) || null;
+    return null;
   }
 }
 
@@ -53,18 +53,34 @@ export async function getStaffPick(): Promise<Strain | null> {
   }
 
   try {
-    const strain = await sanityClient.fetch<Strain | null>(
-      `*[_type == "strain" && isStaffPick == true][0] {
-        _id, name, slug, image, type, effect,
+    const staffPick = await sanityClient.fetch<Strain | null>(
+      `*[_type == "strain" && isStaffPick == true && isHidden != true] | order(sortOrder asc)[0] {
+        _id, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
-        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes,
-        isStaffPick, isSoldOut, sortOrder
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
+        isStaffPick, isSoldOut, isHidden, sortOrder
       }`
     );
-    return strain || mockStrains.find((s) => s.isStaffPick) || null;
+
+    if (staffPick) return staffPick;
+
+    const strainsCount = await sanityClient.fetch<number>(`count(*[_type == "strain" && isHidden != true])`);
+    if (strainsCount !== 1) return null;
+
+    const onlyStrain = await sanityClient.fetch<Strain | null>(
+      `*[_type == "strain" && isHidden != true] | order(sortOrder asc)[0] {
+        _id, name, slug, image, type, effect, effects,
+        thcPercent, cbdPercent, pricePerGram,
+        shortDescription, shortDescriptionRu, shortDescriptionTh,
+        fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
+        isStaffPick, isSoldOut, isHidden, sortOrder
+      }`
+    );
+
+    return onlyStrain || null;
   } catch {
-    return mockStrains.find((s) => s.isStaffPick) || null;
+    return null;
   }
 }
 
@@ -75,8 +91,15 @@ export async function getShopSettings(): Promise<ShopSettings> {
     const settings = await sanityClient.fetch<ShopSettings | null>(
       `*[_type == "shopSettings"][0] {
         openTime, closeTime, isOpen24h,
-        lineUrl, whatsappUrl, telegramUrl,
-        announcement
+        lineUrl, lineId,
+        whatsappUrl, whatsappNumber,
+        telegramUrl, telegramId,
+        phone,
+        announcement,
+        googleRating,
+        googleReviewCount,
+        guidePhoto,
+        teamPhoto
       }`
     );
     return settings || mockShopSettings;
@@ -90,7 +113,7 @@ export async function getAllStrainSlugs(): Promise<string[]> {
 
   try {
     const slugs = await sanityClient.fetch<{ current: string }[]>(
-      `*[_type == "strain"].slug`
+      `*[_type == "strain" && isHidden != true].slug`
     );
     const result = slugs.map((s) => s.current);
     return result.length > 0 ? result : mockStrains.map((s) => s.slug.current);

@@ -7,7 +7,19 @@ import type { Strain } from "@/lib/mock-data";
 import { normalizeTagValue, parseTagFromSearchParams, strainMatchesTag } from "@/lib/strain-tags";
 import { StrainCard } from "./StrainCard";
 
-const effects = ["all", "relax", "energy", "creative", "sleep"] as const;
+const effects = [
+  "all",
+  "relax",
+  "energy",
+  "creative",
+  "sleep",
+  "euphoria",
+  "focus",
+  "happy",
+  "uplifted",
+  "talkative",
+  "hungry",
+] as const;
 
 const effectEmoji: Record<string, string> = {
   all: "🌿",
@@ -15,6 +27,12 @@ const effectEmoji: Record<string, string> = {
   energy: "⚡",
   creative: "🎨",
   sleep: "😴",
+  euphoria: "✨",
+  focus: "🎯",
+  happy: "😊",
+  uplifted: "🚀",
+  talkative: "🗣️",
+  hungry: "🍽️",
 };
 
 interface StrainCatalogProps {
@@ -60,25 +78,26 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
         : (tag ?? "")
       : tagType === "type"
         ? tCommon(`type_${tag ?? ""}`)
-        : (strains.find((strain) => strain.terpenes?.some((terpene) => normalizeTagValue(terpene) === tag))
-            ?.terpenes?.find((terpene) => normalizeTagValue(terpene) === tag) ?? (tag ?? ""));
+        : (strains
+            .flatMap((strain) => strain.terpeneProfile?.map((item) => item.name) || strain.terpenes || [])
+            .find((terpene) => normalizeTagValue(terpene) === tag) ?? (tag ?? ""));
 
   return (
     <section id="catalog" className="py-12 px-4">
       <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 mb-5 sm:mb-6">
           <h2
-            className="text-2xl sm:text-3xl font-bold"
+            className="text-2xl sm:text-3xl font-bold leading-tight"
             style={{ fontFamily: "var(--font-heading)" }}
           >
-            {t("title")}{" "}
-            <span className="text-text-muted text-lg font-normal">
-              · {t("count", { count: available })}
+            {t("title")}
+            <span className="block sm:inline sm:ml-2 text-text-muted text-sm sm:text-lg font-normal mt-1 sm:mt-0">
+              {t("count", { count: available })}
             </span>
           </h2>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-3 mb-6 scrollbar-hide">
+        <div className="flex flex-wrap gap-2 mb-6">
           {effects.map((e) => (
             <button
               key={e}
@@ -112,7 +131,7 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
           </div>
         )}
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
           {filtered.map((strain, i) => (
             <StrainCard
               key={strain._id}

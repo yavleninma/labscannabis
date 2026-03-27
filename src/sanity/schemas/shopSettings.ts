@@ -2,31 +2,31 @@ import { defineField, defineType } from "sanity";
 
 export const shopSettings = defineType({
   name: "shopSettings",
-  title: "Shop Settings",
+  title: "Настройки магазина",
   type: "document",
   fields: [
     defineField({
       name: "openTime",
-      title: "Opening Time",
+      title: "Время открытия",
       type: "string",
       initialValue: "12:00",
-      description: "Format HH:mm, for example 09:30",
+      description: "Формат ЧЧ:мм, например 09:30",
       hidden: ({ document }) => Boolean(document?.isOpen24h),
     }),
     defineField({
       name: "closeTime",
-      title: "Closing Time",
+      title: "Время закрытия",
       type: "string",
       initialValue: "01:00",
-      description: "Format HH:mm, for example 21:00",
+      description: "Формат ЧЧ:мм, например 21:00",
       hidden: ({ document }) => Boolean(document?.isOpen24h),
     }),
     defineField({
       name: "isOpen24h",
-      title: "Open 24/7",
+      title: "Открыто 24/7",
       type: "boolean",
       initialValue: false,
-      description: "Turn on for round-the-clock opening. Time fields are ignored when enabled.",
+      description: "Если включено, магазин работает круглосуточно. Поля времени игнорируются.",
     }),
     defineField({
       name: "lineUrl",
@@ -34,9 +34,21 @@ export const shopSettings = defineType({
       type: "url",
     }),
     defineField({
+      name: "lineId",
+      title: "LINE ID",
+      type: "string",
+      description: "Необязательно. Используется для ссылок LINE, когда URL не указан.",
+    }),
+    defineField({
       name: "whatsappUrl",
       title: "WhatsApp URL",
       type: "url",
+    }),
+    defineField({
+      name: "whatsappNumber",
+      title: "WhatsApp номер",
+      type: "string",
+      description: "Необязательно. Укажите код страны. Используется, когда URL не указан.",
     }),
     defineField({
       name: "telegramUrl",
@@ -44,15 +56,57 @@ export const shopSettings = defineType({
       type: "url",
     }),
     defineField({
-      name: "announcement",
-      title: "Announcement Banner",
+      name: "telegramId",
+      title: "Telegram имя/ID",
       type: "string",
-      description: "Optional announcement text shown at the top of the site",
+      description: "Необязательно. Используется для ссылок Telegram, когда URL не указан.",
+    }),
+    defineField({
+      name: "phone",
+      title: "Номер телефона",
+      type: "string",
+      description: "Необязательно. Используется для звонков и как запасной вариант для WhatsApp/LINE.",
+    }),
+    defineField({
+      name: "announcement",
+      title: "Баннер объявлений",
+      type: "string",
+      description: "Необязательный текст объявления вверху сайта",
+    }),
+    defineField({
+      name: "googleRating",
+      title: "Рейтинг Google",
+      type: "number",
+      initialValue: 4.8,
+      description: "Текущий рейтинг на Google Maps (напр. 4.8). Обновляйте вручную.",
+      validation: (rule) => rule.min(1).max(5).precision(1),
+    }),
+    defineField({
+      name: "googleReviewCount",
+      title: "Кол-во отзывов Google",
+      type: "number",
+      initialValue: 91,
+      description: "Общее число отзывов на Google. Обновляйте вручную.",
+      validation: (rule) => rule.min(0).integer(),
+    }),
+    defineField({
+      name: "guidePhoto",
+      title: "Фото гида (Дмитрий)",
+      type: "image",
+      description: "Фото консультанта, отображается на главной.",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "teamPhoto",
+      title: "Фото команды",
+      type: "image",
+      description: "Фото команды магазина, отображается на главной.",
+      options: { hotspot: true },
     }),
   ],
   preview: {
     prepare() {
-      return { title: "Shop Settings" };
+      return { title: "Настройки магазина" };
     },
   },
 });

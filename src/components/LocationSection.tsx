@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
+import { GOOGLE_PLACE_QUERY } from "@/lib/constants";
 
-const GOOGLE_MAPS_URL = "https://maps.app.goo.gl/T67UqNDGdALMC1VZ8";
-const MAPS_EMBED_URL =
-  "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.!2d100.8825!3d12.9236!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sLabs%20Cannabis!5e0!3m2!1sen!2sth!4v1";
+const GOOGLE_MAPS_URL = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(GOOGLE_PLACE_QUERY)}`;
+const MAPS_EMBED_URL = `https://www.google.com/maps?q=${encodeURIComponent(GOOGLE_PLACE_QUERY)}&output=embed`;
 
 interface LocationSectionProps {
   openTime?: string;
@@ -29,6 +29,7 @@ export function LocationSection({
 }: LocationSectionProps) {
   const t = useTranslations("location");
   const hoursLabel = getHoursLabel(t, openTime, closeTime, isOpen24h);
+  const directionSteps = [t("directions.step1"), t("directions.step2"), t("directions.step3")];
 
   return (
     <section id="location" className="py-12 px-4">
@@ -54,7 +55,7 @@ export function LocationSection({
             />
           </div>
 
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col justify-center gap-5">
             <div>
               <p className="text-text-primary font-medium mb-1">
                 {t("address")}
@@ -62,7 +63,7 @@ export function LocationSection({
               <p className="text-text-secondary text-sm">
                 32 Pattaya 13 Alley (Soi Hollywood)
                 <br />
-                South Pattaya, Chon Buri 20150
+                Pattaya, Chon Buri 20150
               </p>
             </div>
 
@@ -73,6 +74,21 @@ export function LocationSection({
               <p className="text-text-secondary text-sm">
                 {t("landmarkDesc")}
               </p>
+            </div>
+
+            <div>
+              <p className="text-text-primary font-medium mb-2">{t("directions.title")}</p>
+              <ul className="space-y-2">
+                {directionSteps.map((step) => (
+                  <li key={step} className="flex items-start gap-2 text-text-secondary text-sm">
+                    <span
+                      className="mt-1.5 inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{step}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div>
