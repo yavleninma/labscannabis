@@ -11,6 +11,7 @@ interface JsonLdProps {
   isOpen24h?: boolean;
   googleRating?: number;
   googleReviewCount?: number;
+  phone?: string | null;
 }
 
 const descriptions: Record<Locale, string> = {
@@ -26,6 +27,7 @@ export async function JsonLd({
   isOpen24h = false,
   googleRating,
   googleReviewCount,
+  phone,
 }: JsonLdProps) {
   const t = await getTranslations({ locale, namespace: "faq" });
 
@@ -40,7 +42,7 @@ export async function JsonLd({
     name: "Labs Cannabis",
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
-    telephone: "", // TODO: Add phone number
+    ...(phone ? { telephone: phone } : {}),
     image: `${baseUrl}/og-image.svg`,
     address: {
       "@type": "PostalAddress",
@@ -98,11 +100,11 @@ export async function JsonLd({
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd).replace(/</g, "\\u003c") }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }}
       />
     </>
   );

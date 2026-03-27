@@ -102,6 +102,7 @@ export default async function LocaleLayout({
             isOpen24h={shopSettings.isOpen24h}
             googleRating={shopSettings.googleRating}
             googleReviewCount={shopSettings.googleReviewCount}
+            phone={shopSettings.phone}
           />
           <Header
             openTime={shopSettings.openTime}

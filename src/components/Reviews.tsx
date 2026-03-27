@@ -33,7 +33,7 @@ const reviews = [
 
 function Stars({ count }: { count: number }) {
   return (
-    <span className="text-yellow-400 text-sm">
+    <span className="text-yellow-400 text-sm" aria-hidden="true">
       {"★".repeat(count)}
       {"☆".repeat(5 - count)}
     </span>
