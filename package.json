@@ -16,14 +16,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@portabletext/react": "^6.0.3",
+    "@sanity/client": "^7.20.0",
+    "@sanity/image-url": "^2.0.3",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^25.5.0",
     "@types/react": "^19.2.14",
     "next": "^16.2.1",
     "next-intl": "^4.8.3",
+    "next-sanity": "^12.1.6",
     "postcss": "^8.5.8",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
+    "sanity": "^5.18.0",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   }

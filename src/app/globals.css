@@ -4,6 +4,7 @@
   --color-bg-primary: #0a0a0a;
   --color-bg-secondary: #111111;
   --color-bg-card: #1a1a1a;
+  --color-bg-card-hover: #222222;
   --color-emerald-400: #34d399;
   --color-emerald-500: #10b981;
   --color-emerald-600: #059669;
@@ -12,6 +13,8 @@
   --color-text-secondary: #a3a3a3;
   --color-text-muted: #737373;
   --color-border: #262626;
+  --font-heading: "Playfair Display", Georgia, serif;
+  --font-body: "DM Sans", system-ui, sans-serif;
 }
 
 html {
@@ -21,4 +24,22 @@ html {
 body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading), Georgia, serif;
+}
+
+@keyframes pulse-green {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-pulse-green {
+  animation: pulse-green 2s ease-in-out infinite;
 }

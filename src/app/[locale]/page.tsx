@@ -1,19 +1,34 @@
 import { Hero } from "@/components/Hero";
-import { About } from "@/components/About";
-import { HowItWorks } from "@/components/HowItWorks";
-import { Location } from "@/components/Location";
-import { Contact } from "@/components/Contact";
+import { NoPrescription } from "@/components/NoPrescription";
+import { StaffPick } from "@/components/StaffPick";
+import { StrainCatalog } from "@/components/StrainCatalog";
+import { Reviews } from "@/components/Reviews";
+import { LocationSection } from "@/components/LocationSection";
+import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { getAllStrains, getStaffPick } from "@/lib/queries";
 
-export default function HomePage() {
+export default async function HomePage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const [strains, staffPick] = await Promise.all([
+    getAllStrains(),
+    getStaffPick(),
+  ]);
+
   return (
-    <main>
+    <>
       <Hero />
-      <About />
-      <HowItWorks />
-      <Location />
-      <Contact />
+      <NoPrescription />
+      {staffPick && <StaffPick strain={staffPick} locale={locale} />}
+      <StrainCatalog strains={strains} />
+      <Reviews />
+      <LocationSection />
+      <ContactSection />
       <Footer />
-    </main>
+    </>
   );
 }

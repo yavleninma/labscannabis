@@ -1,13 +1,13 @@
 import type { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  // TODO: Replace with actual domain when purchased
-  const baseUrl = "https://labscannabis.com";
+  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
 
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: "/studio",
     },
     sitemap: `${baseUrl}/sitemap.xml`,
   };

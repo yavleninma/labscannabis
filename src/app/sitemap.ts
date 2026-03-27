@@ -1,15 +1,19 @@
 import type { MetadataRoute } from "next";
+import { getAllStrainSlugs } from "@/lib/queries";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // TODO: Replace with actual domain when purchased
-  const baseUrl = "https://labscannabis.com";
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
+  const locales = ["en", "ru", "th"];
 
-  return [
-    {
-      url: `${baseUrl}/en`,
+  const entries: MetadataRoute.Sitemap = [];
+
+  // Homepage entries
+  for (const locale of locales) {
+    entries.push({
+      url: `${baseUrl}/${locale}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
-      priority: 1,
+      priority: locale === "en" ? 1 : 0.9,
       alternates: {
         languages: {
           en: `${baseUrl}/en`,
@@ -17,18 +21,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
           th: `${baseUrl}/th`,
         },
       },
-    },
-    {
-      url: `${baseUrl}/ru`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/th`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-  ];
+    });
+  }
+
+  // Strain detail pages
+  const slugs = await getAllStrainSlugs();
+  for (const slug of slugs) {
+    for (const locale of locales) {
+      entries.push({
+        url: `${baseUrl}/${locale}/strains/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
+        alternates: {
+          languages: {
+            en: `${baseUrl}/en/strains/${slug}`,
+            ru: `${baseUrl}/ru/strains/${slug}`,
+            th: `${baseUrl}/th/strains/${slug}`,
+          },
+        },
+      });
+    }
+  }
+
+  return entries;
 }

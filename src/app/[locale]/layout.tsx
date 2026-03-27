@@ -4,16 +4,10 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
-import { Navbar } from "@/components/Navbar";
+import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 
 type Locale = "en" | "ru" | "th";
-
-const localeNames: Record<Locale, string> = {
-  en: "English",
-  ru: "Русский",
-  th: "ไทย",
-};
 
 export async function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -27,8 +21,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "meta" });
 
-  // TODO: Replace with actual domain when purchased
-  const baseUrl = "https://labscannabis.com";
+  const baseUrl = "https://labscannabis.com"; // TODO: Replace with actual domain
 
   return {
     title: t("title"),
@@ -49,7 +42,6 @@ export async function generateMetadata({
       siteName: "Labs Cannabis",
       locale: locale === "th" ? "th_TH" : locale === "ru" ? "ru_RU" : "en_US",
       type: "website",
-      // TODO: Add OG image
     },
     robots: {
       index: true,
@@ -77,6 +69,12 @@ export default async function LocaleLayout({
     <html lang={locale} className="scroll-smooth">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet"
+        />
         {routing.locales.map((l) => (
           <link
             key={l}
@@ -94,8 +92,8 @@ export default async function LocaleLayout({
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">
         <NextIntlClientProvider messages={messages}>
           <JsonLd locale={locale as Locale} />
-          <Navbar />
-          {children}
+          <Header />
+          <main>{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>
