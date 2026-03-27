@@ -30,11 +30,6 @@ export function LocationSection({
   const t = useTranslations("location");
   const hoursLabel = getHoursLabel(t, openTime, closeTime, isOpen24h);
   const directionSteps = [t("directions.step1"), t("directions.step2"), t("directions.step3")];
-  const routePhotoCards = [
-    { title: t("photoGuide.photo1Title"), description: t("photoGuide.photo1Desc") },
-    { title: t("photoGuide.photo2Title"), description: t("photoGuide.photo2Desc") },
-    { title: t("photoGuide.photo3Title"), description: t("photoGuide.photo3Desc") },
-  ];
 
   return (
     <section id="location" className="py-12 px-4">
@@ -103,22 +98,6 @@ export function LocationSection({
               <p className="text-text-secondary text-sm">
                 {hoursLabel}
               </p>
-            </div>
-
-            <div>
-              <p className="text-text-primary font-medium mb-2">{t("photoGuide.title")}</p>
-              <p className="text-text-secondary text-sm mb-3">{t("photoGuide.subtitle")}</p>
-              <div className="grid grid-cols-1 gap-2">
-                {routePhotoCards.map((card) => (
-                  <div
-                    key={card.title}
-                    className="rounded-lg border border-dashed border-border px-3 py-2 bg-bg-card/40"
-                  >
-                    <p className="text-text-primary text-sm font-medium">{card.title}</p>
-                    <p className="text-text-secondary text-xs mt-0.5">{card.description}</p>
-                  </div>
-                ))}
-              </div>
             </div>
 
             <a

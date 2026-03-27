@@ -74,16 +74,6 @@
       "step2": "Stay on the alley and look for LABS DISPENSARY signage.",
       "step3": "We're on your left side, around the middle of Pattaya 13 Alley."
     },
-    "photoGuide": {
-      "title": "Photo route guide",
-      "subtitle": "Soon we'll add step-by-step photos so you can find us even faster.",
-      "photo1Title": "Photo 1 — Entry point",
-      "photo1Desc": "Where to turn from the main road.",
-      "photo2Title": "Photo 2 — Midway landmark",
-      "photo2Desc": "Reference point in the middle of the alley.",
-      "photo3Title": "Photo 3 — Final storefront",
-      "photo3Desc": "How the shop entrance looks from the street."
-    },
     "hours": "Hours",
     "hoursValueDynamic": "Daily {open} - {close}",
     "hoursValue24_7": "Open 24/7",
@@ -107,14 +97,10 @@
     "seeAll": "See all reviews"
   },
   "about": {
-    "title": "Who We Are",
-    "guideName": "Dmitry",
-    "guideRole": "Your Cannabis Guide",
-    "guideDescription": "Dmitry personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
-    "teamTitle": "Our Team",
-    "teamDescription": "We speak Russian, English, and Thai. Happy to help with strain selection and medical card — no pressure, no rush.",
-    "guidePhotoAlt": "Dmitry — cannabis guide at Labs Cannabis",
-    "teamPhotoAlt": "Labs Cannabis team"
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis consultant and your cannabis guide",
+    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
+    "guidePhotoAlt": "Dima — Labs Cannabis consultant"
   },
   "faq": {
     "title": "Common Questions",
