@@ -4,9 +4,10 @@ import { getTranslations } from "next-intl/server";
 import { PortableText } from "@portabletext/react";
 import { routing } from "@/i18n/routing";
 import { translatePortableTextBlocks, translateText } from "@/lib/auto-translate";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 import { getLocalizedFullDescription, getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
-import { getStrainBySlug, getAllStrainSlugs } from "@/lib/queries";
+import { getStrainBySlug, getAllStrainSlugs, getShopSettings } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 import { urlFor } from "@/sanity/image";
 import { Footer } from "@/components/Footer";
@@ -26,6 +27,11 @@ const gradients = [
   "from-purple-900/40 to-purple-700/20",
   "from-blue-900/40 to-blue-700/20",
 ];
+
+function toContactLocale(value: string): ContactLocale {
+  if (value === "ru" || value === "th") return value;
+  return "en";
+}
 
 export async function generateStaticParams() {
   const slugs = await getAllStrainSlugs();
@@ -91,7 +97,7 @@ export default async function StrainPage({
   params: Promise<{ locale: string; slug: string }>;
 }) {
   const { locale, slug } = await params;
-  const strain = await getStrainBySlug(slug);
+  const [strain, shopSettings] = await Promise.all([getStrainBySlug(slug), getShopSettings()]);
 
   if (!strain) notFound();
 
@@ -109,6 +115,11 @@ export default async function StrainPage({
   );
   const typeHref = createTagHref(locale, "type", strain.type);
   const effectHref = createTagHref(locale, "effect", strain.effect);
+  const reserveUrl = buildContactLinks(
+    shopSettings,
+    toContactLocale(locale),
+    { kind: "purchase", productName: strain.name }
+  ).reserve;
 
   return (
     <>
@@ -176,7 +187,9 @@ export default async function StrainPage({
 
             {!strain.isSoldOut && (
               <a
-                href="#contact"
+                href={reserveUrl || "#"}
+                target={reserveUrl?.startsWith("http") ? "_blank" : undefined}
+                rel={reserveUrl?.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-3 rounded-lg font-medium transition-colors w-fit"
               >
                 {t("reserve")}
@@ -211,7 +224,7 @@ export default async function StrainPage({
           </div>
         )}
       </article>
-      <Footer />
+      <Footer shopSettings={shopSettings} />
     </>
   );
 }

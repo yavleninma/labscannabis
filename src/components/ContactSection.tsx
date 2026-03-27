@@ -1,26 +1,26 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
+import type { ShopSettings } from "@/lib/mock-data";
+import { mockShopSettings } from "@/lib/mock-data";
 
 interface ContactSectionProps {
-  lineUrl?: string | null;
-  whatsappUrl?: string | null;
-  telegramUrl?: string | null;
+  shopSettings?: ShopSettings;
 }
 
-export function ContactSection({
-  lineUrl,
-  whatsappUrl,
-  telegramUrl,
-}: ContactSectionProps) {
-  const t = useTranslations("contact");
+function toContactLocale(value: string): ContactLocale {
+  if (value === "ru" || value === "th") return value;
+  return "en";
+}
 
-  const fallbackLineUrl = "tel:+66660806784";
-  const fallbackWhatsappUrl = "https://wa.me/66660806784";
-  const fallbackTelegramUrl = "https://t.me/TODO";
+export function ContactSection({ shopSettings = mockShopSettings }: ContactSectionProps) {
+  const t = useTranslations("contact");
+  const locale = useLocale();
+  const links = buildContactLinks(shopSettings, toContactLocale(locale), { kind: "general" });
 
   const channels = [
     {
       name: "LINE",
-      href: lineUrl || fallbackLineUrl,
+      href: links.line || links.phone || "#",
       color: "bg-[#06C755] hover:bg-[#05b34d]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -30,7 +30,7 @@ export function ContactSection({
     },
     {
       name: "WhatsApp",
-      href: whatsappUrl || fallbackWhatsappUrl,
+      href: links.whatsapp || links.phone || "#",
       color: "bg-[#25D366] hover:bg-[#20bd5a]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -40,7 +40,7 @@ export function ContactSection({
     },
     {
       name: "Telegram",
-      href: telegramUrl || fallbackTelegramUrl,
+      href: links.telegram || links.phone || "#",
       color: "bg-[#0088cc] hover:bg-[#007ab8]",
       icon: (
         <svg className="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
@@ -68,8 +68,8 @@ export function ContactSection({
             <a
               key={ch.name}
               href={ch.href}
-              target="_blank"
-              rel="noopener noreferrer"
+              target={ch.href.startsWith("http") ? "_blank" : undefined}
+              rel={ch.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className={`${ch.color} text-white rounded-xl px-8 py-4 flex items-center gap-3 text-lg font-medium transition-colors w-full sm:w-auto justify-center`}
             >
               {ch.icon}

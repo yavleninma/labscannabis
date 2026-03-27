@@ -35,11 +35,9 @@ export default async function HomePage({
         isOpen24h={shopSettings.isOpen24h}
       />
       <ContactSection
-        lineUrl={shopSettings.lineUrl}
-        whatsappUrl={shopSettings.whatsappUrl}
-        telegramUrl={shopSettings.telegramUrl}
+        shopSettings={shopSettings}
       />
-      <Footer />
+      <Footer shopSettings={shopSettings} />
     </>
   );
 }

@@ -25,8 +25,12 @@ export interface ShopSettings {
   closeTime: string;
   isOpen24h?: boolean;
   lineUrl: string | null;
+  lineId?: string | null;
   whatsappUrl: string | null;
+  whatsappNumber?: string | null;
   telegramUrl: string | null;
+  telegramId?: string | null;
+  phone?: string | null;
   announcement: string | null;
 }
 
@@ -174,7 +178,11 @@ export const mockShopSettings: ShopSettings = {
   closeTime: "01:00",
   isOpen24h: false,
   lineUrl: null, // TODO: Add LINE URL
+  lineId: null,
   whatsappUrl: null, // TODO: Add WhatsApp URL
+  whatsappNumber: null,
   telegramUrl: null, // TODO: Add Telegram URL
+  telegramId: null,
+  phone: "+66 66 080 6784",
   announcement: null,
 };

@@ -34,14 +34,38 @@ export const shopSettings = defineType({
       type: "url",
     }),
     defineField({
+      name: "lineId",
+      title: "LINE ID",
+      type: "string",
+      description: "Optional. Used to build LINE links when LINE URL is not set.",
+    }),
+    defineField({
       name: "whatsappUrl",
       title: "WhatsApp URL",
       type: "url",
     }),
     defineField({
+      name: "whatsappNumber",
+      title: "WhatsApp Number",
+      type: "string",
+      description: "Optional. Include country code. Used when WhatsApp URL is not set.",
+    }),
+    defineField({
       name: "telegramUrl",
       title: "Telegram URL",
       type: "url",
+    }),
+    defineField({
+      name: "telegramId",
+      title: "Telegram Username/ID",
+      type: "string",
+      description: "Optional. Used to build Telegram links when Telegram URL is not set.",
+    }),
+    defineField({
+      name: "phone",
+      title: "Phone Number",
+      type: "string",
+      description: "Optional. Used for call link and as fallback for WhatsApp/LINE.",
     }),
     defineField({
       name: "announcement",

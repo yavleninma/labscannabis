@@ -75,7 +75,10 @@ export async function getShopSettings(): Promise<ShopSettings> {
     const settings = await sanityClient.fetch<ShopSettings | null>(
       `*[_type == "shopSettings"][0] {
         openTime, closeTime, isOpen24h,
-        lineUrl, whatsappUrl, telegramUrl,
+        lineUrl, lineId,
+        whatsappUrl, whatsappNumber,
+        telegramUrl, telegramId,
+        phone,
         announcement
       }`
     );
