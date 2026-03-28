@@ -3,8 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { GOOGLE_LISTING_URL, DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
+import type { GoogleReview } from "@/lib/google-reviews";
 
-const reviews = [
+const FALLBACK_REVIEWS: GoogleReview[] = [
   {
     name: "Mike R.",
     initial: "M",
@@ -12,6 +13,7 @@ const reviews = [
     originalText:
       "Best dispensary in Pattaya hands down. The staff really knows their strains and helped me pick the perfect one. Clean shop, great vibes.",
     originalLang: "en",
+    relativeTime: "",
   },
   {
     name: "Алексей К.",
@@ -20,6 +22,7 @@ const reviews = [
     originalText:
       "Отличный магазин! Ребята помогли с оформлением карты прямо на месте за пару минут. Выбор сортов хороший, цены адекватные. Рекомендую.",
     originalLang: "ru",
+    relativeTime: "",
   },
   {
     name: "Sarah T.",
@@ -28,6 +31,7 @@ const reviews = [
     originalText:
       "So easy! I was nervous about the medical card thing but they walked me through everything. Great selection and very knowledgeable staff.",
     originalLang: "en",
+    relativeTime: "",
   },
 ];
 
@@ -43,16 +47,19 @@ function Stars({ count }: { count: number }) {
 interface ReviewsProps {
   rating?: number | null;
   reviewCount?: number | null;
+  reviews?: GoogleReview[] | null;
 }
 
 export function Reviews({
   rating,
   reviewCount,
+  reviews: reviewsProp,
 }: ReviewsProps) {
   const t = useTranslations("reviews");
   const locale = useLocale() as "en" | "ru" | "th";
   const safeRating = rating ?? DEFAULT_GOOGLE_RATING;
   const safeReviewCount = reviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
+  const reviews = reviewsProp?.length ? reviewsProp : FALLBACK_REVIEWS;
   const [translatedByName, setTranslatedByName] = useState<Record<string, string>>({});
   const [showOriginalByName, setShowOriginalByName] = useState<Record<string, boolean>>({});
   const [isTranslating, setIsTranslating] = useState(false);
@@ -111,7 +118,7 @@ export function Reviews({
     return () => {
       isActive = false;
     };
-  }, [locale, needsTranslation]);
+  }, [locale, needsTranslation, reviews]);
 
   const cards = useMemo(
     () =>
@@ -128,7 +135,7 @@ export function Reviews({
           shouldShowOriginal,
         };
       }),
-    [needsTranslation, showOriginalByName, translatedByName]
+    [needsTranslation, showOriginalByName, translatedByName, reviews]
   );
 
   return (
