@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import Image from "next/image";
 import { PortableText } from "@portabletext/react";
 import { routing } from "@/i18n/routing";
 import { translatePortableTextBlocks, translateText } from "@/lib/auto-translate";
@@ -11,6 +12,7 @@ import { getStrainBySlug, getAllStrainSlugs, getShopSettings } from "@/lib/queri
 import { getSiteUrl } from "@/lib/site-url";
 import { urlFor } from "@/sanity/image";
 import { Footer } from "@/components/Footer";
+import { StrainJsonLd } from "@/components/StrainJsonLd";
 
 type Locale = "en" | "ru" | "th";
 
@@ -80,6 +82,10 @@ export async function generateMetadata({
           type: tCommon(`type_${strain.type}`),
         }));
 
+  const ogImageUrl = strain.image
+    ? urlFor(strain.image)?.width(1200).height(630).url()
+    : null;
+
   return {
     title,
     description,
@@ -97,6 +103,15 @@ export async function generateMetadata({
       url: `${baseUrl}/${locale}/strains/${slug}`,
       siteName: "Labs Cannabis",
       type: "article",
+      images: ogImageUrl
+        ? [{ url: ogImageUrl, width: 1200, height: 630, alt: strain.name }]
+        : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: ogImageUrl ? [ogImageUrl] : [],
     },
   };
 }
@@ -146,8 +161,16 @@ export default async function StrainPage({
   ].filter((channel) => Boolean(channel.href) && !(channel.id === "line" && channel.href?.startsWith("tel:")));
   const phoneDisplay = shopSettings.phone?.trim() || contactLinks.phone?.replace(/^tel:/, "") || null;
 
+  const baseUrl = getSiteUrl();
+
   return (
     <>
+      <StrainJsonLd
+        strain={strain}
+        locale={locale}
+        baseUrl={baseUrl}
+        breadcrumbStrainsLabel={t("breadcrumbStrains")}
+      />
       <article className="pt-20 pb-12 px-4 max-w-4xl mx-auto">
         <a
           href={`/${locale}#catalog`}
@@ -160,12 +183,15 @@ export default async function StrainPage({
         </a>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-          <div className="rounded-xl overflow-hidden border border-border aspect-[4/3]">
+          <div className="rounded-xl overflow-hidden border border-border aspect-[4/3] relative">
             {imageUrl ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={tCommon("strainAltText", { name: strain.name })}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 640px) 100vw, 50vw"
+                className="object-cover"
+                priority
               />
             ) : (
               <div className={`w-full h-full bg-gradient-to-br ${gradients[0]} flex items-center justify-center`}>

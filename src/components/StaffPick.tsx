@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getTranslations } from "next-intl/server";
 import { translateText } from "@/lib/auto-translate";
 import type { Strain } from "@/lib/mock-data";
@@ -51,10 +52,13 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-0">
             <div className="relative aspect-[4/3] sm:aspect-auto">
               {imageUrl ? (
-                <img
+                <Image
                   src={imageUrl}
                   alt={tCommon("staffPickAltText", { name: strain.name })}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 640px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
                 />
               ) : (
                 <div className="w-full h-full min-h-[200px] bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center">

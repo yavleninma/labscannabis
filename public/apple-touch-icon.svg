@@ -1,0 +1,5 @@
+<svg width="180" height="180" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="180" rx="40" fill="#0d2218"/>
+  <text x="90" y="80" text-anchor="middle" fill="#10b981" font-family="system-ui, sans-serif" font-size="48" font-weight="800">LC</text>
+  <text x="90" y="130" text-anchor="middle" fill="#6ee7b7" font-family="system-ui, sans-serif" font-size="20" font-weight="500">Cannabis</text>
+</svg>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ShopSettings } from "@/lib/mock-data";
 import { urlFor } from "@/sanity/image";
@@ -18,12 +19,14 @@ export function AboutTeam({ shopSettings }: AboutTeamProps) {
       <div className="max-w-6xl mx-auto">
         <div className="max-w-2xl w-full mx-auto">
           <div className="bg-bg-card border border-border rounded-2xl p-6 flex flex-col items-center text-center">
-            <div className="w-full rounded-xl bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border border-emerald-500/30 overflow-hidden aspect-[3/2]">
+            <div className="relative w-full rounded-xl bg-gradient-to-br from-emerald-900/40 to-emerald-700/20 flex items-center justify-center mb-4 border border-emerald-500/30 overflow-hidden aspect-[3/2]">
               {guideImageUrl ? (
-                <img
+                <Image
                   src={guideImageUrl}
                   alt={t("guidePhotoAlt")}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 672px"
+                  className="object-cover"
                 />
               ) : (
                 <span className="text-5xl opacity-50" aria-hidden="true">👤</span>

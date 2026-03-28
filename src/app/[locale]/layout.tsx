@@ -4,6 +4,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
+import { Noto_Sans, Noto_Serif, Noto_Sans_Thai, Noto_Serif_Thai } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header } from "@/components/Header";
@@ -13,6 +14,34 @@ import { getSiteUrl } from "@/lib/site-url";
 
 type Locale = "en" | "ru" | "th";
 export const revalidate = 60;
+
+const notoSans = Noto_Sans({
+  subsets: ["latin", "cyrillic"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const notoSerif = Noto_Serif({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-heading",
+  display: "swap",
+});
+
+const notoSansThai = Noto_Sans_Thai({
+  subsets: ["thai"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans-thai",
+  display: "swap",
+});
+
+const notoSerifThai = Noto_Serif_Thai({
+  subsets: ["thai"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-heading-thai",
+  display: "swap",
+});
 
 export async function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -48,6 +77,11 @@ export async function generateMetadata({
       locale: locale === "th" ? "th_TH" : locale === "ru" ? "ru_RU" : "en_US",
       type: "website",
     },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
+    },
     robots: {
       index: true,
       follow: true,
@@ -72,29 +106,14 @@ export default async function LocaleLayout({
   const shopSettings = await getShopSettings();
 
   return (
-    <html lang={locale}>
+    <html
+      lang={locale}
+      className={`${notoSans.variable} ${notoSerif.variable} ${notoSansThai.variable} ${notoSerifThai.variable}`}
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Serif:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        {routing.locales.map((l) => (
-          <link
-            key={l}
-            rel="alternate"
-            hrefLang={l}
-            href={`${getSiteUrl()}/${l}`}
-          />
-        ))}
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href={`${getSiteUrl()}/en`}
-        />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
       </head>
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">
         <NextIntlClientProvider messages={messages}>

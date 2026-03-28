@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
 import { createTagHref } from "@/lib/strain-tags";
@@ -76,24 +77,18 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
   };
 
   return (
-    <div
-      role="link"
-      tabIndex={0}
-      onClick={() => window.location.assign(detailsHref)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          window.location.assign(detailsHref);
-        }
-      }}
-      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all cursor-pointer"
+    <a
+      href={detailsHref}
+      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={tCommon("cardAltText", { name: strain.name })}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            fill
+            sizes="(max-width: 420px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div
@@ -168,7 +163,8 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
               {soldOutLabel}
             </span>
           ) : (
-            <span
+            <button
+              type="button"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -177,10 +173,10 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
               className="text-[11px] sm:text-xs text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               {reserveLabel}
-            </span>
+            </button>
           )}
         </div>
       </div>
-    </div>
+    </a>
   );
 }

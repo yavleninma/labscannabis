@@ -7,11 +7,17 @@ export function normalizeTagValue(value: string): string {
 }
 
 export function createTagHref(locale: string, tagType: StrainTagType, tagValue: string): string {
-  const params = new URLSearchParams({
-    tagType,
-    tag: normalizeTagValue(tagValue),
-  });
+  const normalized = normalizeTagValue(tagValue);
 
+  if (tagType === "effect") {
+    return `/${locale}/strains/effects/${normalized}`;
+  }
+  if (tagType === "type") {
+    return `/${locale}/strains/types/${normalized}`;
+  }
+
+  // terpene: keep query param approach (no dedicated pages)
+  const params = new URLSearchParams({ tagType, tag: normalized });
   return `/${locale}?${params.toString()}#catalog`;
 }
 

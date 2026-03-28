@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
 import { normalizeTagValue, parseTagFromSearchParams, strainMatchesTag } from "@/lib/strain-tags";
@@ -43,8 +43,6 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
   const t = useTranslations("catalog");
   const tCommon = useTranslations("strainCommon");
   const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { tagType, tag } = parseTagFromSearchParams(searchParams);
 
@@ -59,16 +57,11 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
   const activeEffectFilter = tagType === "effect" ? tag : null;
 
   const updateFilter = (effect: string) => {
-    const params = new URLSearchParams(searchParams.toString());
     if (effect === "all") {
-      params.delete("tagType");
-      params.delete("tag");
+      window.location.assign(`/${locale}#catalog`);
     } else {
-      params.set("tagType", "effect");
-      params.set("tag", effect);
+      window.location.assign(`/${locale}/strains/effects/${effect}`);
     }
-    const query = params.toString();
-    router.replace(`${pathname}${query ? `?${query}` : ""}#catalog`, { scroll: false });
   };
 
   const activeTagLabel =

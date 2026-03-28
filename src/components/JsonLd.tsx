@@ -43,7 +43,7 @@ export async function JsonLd({
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
-    image: `${baseUrl}/og-image.svg`,
+    image: `${baseUrl}/opengraph-image`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",
