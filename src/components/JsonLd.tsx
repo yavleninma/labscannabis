@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { getSiteUrl } from "@/lib/site-url";
-import { DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
+import { DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT, GOOGLE_LISTING_URL } from "@/lib/constants";
 
 type Locale = "en" | "ru" | "th";
 
@@ -37,13 +37,16 @@ export async function JsonLd({
 
   const localBusinessLd = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
-    "@id": `${baseUrl}/${locale}`,
+    "@type": ["LocalBusiness", "Store"],
+    "@id": `${baseUrl}/#business`,
     name: "Labs Cannabis",
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
     image: `${baseUrl}/og-image.svg`,
+    sameAs: [
+      GOOGLE_LISTING_URL,
+    ],
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",

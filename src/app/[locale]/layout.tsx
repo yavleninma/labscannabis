@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { notoSans, notoSerif, notoSansThai, notoSerifThai } from "@/lib/fonts";
 import "../globals.css";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
@@ -28,6 +29,12 @@ export async function generateMetadata({
 
   const baseUrl = getSiteUrl();
 
+  const localeMap: Record<string, string> = {
+    en: "en_US",
+    ru: "ru_RU",
+    th: "th_TH",
+  };
+
   return {
     title: t("title"),
     description: t("description"),
@@ -35,9 +42,10 @@ export async function generateMetadata({
     alternates: {
       canonical: `${baseUrl}/${locale}`,
       languages: {
-        en: `${baseUrl}/en`,
-        ru: `${baseUrl}/ru`,
-        th: `${baseUrl}/th`,
+        "x-default": `${baseUrl}/en`,
+        "en-US": `${baseUrl}/en`,
+        "ru-RU": `${baseUrl}/ru`,
+        "th-TH": `${baseUrl}/th`,
       },
     },
     openGraph: {
@@ -45,8 +53,13 @@ export async function generateMetadata({
       description: t("ogDescription"),
       url: `${baseUrl}/${locale}`,
       siteName: "Labs Cannabis",
-      locale: locale === "th" ? "th_TH" : locale === "ru" ? "ru_RU" : "en_US",
+      locale: localeMap[locale] ?? "en_US",
       type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("ogTitle"),
+      description: t("ogDescription"),
     },
     robots: {
       index: true,
@@ -71,30 +84,18 @@ export default async function LocaleLayout({
   const messages = await getMessages();
   const shopSettings = await getShopSettings();
 
+  const fontClasses = [
+    notoSans.variable,
+    notoSerif.variable,
+    notoSansThai.variable,
+    notoSerifThai.variable,
+  ].join(" ");
+
   return (
-    <html lang={locale}>
+    <html lang={locale} className={fontClasses}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Serif:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap"
-          rel="stylesheet"
-        />
-        {routing.locales.map((l) => (
-          <link
-            key={l}
-            rel="alternate"
-            hrefLang={l}
-            href={`${getSiteUrl()}/${l}`}
-          />
-        ))}
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href={`${getSiteUrl()}/en`}
-        />
       </head>
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">
         <NextIntlClientProvider messages={messages}>

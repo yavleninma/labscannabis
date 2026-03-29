@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { PortableText } from "@portabletext/react";
@@ -86,9 +87,10 @@ export async function generateMetadata({
     alternates: {
       canonical: `${baseUrl}/${locale}/strains/${slug}`,
       languages: {
-        en: `${baseUrl}/en/strains/${slug}`,
-        ru: `${baseUrl}/ru/strains/${slug}`,
-        th: `${baseUrl}/th/strains/${slug}`,
+        "x-default": `${baseUrl}/en/strains/${slug}`,
+        "en-US": `${baseUrl}/en/strains/${slug}`,
+        "ru-RU": `${baseUrl}/ru/strains/${slug}`,
+        "th-TH": `${baseUrl}/th/strains/${slug}`,
       },
     },
     openGraph: {
@@ -97,6 +99,11 @@ export async function generateMetadata({
       url: `${baseUrl}/${locale}/strains/${slug}`,
       siteName: "Labs Cannabis",
       type: "article",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
     },
   };
 }
@@ -146,8 +153,76 @@ export default async function StrainPage({
   ].filter((channel) => Boolean(channel.href) && !(channel.id === "line" && channel.href?.startsWith("tel:")));
   const phoneDisplay = shopSettings.phone?.trim() || contactLinks.phone?.replace(/^tel:/, "") || null;
 
+  const baseUrl = getSiteUrl();
+
+  // Product schema
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: strain.name,
+    ...(translatedShortDescription ? { description: translatedShortDescription } : {}),
+    brand: {
+      "@type": "Brand",
+      name: "Labs Cannabis",
+    },
+    offers: {
+      "@type": "Offer",
+      price: String(strain.pricePerGram),
+      priceCurrency: "THB",
+      priceSpecification: {
+        "@type": "UnitPriceSpecification",
+        price: String(strain.pricePerGram),
+        priceCurrency: "THB",
+        unitText: "g",
+      },
+      availability: strain.isSoldOut
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
+      url: `${baseUrl}/${locale}/strains/${slug}`,
+      seller: {
+        "@type": "LocalBusiness",
+        "@id": `${baseUrl}/#business`,
+        name: "Labs Cannabis",
+      },
+    },
+  };
+
+  // BreadcrumbList schema
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Labs Cannabis",
+        item: `${baseUrl}/${locale}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: tCommon("tagType_type"),
+        item: `${baseUrl}/${locale}#catalog`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: strain.name,
+        item: `${baseUrl}/${locale}/strains/${slug}`,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd).replace(/</g, "\\u003c") }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd).replace(/</g, "\\u003c") }}
+      />
       <article className="pt-20 pb-12 px-4 max-w-4xl mx-auto">
         <a
           href={`/${locale}#catalog`}
@@ -162,10 +237,13 @@ export default async function StrainPage({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
           <div className="rounded-xl overflow-hidden border border-border aspect-[4/3]">
             {imageUrl ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={tCommon("strainAltText", { name: strain.name })}
+                width={800}
+                height={600}
                 className="w-full h-full object-cover"
+                priority
               />
             ) : (
               <div className={`w-full h-full bg-gradient-to-br ${gradients[0]} flex items-center justify-center`}>

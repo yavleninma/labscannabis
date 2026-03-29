@@ -32,7 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       entries.push({
         url: `${baseUrl}/${locale}/strains/${slug}`,
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "daily",
         priority: 0.8,
         alternates: {
           languages: {
