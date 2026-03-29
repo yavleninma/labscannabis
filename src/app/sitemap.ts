@@ -32,9 +32,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: locale === "en" ? 1 : 0.9,
       alternates: {
         languages: {
-          en: `${baseUrl}/en`,
-          ru: `${baseUrl}/ru`,
-          th: `${baseUrl}/th`,
+          "x-default": `${baseUrl}/en`,
+          "en-US": `${baseUrl}/en`,
+          "ru-RU": `${baseUrl}/ru`,
+          "th-TH": `${baseUrl}/th`,
         },
       },
     });
@@ -50,9 +51,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
         alternates: {
           languages: {
-            en: `${baseUrl}/en/strains/effects/${effect}`,
-            ru: `${baseUrl}/ru/strains/effects/${effect}`,
-            th: `${baseUrl}/th/strains/effects/${effect}`,
+            "x-default": `${baseUrl}/en/strains/effects/${effect}`,
+            "en-US": `${baseUrl}/en/strains/effects/${effect}`,
+            "ru-RU": `${baseUrl}/ru/strains/effects/${effect}`,
+            "th-TH": `${baseUrl}/th/strains/effects/${effect}`,
           },
         },
       });
@@ -69,9 +71,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.75,
         alternates: {
           languages: {
-            en: `${baseUrl}/en/strains/types/${type}`,
-            ru: `${baseUrl}/ru/strains/types/${type}`,
-            th: `${baseUrl}/th/strains/types/${type}`,
+            "x-default": `${baseUrl}/en/strains/types/${type}`,
+            "en-US": `${baseUrl}/en/strains/types/${type}`,
+            "ru-RU": `${baseUrl}/ru/strains/types/${type}`,
+            "th-TH": `${baseUrl}/th/strains/types/${type}`,
           },
         },
       });
@@ -85,13 +88,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       entries.push({
         url: `${baseUrl}/${locale}/strains/${slug}`,
         lastModified: new Date(),
-        changeFrequency: "weekly",
+        changeFrequency: "daily",
         priority: 0.8,
         alternates: {
           languages: {
-            en: `${baseUrl}/en/strains/${slug}`,
-            ru: `${baseUrl}/ru/strains/${slug}`,
-            th: `${baseUrl}/th/strains/${slug}`,
+            "x-default": `${baseUrl}/en/strains/${slug}`,
+            "en-US": `${baseUrl}/en/strains/${slug}`,
+            "ru-RU": `${baseUrl}/ru/strains/${slug}`,
+            "th-TH": `${baseUrl}/th/strains/${slug}`,
           },
         },
       });

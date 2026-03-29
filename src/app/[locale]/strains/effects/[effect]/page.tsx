@@ -51,9 +51,10 @@ export async function generateMetadata({
     alternates: {
       canonical: `${baseUrl}/${locale}/strains/effects/${effect}`,
       languages: {
-        en: `${baseUrl}/en/strains/effects/${effect}`,
-        ru: `${baseUrl}/ru/strains/effects/${effect}`,
-        th: `${baseUrl}/th/strains/effects/${effect}`,
+        "x-default": `${baseUrl}/en/strains/effects/${effect}`,
+        "en-US": `${baseUrl}/en/strains/effects/${effect}`,
+        "ru-RU": `${baseUrl}/ru/strains/effects/${effect}`,
+        "th-TH": `${baseUrl}/th/strains/effects/${effect}`,
       },
     },
     openGraph: {

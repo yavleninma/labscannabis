@@ -40,9 +40,10 @@ export async function generateMetadata({
     alternates: {
       canonical: `${baseUrl}/${locale}/strains/types/${type}`,
       languages: {
-        en: `${baseUrl}/en/strains/types/${type}`,
-        ru: `${baseUrl}/ru/strains/types/${type}`,
-        th: `${baseUrl}/th/strains/types/${type}`,
+        "x-default": `${baseUrl}/en/strains/types/${type}`,
+        "en-US": `${baseUrl}/en/strains/types/${type}`,
+        "ru-RU": `${baseUrl}/ru/strains/types/${type}`,
+        "th-TH": `${baseUrl}/th/strains/types/${type}`,
       },
     },
     openGraph: {
