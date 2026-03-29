@@ -89,13 +89,14 @@ export async function generateMetadata({
         en: `${baseUrl}/en/strains/${slug}`,
         ru: `${baseUrl}/ru/strains/${slug}`,
         th: `${baseUrl}/th/strains/${slug}`,
+        "x-default": `${baseUrl}/en/strains/${slug}`,
       },
     },
     openGraph: {
       title,
       description,
       url: `${baseUrl}/${locale}/strains/${slug}`,
-      siteName: "Labs Cannabis",
+      siteName: "LABS Cannabis",
       type: "article",
     },
   };

@@ -91,6 +91,7 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
             style={{ fontFamily: "var(--font-heading)" }}
           >
             {t("title")}
+            {" "}
             <span className="block sm:inline sm:ml-2 text-text-muted text-sm sm:text-lg font-normal mt-1 sm:mt-0">
               {t("count", { count: available })}
             </span>

@@ -79,7 +79,7 @@ export function Footer({ shopSettings = mockShopSettings }: FooterProps) {
             {t("disclaimer")}
           </p>
           <p className="text-text-muted text-xs mt-3">
-            &copy; {new Date().getFullYear()} Labs Cannabis. {t("rights")}
+            &copy; {new Date().getFullYear()} LABS Cannabis. {t("rights")}
           </p>
         </div>
       </div>

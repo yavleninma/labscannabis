@@ -1,4 +1,3 @@
-import { getTranslations } from "next-intl/server";
 import { getSiteUrl } from "@/lib/site-url";
 import { DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT } from "@/lib/constants";
 
@@ -20,7 +19,7 @@ const descriptions: Record<Locale, string> = {
   th: "ร้านกัญชาที่ได้รับอนุญาตในพัทยา บัตรทางการแพทย์ภายใน 2 นาที เดินเข้ามาได้เลย 5 นาทีจาก Walking Street",
 };
 
-export async function JsonLd({
+export function JsonLd({
   locale,
   openTime = "12:00",
   closeTime = "01:00",
@@ -29,8 +28,6 @@ export async function JsonLd({
   googleReviewCount,
   phone,
 }: JsonLdProps) {
-  const t = await getTranslations({ locale, namespace: "faq" });
-
   const baseUrl = getSiteUrl();
   const rating = googleRating ?? DEFAULT_GOOGLE_RATING;
   const reviewCount = googleReviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
@@ -38,8 +35,8 @@ export async function JsonLd({
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${baseUrl}/${locale}`,
-    name: "Labs Cannabis",
+    "@id": `${baseUrl}/#business`,
+    name: "LABS Cannabis",
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
@@ -54,8 +51,8 @@ export async function JsonLd({
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 12.9236,
-      longitude: 100.8825,
+      latitude: 12.9233467,
+      longitude: 100.8771557,
     },
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
@@ -69,7 +66,7 @@ export async function JsonLd({
         "Sunday",
       ],
       opens: isOpen24h ? "00:00" : openTime,
-      closes: isOpen24h ? "23:59" : closeTime,
+      closes: isOpen24h ? "00:00" : closeTime,
     },
     aggregateRating: {
       "@type": "AggregateRating",
@@ -82,30 +79,10 @@ export async function JsonLd({
     paymentAccepted: "Cash, QR Bank Transfer",
   };
 
-  const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: faqKeys.map((key) => ({
-      "@type": "Question",
-      name: t(`q${key}`),
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: t(`a${key}`),
-      },
-    })),
-  };
-
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd).replace(/</g, "\\u003c") }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd).replace(/</g, "\\u003c") }}
-      />
-    </>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd).replace(/</g, "\\u003c") }}
+    />
   );
 }
