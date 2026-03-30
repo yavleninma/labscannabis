@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const completion = await client.chat.completions.create({
       model: "gpt-5.4",
       temperature: 0.75,
-      max_tokens: 300,
+      max_completion_tokens: 300,
       messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
     });
 
