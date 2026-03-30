@@ -25,25 +25,40 @@ const ERROR_MESSAGES: Record<string, string> = {
   th: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
 };
 
+const LABEL_TEXTS: Record<string, string> = {
+  en: "Looking for something? 👋",
+  ru: "Ищешь что-то? 👋",
+  th: "กำลังหาอะไรอยู่? 👋",
+};
+
 export function ChatWidget({ locale }: { locale: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
+  const [showLabel, setShowLabel] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const greeting = GREETINGS[locale] ?? GREETINGS.en;
   const placeholder = PLACEHOLDERS[locale] ?? PLACEHOLDERS.en;
+  const labelText = LABEL_TEXTS[locale] ?? LABEL_TEXTS.en;
 
-  // Set greeting on first open
+  // Show label after 2.5s delay
+  useEffect(() => {
+    const t = setTimeout(() => setShowLabel(true), 2500);
+    return () => clearTimeout(t);
+  }, []);
+
+  // Set greeting on first open, hide label
   useEffect(() => {
     if (isOpen && messages.length === 0) {
       setMessages([{ role: "assistant", content: greeting }]);
     }
     if (isOpen) {
       setHasUnread(false);
+      setShowLabel(false);
     }
   }, [isOpen, greeting, messages.length]);
 
@@ -89,7 +104,7 @@ export function ChatWidget({ locale }: { locale: string }) {
         setIsLoading(false);
       }
     },
-    [input, isLoading, messages, isOpen],
+    [input, isLoading, messages, isOpen, locale],
   );
 
   return (
@@ -129,14 +144,7 @@ export function ChatWidget({ locale }: { locale: string }) {
               className="flex h-7 w-7 items-center justify-center rounded-full text-white/70 transition-colors hover:bg-white/20 hover:text-white"
               aria-label="Close chat"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
@@ -145,20 +153,13 @@ export function ChatWidget({ locale }: { locale: string }) {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-4" style={{ gap: "12px", display: "flex", flexDirection: "column" }}>
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-              >
+              <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className="max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed"
                   style={
                     msg.role === "user"
                       ? { background: "#059669", color: "#fff", borderBottomRightRadius: "4px" }
-                      : {
-                          background: "var(--color-bg-secondary)",
-                          color: "var(--color-text-primary)",
-                          borderBottomLeftRadius: "4px",
-                        }
+                      : { background: "var(--color-bg-secondary)", color: "var(--color-text-primary)", borderBottomLeftRadius: "4px" }
                   }
                 >
                   {msg.content}
@@ -171,25 +172,18 @@ export function ChatWidget({ locale }: { locale: string }) {
               <div className="flex justify-start">
                 <div
                   className="flex items-center gap-1 rounded-2xl px-4 py-3"
-                  style={{
-                    background: "var(--color-bg-secondary)",
-                    borderBottomLeftRadius: "4px",
-                  }}
+                  style={{ background: "var(--color-bg-secondary)", borderBottomLeftRadius: "4px" }}
                 >
                   {[0, 150, 300].map((delay) => (
                     <span
                       key={delay}
                       className="block h-2 w-2 rounded-full"
-                      style={{
-                        background: "var(--color-text-muted)",
-                        animation: `bounce 1.2s ease-in-out ${delay}ms infinite`,
-                      }}
+                      style={{ background: "var(--color-text-muted)", animation: `bounce 1.2s ease-in-out ${delay}ms infinite` }}
                     />
                   ))}
                 </div>
               </div>
             )}
-
             <div ref={messagesEndRef} />
           </div>
 
@@ -206,11 +200,7 @@ export function ChatWidget({ locale }: { locale: string }) {
               placeholder={placeholder}
               disabled={isLoading}
               className="min-w-0 flex-1 rounded-xl px-3 py-2.5 text-sm outline-none transition-colors disabled:opacity-50"
-              style={{
-                background: "var(--color-bg-secondary)",
-                color: "var(--color-text-primary)",
-                border: "1px solid var(--color-border)",
-              }}
+              style={{ background: "var(--color-bg-secondary)", color: "var(--color-text-primary)", border: "1px solid var(--color-border)" }}
             />
             <button
               type="submit"
@@ -219,12 +209,7 @@ export function ChatWidget({ locale }: { locale: string }) {
               style={{ background: "#059669" }}
               aria-label="Send"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
               </svg>
             </button>
@@ -232,45 +217,52 @@ export function ChatWidget({ locale }: { locale: string }) {
         </div>
       )}
 
+      {/* Label bubble */}
+      {!isOpen && showLabel && (
+        <div
+          className="fixed bottom-7 right-20 z-50 flex items-center gap-2 rounded-2xl px-4 py-2.5 shadow-lg"
+          style={{
+            background: "var(--color-bg-card)",
+            border: "1px solid var(--color-border)",
+            animation: "slideInLabel 0.3s ease-out",
+          }}
+        >
+          <span className="whitespace-nowrap text-sm font-medium" style={{ color: "var(--color-text-primary)" }}>
+            {labelText}
+          </span>
+          <button
+            onClick={(e) => { e.stopPropagation(); setShowLabel(false); }}
+            className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full text-xs"
+            style={{ color: "var(--color-text-muted)" }}
+            aria-label="Dismiss"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       {/* Floating toggle button */}
       <button
         onClick={() => setIsOpen((v) => !v)}
         className="fixed bottom-6 right-4 z-50 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform hover:scale-105 active:scale-95"
-        style={{ background: "#059669" }}
+        style={{
+          background: "#059669",
+          boxShadow: "0 0 0 0 rgba(5,150,105,0.5)",
+          animation: !isOpen && showLabel ? undefined : "chatPulse 2.5s ease-in-out infinite",
+        }}
         aria-label={isOpen ? "Close chat" : "Chat with us"}
       >
         {isOpen ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5 text-white"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
           <>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-              />
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
             </svg>
             {hasUnread && (
-              <span
-                className="absolute right-1 top-1 flex h-3 w-3 items-center justify-center rounded-full"
-                style={{ background: "#ef4444" }}
-              />
+              <span className="absolute right-1 top-1 flex h-3 w-3 items-center justify-center rounded-full" style={{ background: "#ef4444" }} />
             )}
           </>
         )}
