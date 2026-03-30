@@ -9,6 +9,7 @@ import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
+import { ChatWidget } from "@/components/ChatWidget";
 import { getShopSettings } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -133,6 +134,7 @@ export default async function LocaleLayout({
             isOpen24h={shopSettings.isOpen24h}
           />
           <main>{children}</main>
+          <ChatWidget locale={locale} />
         </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
