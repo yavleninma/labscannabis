@@ -3,7 +3,16 @@ import { NextResponse } from "next/server";
 import { getAllStrains, getShopSettings } from "@/lib/queries";
 import type { Strain, ShopSettings } from "@/lib/mock-data";
 
-// --- Context helpers ---
+// --- Types ---
+
+export type ContactCard = {
+  label: string;
+  url: string;
+  color: string;
+  icon: "phone" | "whatsapp" | "telegram" | "line";
+};
+
+// --- Helpers ---
 
 function formatCatalog(strains: Strain[]): string {
   const available = strains.filter((s) => !s.isSoldOut);
@@ -26,29 +35,41 @@ function formatCatalog(strains: Strain[]): string {
   return lines.join("\n") || "Catalog temporarily unavailable.";
 }
 
-function formatContacts(s: ShopSettings): string {
-  const lines: string[] = [];
+function buildContactCards(s: ShopSettings): ContactCard[] {
+  const cards: ContactCard[] = [];
 
-  if (s.phone) lines.push(`Phone/WhatsApp: ${s.phone}`);
+  // WhatsApp (prefer explicit URL, else build from number or phone)
+  const waUrl = s.whatsappUrl?.trim() || null;
+  const waNumber = (s.whatsappNumber || s.phone || "").replace(/\D/g, "");
+  const whatsapp = waUrl || (waNumber ? `https://wa.me/${waNumber}` : null);
+  if (whatsapp) cards.push({ label: "WhatsApp", url: whatsapp, color: "#25D366", icon: "whatsapp" });
 
-  const tg = s.telegramId
-    ? `@${s.telegramId.replace(/^@/, "")}`
-    : s.telegramUrl ?? null;
-  if (tg) lines.push(`Telegram: ${tg}`);
+  // Telegram
+  const tgId = s.telegramId?.replace(/^@+/, "").trim();
+  const telegram = s.telegramUrl?.trim() || (tgId ? `https://t.me/${tgId}` : null);
+  if (telegram) cards.push({ label: "Telegram", url: telegram, color: "#0088cc", icon: "telegram" });
 
-  const lineContact = s.lineId
-    ? `LINE: @${s.lineId.replace(/^@/, "")}`
-    : s.lineUrl
-      ? `LINE: ${s.lineUrl}`
-      : null;
-  if (lineContact) lines.push(lineContact);
+  // LINE
+  const lineId = s.lineId?.replace(/^@+/, "").trim();
+  const line = s.lineUrl?.trim() || (lineId ? `https://line.me/ti/p/~${lineId}` : null);
+  if (line) cards.push({ label: "LINE", url: line, color: "#06C755", icon: "line" });
 
-  return lines.join("\n") || "Phone: +66 66 080 6784";
+  // Phone (always last)
+  if (s.phone) {
+    const digits = s.phone.replace(/\D/g, "");
+    if (digits) cards.push({ label: s.phone, url: `tel:+${digits}`, color: "#059669", icon: "phone" });
+  }
+
+  return cards;
 }
 
 // --- 5-minute in-memory cache ---
 
-type CtxCache = { catalog: string; contacts: string; ts: number };
+type CtxCache = {
+  catalog: string;
+  contactCards: ContactCard[];
+  ts: number;
+};
 let cachedCtx: CtxCache | null = null;
 const CTX_TTL = 5 * 60 * 1000;
 
@@ -57,7 +78,7 @@ async function getContext(): Promise<CtxCache> {
   const [strains, settings] = await Promise.all([getAllStrains(), getShopSettings()]);
   cachedCtx = {
     catalog: formatCatalog(strains),
-    contacts: formatContacts(settings),
+    contactCards: buildContactCards(settings),
     ts: Date.now(),
   };
   return cachedCtx;
@@ -72,9 +93,7 @@ KEY TASK: Many visitors are looking for vapes, HQD, IQOS, e-cigs. When they ask:
 - Be warm, not preachy — like a friend giving a heads-up
 - Quickly mention vapes are illegal here (fines, police) — you're doing them a favor
 - Pivot: weed is totally legal, Dima personally picks only the freshest top strains
-- End with one short question to keep them talking (what vibe are they after? relaxing? energizing?)
-
-For other questions: super short, friendly answer.
+- End with one short question to keep them talking (what vibe? relaxing? energizing?)
 
 SHOP: Labs Cannabis, Soi Hollywood (Pattaya 13 Alley), 5 min from Walking Street. Walk-in, cash or QR.
 
@@ -84,7 +103,8 @@ RULES — strict:
 - Zero markdown. No asterisks, no lists, no bold. Plain text only.
 - Reply in the user's language always
 - One emoji max, optional
-- When someone asks what's available, mentions a strain name, or wants to buy: share the relevant info from CURRENT STOCK and finish with the CONTACTS. Keep it natural, don't dump everything at once.
+- When someone asks what's available: share from CURRENT STOCK below
+- When someone wants to buy, asks how to contact us, or you mention reaching out: add exactly [CONTACTS] at the very end of your message. The system shows these as clickable buttons — do NOT write phone numbers or handles in plain text.
 `.trim();
 
 // --- Route ---
@@ -110,10 +130,7 @@ export async function POST(request: Request) {
     const systemPrompt = `${BASE_PROMPT}
 
 CURRENT STOCK:
-${ctx.catalog}
-
-CONTACTS — share these when someone wants to buy, asks about a strain, or asks how to reach us:
-${ctx.contacts}`;
+${ctx.catalog}`;
 
     const client = new OpenAI({ apiKey });
     const completion = await client.chat.completions.create({
@@ -123,8 +140,14 @@ ${ctx.contacts}`;
       messages: [{ role: "system", content: systemPrompt }, ...messages],
     });
 
-    const content = completion.choices[0]?.message?.content ?? "";
-    return NextResponse.json({ content });
+    const raw = completion.choices[0]?.message?.content ?? "";
+    const showContacts = raw.includes("[CONTACTS]");
+    const content = raw.replace("[CONTACTS]", "").trim();
+
+    return NextResponse.json({
+      content,
+      contacts: showContacts ? ctx.contactCards : [],
+    });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error("[chat]", msg);
