@@ -19,6 +19,12 @@ const PLACEHOLDERS: Record<string, string> = {
   th: "พิมพ์ที่นี่...",
 };
 
+const ERROR_MESSAGES: Record<string, string> = {
+  en: "Something went wrong. Please try again.",
+  ru: "Что-то пошло не так. Попробуй ещё раз.",
+  th: "เกิดข้อผิดพลาด กรุณาลองใหม่อีกครั้ง",
+};
+
 export function ChatWidget({ locale }: { locale: string }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
@@ -65,6 +71,7 @@ export function ChatWidget({ locale }: { locale: string }) {
       setInput("");
       setIsLoading(true);
 
+      const errorMsg = ERROR_MESSAGES[locale] ?? ERROR_MESSAGES.en;
       try {
         const res = await fetch("/api/chat", {
           method: "POST",
@@ -72,12 +79,11 @@ export function ChatWidget({ locale }: { locale: string }) {
           body: JSON.stringify({ messages: next }),
         });
         const data = (await res.json()) as { content?: string };
-        if (data.content) {
-          setMessages((prev) => [...prev, { role: "assistant", content: data.content! }]);
-          if (!isOpen) setHasUnread(true);
-        }
+        const reply = data.content ?? errorMsg;
+        setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+        if (!isOpen) setHasUnread(true);
       } catch {
-        // silent fail — user can retry
+        setMessages((prev) => [...prev, { role: "assistant", content: errorMsg }]);
       } finally {
         setIsLoading(false);
       }
