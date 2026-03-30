@@ -60,7 +60,9 @@ export async function POST(request: Request) {
 
     const content = completion.choices[0]?.message?.content ?? "";
     return NextResponse.json({ content });
-  } catch {
-    return NextResponse.json({ error: "Failed to get response" }, { status: 500 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[chat]", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }

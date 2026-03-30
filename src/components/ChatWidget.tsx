@@ -78,7 +78,8 @@ export function ChatWidget({ locale }: { locale: string }) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ messages: next }),
         });
-        const data = (await res.json()) as { content?: string };
+        const data = (await res.json()) as { content?: string; error?: string };
+        if (data.error) console.error("[chat api error]", data.error);
         const reply = data.content ?? errorMsg;
         setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
         if (!isOpen) setHasUnread(true);
