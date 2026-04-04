@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Magazin de canabis în Pattaya | Încercați înainte de a cumpăra",
+    "description": "Magazin de canabis licențiat în Pattaya. Probă gratuită în magazin, astfel încât să puteți încerca înainte de a cumpăra și să verificați mai întâi prospețimea. Card medical la fața locului în 2 minute, 5 minute de Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Magazin de canabis | Încercați înainte de a cumpăra",
+    "ogDescription": "Probă gratuită în magazin, astfel încât să puteți încerca înainte de a cumpăra și să verificați mai întâi prospețimea. Labs Cannabis este la 5 minute de Walking Street.",
+    "keywords": [
+      "magazin de canabis Pattaya",
+      "magazin de buruieni Pattaya",
+      "dispensar pattaya",
+      "magazin de mostre de canabis gratuit",
+      "încercați înainte de a cumpăra canabis",
+      "plimbare în dispensarul Pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Deschis acum",
+    "closed": "Închis",
+    "switching": "Comutare",
+    "menu": "Catalog",
+    "allLanguages": "Toate limbile",
+    "searchLanguages": "Căutați limbi",
+    "currentLanguage": "Limba actuală"
+  },
+  "hero": {
+    "title": "Magazin de canabis în Pattaya",
+    "subtitle": "Muguri proaspeți și pre-roll-uri — 5 minute de la Walking Street. Intrați, vă vom ajuta să alegeți.",
+    "getDirections": "Obțineți indicații",
+    "messageUs": "Trimite-ne un mesaj",
+    "seeMenu": "Ce este în stoc",
+    "sampleBadge": "Probă gratuită în magazin",
+    "sampleTitle": "Încercați înainte de a cumpăra",
+    "sampleText": "Intră, verifică mai întâi prospețimea și calitatea. Dacă vă place, atunci cumpărați.",
+    "sampleFresh": "Raft proaspăt",
+    "samplePressure": "Încearcă mai întâi",
+    "sampleTrust": "Calitatea în primul rând"
+  },
+  "noPrescription": {
+    "title": "Fără rețetă? Te-am prins.",
+    "subtitle": "Thailanda necesită un card medical, dar nu vă faceți griji, ne ocupăm de totul pe loc. Doar intră.",
+    "step1Title": "Intră",
+    "step1Desc": "Nu este nevoie de programare. Vino la magazin oricând suntem deschisi.",
+    "step2Title": "Scanați și umpleți",
+    "step2Desc": "Formulare rapidă pe telefon - durează 2 minute. Personalul nostru vă va ghida prin fiecare pas.",
+    "step3Title": "Făcut",
+    "step3Desc": "Alegeți-vă tulpina, plătiți și bucurați-vă. Asta este.",
+    "badge1": "100% legal",
+    "badge2": "Durează 2 min",
+    "badge3": "Consultație gratuită"
+  },
+  "staffPick": {
+    "badge": "Alegerea expertului",
+    "reserve": "Întrebați despre asta",
+    "viewDetails": "Vezi detalii"
+  },
+  "catalog": {
+    "title": "Ce este în stoc",
+    "count": "{count} tulpini disponibile",
+    "filter_all": "Toate",
+    "filter_relax": "Relaxați-vă",
+    "filter_energy": "Energie",
+    "filter_creative": "Creativ",
+    "filter_euphoria": "Euforie",
+    "filter_sleep": "Dormi",
+    "filter_focus": "Concentrează-te",
+    "filter_happy": "Fericit",
+    "filter_uplifted": "Înălțat",
+    "filter_talkative": "Vorbăreț",
+    "filter_hungry": "Foame",
+    "reserve": "Întrebați despre asta",
+    "soldOut": "Epuizat",
+    "noResults": "Nicio tulpină nu se potrivește cu acest filtru în acest moment.",
+    "activeFilter": "Filtrat de {tagType}: {tagLabel}",
+    "clearFilter": "Șterge filtrul"
+  },
+  "reviews": {
+    "subtitle": "{count} recenzii pe Google",
+    "sourceGoogle": "prin Google",
+    "showOriginal": "Original",
+    "showTranslation": "Traducere",
+    "translating": "Se traduce...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Cel mai bun dispensar din Pattaya, fără îndoială. Personalul își cunoaște cu adevărat tulpinile și m-a ajutat să o aleg pe cea perfectă. Magazin curat, vibrații grozave."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Magazin excelent. Echipa m-a ajutat să pregătesc cardul medical chiar acolo în câteva minute. Selecție bună de tulpini și prețuri corecte. Recomandat."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Atat de usor. Eram nervos în legătură cu chestia cu cardul medical, dar m-au ghidat prin toate. Selecție mare și personal foarte bine informat."
+      }
+    }
+  },
+  "location": {
+    "title": "Găsește-ne",
+    "address": "Adresa",
+    "landmark": "Reper",
+    "landmarkDesc": "5 minute de mers pe jos de la Walking Street",
+    "directions": {
+      "title": "Cel mai bun traseu pe jos",
+      "step1": "Mergeți la Pattaya 13 Alley (Soi Hollywood) din Walking Street.",
+      "step2": "Rămâneți pe alee și căutați indicatoare DISPENSARY LABS.",
+      "step3": "Suntem pe partea stângă, pe la mijlocul Aleii Pattaya 13."
+    },
+    "hours": "Ore",
+    "hoursValueDynamic": "Zilnic {open} - {close}",
+    "hoursValue24_7": "Deschis 24/7",
+    "openInMaps": "Deschideți în Google Maps"
+  },
+  "contact": {
+    "title": "Luați legătura",
+    "subtitle": "Pune o întrebare sau verifică ce este disponibil - de obicei răspundem în 5 minute în timpul programului de lucru."
+  },
+  "footer": {
+    "disclaimer": "Doar adulți peste 20 de ani. Magazin de canabis licențiat care funcționează în cadrul cadrului de canabis medicinal thailandez.",
+    "rights": "Toate drepturile rezervate."
+  },
+  "quickMenu": {
+    "title": "În stoc acum",
+    "seeAll": "Vezi catalogul",
+    "soldOut": "Epuizat"
+  },
+  "socialProof": {
+    "reviewCount": "{count} recenzii pe Google",
+    "seeAll": "Vezi toate recenziile"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis consultant și ghidul tău de canabis",
+    "guideDescription": "Dima selectează personal fiecare tulpină pe care o transportăm și ține un ochi pe ceea ce ajunge pe raft. Vorbește fluent rusă și engleză. Prima dată? El vă va ghida prin toate - la ce să vă așteptați, ce să alegeți, cu cât să începeți. Sfaturi clare, sincere.",
+    "guidePhotoAlt": "Dima — Labs Cannabis consultant"
+  },
+  "faq": {
+    "title": "Întrebări comune",
+    "q8": "Există o probă gratuită sau pot încerca înainte de a cumpăra?",
+    "a8": "Da. Oferim o mostră gratuită în magazin, astfel încât să puteți verifica prospețimea și calitatea înainte de a vă decide să cumpărați.",
+    "q1": "Am nevoie de rețetă sau card medical?",
+    "a1": "Thailanda necesită un card medical pentru achiziția de canabis. Vă ajutăm să obțineți unul pe loc — este un formular digital rapid pe telefon, durează aproximativ 2 minute. Personalul nostru vă ghidează prin fiecare pas.",
+    "q2": "Este legal pentru turisti?",
+    "a2": "Da. Turiștii pot cumpăra legal canabis medicinal în Thailanda cu un card medical, pe care vă ajutăm să îl obțineți chiar aici, la magazin.",
+    "q3": "Ce metode de plata acceptati?",
+    "a3": "Numerar (baht thailandez) și transfer bancar QR. Nu există carduri de credit în acest moment.",
+    "q4": "Pot să fumez aici sau este doar la pachet?",
+    "a4": "Doar la pachet. Vindem produse pentru uz personal - nu există zonă pentru fumat.",
+    "q5": "Cum te găsesc de la Walking Street?",
+    "a5": "5 minute de mers pe jos. Îndreptați-vă spre Soi Hollywood (Pattaya 13 Alley), căutați semnalizarea LABS pe partea stângă. Suntem pe la mijlocul benzii.",
+    "q6": "Care sunt orele tale?",
+    "a6": "Suntem deschisi in fiecare zi, nu este nevoie de programare. Verificați orele din antet - se actualizează în timp real.",
+    "q7": "Nu am încercat niciodată canabis. Personalul dumneavoastră mă poate ajuta să aleg?",
+    "a7": "Absolut. Spune-ne ce cauți — relaxare, energie, somn mai bun — și îți vom recomanda o tulpină și o cantitate care să aibă sens pentru tine."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Cumpărați de la Labs Cannabis Pattaya",
+    "backToCatalog": "Înapoi la selecție",
+    "reserve": "Întrebați despre această tulpină",
+    "reserveVia": "Contact prin",
+    "call": "Apel",
+    "soldOut": "Epuizat",
+    "terpenes": "Profilul terpenelor",
+    "about": "Despre această tulpină",
+    "metaDescriptionFallback": "{name} {type} tulpină de canabis. THC {thc}%. Disponibil la Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} tulpină de canabis. Disponibil la Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Tulpini"
+  },
+  "effectPage": {
+    "title": "{effect} Tulpini de canabis în Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} Tulpini — Labs Cannabis Pattaya",
+    "description": "Căutați {effect} tulpini de canabis la dispensarul Labs Cannabis din Pattaya, Thailanda. Intrați, nu este nevoie de programare.",
+    "h1": "{effect} Tulpini de canabis din Pattaya",
+    "intro": "Căutați {effect} efecte? Răsfoiți selecția noastră actuală la Labs Cannabis, Pattaya. Intrați – nu este nevoie de programare.",
+    "breadcrumbStrains": "Tulpini",
+    "reserve": "Întrebați despre asta",
+    "soldOut": "Epuizat",
+    "noResults": "Nicio tulpină de {effect} momentan. Reveniți în curând.",
+    "effect_relax": "Relaxare",
+    "effect_energy": "Energizant",
+    "effect_creative": "Creativ",
+    "effect_sleep": "Dormi",
+    "effect_euphoria": "Euforic",
+    "effect_focus": "Concentrează-te",
+    "effect_happy": "Fericit",
+    "effect_uplifted": "Înălțător",
+    "effect_talkative": "Vorbăreț",
+    "effect_hungry": "Pofta de mancare"
+  },
+  "typePage": {
+    "title": "{type} Tulpini de canabis în Pattaya | Labs Cannabis",
+    "ogTitle": "{type} Tulpini — Labs Cannabis Pattaya",
+    "description": "Căutați {type} tulpini de canabis la dispensarul Labs Cannabis din Pattaya, Thailanda. Intrați, nu este nevoie de programare.",
+    "h1": "{type} Tulpini de canabis din Pattaya",
+    "intro": "Răsfoiți selecția noastră actuală de {type} tulpini de canabis la Labs Cannabis, Pattaya. Intrați – nu este nevoie de programare.",
+    "breadcrumbStrains": "Tulpini",
+    "reserve": "Întrebați despre asta",
+    "soldOut": "Epuizat",
+    "noResults": "Nu există {type} tulpini disponibile momentan.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrid"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrid",
+    "effect_relax": "Relaxați-vă",
+    "effect_energy": "Energie",
+    "effect_creative": "Creativ",
+    "effect_sleep": "Dormi",
+    "effect_euphoria": "Euforie",
+    "effect_focus": "Concentrează-te",
+    "effect_happy": "Fericit",
+    "effect_uplifted": "Înălțat",
+    "effect_talkative": "Vorbăreț",
+    "effect_hungry": "Foame",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} tulpină de canabis la Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Alegere expertă la Labs Cannabis Pattaya",
+    "strainAltText": "{name} tulpină de canabis disponibilă la dispensarul Labs Cannabis Pattaya",
+    "tagType_effect": "Efect",
+    "tagType_type": "Tip",
+    "tagType_terpene": "terpene"
+  }
+}

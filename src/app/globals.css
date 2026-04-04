@@ -13,12 +13,42 @@
   --color-text-secondary: #525250;
   --color-text-muted: #86857f;
   --color-border: #dddcd6;
-  --font-heading: "Noto Serif", "Noto Serif Thai", Georgia, serif;
-  --font-body: "Noto Sans", "Noto Sans Thai", system-ui, sans-serif;
+  --font-heading: var(--font-heading-latin), var(--font-heading-thai), Georgia, serif;
+  --font-body: var(--font-body-latin), var(--font-body-thai), system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+html[data-script="latin"] {
+  --font-heading: var(--font-heading-latin), Georgia, serif;
+  --font-body: var(--font-body-latin), system-ui, sans-serif;
+}
+
+html[data-script="thai"] {
+  --font-heading: var(--font-heading-thai), Georgia, serif;
+  --font-body: var(--font-body-thai), system-ui, sans-serif;
+}
+
+html[data-script="cjk"] {
+  --font-heading: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Yu Gothic", "Meiryo", "Malgun Gothic", system-ui, sans-serif;
+  --font-body: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Yu Gothic", "Meiryo", "Malgun Gothic", system-ui, sans-serif;
+}
+
+html[data-script="arabic"] {
+  --font-heading: "Segoe UI", Tahoma, Arial, sans-serif;
+  --font-body: "Segoe UI", Tahoma, Arial, sans-serif;
+}
+
+html[data-script="hebrew"] {
+  --font-heading: "Segoe UI", Arial, sans-serif;
+  --font-body: "Segoe UI", Arial, sans-serif;
+}
+
+html[data-script="devanagari"] {
+  --font-heading: "Nirmala UI", "Mangal", sans-serif;
+  --font-body: "Nirmala UI", "Mangal", sans-serif;
 }
 
 body {
@@ -27,6 +57,10 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 17px;
   line-height: 1.65;
+}
+
+html[dir="rtl"] body {
+  unicode-bidi: plaintext;
 }
 
 h1, h2, h3, h4, h5, h6 {

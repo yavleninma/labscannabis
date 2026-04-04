@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — חנות קנאביס בPattaya | נסה לפני שאתה קונה",
+    "description": "חנות קנאביס מורשית בPattaya. מדגם חינם בחנות, כך שתוכל לנסות לפני הקנייה ולבדוק תחילה טריות. כרטיס רפואי באתר תוך 2 דקות, 5 דקות מWalking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya חנות קנאביס | נסה לפני שאתה קונה",
+    "ogDescription": "מדגם חינם בחנות, כך שתוכל לנסות לפני הקנייה ולבדוק תחילה טריות. Labs Cannabis נמצא במרחק של 5 דקות מWalking Street.",
+    "keywords": [
+      "חנות קנאביס פטאיה",
+      "חנות גראס פטאיה",
+      "מרפא פטאיה",
+      "חנות קנאביס לדוגמה בחינם",
+      "נסה לפני שאתה קונה קנאביס",
+      "ללכת במרפאה פטאיה"
+    ]
+  },
+  "header": {
+    "openNow": "פתח עכשיו",
+    "closed": "סָגוּר",
+    "switching": "מיתוג",
+    "menu": "קָטָלוֹג",
+    "allLanguages": "כל השפות",
+    "searchLanguages": "חיפוש שפות",
+    "currentLanguage": "שפה נוכחית"
+  },
+  "hero": {
+    "title": "חנות קנאביס בPattaya",
+    "subtitle": "ניצנים טריים ופרום לחמניות - 5 דקות מWalking Street. היכנס, אנחנו נעזור לך לבחור.",
+    "getDirections": "קבל הוראות הגעה",
+    "messageUs": "שלח לנו הודעה",
+    "seeMenu": "מה יש במלאי",
+    "sampleBadge": "מדגם חינם בחנות",
+    "sampleTitle": "נסה לפני שאתה קונה",
+    "sampleText": "היכנסו, בדקו תחילה טריות ואיכות. אם אתה אוהב את זה, אז תקנה.",
+    "sampleFresh": "מדף טרי",
+    "samplePressure": "תנסה קודם",
+    "sampleTrust": "איכות קודם כל"
+  },
+  "noPrescription": {
+    "title": "ללא מרשם? יש לנו אותך.",
+    "subtitle": "תאילנד דורשת כרטיס רפואי - אבל אל דאגה, אנחנו מטפלים בהכל במקום. פשוט תיכנס פנימה.",
+    "step1Title": "היכנס פנימה",
+    "step1Desc": "לא צריך פגישה. פשוט בוא לחנות בכל פעם שאנחנו פתוחים.",
+    "step2Title": "סרוק ומלא",
+    "step2Desc": "טופס מהיר בטלפון שלך - לוקח 2 דקות. הצוות שלנו ידריך אותך בכל שלב.",
+    "step3Title": "נַעֲשָׂה",
+    "step3Desc": "בחר את הזן שלך, שלם ותיהנה. זהו.",
+    "badge1": "100% חוקי",
+    "badge2": "לוקח 2 דקות",
+    "badge3": "ייעוץ חינם"
+  },
+  "staffPick": {
+    "badge": "בחירת מומחה",
+    "reserve": "תשאל על זה",
+    "viewDetails": "הצג פרטים"
+  },
+  "catalog": {
+    "title": "מה יש במלאי",
+    "count": "{count} זנים זמינים",
+    "filter_all": "כֹּל",
+    "filter_relax": "לְהִרָגַע",
+    "filter_energy": "אֵנֶרְגִיָה",
+    "filter_creative": "יְצִירָתִי",
+    "filter_euphoria": "הַרגָשָׁה טוֹבָה",
+    "filter_sleep": "לִישׁוֹן",
+    "filter_focus": "מוֹקֵד",
+    "filter_happy": "שַׂמֵחַ",
+    "filter_uplifted": "מוּרָם",
+    "filter_talkative": "פַּטפְּטָנִי",
+    "filter_hungry": "רָעֵב",
+    "reserve": "תשאל על זה",
+    "soldOut": "הַכַּרטִיסִים אָזלוּ",
+    "noResults": "אין זנים שתואמים למסנן הזה כרגע.",
+    "activeFilter": "מסונן לפי {tagType}: {tagLabel}",
+    "clearFilter": "נקה מסנן"
+  },
+  "reviews": {
+    "subtitle": "{count} ביקורות על Google",
+    "sourceGoogle": "דרך Google",
+    "showOriginal": "מְקוֹרִי",
+    "showTranslation": "תִרגוּם",
+    "translating": "תִרגוּם...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "המרפאה הטובה ביותר ב-Pattaya. הצוות באמת מכיר את הזנים שלהם ועזר לי לבחור את המושלם. חנות נקייה, אווירה נהדרת."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "חנות מעולה. הצוות עזר לי לסדר את הכרטיס הרפואי שם תוך כמה דקות. מבחר זנים טוב ומחירים הוגנים. מוּמלָץ."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "כל כך קל. הייתי עצבני בגלל עניין הכרטיסים הרפואיים, אבל הם הובילו אותי בכל דבר. מבחר גדול וצוות בעל ידע רב."
+      }
+    }
+  },
+  "location": {
+    "title": "מצא אותנו",
+    "address": "כְּתוֹבֶת",
+    "landmark": "צִיוּן דֶרֶך",
+    "landmarkDesc": "5 דקות הליכה מWalking Street",
+    "directions": {
+      "title": "המסלול הטוב ביותר ברגל",
+      "step1": "פנה ל-Pattaya 13 Alley (Soi Hollywood) מ-Walking Street.",
+      "step2": "הישאר בסמטה וחפש את השילוט LABS DISPENSARY.",
+      "step3": "אנחנו בצד שמאל שלך, בערך באמצע סמטת Pattaya 13."
+    },
+    "hours": "שעות",
+    "hoursValueDynamic": "יומי {open} - {close}",
+    "hoursValue24_7": "פתוח 24/7",
+    "openInMaps": "פתח במפות Google"
+  },
+  "contact": {
+    "title": "לְהִתְקַשֵׁר",
+    "subtitle": "שאל שאלה או בדוק מה זמין - בדרך כלל אנו עונים תוך 5 דקות במהלך שעות העבודה."
+  },
+  "footer": {
+    "disclaimer": "מבוגרים מעל 20 בלבד. חנות קנאביס מורשית הפועלת במסגרת הקנאביס הרפואי התאילנדי.",
+    "rights": "כֹּל הַזְכוּיוֹת שְׁמוּרוֹת."
+  },
+  "quickMenu": {
+    "title": "במלאי עכשיו",
+    "seeAll": "צפו בקטלוג",
+    "soldOut": "הַכַּרטִיסִים אָזלוּ"
+  },
+  "socialProof": {
+    "reviewCount": "{count} ביקורות על Google",
+    "seeAll": "ראה את כל הביקורות"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "יועץ Labs Cannabis ומדריך הקנאביס שלך",
+    "guideDescription": "דימה בוחר באופן אישי כל זן שאנו נושאים ומפקח עין על מה שיגמר על המדף. דובר רוסית ואנגלית שוטפת. פעם ראשונה? הוא ידריך אותך בהכל - למה לצפות, מה לבחור, עם כמה להתחיל. עצה ברורה וכנה.",
+    "guidePhotoAlt": "דימה - יועץ Labs Cannabis"
+  },
+  "faq": {
+    "title": "שאלות נפוצות",
+    "q8": "האם יש מדגם חינם או שאני יכול לנסות לפני שאני קונה?",
+    "a8": "כֵּן. אנו מציעים מדגם חינם בחנות, כך שתוכל לבדוק טריות ואיכות לפני שתחליט לקנות.",
+    "q1": "האם אני צריך מרשם או כרטיס רפואי?",
+    "a1": "תאילנד דורשת כרטיס רפואי לרכישת קנאביס. אנחנו עוזרים לך להשיג אחד במקום - זה טופס דיגיטלי מהיר בטלפון שלך, לוקח בערך 2 דקות. הצוות שלנו מלווה אותך בכל שלב.",
+    "q2": "האם זה חוקי לתיירים?",
+    "a2": "כֵּן. תיירים יכולים לרכוש קנאביס רפואי בתאילנד באופן חוקי עם כרטיס רפואי, אותו אנו עוזרים לך להשיג ממש כאן בחנות.",
+    "q3": "אילו אמצעי תשלום אתה מקבל?",
+    "a3": "מזומן (בהט תאילנדי) והעברה בנקאית QR. אין כרטיסי אשראי בשלב זה.",
+    "q4": "האם אני יכול לעשן כאן או שזה רק טייק אווי?",
+    "a4": "טייק אווי בלבד. אנו מוכרים מוצר לשימוש אישי - אין אזור עישון באתר.",
+    "q5": "איך אני מוצא אותך מWalking Street?",
+    "a5": "5 דקות הליכה. לכו אל סוי הוליווד (Pattaya 13 Alley), חפשו את השילוט LABS בצד שמאל. אנחנו בערך באמצע הנתיב.",
+    "q6": "מה השעות שלך?",
+    "a6": "אנחנו פתוחים כל יום, אין צורך בתיאום מראש. בדוק את השעות בכותרת - הן מתעדכנות בזמן אמת.",
+    "q7": "מעולם לא ניסיתי קנאביס. האם הצוות שלך יכול לעזור לי לבחור?",
+    "a7": "בְּהֶחלֵט. ספר לנו מה אתה מחפש - רגיעה, אנרגיה, שינה טובה יותר - ואנו נמליץ על עומס וכמות הגיונית עבורך."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "קנה בLabs Cannabis Pattaya",
+    "backToCatalog": "חזרה לבחירה",
+    "reserve": "שאל על הזן הזה",
+    "reserveVia": "צור קשר דרך",
+    "call": "שִׂיחָה",
+    "soldOut": "הַכַּרטִיסִים אָזלוּ",
+    "terpenes": "פרופיל טרפן",
+    "about": "על הזן הזה",
+    "metaDescriptionFallback": "{name} {type} זן קנאביס. THC {thc}%. זמין ב-Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} זן קנאביס. זמין ב-Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "זנים"
+  },
+  "effectPage": {
+    "title": "{effect} זני קנאביס ב-Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} זנים — Labs Cannabis Pattaya",
+    "description": "עיין ב-{effect} זני קנאביס במרפאה Labs Cannabis בPattaya, תאילנד. היכנסו, אין צורך בתיאום מראש.",
+    "h1": "{effect} זני קנאביס ב-Pattaya",
+    "intro": "מחפש אפקטים של {effect}? עיין במבחר הנוכחי שלנו ב-Labs Cannabis, Pattaya. היכנסו פנימה - אין צורך בתיאום מראש.",
+    "breadcrumbStrains": "זנים",
+    "reserve": "תשאל על זה",
+    "soldOut": "הַכַּרטִיסִים אָזלוּ",
+    "noResults": "אין {effect} זנים כרגע. בדוק שוב בקרוב.",
+    "effect_relax": "מַרגִיעַ",
+    "effect_energy": "ממריץ",
+    "effect_creative": "יְצִירָתִי",
+    "effect_sleep": "לִישׁוֹן",
+    "effect_euphoria": "אופורית",
+    "effect_focus": "מוֹקֵד",
+    "effect_happy": "שַׂמֵחַ",
+    "effect_uplifted": "צְמִיחָה",
+    "effect_talkative": "פַּטפְּטָנִי",
+    "effect_hungry": "תֵאָבוֹן"
+  },
+  "typePage": {
+    "title": "{type} זני קנאביס ב-Pattaya | Labs Cannabis",
+    "ogTitle": "{type} זנים — Labs Cannabis Pattaya",
+    "description": "עיין ב-{type} זני קנאביס במרפאה Labs Cannabis בPattaya, תאילנד. היכנסו, אין צורך בתיאום מראש.",
+    "h1": "{type} זני קנאביס ב-Pattaya",
+    "intro": "עיין במבחר הנוכחי שלנו של {type} זני קנאביס ב-Labs Cannabis, Pattaya. היכנסו פנימה - אין צורך בתיאום מראש.",
+    "breadcrumbStrains": "זנים",
+    "reserve": "תשאל על זה",
+    "soldOut": "הַכַּרטִיסִים אָזלוּ",
+    "noResults": "אין {type} זנים זמינים כעת.",
+    "type_indica": "אינדיקה",
+    "type_sativa": "סאטיבה",
+    "type_hybrid": "היברידי"
+  },
+  "strainCommon": {
+    "type_indica": "אינדיקה",
+    "type_sativa": "סאטיבה",
+    "type_hybrid": "היברידי",
+    "effect_relax": "לְהִרָגַע",
+    "effect_energy": "אֵנֶרְגִיָה",
+    "effect_creative": "יְצִירָתִי",
+    "effect_sleep": "לִישׁוֹן",
+    "effect_euphoria": "הַרגָשָׁה טוֹבָה",
+    "effect_focus": "מוֹקֵד",
+    "effect_happy": "שַׂמֵחַ",
+    "effect_uplifted": "מוּרָם",
+    "effect_talkative": "פַּטפְּטָנִי",
+    "effect_hungry": "רָעֵב",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/גרם",
+    "cardAltText": "{name} זן קנאביס ב-Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — בחירת מומחה ב-Labs Cannabis Pattaya",
+    "strainAltText": "{name} זן קנאביס זמין במרפאה Labs Cannabis Pattaya",
+    "tagType_effect": "אֵפֶקְט",
+    "tagType_type": "סוּג",
+    "tagType_terpene": "טרפן"
+  }
+}

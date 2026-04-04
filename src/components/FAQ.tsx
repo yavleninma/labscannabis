@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 
-const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
+const faqKeys = ["8", "1", "2", "3", "4", "5", "6", "7"] as const;
 
 export function FAQ() {
   const t = useTranslations("faq");

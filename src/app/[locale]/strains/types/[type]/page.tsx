@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { buildLanguageAlternates } from "@/i18n/metadata";
 import { routing } from "@/i18n/routing";
 import { getAllStrains, getShopSettings } from "@/lib/queries";
 import { strainMatchesTag } from "@/lib/strain-tags";
 import { getSiteUrl } from "@/lib/site-url";
 import { StrainCard } from "@/components/StrainCard";
 import { Footer } from "@/components/Footer";
-
-export const revalidate = 60;
 
 const VALID_TYPES = ["indica", "sativa", "hybrid"] as const;
 
@@ -39,12 +38,10 @@ export async function generateMetadata({
     description: t("description", { type: typeLabel }),
     alternates: {
       canonical: `${baseUrl}/${locale}/strains/types/${type}`,
-      languages: {
-        "x-default": `${baseUrl}/en/strains/types/${type}`,
-        "en-US": `${baseUrl}/en/strains/types/${type}`,
-        "ru-RU": `${baseUrl}/ru/strains/types/${type}`,
-        "th-TH": `${baseUrl}/th/strains/types/${type}`,
-      },
+      languages: buildLanguageAlternates(
+        baseUrl,
+        (alternateLocale) => `/${alternateLocale}/strains/types/${type}`,
+      ),
     },
     openGraph: {
       title: t("ogTitle", { type: typeLabel }),

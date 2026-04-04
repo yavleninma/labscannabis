@@ -1,6 +1,7 @@
+import type { ContactMessageLocale } from "@/i18n/config";
 import type { ShopSettings } from "@/lib/mock-data";
 
-export type ContactLocale = "en" | "ru" | "th";
+export type ContactLocale = ContactMessageLocale;
 
 type MessageKind = "general" | "purchase";
 

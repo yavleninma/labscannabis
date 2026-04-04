@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
-import { getAllStrainSlugs } from "@/lib/queries";
+import { localeCodes } from "@/i18n/config";
+import { buildLanguageAlternates } from "@/i18n/metadata";
+import { getAllStrains } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
 
 const EFFECTS = [
@@ -19,43 +21,34 @@ const TYPES = ["indica", "sativa", "hybrid"] as const;
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = getSiteUrl();
-  const locales = ["en", "ru", "th"];
-
   const entries: MetadataRoute.Sitemap = [];
 
   // Homepage entries
-  for (const locale of locales) {
+  for (const locale of localeCodes) {
     entries.push({
       url: `${baseUrl}/${locale}`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: locale === "en" ? 1 : 0.9,
       alternates: {
-        languages: {
-          "x-default": `${baseUrl}/en`,
-          "en-US": `${baseUrl}/en`,
-          "ru-RU": `${baseUrl}/ru`,
-          "th-TH": `${baseUrl}/th`,
-        },
+        languages: buildLanguageAlternates(baseUrl, (alternateLocale) => `/${alternateLocale}`),
       },
     });
   }
 
   // Effect landing pages
   for (const effect of EFFECTS) {
-    for (const locale of locales) {
+    for (const locale of localeCodes) {
       entries.push({
         url: `${baseUrl}/${locale}/strains/effects/${effect}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.7,
         alternates: {
-          languages: {
-            "x-default": `${baseUrl}/en/strains/effects/${effect}`,
-            "en-US": `${baseUrl}/en/strains/effects/${effect}`,
-            "ru-RU": `${baseUrl}/ru/strains/effects/${effect}`,
-            "th-TH": `${baseUrl}/th/strains/effects/${effect}`,
-          },
+          languages: buildLanguageAlternates(
+            baseUrl,
+            (alternateLocale) => `/${alternateLocale}/strains/effects/${effect}`,
+          ),
         },
       });
     }
@@ -63,40 +56,39 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Type landing pages
   for (const type of TYPES) {
-    for (const locale of locales) {
+    for (const locale of localeCodes) {
       entries.push({
         url: `${baseUrl}/${locale}/strains/types/${type}`,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 0.75,
         alternates: {
-          languages: {
-            "x-default": `${baseUrl}/en/strains/types/${type}`,
-            "en-US": `${baseUrl}/en/strains/types/${type}`,
-            "ru-RU": `${baseUrl}/ru/strains/types/${type}`,
-            "th-TH": `${baseUrl}/th/strains/types/${type}`,
-          },
+          languages: buildLanguageAlternates(
+            baseUrl,
+            (alternateLocale) => `/${alternateLocale}/strains/types/${type}`,
+          ),
         },
       });
     }
   }
 
   // Strain detail pages
-  const slugs = await getAllStrainSlugs();
-  for (const slug of slugs) {
-    for (const locale of locales) {
+  const strains = await getAllStrains();
+  for (const strain of strains) {
+    const slug = strain.slug.current;
+    const lastModified = strain._updatedAt ? new Date(strain._updatedAt) : new Date();
+
+    for (const locale of localeCodes) {
       entries.push({
         url: `${baseUrl}/${locale}/strains/${slug}`,
-        lastModified: new Date(),
-        changeFrequency: "daily",
+        lastModified,
+        changeFrequency: "weekly",
         priority: 0.8,
         alternates: {
-          languages: {
-            "x-default": `${baseUrl}/en/strains/${slug}`,
-            "en-US": `${baseUrl}/en/strains/${slug}`,
-            "ru-RU": `${baseUrl}/ru/strains/${slug}`,
-            "th-TH": `${baseUrl}/th/strains/${slug}`,
-          },
+          languages: buildLanguageAlternates(
+            baseUrl,
+            (alternateLocale) => `/${alternateLocale}/strains/${slug}`,
+          ),
         },
       });
     }

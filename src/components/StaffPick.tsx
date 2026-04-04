@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import { translateText } from "@/lib/auto-translate";
+import type { AppLocale } from "@/i18n/config";
 import type { Strain } from "@/lib/mock-data";
 import { getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
@@ -39,11 +39,7 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
     : (strain.terpenes || []).map((name) => ({ name, amount: 0 }));
   const hasThc = typeof strain.thcPercent === "number";
   const hasCbd = typeof strain.cbdPercent === "number";
-  const localizedShortDescription = getLocalizedShortDescription(strain, locale as "en" | "ru" | "th");
-  const translatedShortDescription =
-    locale === "en" || !localizedShortDescription
-      ? localizedShortDescription
-      : await translateText(localizedShortDescription, locale as "ru" | "th");
+  const localizedShortDescription = getLocalizedShortDescription(strain, locale as AppLocale);
 
   return (
     <section className="py-8 px-4">
@@ -108,7 +104,7 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
                 </div>
               )}
               <p className="text-text-secondary text-sm mb-4">
-                {translatedShortDescription}
+                {localizedShortDescription}
               </p>
               <div className="flex items-center gap-4">
                 <span className="text-2xl font-bold text-emerald-400">

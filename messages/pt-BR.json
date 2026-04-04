@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Loja de cannabis em Pattaya | Experimente antes de comprar",
+    "description": "Loja de cannabis licenciada em Pattaya. Amostra grátis na loja, para que você possa experimentar antes de comprar e verificar primeiro a frescura. Cartão médico no local em 2 minutos, 5 minutos de Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Loja de cannabis | Experimente antes de comprar",
+    "ogDescription": "Amostra grátis na loja, para que você possa experimentar antes de comprar e verificar primeiro a frescura. Labs Cannabis fica a 5 minutos de Walking Street.",
+    "keywords": [
+      "loja de cannabis Pattaya",
+      "loja de ervas daninhas Pattaya",
+      "dispensário pattaya",
+      "loja de cannabis de amostra grátis",
+      "experimente antes de comprar cannabis",
+      "andar no dispensário Pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Abra agora",
+    "closed": "Fechado",
+    "switching": "Troca",
+    "menu": "Catálogo",
+    "allLanguages": "Todos os idiomas",
+    "searchLanguages": "Idiomas de pesquisa",
+    "currentLanguage": "Idioma atual"
+  },
+  "hero": {
+    "title": "Loja de cannabis em Pattaya",
+    "subtitle": "Botões frescos e pré-rolos - 5 min de Walking Street. Entre, nós o ajudaremos a escolher.",
+    "getDirections": "Obter direções",
+    "messageUs": "Envie-nos uma mensagem",
+    "seeMenu": "O que há em estoque",
+    "sampleBadge": "Amostra grátis na loja",
+    "sampleTitle": "Experimente antes de comprar",
+    "sampleText": "Entre, verifique primeiro a frescura e a qualidade. Se você gosta, então compre.",
+    "sampleFresh": "Prateleira fresca",
+    "samplePressure": "Tente primeiro",
+    "sampleTrust": "Qualidade em primeiro lugar"
+  },
+  "noPrescription": {
+    "title": "Sem receita? Nós temos você.",
+    "subtitle": "A Tailândia exige um cartão médico — mas não se preocupe, nós cuidamos de tudo no local. Basta entrar.",
+    "step1Title": "Entre",
+    "step1Desc": "Não é necessário agendamento. Basta vir à loja sempre que estivermos abertos.",
+    "step2Title": "Digitalizar e preencher",
+    "step2Desc": "Formulário rápido no seu telefone – leva 2 minutos. Nossa equipe irá guiá-lo em cada etapa.",
+    "step3Title": "Feito",
+    "step3Desc": "Escolha sua variedade, pague e aproveite. É isso.",
+    "badge1": "100% legal",
+    "badge2": "Leva 2 minutos",
+    "badge3": "Consulta gratuita"
+  },
+  "staffPick": {
+    "badge": "Escolha de especialista",
+    "reserve": "Pergunte sobre isso",
+    "viewDetails": "Ver detalhes"
+  },
+  "catalog": {
+    "title": "O que há em estoque",
+    "count": "{count} cepas disponíveis",
+    "filter_all": "Todos",
+    "filter_relax": "Relaxar",
+    "filter_energy": "Energia",
+    "filter_creative": "Criativo",
+    "filter_euphoria": "Euforia",
+    "filter_sleep": "Dormir",
+    "filter_focus": "Foco",
+    "filter_happy": "Feliz",
+    "filter_uplifted": "Elevado",
+    "filter_talkative": "Falante",
+    "filter_hungry": "Com fome",
+    "reserve": "Pergunte sobre isso",
+    "soldOut": "Vendido",
+    "noResults": "Nenhuma cepa corresponde a este filtro no momento.",
+    "activeFilter": "Filtrado por {tagType}: {tagLabel}",
+    "clearFilter": "Limpar filtro"
+  },
+  "reviews": {
+    "subtitle": "{count} comentários em Google",
+    "sourceGoogle": "através de Google",
+    "showOriginal": "Original",
+    "showTranslation": "Tradução",
+    "translating": "Traduzindo...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Melhor dispensário em Pattaya sem dúvida. A equipe realmente conhece suas variedades e me ajudou a escolher a perfeita. Loja limpa, ótimas vibrações."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Excelente loja. A equipe me ajudou a resolver o cartão médico ali mesmo em alguns minutos. Boa seleção de variedades e preços justos. Recomendado."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Tão fácil. Eu estava nervoso com a questão do cartão médico, mas eles me orientaram em tudo. Grande seleção e equipe muito experiente."
+      }
+    }
+  },
+  "location": {
+    "title": "Encontre-nos",
+    "address": "Endereço",
+    "landmark": "Marco",
+    "landmarkDesc": "5 minutos a pé de Walking Street",
+    "directions": {
+      "title": "Melhor percurso a pé",
+      "step1": "Vá para Pattaya 13 Alley (Soi Hollywood) de Walking Street.",
+      "step2": "Fique no beco e procure a sinalização de LABS DISPENSARY.",
+      "step3": "Estamos do seu lado esquerdo, no meio do Beco Pattaya 13."
+    },
+    "hours": "Horas",
+    "hoursValueDynamic": "Diariamente {open} - {close}",
+    "hoursValue24_7": "Aberto 24 horas por dia, 7 dias por semana",
+    "openInMaps": "Abrir em Google Mapas"
+  },
+  "contact": {
+    "title": "Entre em contato",
+    "subtitle": "Faça uma pergunta ou verifique o que está disponível — normalmente respondemos em 5 minutos durante o horário comercial."
+  },
+  "footer": {
+    "disclaimer": "Somente adultos com mais de 20 anos. Loja de cannabis licenciada que opera sob a estrutura tailandesa de cannabis medicinal.",
+    "rights": "Todos os direitos reservados."
+  },
+  "quickMenu": {
+    "title": "Em estoque agora",
+    "seeAll": "Ver catálogo",
+    "soldOut": "Vendido"
+  },
+  "socialProof": {
+    "reviewCount": "{count} comentários em Google",
+    "seeAll": "Ver todas as avaliações"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Consultor Labs Cannabis e seu guia sobre cannabis",
+    "guideDescription": "Dima seleciona pessoalmente cada variedade que carregamos e fica de olho no que vai parar na prateleira. Fala russo e inglês fluentemente. Primeira vez? Ele orientará você em tudo - o que esperar, o que escolher, com quanto começar. Conselhos claros e honestos.",
+    "guidePhotoAlt": "Dima — consultor Labs Cannabis"
+  },
+  "faq": {
+    "title": "Perguntas comuns",
+    "q8": "Existe uma amostra grátis ou posso experimentar antes de comprar?",
+    "a8": "Sim. Oferecemos uma amostra grátis na loja, para que você possa verificar o frescor e a qualidade antes de decidir comprar.",
+    "q1": "Preciso de receita ou cartão médico?",
+    "a1": "A Tailândia exige um cartão médico para compras de cannabis. Nós ajudamos você a conseguir um na hora — é um formulário digital rápido no seu telefone, leva cerca de 2 minutos. Nossa equipe orienta você em cada etapa.",
+    "q2": "É legal para turistas?",
+    "a2": "Sim. Os turistas podem comprar cannabis medicinal legalmente na Tailândia com um cartão médico, que ajudamos você a obter aqui mesmo na loja.",
+    "q3": "Quais métodos de pagamento você aceita?",
+    "a3": "Dinheiro (Baht Tailandês) e transferência bancária QR. Não há cartões de crédito no momento.",
+    "q4": "Posso fumar aqui ou é apenas para viagem?",
+    "a4": "Apenas para viagem. Vendemos produtos para uso pessoal — não há área para fumantes no local.",
+    "q5": "Como encontro você em Walking Street?",
+    "a5": "Caminhada de 5 minutos. Vá para Soi Hollywood (Pattaya 13 Alley), procure a sinalização LABS no lado esquerdo. Estamos no meio da pista.",
+    "q6": "Qual é o seu horário?",
+    "a6": "Estamos abertos todos os dias, sem necessidade de agendamento. Verifique os horários no cabeçalho – eles são atualizados em tempo real.",
+    "q7": "Nunca experimentei cannabis. Sua equipe pode me ajudar a escolher?",
+    "a7": "Absolutamente. Diga-nos o que você procura - relaxamento, energia, sono melhor - e recomendaremos uma tensão e uma quantidade que façam sentido para você."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Compre em Labs Cannabis Pattaya",
+    "backToCatalog": "Voltar à seleção",
+    "reserve": "Pergunte sobre esta cepa",
+    "reserveVia": "Contato via",
+    "call": "Chamar",
+    "soldOut": "Vendido",
+    "terpenes": "Perfil de Terpeno",
+    "about": "Sobre esta cepa",
+    "metaDescriptionFallback": "{name} {type} cepa de cannabis. THC {thc}%. Disponível em Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cepa de cannabis. Disponível em Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Cepas"
+  },
+  "effectPage": {
+    "title": "{effect} Cepas de cannabis em Pattaya | __MARCA_1__",
+    "ogTitle": "{effect} Cepas — Labs Cannabis Pattaya",
+    "description": "Procure variedades de cannabis {effect} no dispensário Labs Cannabis em Pattaya, Tailândia. Entre, não precisa de agendamento.",
+    "h1": "{effect} Cepas de cannabis em Pattaya",
+    "intro": "Procurando efeitos {effect}? Navegue pela nossa seleção atual em Labs Cannabis, Pattaya. Entre - não é necessário agendamento.",
+    "breadcrumbStrains": "Cepas",
+    "reserve": "Pergunte sobre isso",
+    "soldOut": "Vendido",
+    "noResults": "Não há cepas {effect} no momento. Volte em breve.",
+    "effect_relax": "Relaxante",
+    "effect_energy": "Energizante",
+    "effect_creative": "Criativo",
+    "effect_sleep": "Dormir",
+    "effect_euphoria": "Eufórico",
+    "effect_focus": "Foco",
+    "effect_happy": "Feliz",
+    "effect_uplifted": "Edificante",
+    "effect_talkative": "Falante",
+    "effect_hungry": "Apetite"
+  },
+  "typePage": {
+    "title": "{type} Cepas de cannabis em Pattaya | __MARCA_1__",
+    "ogTitle": "{type} Cepas — Labs Cannabis Pattaya",
+    "description": "Procure variedades de cannabis {type} no dispensário Labs Cannabis em Pattaya, Tailândia. Entre, não precisa de agendamento.",
+    "h1": "{type} Cepas de cannabis em Pattaya",
+    "intro": "Navegue pela nossa seleção atual de variedades de cannabis {type} em Labs Cannabis, Pattaya. Entre - não é necessário agendamento.",
+    "breadcrumbStrains": "Cepas",
+    "reserve": "Pergunte sobre isso",
+    "soldOut": "Vendido",
+    "noResults": "Nenhuma cepa {type} disponível no momento.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Híbrido"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Híbrido",
+    "effect_relax": "Relaxar",
+    "effect_energy": "Energia",
+    "effect_creative": "Criativo",
+    "effect_sleep": "Dormir",
+    "effect_euphoria": "Euforia",
+    "effect_focus": "Foco",
+    "effect_happy": "Feliz",
+    "effect_uplifted": "Elevado",
+    "effect_talkative": "Falante",
+    "effect_hungry": "Com fome",
+    "thc": "__MARCA_0__",
+    "cbd": "__MARCA_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cepa de cannabis em Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Escolha de especialista em Labs Cannabis Pattaya",
+    "strainAltText": "{name} variedade de cannabis disponível no dispensário Labs Cannabis Pattaya",
+    "tagType_effect": "Efeito",
+    "tagType_type": "Tipo",
+    "tagType_terpene": "Terpeno"
+  }
+}

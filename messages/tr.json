@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Pattaya Esrar Mağazası | Satın Almadan Önce Deneyin",
+    "description": "Pattaya'de lisanslı esrar dükkanı. Mağazada ücretsiz numune, böylece satın almadan önce deneyebilir ve önce tazeliğini kontrol edebilirsiniz. Walking Street'dan 5 dakika uzaklıkta, 2 dakika içinde yerinde sağlık kartı.",
+    "ogTitle": "Labs Cannabis — Pattaya Esrar Mağazası | Satın Almadan Önce Deneyin",
+    "ogDescription": "Mağazada ücretsiz numune, böylece satın almadan önce deneyebilir ve önce tazeliğini kontrol edebilirsiniz. Labs Cannabis, Walking Street'den 5 dakika uzaklıktadır.",
+    "keywords": [
+      "esrar dükkanı pattaya",
+      "ot dükkanı pattaya",
+      "dispanser pattaya",
+      "ücretsiz örnek esrar dükkanı",
+      "esrar almadan önce deneyin",
+      "dispanser pattaya'da yürümek"
+    ]
+  },
+  "header": {
+    "openNow": "Şimdi aç",
+    "closed": "Kapalı",
+    "switching": "Anahtarlama",
+    "menu": "Katalog",
+    "allLanguages": "Tüm diller",
+    "searchLanguages": "Dilleri ara",
+    "currentLanguage": "Mevcut dil"
+  },
+  "hero": {
+    "title": "Pattaya'da esrar dükkanı",
+    "subtitle": "Taze tomurcuklar ve ön rulolar — Walking Street'dan 5 dakika. İçeri girin, seçmenize yardımcı olacağız.",
+    "getDirections": "Yol Tarifi Al",
+    "messageUs": "Bize Mesaj Gönderin",
+    "seeMenu": "Stokta neler var",
+    "sampleBadge": "Mağazada ücretsiz örnek",
+    "sampleTitle": "Satın almadan önce deneyin",
+    "sampleText": "Gelin, önce tazeliğini ve kalitesini kontrol edin. Beğendiyseniz satın alın.",
+    "sampleFresh": "Taze raf",
+    "samplePressure": "İlk önce deneyin",
+    "sampleTrust": "Önce kalite"
+  },
+  "noPrescription": {
+    "title": "Reçete yok mu? Seni yakaladık.",
+    "subtitle": "Tayland'da sağlık kartı gerekiyor ancak endişelenmeyin, her şeyi yerinde hallediyoruz. Sadece içeri girin.",
+    "step1Title": "İçeri gir",
+    "step1Desc": "Randevuya gerek yok. Ne zaman açık olursak mağazaya gelmeniz yeterli.",
+    "step2Title": "Tara ve doldur",
+    "step2Desc": "Telefonunuzda hızlı form — 2 dakika sürer. Personelimiz size her adımda rehberlik edecektir.",
+    "step3Title": "Tamamlamak",
+    "step3Desc": "Türünüzü seçin, ödeyin ve keyfini çıkarın. İşte bu.",
+    "badge1": "%100 yasal",
+    "badge2": "2 dakika sürer",
+    "badge3": "Ücretsiz danışmanlık"
+  },
+  "staffPick": {
+    "badge": "Uzman Seçimi",
+    "reserve": "Bunu sor",
+    "viewDetails": "Ayrıntıları görüntüle"
+  },
+  "catalog": {
+    "title": "Stokta neler var",
+    "count": "{count} tür mevcut",
+    "filter_all": "Tüm",
+    "filter_relax": "Rahatlamak",
+    "filter_energy": "Enerji",
+    "filter_creative": "Yaratıcı",
+    "filter_euphoria": "Coşku",
+    "filter_sleep": "Uyumak",
+    "filter_focus": "Odak",
+    "filter_happy": "Mutlu",
+    "filter_uplifted": "Yükseltilmiş",
+    "filter_talkative": "Konuşkan",
+    "filter_hungry": "Aç",
+    "reserve": "Bunu sor",
+    "soldOut": "Hepsi satıldı",
+    "noResults": "Şu anda bu filtreyle eşleşen tür yok.",
+    "activeFilter": "{tagType} tarafından filtrelendi: {tagLabel}",
+    "clearFilter": "Filtreyi temizle"
+  },
+  "reviews": {
+    "subtitle": "Google hakkında {count} inceleme",
+    "sourceGoogle": "Google aracılığıyla",
+    "showOriginal": "Orijinal",
+    "showTranslation": "Çeviri",
+    "translating": "Çeviri...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Pattaya'daki en iyi dispanser kesinlikle. Personel onların türlerini gerçekten biliyor ve mükemmel olanı seçmemde bana yardımcı oldu. Temiz dükkan, harika hisler."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Mükemmel dükkan. Ekip birkaç dakika içinde sağlık kartını düzenlememe yardımcı oldu. İyi tür seçimi ve uygun fiyatlar. Tavsiye edilen."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Çok kolay. Sağlık kartı meselesi konusunda gergindim ama her şeyi bana anlattılar. Mükemmel seçim ve çok bilgili personel."
+      }
+    }
+  },
+  "location": {
+    "title": "Bizi Bulun",
+    "address": "Adres",
+    "landmark": "Dönüm noktası",
+    "landmarkDesc": "Walking Street'dan 5 dakika yürüme mesafesinde",
+    "directions": {
+      "title": "Yürüyerek en iyi rota",
+      "step1": "Walking Street'den Pattaya 13 Alley'e (Soi Hollywood) gidin.",
+      "step2": "Ara sokakta kalın ve LABS DISPENSARY tabelasını arayın.",
+      "step3": "Pattaya 13 Sokağı'nın ortasında, sol tarafınızdayız."
+    },
+    "hours": "Saat",
+    "hoursValueDynamic": "Günlük {open} - {close}",
+    "hoursValue24_7": "7/24 açık",
+    "openInMaps": "Google Haritalar'da aç"
+  },
+  "contact": {
+    "title": "İletişime Geçin",
+    "subtitle": "Bir soru sorun veya nelerin mevcut olduğunu kontrol edin; genellikle çalışma saatleri içinde 5 dakika içinde yanıt veririz."
+  },
+  "footer": {
+    "disclaimer": "Yalnızca 20 yaş üstü yetişkinler. Tayland tıbbi esrar çerçevesi kapsamında faaliyet gösteren lisanslı esrar mağazası.",
+    "rights": "Her hakkı saklıdır."
+  },
+  "quickMenu": {
+    "title": "Şimdi stokta",
+    "seeAll": "Kataloğu görüntüle",
+    "soldOut": "Hepsi satıldı"
+  },
+  "socialProof": {
+    "reviewCount": "Google hakkında {count} inceleme",
+    "seeAll": "Tüm yorumları görün"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis danışmanınız ve esrar rehberiniz",
+    "guideDescription": "Dima, taşıdığımız her türü bizzat seçiyor ve rafa nelerin konduğunu takip ediyor. Rusça ve İngilizce'yi akıcı bir şekilde konuşuyor. İlk kez mi? Size her konuda yol gösterecek; ne bekleyeceğiniz, neyi seçeceğiniz, ne kadarla başlayacağınız. Açık ve dürüst tavsiye.",
+    "guidePhotoAlt": "Dima — Labs Cannabis danışman"
+  },
+  "faq": {
+    "title": "Sık Sorulan Sorular",
+    "q8": "Ücretsiz bir örnek var mı yoksa satın almadan önce deneyebilir miyim?",
+    "a8": "Evet. Mağazada ücretsiz bir numune sunuyoruz, böylece satın almaya karar vermeden önce tazeliğini ve kalitesini kontrol edebilirsiniz.",
+    "q1": "Reçeteye veya sağlık kartına ihtiyacım var mı?",
+    "a1": "Tayland esrar alımları için sağlık kartı gerektirmektedir. Hemen bir form almanıza yardımcı oluyoruz; bu, telefonunuzdaki hızlı bir dijital formdur ve yaklaşık 2 dakika sürer. Personelimiz her adımda size yol gösterir.",
+    "q2": "Turistler için yasal mı?",
+    "a2": "Evet. Turistler Tayland'da tıbbi esrarı yasal olarak satın almalarına yardımcı olduğumuz bir sağlık kartıyla satın alabilirler.",
+    "q3": "Hangi ödeme yöntemlerini kabul ediyorsunuz?",
+    "a3": "Nakit (Tayland Bahtı) ve QR banka havalesi. Şu anda kredi kartı yok.",
+    "q4": "Burada sigara içebilir miyim yoksa sadece paket servisi mi var?",
+    "a4": "Sadece paket servis. Kişisel kullanım için ürün satıyoruz; tesiste sigara içilen alan bulunmamaktadır.",
+    "q5": "Seni Walking Street'dan nasıl bulurum?",
+    "a5": "5 dakikalık yürüme mesafesinde. Soi Hollywood'a (Pattaya 13 Sokak) gidin, sol tarafta LABS tabelasını arayın. Yolun ortasındayız.",
+    "q6": "Çalışma saatleriniz nedir?",
+    "a6": "Her gün açığız, randevuya gerek yok. Başlıktaki saatleri kontrol edin; gerçek zamanlı olarak güncellenirler.",
+    "q7": "Esrarı hiç denemedim. Personeliniz seçim yapmama yardımcı olabilir mi?",
+    "a7": "Kesinlikle. Bize ne aradığınızı söyleyin - rahatlama, enerji, daha iyi uyku - ve biz de sizin için anlamlı olan bir gerginlik ve miktar önerelim."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Labs Cannabis Pattaya fiyatından satın alın",
+    "backToCatalog": "Seçime geri dön",
+    "reserve": "Bu Tür Hakkında Sorun",
+    "reserveVia": "İletişim yoluyla",
+    "call": "Arama",
+    "soldOut": "Hepsi satıldı",
+    "terpenes": "Terpen Profili",
+    "about": "Bu Tür Hakkında",
+    "metaDescriptionFallback": "{name} {type} esrar türü. THC {thc}%. Labs Cannabis Pattaya adresinde mevcut.",
+    "metaDescriptionFallbackNoThc": "{name} {type} esrar türü. Labs Cannabis Pattaya adresinde mevcut.",
+    "breadcrumbStrains": "suşlar"
+  },
+  "effectPage": {
+    "title": "{effect} Pattaya Bölgesindeki Esrar Türleri | Labs Cannabis",
+    "ogTitle": "{effect} Suşlar — Labs Cannabis Pattaya",
+    "description": "Pattaya, Tayland'daki Labs Cannabis dispanserinde {effect} esrar türlerine göz atın. Randevuya gerek yok, içeri girin.",
+    "h1": "{effect} Pattaya Bölgesindeki Esrar Türleri",
+    "intro": "{effect} efektleri mi arıyorsunuz? Labs Cannabis, Pattaya adresindeki mevcut seçimimize göz atın. İçeri girin - randevuya gerek yok.",
+    "breadcrumbStrains": "suşlar",
+    "reserve": "Bunu sor",
+    "soldOut": "Hepsi satıldı",
+    "noResults": "Şu anda {effect} suşu yok. Yakında tekrar kontrol edin.",
+    "effect_relax": "Rahatlatıcı",
+    "effect_energy": "Enerji verici",
+    "effect_creative": "Yaratıcı",
+    "effect_sleep": "Uyumak",
+    "effect_euphoria": "öforik",
+    "effect_focus": "Odak",
+    "effect_happy": "Mutlu",
+    "effect_uplifted": "Canlandırıcı",
+    "effect_talkative": "Konuşkan",
+    "effect_hungry": "İştah"
+  },
+  "typePage": {
+    "title": "{type} Pattaya Bölgesindeki Esrar Türleri | Labs Cannabis",
+    "ogTitle": "{type} Suşlar — Labs Cannabis Pattaya",
+    "description": "Pattaya, Tayland'daki Labs Cannabis dispanserinde {type} esrar türlerine göz atın. Randevuya gerek yok, içeri girin.",
+    "h1": "{type} Pattaya Bölgesindeki Esrar Türleri",
+    "intro": "Labs Cannabis, Pattaya adresindeki mevcut {type} esrar türleri seçimimize göz atın. İçeri girin - randevuya gerek yok.",
+    "breadcrumbStrains": "suşlar",
+    "reserve": "Bunu sor",
+    "soldOut": "Hepsi satıldı",
+    "noResults": "Şu anda {type} türü mevcut değil.",
+    "type_indica": "İndika",
+    "type_sativa": "sativa",
+    "type_hybrid": "Hibrit"
+  },
+  "strainCommon": {
+    "type_indica": "İndika",
+    "type_sativa": "sativa",
+    "type_hybrid": "Hibrit",
+    "effect_relax": "Rahatlamak",
+    "effect_energy": "Enerji",
+    "effect_creative": "Yaratıcı",
+    "effect_sleep": "Uyumak",
+    "effect_euphoria": "Coşku",
+    "effect_focus": "Odak",
+    "effect_happy": "Mutlu",
+    "effect_uplifted": "Yükseltilmiş",
+    "effect_talkative": "Konuşkan",
+    "effect_hungry": "Aç",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} esrar türü, Labs Cannabis Pattaya adresinde",
+    "staffPickAltText": "{name} — Labs Cannabis Pattaya adresinde Uzman Seçimi",
+    "strainAltText": "{name} esrar türü Labs Cannabis dispanserinde Pattaya mevcuttur",
+    "tagType_effect": "Etki",
+    "tagType_type": "Tip",
+    "tagType_terpene": "Terpen"
+  }
+}

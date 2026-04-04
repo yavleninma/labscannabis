@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Cannabisbutikk i Pattaya | Prøv før du kjøper",
+    "description": "Lisensiert cannabisbutikk i Pattaya. Gratis prøve i butikk, så du kan prøve før du kjøper og sjekke ferskheten først. Medisinsk kort på stedet på 2 minutter, 5 minutter fra Walking Street.",
+    "ogTitle": "__MERKE_0__ — __MERKE_1__ Cannabisbutikk | Prøv før du kjøper",
+    "ogDescription": "Gratis prøve i butikk, så du kan prøve før du kjøper og sjekke ferskheten først. Labs Cannabis er 5 minutter fra Walking Street.",
+    "keywords": [
+      "cannabisbutikk pattaya",
+      "weed shop pattaya",
+      "dispensary pattaya",
+      "gratis prøve cannabisbutikk",
+      "prøv før du kjøper cannabis",
+      "gå i dispensary pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Åpne nå",
+    "closed": "Lukket",
+    "switching": "Bytter",
+    "menu": "Katalog",
+    "allLanguages": "Alle språk",
+    "searchLanguages": "Søk etter språk",
+    "currentLanguage": "Nåværende språk"
+  },
+  "hero": {
+    "title": "Cannabisbutikk i Pattaya",
+    "subtitle": "Friske knopper og pre-rolls — 5 minutter fra Walking Street. Gå inn, vi hjelper deg med å velge.",
+    "getDirections": "Få veibeskrivelse",
+    "messageUs": "Send oss ​​en melding",
+    "seeMenu": "Hva er på lager",
+    "sampleBadge": "Gratis prøve i butikk",
+    "sampleTitle": "Prøv før du kjøper",
+    "sampleText": "Kom inn, sjekk friskhet og kvalitet først. Hvis du liker det, så kjøp.",
+    "sampleFresh": "Frisk hylle",
+    "samplePressure": "Prøv først",
+    "sampleTrust": "Kvalitet først"
+  },
+  "noPrescription": {
+    "title": "Ingen resept? Vi har deg.",
+    "subtitle": "Thailand krever et medisinsk kort - men ikke bekymre deg, vi håndterer alt på stedet. Bare gå inn.",
+    "step1Title": "Gå inn",
+    "step1Desc": "Ingen avtale nødvendig. Bare kom til butikken hver gang vi har åpent.",
+    "step2Title": "Skann og fyll",
+    "step2Desc": "Hurtigskjema på telefonen – tar 2 minutter. Våre ansatte vil veilede deg gjennom hvert trinn.",
+    "step3Title": "Ferdig",
+    "step3Desc": "Velg din type, betal og nyt. Det er det.",
+    "badge1": "100% lovlig",
+    "badge2": "Tar 2 min",
+    "badge3": "Gratis konsultasjon"
+  },
+  "staffPick": {
+    "badge": "Ekspertvalg",
+    "reserve": "Spør om det",
+    "viewDetails": "Se detaljer"
+  },
+  "catalog": {
+    "title": "Hva er på lager",
+    "count": "{count} stammer tilgjengelig",
+    "filter_all": "Alle",
+    "filter_relax": "Slappe av",
+    "filter_energy": "Energi",
+    "filter_creative": "Kreativ",
+    "filter_euphoria": "Eufori",
+    "filter_sleep": "Sove",
+    "filter_focus": "Fokus",
+    "filter_happy": "Lykkelig",
+    "filter_uplifted": "Oppløftet",
+    "filter_talkative": "Pratsom",
+    "filter_hungry": "Sulten",
+    "reserve": "Spør om det",
+    "soldOut": "Utsolgt",
+    "noResults": "Ingen stammer samsvarer med dette filteret akkurat nå.",
+    "activeFilter": "Filtrert etter {tagType}: {tagLabel}",
+    "clearFilter": "Tøm filter"
+  },
+  "reviews": {
+    "subtitle": "{count} anmeldelser på Google",
+    "sourceGoogle": "via Google",
+    "showOriginal": "Opprinnelig",
+    "showTranslation": "Oversettelse",
+    "translating": "Oversetter...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Beste apotek i Pattaya uten tvil. Personalet kjenner virkelig deres belastninger og hjalp meg med å velge den perfekte. Ren butikk, gode vibber."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Utmerket butikk. Teamet hjalp meg med å sortere ut det medisinske kortet der på et par minutter. Godt utvalg av stammer og rimelige priser. Anbefalt."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Så enkelt. Jeg var nervøs for det med medisinske kort, men de ledet meg gjennom alt. Stort utvalg og svært kunnskapsrik personale."
+      }
+    }
+  },
+  "location": {
+    "title": "Finn oss",
+    "address": "Adresse",
+    "landmark": "Landemerke",
+    "landmarkDesc": "5 min gange fra Walking Street",
+    "directions": {
+      "title": "Beste rute til fots",
+      "step1": "Dra til Pattaya 13 Alley (Soi Hollywood) fra Walking Street.",
+      "step2": "Hold deg i bakgaten og se etter LABS DISPENSARY-skilt.",
+      "step3": "Vi er på venstre side, rundt midten av Pattaya 13 Alley."
+    },
+    "hours": "Timer",
+    "hoursValueDynamic": "Daglig {open} - {close}",
+    "hoursValue24_7": "Åpent 24/7",
+    "openInMaps": "Åpne i Google Maps"
+  },
+  "contact": {
+    "title": "Ta kontakt",
+    "subtitle": "Still et spørsmål eller sjekk hva som er tilgjengelig — vi svarer vanligvis innen 5 minutter i arbeidstiden."
+  },
+  "footer": {
+    "disclaimer": "Kun voksne 20+. Lisensiert cannabisbutikk som opererer under det thailandske rammeverket for medisinsk cannabis.",
+    "rights": "Alle rettigheter forbeholdt."
+  },
+  "quickMenu": {
+    "title": "På lager nå",
+    "seeAll": "Se katalog",
+    "soldOut": "Utsolgt"
+  },
+  "socialProof": {
+    "reviewCount": "{count} anmeldelser på Google",
+    "seeAll": "Se alle anmeldelser"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis konsulent og din cannabisguide",
+    "guideDescription": "Dima velger personlig hver stamme vi bærer og holder øye med hva som havner på hyllen. Snakker russisk og engelsk flytende. Første gang? Han vil lede deg gjennom alt - hva du kan forvente, hva du skal velge, hvor mye du skal begynne med. Klare, ærlige råd.",
+    "guidePhotoAlt": "Dima — Labs Cannabis konsulent"
+  },
+  "faq": {
+    "title": "Vanlige spørsmål",
+    "q8": "Finnes det en gratis prøve eller kan jeg prøve før jeg kjøper?",
+    "a8": "Ja. Vi tilbyr en gratis prøve i butikken, slik at du kan sjekke ferskhet og kvalitet før du bestemmer deg for å kjøpe.",
+    "q1": "Trenger jeg resept eller medisinsk kort?",
+    "a1": "Thailand krever et medisinsk kort for kjøp av cannabis. Vi hjelper deg å få en på stedet – det er et raskt digitalt skjema på telefonen din, tar omtrent 2 minutter. Våre ansatte leder deg gjennom hvert trinn.",
+    "q2": "Er det lovlig for turister?",
+    "a2": "Ja. Turister kan lovlig kjøpe medisinsk cannabis i Thailand med et medisinsk kort, som vi hjelper deg med å få tak i her i butikken.",
+    "q3": "Hvilke betalingsmåter godtar du?",
+    "a3": "Kontanter (Thai Baht) og QR-bankoverføring. Ingen kredittkort for øyeblikket.",
+    "q4": "Kan jeg røyke her eller er det bare takeaway?",
+    "a4": "Kun takeaway. Vi selger produkter for personlig bruk — det er ikke røykeområde på stedet.",
+    "q5": "Hvordan finner jeg deg fra Walking Street?",
+    "a5": "5 minutters gange. Gå inn i Soi Hollywood (Pattaya 13 Alley), se etter LABS-skiltingen på venstre side. Vi er rundt midten av banen.",
+    "q6": "Hva er åpningstidene dine?",
+    "a6": "Vi har åpent hver dag, ingen avtale nødvendig. Sjekk timene i overskriften – de oppdateres i sanntid.",
+    "q7": "Jeg har aldri prøvd cannabis. Kan personalet hjelpe meg å velge?",
+    "a7": "Absolutt. Fortell oss hva du leter etter – avslapning, energi, bedre søvn – og vi vil anbefale en belastning og mengde som gir mening for deg."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Kjøp hos Labs Cannabis Pattaya",
+    "backToCatalog": "Tilbake til utvalg",
+    "reserve": "Spør om denne stammen",
+    "reserveVia": "Ta kontakt via",
+    "call": "Ringe",
+    "soldOut": "Utsolgt",
+    "terpenes": "Terpene-profil",
+    "about": "Om denne stammen",
+    "metaDescriptionFallback": "{name} {type} cannabisstamme. __MERKE_4__ {thc}%. Tilgjengelig på Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabisstamme. Tilgjengelig på Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Stammer"
+  },
+  "effectPage": {
+    "title": "{effect} Cannabisstammer i Pattaya | __MERKE_1__",
+    "ogTitle": "{effect} stammer — Labs Cannabis Pattaya",
+    "description": "Bla gjennom {effect} cannabisstammer på Labs Cannabis apotek i Pattaya, Thailand. Gå inn, ingen avtale nødvendig.",
+    "h1": "{effect} Cannabisstammer i Pattaya",
+    "intro": "Leter du etter {effect} effekter? Bla gjennom vårt nåværende utvalg på Labs Cannabis, Pattaya. Gå inn - ingen avtale nødvendig.",
+    "breadcrumbStrains": "Stammer",
+    "reserve": "Spør om det",
+    "soldOut": "Utsolgt",
+    "noResults": "Ingen {effect} stammer akkurat nå. Kom tilbake snart.",
+    "effect_relax": "Avslappende",
+    "effect_energy": "Energigivende",
+    "effect_creative": "Kreativ",
+    "effect_sleep": "Sove",
+    "effect_euphoria": "Euforisk",
+    "effect_focus": "Fokus",
+    "effect_happy": "Lykkelig",
+    "effect_uplifted": "Oppløftende",
+    "effect_talkative": "Pratsom",
+    "effect_hungry": "Appetitt"
+  },
+  "typePage": {
+    "title": "{type} Cannabisstammer i Pattaya | __MERKE_1__",
+    "ogTitle": "{type} stammer — Labs Cannabis Pattaya",
+    "description": "Bla gjennom {type} cannabisstammer på Labs Cannabis apotek i Pattaya, Thailand. Gå inn, ingen avtale nødvendig.",
+    "h1": "{type} Cannabisstammer i Pattaya",
+    "intro": "Bla gjennom vårt nåværende utvalg av {type} cannabisstammer på Labs Cannabis, Pattaya. Gå inn - ingen avtale nødvendig.",
+    "breadcrumbStrains": "Stammer",
+    "reserve": "Spør om det",
+    "soldOut": "Utsolgt",
+    "noResults": "Ingen {type} stammer tilgjengelig akkurat nå.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid",
+    "effect_relax": "Slappe av",
+    "effect_energy": "Energi",
+    "effect_creative": "Kreativ",
+    "effect_sleep": "Sove",
+    "effect_euphoria": "Eufori",
+    "effect_focus": "Fokus",
+    "effect_happy": "Lykkelig",
+    "effect_uplifted": "Oppløftet",
+    "effect_talkative": "Pratsom",
+    "effect_hungry": "Sulten",
+    "thc": "__MERKE_0__",
+    "cbd": "__MERKE_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabisstamme ved Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Ekspertvalg hos Labs Cannabis Pattaya",
+    "strainAltText": "{name} cannabisstamme tilgjengelig på Labs Cannabis apotek Pattaya",
+    "tagType_effect": "Effekt",
+    "tagType_type": "Type",
+    "tagType_terpene": "Terpene"
+  }
+}
