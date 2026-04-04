@@ -1,14 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { buildLanguageAlternates } from "@/i18n/metadata";
 import { routing } from "@/i18n/routing";
 import { getAllStrains, getShopSettings } from "@/lib/queries";
 import { strainMatchesTag } from "@/lib/strain-tags";
 import { getSiteUrl } from "@/lib/site-url";
 import { StrainCard } from "@/components/StrainCard";
 import { Footer } from "@/components/Footer";
-
-export const revalidate = 60;
 
 const VALID_EFFECTS = [
   "relax",
@@ -50,12 +49,10 @@ export async function generateMetadata({
     description: t("description", { effect: effectLabel }),
     alternates: {
       canonical: `${baseUrl}/${locale}/strains/effects/${effect}`,
-      languages: {
-        "x-default": `${baseUrl}/en/strains/effects/${effect}`,
-        "en-US": `${baseUrl}/en/strains/effects/${effect}`,
-        "ru-RU": `${baseUrl}/ru/strains/effects/${effect}`,
-        "th-TH": `${baseUrl}/th/strains/effects/${effect}`,
-      },
+      languages: buildLanguageAlternates(
+        baseUrl,
+        (alternateLocale) => `/${alternateLocale}/strains/effects/${effect}`,
+      ),
     },
     openGraph: {
       title: t("ogTitle", { effect: effectLabel }),

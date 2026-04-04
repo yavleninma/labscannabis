@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Pattaya 的大麻店 |购买前先试用",
+    "description": "Pattaya 的持牌大麻店。店里有免费样品，所以您可以在购买前先试用并检查新鲜度。 2 分钟内即可获得现场医疗卡，距 Walking Street 5 分钟路程。",
+    "ogTitle": "Labs Cannabis — Pattaya 大麻店 |购买前先试用",
+    "ogDescription": "店里有免费样品，所以您可以在购买前先试用并检查新鲜度。 Labs Cannabis 距 Walking Street 5 分钟路程。",
+    "keywords": [
+      "芭堤雅大麻店",
+      "芭堤雅杂草店",
+      "芭堤雅药房",
+      "免费样品大麻店",
+      "购买大麻之前先尝试一下",
+      "走进芭堤雅药房"
+    ]
+  },
+  "header": {
+    "openNow": "现已开放",
+    "closed": "关闭",
+    "switching": "交换",
+    "menu": "目录",
+    "allLanguages": "所有语言",
+    "searchLanguages": "搜索语言",
+    "currentLanguage": "当前语言"
+  },
+  "hero": {
+    "title": "Pattaya 的大麻店",
+    "subtitle": "新鲜花蕾和前卷 — 距 Walking Street 5 分钟路程。走进去，我们帮你挑选。",
+    "getDirections": "获取路线",
+    "messageUs": "给我们留言",
+    "seeMenu": "库存有哪些",
+    "sampleBadge": "店内免费样品",
+    "sampleTitle": "购买前先试用",
+    "sampleText": "进来，先检查新鲜度和质量。如果你喜欢它，那就买吧。",
+    "sampleFresh": "生鲜货架",
+    "samplePressure": "先尝试一下",
+    "sampleTrust": "质量第一"
+  },
+  "noPrescription": {
+    "title": "没有处方吗？我们找到你了。",
+    "subtitle": "泰国需要医疗卡 - 但不用担心，我们会当场处理一切。只要走进去。",
+    "step1Title": "走进去",
+    "step1Desc": "无需预约。只要我们营业时就来店里。",
+    "step2Title": "扫描并填写",
+    "step2Desc": "在手机上快速填写表格 — 仅需 2 分钟。我们的员工将指导您完成每一步。",
+    "step3Title": "完毕",
+    "step3Desc": "选择您的品种、付费并享受。就是这样。",
+    "badge1": "100%合法",
+    "badge2": "需要 2 分钟",
+    "badge3": "免费咨询"
+  },
+  "staffPick": {
+    "badge": "专家精选",
+    "reserve": "询问一下",
+    "viewDetails": "查看详情"
+  },
+  "catalog": {
+    "title": "库存有哪些",
+    "count": "可用 {count} 菌株",
+    "filter_all": "全部",
+    "filter_relax": "放松",
+    "filter_energy": "活力",
+    "filter_creative": "有创造力的",
+    "filter_euphoria": "欣快感",
+    "filter_sleep": "睡觉",
+    "filter_focus": "重点",
+    "filter_happy": "快乐的",
+    "filter_uplifted": "振奋",
+    "filter_talkative": "健谈",
+    "filter_hungry": "饥饿的",
+    "reserve": "询问一下",
+    "soldOut": "售罄",
+    "noResults": "目前没有菌株与此过滤器匹配。",
+    "activeFilter": "按 {tagType} 过滤：{tagLabel}",
+    "clearFilter": "清除过滤器"
+  },
+  "reviews": {
+    "subtitle": "Google 上有 {count} 条评论",
+    "sourceGoogle": "通过 Google",
+    "showOriginal": "原来的",
+    "showTranslation": "翻译",
+    "translating": "翻译...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Pattaya 中最好的药房毫无疑问。工作人员非常了解他们的菌株并帮助我挑选了完美的菌株。店里干净整洁，氛围很好。"
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "很棒的商店。该团队在几分钟内帮我整理了医疗卡。良好的菌株选择和公平的价格。受到推崇的。"
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "太容易了。我对医疗卡的事情感到紧张，但他们引导我完成了一切。很棒的选择和知识渊博的员工。"
+      }
+    }
+  },
+  "location": {
+    "title": "找到我们",
+    "address": "地址",
+    "landmark": "地标",
+    "landmarkDesc": "距离Walking Street 步行 5 分钟",
+    "directions": {
+      "title": "最佳步行路线",
+      "step1": "从 Walking Street 前往 Pattaya 13 Alley（好莱坞巷）。",
+      "step2": "留在巷子里，寻找 LABS DISPENSARY 标牌。",
+      "step3": "我们位于您的左侧，Pattaya 13 巷中间附近。"
+    },
+    "hours": "时间",
+    "hoursValueDynamic": "每日 {open} - {close}",
+    "hoursValue24_7": "24/7 开放",
+    "openInMaps": "在 Google 地图中打开"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "提出问题或查看可用内容 - 我们通常在工作时间内 5 分钟内回复。"
+  },
+  "footer": {
+    "disclaimer": "仅限 20 岁以上成人。在泰国医用大麻框架下经营的特许大麻店。",
+    "rights": "版权所有。"
+  },
+  "quickMenu": {
+    "title": "现在有货",
+    "seeAll": "查看目录",
+    "soldOut": "售罄"
+  },
+  "socialProof": {
+    "reviewCount": "Google 上有 {count} 条评论",
+    "seeAll": "查看所有评论"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis 顾问和您的大麻指南",
+    "guideDescription": "迪玛亲自挑选我们携带的每种菌株，并密切关注最终上架的菌株。能说流利的俄语和英语。第一次？他会引导您完成所有事情——期待什么、选择什么、开始多少。清晰、诚实的建议。",
+    "guidePhotoAlt": "迪玛 — Labs Cannabis 顾问"
+  },
+  "faq": {
+    "title": "常见问题",
+    "q8": "有免费样品吗？或者我可以在购买前试用吗？",
+    "a8": "是的。我们在店内提供免费样品，因此您可以在决定购买之前检查新鲜度和质量。",
+    "q1": "我需要处方或医疗卡吗？",
+    "a1": "泰国购买大麻需要医疗卡。我们帮助您当场获得一份表格 — 这是您手机上的快速数字表格，大约需要 2 分钟。我们的工作人员将引导您完成每一步。",
+    "q2": "对游客来说合法吗？",
+    "a2": "是的。游客可以使用医疗卡在泰国合法购买医用大麻，我们可以帮助您在商店购买医疗卡。",
+    "q3": "你们接受什么付款方式？",
+    "a3": "现金（泰铢）和二维码银行转账。目前没有信用卡。",
+    "q4": "我可以在这里抽烟还是只能外卖？",
+    "a4": "仅限外卖。我们出售供个人使用的产品 - 现场没有吸烟区。",
+    "q5": "我如何从 Walking Street 找到您？",
+    "a5": "步行5分钟。前往好莱坞大道 (Pattaya 13 Alley)，寻找左侧的 LABS 标牌。我们在车道中间。",
+    "q6": "您的营业时间是几点？",
+    "a6": "我们每天都营业，无需预约。检查标题中的营业时间 - 它们会实时更新。",
+    "q7": "我从未尝试过大麻。你们的工作人员可以帮我选择吗？",
+    "a7": "绝对地。告诉我们您想要什么——放松、精力充沛、更好的睡眠——我们会推荐适合您的压力和量。"
+  },
+  "strainPage": {
+    "metaTitleSuffix": "在 Labs Cannabis Pattaya 购买",
+    "backToCatalog": "返回选择",
+    "reserve": "询问有关该菌株的信息",
+    "reserveVia": "联系方式",
+    "call": "称呼",
+    "soldOut": "售罄",
+    "terpenes": "萜烯概况",
+    "about": "关于该菌株",
+    "metaDescriptionFallback": "{name} {type} 大麻菌株。 THC {thc}%。有售：Labs Cannabis Pattaya。",
+    "metaDescriptionFallbackNoThc": "{name} {type} 大麻菌株。有售：Labs Cannabis Pattaya。",
+    "breadcrumbStrains": "菌株"
+  },
+  "effectPage": {
+    "title": "Pattaya 中的 {effect} 大麻菌株 | __品牌_1__",
+    "ogTitle": "{effect} 菌株 — Labs Cannabis Pattaya",
+    "description": "在泰国 Pattaya 的 Labs Cannabis 药房浏览 {effect} 大麻品种。走进去，无需预约。",
+    "h1": "Pattaya 中的 {effect} 大麻菌株",
+    "intro": "正在寻找 {effect} 效果？浏览我们当前的选择：Labs Cannabis、Pattaya。走进去——无需预约。",
+    "breadcrumbStrains": "菌株",
+    "reserve": "询问一下",
+    "soldOut": "售罄",
+    "noResults": "目前没有 {effect} 菌株。请尽快回来查看。",
+    "effect_relax": "放松",
+    "effect_energy": "充满活力",
+    "effect_creative": "有创造力的",
+    "effect_sleep": "睡觉",
+    "effect_euphoria": "欣快感",
+    "effect_focus": "重点",
+    "effect_happy": "快乐的",
+    "effect_uplifted": "振奋人心",
+    "effect_talkative": "健谈",
+    "effect_hungry": "食欲"
+  },
+  "typePage": {
+    "title": "Pattaya 中的 {type} 大麻菌株 | __品牌_1__",
+    "ogTitle": "{type} 菌株 — Labs Cannabis Pattaya",
+    "description": "在泰国 Pattaya 的 Labs Cannabis 药房浏览 {type} 大麻品种。走进去，无需预约。",
+    "h1": "Pattaya 中的 {type} 大麻菌株",
+    "intro": "浏览我们当前选择的 {type} 大麻品种，网址为 Labs Cannabis、Pattaya。走进去——无需预约。",
+    "breadcrumbStrains": "菌株",
+    "reserve": "询问一下",
+    "soldOut": "售罄",
+    "noResults": "目前没有可用的 {type} 菌株。",
+    "type_indica": "籼稻",
+    "type_sativa": "苜蓿",
+    "type_hybrid": "杂交种"
+  },
+  "strainCommon": {
+    "type_indica": "籼稻",
+    "type_sativa": "苜蓿",
+    "type_hybrid": "杂交种",
+    "effect_relax": "放松",
+    "effect_energy": "活力",
+    "effect_creative": "有创造力的",
+    "effect_sleep": "睡觉",
+    "effect_euphoria": "欣快感",
+    "effect_focus": "重点",
+    "effect_happy": "快乐的",
+    "effect_uplifted": "振奋",
+    "effect_talkative": "健谈",
+    "effect_hungry": "饥饿的",
+    "thc": "__品牌_0__",
+    "cbd": "__品牌_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} 大麻菌株位于 Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Labs Cannabis Pattaya 的专家精选",
+    "strainAltText": "{name} 大麻菌株可在 Labs Cannabis 药房 Pattaya 购买",
+    "tagType_effect": "影响",
+    "tagType_type": "类型",
+    "tagType_terpene": "萜烯"
+  }
+}

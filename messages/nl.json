@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Cannabiswinkel in Pattaya | Probeer het voordat u koopt",
+    "description": "Gelicentieerde cannabiswinkel in Pattaya. Gratis proefmonster in de winkel, zodat u eerst kunt uitproberen voordat u koopt en de versheid kunt controleren. Medische kaart ter plaatse in 2 minuten, 5 minuten vanaf Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Cannabiswinkel | Probeer het voordat u koopt",
+    "ogDescription": "Gratis proefmonster in de winkel, zodat u eerst kunt uitproberen voordat u koopt en de versheid kunt controleren. Labs Cannabis ligt op 5 minuten van Walking Street.",
+    "keywords": [
+      "cannabiswinkel Pattaya",
+      "wietwinkel Pattaya",
+      "apotheek pataya",
+      "gratis proefcannabiswinkel",
+      "probeer het voordat je cannabis koopt",
+      "loop in apotheek pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Nu openen",
+    "closed": "Gesloten",
+    "switching": "Schakelen",
+    "menu": "Catalogus",
+    "allLanguages": "Alle talen",
+    "searchLanguages": "Zoek talen",
+    "currentLanguage": "Huidige taal"
+  },
+  "hero": {
+    "title": "Cannabiswinkel in Pattaya",
+    "subtitle": "Verse toppen en pre-rolls — 5 minuten vanaf Walking Street. Loop binnen, wij helpen je kiezen.",
+    "getDirections": "Routebeschrijving opvragen",
+    "messageUs": "Stuur ons een bericht",
+    "seeMenu": "Wat is er op voorraad",
+    "sampleBadge": "Gratis monster in de winkel",
+    "sampleTitle": "Probeer het voordat je koopt",
+    "sampleText": "Kom binnen, controleer eerst de versheid en kwaliteit. Als je het leuk vindt, koop dan.",
+    "sampleFresh": "Verse plank",
+    "samplePressure": "Probeer het eerst",
+    "sampleTrust": "Kwaliteit voorop"
+  },
+  "noPrescription": {
+    "title": "Geen recept? We hebben je.",
+    "subtitle": "Voor Thailand is een medische kaart vereist, maar maak je geen zorgen, we regelen alles ter plekke. Loop gewoon binnen.",
+    "step1Title": "Loop binnen",
+    "step1Desc": "Geen afspraak nodig. Kom gewoon naar de winkel als we open zijn.",
+    "step2Title": "Scannen en vullen",
+    "step2Desc": "Snel formulier op uw telefoon — duurt 2 minuten. Onze medewerkers begeleiden u bij elke stap.",
+    "step3Title": "Klaar",
+    "step3Desc": "Kies je soort, betaal en geniet ervan. Dat is het.",
+    "badge1": "100% legaal",
+    "badge2": "Duurt 2 minuten",
+    "badge3": "Gratis advies"
+  },
+  "staffPick": {
+    "badge": "Deskundige keuze",
+    "reserve": "Vraag ernaar",
+    "viewDetails": "Bekijk details"
+  },
+  "catalog": {
+    "title": "Wat is er op voorraad",
+    "count": "{count} soorten beschikbaar",
+    "filter_all": "Alle",
+    "filter_relax": "Ontspannen",
+    "filter_energy": "Energie",
+    "filter_creative": "Creatief",
+    "filter_euphoria": "Euforie",
+    "filter_sleep": "Slaap",
+    "filter_focus": "Focus",
+    "filter_happy": "Vrolijk",
+    "filter_uplifted": "Opgeheven",
+    "filter_talkative": "Spraakzaam",
+    "filter_hungry": "Hongerig",
+    "reserve": "Vraag ernaar",
+    "soldOut": "Uitverkocht",
+    "noResults": "Er zijn momenteel geen soorten die overeenkomen met dit filter.",
+    "activeFilter": "Gefilterd op {tagType}: {tagLabel}",
+    "clearFilter": "Wis filter"
+  },
+  "reviews": {
+    "subtitle": "{count} recensies op Google",
+    "sourceGoogle": "via __MERK_0__",
+    "showOriginal": "Origineel",
+    "showTranslation": "Vertaling",
+    "translating": "Vertalen...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Beste apotheek in Pattaya zonder twijfel. Het personeel kent hun soorten echt en heeft me geholpen de perfecte soort te kiezen. Schone winkel, geweldige sfeer."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Uitstekende winkel. Het team hielp me daar binnen een paar minuten de medische kaart te regelen. Goede selectie van soorten en eerlijke prijzen. Aanbevolen."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Zo gemakkelijk. Ik was zenuwachtig over het gedoe met de medische kaart, maar ze hebben me door alles heen geleid. Grote keuze en zeer kundig personeel."
+      }
+    }
+  },
+  "location": {
+    "title": "Vind ons",
+    "address": "Adres",
+    "landmark": "Oriëntatiepunt",
+    "landmarkDesc": "5 minuten lopen van Walking Street",
+    "directions": {
+      "title": "Beste route te voet",
+      "step1": "Ga naar Pattaya 13 Alley (Soi Hollywood) vanaf Walking Street.",
+      "step2": "Blijf in het steegje en let op de borden met LABS DISPENSARY.",
+      "step3": "We bevinden ons aan uw linkerkant, ongeveer in het midden van Pattaya 13 Alley."
+    },
+    "hours": "Uur",
+    "hoursValueDynamic": "Dagelijks {open} - {close}",
+    "hoursValue24_7": "24/7 geopend",
+    "openInMaps": "Openen in Google Kaarten"
+  },
+  "contact": {
+    "title": "Neem contact op",
+    "subtitle": "Stel een vraag of kijk wat er beschikbaar is. Tijdens werkuren antwoorden we doorgaans binnen 5 minuten."
+  },
+  "footer": {
+    "disclaimer": "Alleen volwassenen 20+. Gelicentieerde cannabiswinkel die opereert onder het Thaise kader voor medicinale cannabis.",
+    "rights": "Alle rechten voorbehouden."
+  },
+  "quickMenu": {
+    "title": "Nu op voorraad",
+    "seeAll": "Catalogus bekijken",
+    "soldOut": "Uitverkocht"
+  },
+  "socialProof": {
+    "reviewCount": "{count} recensies op Google",
+    "seeAll": "Bekijk alle beoordelingen"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis adviseur en uw cannabisgids",
+    "guideDescription": "Dima selecteert persoonlijk elke soort die we voeren en houdt in de gaten wat er in het schap belandt. Spreekt vloeiend Russisch en Engels. Eerste keer? Hij begeleidt u door alles: wat u kunt verwachten, wat u moet kiezen, hoeveel u moet beginnen. Duidelijk en eerlijk advies.",
+    "guidePhotoAlt": "Dima — Labs Cannabis adviseur"
+  },
+  "faq": {
+    "title": "Veelgestelde vragen",
+    "q8": "Is er een gratis monster of kan ik het proberen voordat ik het koop?",
+    "a8": "Ja. We bieden een gratis monster aan in de winkel, zodat u de versheid en kwaliteit kunt controleren voordat u besluit tot aankoop.",
+    "q1": "Heb ik een recept of medische kaart nodig?",
+    "a1": "Thailand vereist een medische kaart voor cannabisaankopen. Wij helpen u er ter plekke een te krijgen. Het is een snel digitaal formulier op uw telefoon, dat ongeveer 2 minuten duurt. Onze medewerkers begeleiden u bij elke stap.",
+    "q2": "Is het legaal voor toeristen?",
+    "a2": "Ja. Toeristen kunnen in Thailand legaal medicinale cannabis kopen met een medische kaart, die wij u hier in de winkel helpen verkrijgen.",
+    "q3": "Welke betaalmethoden accepteert u?",
+    "a3": "Contant (Thaise Baht) en QR-bankoverschrijving. Geen creditcards op dit moment.",
+    "q4": "Mag ik hier roken of is het alleen afhaalmaaltijden?",
+    "a4": "Alleen afhaalmaaltijden. Wij verkopen producten voor persoonlijk gebruik. Er is geen rookruimte op het terrein.",
+    "q5": "Hoe vind ik je van Walking Street?",
+    "a5": "5 minuten lopen. Ga naar Soi Hollywood (Pattaya 13 Alley), zoek naar LABS bewegwijzering aan de linkerkant. We zijn ongeveer halverwege de baan.",
+    "q6": "Wat zijn jouw uren?",
+    "a6": "Wij zijn elke dag geopend, geen afspraak nodig. Controleer de uren in de kop: ze worden in realtime bijgewerkt.",
+    "q7": "Ik heb nog nooit cannabis geprobeerd. Kunnen uw medewerkers mij helpen kiezen?",
+    "a7": "Absoluut. Vertel ons waar u naar op zoek bent (ontspanning, energie, betere slaap) en wij adviseren u een soort en hoeveelheid die voor u zinvol zijn."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Koop bij Labs Cannabis Pattaya",
+    "backToCatalog": "Terug naar selectie",
+    "reserve": "Vraag naar deze soort",
+    "reserveVia": "Neem contact op via",
+    "call": "Telefoongesprek",
+    "soldOut": "Uitverkocht",
+    "terpenes": "Terpeenprofiel",
+    "about": "Over deze soort",
+    "metaDescriptionFallback": "{name} {type} cannabissoort. __MERK_4__ {thc}%. Verkrijgbaar bij Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabissoort. Verkrijgbaar bij Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Stammen"
+  },
+  "effectPage": {
+    "title": "{effect} Cannabissoorten in Pattaya | __MERK_1__",
+    "ogTitle": "{effect} Soorten — Labs Cannabis Pattaya",
+    "description": "Blader door {effect} cannabissoorten bij Labs Cannabis apotheek in Pattaya, Thailand. Loop binnen, geen afspraak nodig.",
+    "h1": "{effect} Cannabissoorten in Pattaya",
+    "intro": "Op zoek naar {effect} effecten? Blader door ons huidige aanbod op Labs Cannabis, Pattaya. Loop binnen: geen afspraak nodig.",
+    "breadcrumbStrains": "Stammen",
+    "reserve": "Vraag ernaar",
+    "soldOut": "Uitverkocht",
+    "noResults": "Momenteel geen {effect}-stammen. Kom snel terug.",
+    "effect_relax": "Ontspannend",
+    "effect_energy": "Energiek",
+    "effect_creative": "Creatief",
+    "effect_sleep": "Slaap",
+    "effect_euphoria": "Euforisch",
+    "effect_focus": "Focus",
+    "effect_happy": "Vrolijk",
+    "effect_uplifted": "Opbeurend",
+    "effect_talkative": "Spraakzaam",
+    "effect_hungry": "Trek"
+  },
+  "typePage": {
+    "title": "{type} Cannabissoorten in Pattaya | __MERK_1__",
+    "ogTitle": "{type} Soorten — Labs Cannabis Pattaya",
+    "description": "Blader door {type} cannabissoorten bij Labs Cannabis apotheek in Pattaya, Thailand. Loop binnen, geen afspraak nodig.",
+    "h1": "{type} Cannabissoorten in Pattaya",
+    "intro": "Blader door onze huidige selectie van {type} cannabissoorten bij Labs Cannabis, Pattaya. Loop binnen: geen afspraak nodig.",
+    "breadcrumbStrains": "Stammen",
+    "reserve": "Vraag ernaar",
+    "soldOut": "Uitverkocht",
+    "noResults": "Er zijn momenteel geen {type} soorten beschikbaar.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybride"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybride",
+    "effect_relax": "Ontspannen",
+    "effect_energy": "Energie",
+    "effect_creative": "Creatief",
+    "effect_sleep": "Slaap",
+    "effect_euphoria": "Euforie",
+    "effect_focus": "Focus",
+    "effect_happy": "Vrolijk",
+    "effect_uplifted": "Opgeheven",
+    "effect_talkative": "Spraakzaam",
+    "effect_hungry": "Hongerig",
+    "thc": "__MERK_0__",
+    "cbd": "__MERK_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabissoort bij Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Keuze van experts bij Labs Cannabis Pattaya",
+    "strainAltText": "{name} cannabissoort verkrijgbaar bij Labs Cannabis apotheek Pattaya",
+    "tagType_effect": "Effect",
+    "tagType_type": "Type",
+    "tagType_terpene": "Terpeen"
+  }
+}

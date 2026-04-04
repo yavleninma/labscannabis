@@ -1,9 +1,9 @@
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder, type SanityImageSource } from "@sanity/image-url";
 import { sanityClient } from "./client";
 
-const builder = sanityClient ? imageUrlBuilder(sanityClient) : null;
+const builder = sanityClient ? createImageUrlBuilder(sanityClient) : null;
 
-export function urlFor(source: { asset: { _ref: string } }) {
+export function urlFor(source: SanityImageSource) {
   if (!builder) return null;
   return builder.image(source);
 }

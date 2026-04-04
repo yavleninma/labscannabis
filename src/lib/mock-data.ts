@@ -1,5 +1,18 @@
+import type { AutomatedLocale } from "@/i18n/config";
+import type { PortableTextBlock } from "./portable-text";
+
+export interface StrainTranslation {
+  locale: AutomatedLocale;
+  shortDescription?: string | null;
+  fullDescription?: PortableTextBlock[] | null;
+  sourceHash?: string | null;
+  translatedAt?: string | null;
+  model?: string | null;
+}
+
 export interface Strain {
   _id: string;
+  _updatedAt?: string;
   name: string;
   slug: { current: string };
   image: { asset: { _ref: string } } | null;
@@ -36,9 +49,10 @@ export interface Strain {
   shortDescription: string;
   shortDescriptionRu?: string | null;
   shortDescriptionTh?: string | null;
-  fullDescription: { _type: string; _key?: string; [key: string]: unknown }[] | null;
-  fullDescriptionRu?: { _type: string; _key?: string; [key: string]: unknown }[] | null;
-  fullDescriptionTh?: { _type: string; _key?: string; [key: string]: unknown }[] | null;
+  fullDescription: PortableTextBlock[] | null;
+  fullDescriptionRu?: PortableTextBlock[] | null;
+  fullDescriptionTh?: PortableTextBlock[] | null;
+  translations?: StrainTranslation[] | null;
   terpenes: string[] | null;
   terpeneProfile?: { name: string; amount: number }[] | null;
   isStaffPick: boolean;

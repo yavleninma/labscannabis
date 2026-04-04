@@ -1,11 +1,10 @@
 import { getTranslations } from "next-intl/server";
+import type { AppLocale } from "@/i18n/config";
 import { getSiteUrl } from "@/lib/site-url";
 import { DEFAULT_GOOGLE_RATING, DEFAULT_GOOGLE_REVIEW_COUNT, GOOGLE_LISTING_URL } from "@/lib/constants";
 
-type Locale = "en" | "ru" | "th";
-
 interface JsonLdProps {
-  locale: Locale;
+  locale: AppLocale;
   openTime?: string;
   closeTime?: string;
   isOpen24h?: boolean;
@@ -13,12 +12,6 @@ interface JsonLdProps {
   googleReviewCount?: number;
   phone?: string | null;
 }
-
-const descriptions: Record<Locale, string> = {
-  en: "Licensed cannabis shop in Pattaya. On-site medical card in 2 minutes, walk-in friendly. 5 min from Walking Street. Russian- and English-speaking staff.",
-  ru: "Лицензированный каннабис-шоп в Паттайе. Медкарта за 2 минуты на месте, без записи. 5 минут от Walking Street. Говорим по-русски.",
-  th: "ร้านกัญชาที่ได้รับอนุญาตในพัทยา บัตรทางการแพทย์ภายใน 2 นาที เดินเข้ามาได้เลย 5 นาทีจาก Walking Street",
-};
 
 export async function JsonLd({
   locale,
@@ -29,6 +22,7 @@ export async function JsonLd({
   googleReviewCount,
   phone,
 }: JsonLdProps) {
+  const meta = await getTranslations({ locale, namespace: "meta" });
   const t = await getTranslations({ locale, namespace: "faq" });
 
   const baseUrl = getSiteUrl();
@@ -40,7 +34,7 @@ export async function JsonLd({
     "@type": ["LocalBusiness", "Store"],
     "@id": `${baseUrl}/#business`,
     name: "Labs Cannabis",
-    description: descriptions[locale],
+    description: meta("description"),
     url: `${baseUrl}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
     image: `${baseUrl}/opengraph-image`,
@@ -83,7 +77,7 @@ export async function JsonLd({
     paymentAccepted: "Cash, QR Bank Transfer",
   };
 
-  const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
+  const faqKeys = ["8", "1", "2", "3", "4", "5", "6", "7"] as const;
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

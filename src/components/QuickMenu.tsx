@@ -73,9 +73,9 @@ export function QuickMenu({ strains }: QuickMenuProps) {
                   href={`/${locale}/strains/${strain.slug.current}`}
                   className="shrink-0 inline-flex items-center gap-2 rounded-full border border-border bg-bg-card px-2.5 py-1.5 text-sm text-text-muted hover:text-text-secondary transition-colors"
                 >
-                  <span className="h-6 w-6 rounded-full overflow-hidden border border-border bg-bg-card shrink-0">
+                  <span className="relative h-6 w-6 rounded-full overflow-hidden border border-border bg-bg-card shrink-0">
                     {thumbnailUrl ? (
-                      <img src={thumbnailUrl} alt={strain.name} className="h-full w-full object-cover" />
+                      <Image src={thumbnailUrl} alt={strain.name} fill sizes="24px" className="object-cover" />
                     ) : (
                       <span className="h-full w-full flex items-center justify-center text-[10px]">🌿</span>
                     )}

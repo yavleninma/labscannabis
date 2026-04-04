@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Kannabiskauppa Pattaya | Kokeile ennen ostamista",
+    "description": "Lisensoitu kannabiskauppa kohteessa Pattaya. Ilmainen näyte myymälässä, joten voit kokeilla ennen ostamista ja tarkistaa tuoreuden ensin. Lääkärikortti paikan päällä 2 minuutissa, 5 min päässä Walking Street:sta.",
+    "ogTitle": "Labs Cannabis — Pattaya Kannabiskauppa | Kokeile ennen ostamista",
+    "ogDescription": "Ilmainen näyte myymälässä, joten voit kokeilla ennen ostamista ja tarkistaa tuoreuden ensin. Labs Cannabis on 5 minuutin päässä Walking Street:sta.",
+    "keywords": [
+      "kannabiskauppa pattaya",
+      "rikkakasvikauppa pattaya",
+      "lääkehoito pattaya",
+      "ilmainen kannabisnäytekauppa",
+      "kokeile ennen kuin ostat kannabista",
+      "kävellä ambulanssissa Pattayassa"
+    ]
+  },
+  "header": {
+    "openNow": "Avaa nyt",
+    "closed": "Suljettu",
+    "switching": "Vaihtaminen",
+    "menu": "Luettelo",
+    "allLanguages": "Kaikki kielet",
+    "searchLanguages": "Hae kieliä",
+    "currentLanguage": "Nykyinen kieli"
+  },
+  "hero": {
+    "title": "Kannabiskauppa Pattaya",
+    "subtitle": "Tuoreet silmut ja esirullat – 5 min Walking Street:sta. Tule sisään, autamme sinua valitsemaan.",
+    "getDirections": "Hanki reittiohjeet",
+    "messageUs": "Lähetä meille viesti",
+    "seeMenu": "Mitä on varastossa",
+    "sampleBadge": "Ilmainen näyte myymälässä",
+    "sampleTitle": "Kokeile ennen ostamista",
+    "sampleText": "Tule sisään ja tarkista ensin tuoreus ja laatu. Jos pidät siitä, osta.",
+    "sampleFresh": "Tuore hylly",
+    "samplePressure": "Kokeile ensin",
+    "sampleTrust": "Laatu ensin"
+  },
+  "noPrescription": {
+    "title": "Ei reseptiä? Meillä on sinut.",
+    "subtitle": "Thaimaa vaatii lääkärikortin – mutta älä huoli, hoidamme kaiken paikan päällä. Kävele vain sisään.",
+    "step1Title": "Kävele sisään",
+    "step1Desc": "Ajanvarausta ei tarvita. Tule vain myymälään aina kun olemme auki.",
+    "step2Title": "Skannaa & täytä",
+    "step2Desc": "Pikalomake puhelimellasi – kestää 2 minuuttia. Henkilökuntamme opastaa sinua kaikissa vaiheissa.",
+    "step3Title": "Tehty",
+    "step3Desc": "Valitse itsesi, maksa ja nauti. Siinä se.",
+    "badge1": "100% laillista",
+    "badge2": "Kestää 2 min",
+    "badge3": "Ilmainen konsultaatio"
+  },
+  "staffPick": {
+    "badge": "Asiantuntijavalinta",
+    "reserve": "Kysy siitä",
+    "viewDetails": "Näytä tiedot"
+  },
+  "catalog": {
+    "title": "Mitä on varastossa",
+    "count": "{count} kantaa saatavilla",
+    "filter_all": "Kaikki",
+    "filter_relax": "Rentoutua",
+    "filter_energy": "Energiaa",
+    "filter_creative": "Luova",
+    "filter_euphoria": "Euforia",
+    "filter_sleep": "Nukkua",
+    "filter_focus": "Keskity",
+    "filter_happy": "Onnellinen",
+    "filter_uplifted": "Ylöstynyt",
+    "filter_talkative": "Puhelias",
+    "filter_hungry": "Nälkäinen",
+    "reserve": "Kysy siitä",
+    "soldOut": "Loppuunmyyty",
+    "noResults": "Yksikään rasitus ei vastaa tätä suodatinta tällä hetkellä.",
+    "activeFilter": "Suodatti {tagType}: {tagLabel}",
+    "clearFilter": "Tyhjennä suodatin"
+  },
+  "reviews": {
+    "subtitle": "{count} arvostelua Google -palvelussa",
+    "sourceGoogle": "kautta Google",
+    "showOriginal": "Alkuperäinen",
+    "showTranslation": "Käännös",
+    "translating": "Käännetään...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Paras apteekki Pattaya kädet alaspäin. Henkilökunta todella tuntee kantansa ja auttoi minua valitsemaan täydellisen. Siisti kauppa, hyvä meininki."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Erinomainen kauppa. Tiimi auttoi minua selvittämään sairauskortin siellä muutamassa minuutissa. Hyvä lajikevalikoima ja reilut hinnat. Suositeltava."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Niin helppoa. Olin hermostunut sairauskorttiasiasta, mutta he ohjasivat minut läpi kaiken. Suuri valikoima ja erittäin osaava henkilökunta."
+      }
+    }
+  },
+  "location": {
+    "title": "Löydä meidät",
+    "address": "Osoite",
+    "landmark": "Maamerkki",
+    "landmarkDesc": "5 minuutin kävelymatkan päässä Walking Street",
+    "directions": {
+      "title": "Paras reitti kävellen",
+      "step1": "Suuntaa Pattaya 13 Alley (Soi Hollywood) Walking Street:sta.",
+      "step2": "Pysy kujalla ja etsi LABS DISPENSARY -kylttejä.",
+      "step3": "Olemme vasemmalla puolellasi, Pattaya 13-kujan keskellä."
+    },
+    "hours": "Tuntia",
+    "hoursValueDynamic": "Päivittäin {open} - {close}",
+    "hoursValue24_7": "Avoinna 24/7",
+    "openInMaps": "Avaa Google Mapsissa"
+  },
+  "contact": {
+    "title": "Ota yhteyttä",
+    "subtitle": "Esitä kysymys tai tarkista, mitä on saatavilla – vastaamme yleensä 5 minuutin kuluessa työaikana."
+  },
+  "footer": {
+    "disclaimer": "Vain aikuiset 20+. Lisensoitu kannabiskauppa, joka toimii Thaimaan lääketieteellisen kannabiksen puitteissa.",
+    "rights": "Kaikki oikeudet pidätetään."
+  },
+  "quickMenu": {
+    "title": "Varastossa nyt",
+    "seeAll": "Katso luettelo",
+    "soldOut": "Loppuunmyyty"
+  },
+  "socialProof": {
+    "reviewCount": "{count} arvostelua Google -palvelussa",
+    "seeAll": "Katso kaikki arvostelut"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis konsultti ja kannabisoppaasi",
+    "guideDescription": "Dima valitsee henkilökohtaisesti jokaisen kantamamme kannan ja pitää silmällä, mitä hyllylle päätyy. Puhuu sujuvasti venäjää ja englantia. Ensimmäinen kerta? Hän opastaa sinut kaiken läpi – mitä odottaa, mitä valita, kuinka paljon aloittaa. Selkeä, rehellinen neuvo.",
+    "guidePhotoAlt": "Dima — Labs Cannabis konsultti"
+  },
+  "faq": {
+    "title": "Yleisiä kysymyksiä",
+    "q8": "Onko ilmaista näytettä vai voinko kokeilla ennen ostamista?",
+    "a8": "Kyllä. Tarjoamme ilmaisen näytteen myymälässä, joten voit tarkistaa tuoreuden ja laadun ennen ostopäätöstä.",
+    "q1": "Tarvitsenko reseptin tai lääkärikortin?",
+    "a1": "Thaimaa vaatii lääketieteellisen kortin kannabiksen ostamiseen. Autamme sinua hankkimaan sellaisen paikan päällä – se on nopea digitaalinen lomake puhelimessasi, kestää noin 2 minuuttia. Henkilökuntamme opastaa sinua jokaisen vaiheen läpi.",
+    "q2": "Onko se laillista turisteille?",
+    "a2": "Kyllä. Turistit voivat ostaa lääkekannabista laillisesti Thaimaasta lääketieteellisellä kortilla, jonka hankinnassa autamme sinua täällä kaupassa.",
+    "q3": "Mitä maksutapoja hyväksyt?",
+    "a3": "Käteinen (Thai Baht) ja QR-pankkisiirto. Ei luottokortteja tällä hetkellä.",
+    "q4": "Voinko tupakoida täällä vai onko se vain takeaway?",
+    "a4": "Vain takeaway. Myymme tuotetta henkilökohtaiseen käyttöön – paikan päällä ei ole tupakointialuetta.",
+    "q5": "Miten löydän sinut Walking Street:sta?",
+    "a5": "5 minuutin kävelymatka. Suuntaa Soi Hollywoodiin (Pattaya 13 Alley), etsi LABS -kyltit vasemmasta reunasta. Olemme noin keskellä kaistaa.",
+    "q6": "Mitkä ovat tunnisi?",
+    "a6": "Olemme avoinna joka päivä, ei ajanvarausta. Tarkista tunnit otsikosta – ne päivittyvät reaaliajassa.",
+    "q7": "En ole koskaan kokeillut kannabista. Voiko henkilökuntasi auttaa minua valinnassa?",
+    "a7": "Täysin. Kerro meille, mitä etsit – rentoutumista, energiaa, parempaa unta – ja me suosittelemme sinulle sopivaa rasitusta ja määrää."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Osta Labs Cannabis Pattaya",
+    "backToCatalog": "Takaisin valintaan",
+    "reserve": "Kysy tästä kannasta",
+    "reserveVia": "Ota yhteyttä kautta",
+    "call": "Soittaa",
+    "soldOut": "Loppuunmyyty",
+    "terpenes": "Terpene profiili",
+    "about": "Tietoja tästä kannasta",
+    "metaDescriptionFallback": "{name} {type} kannabiskanta. THC {thc}%. Saatavilla osoitteesta Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} kannabiskanta. Saatavilla osoitteesta Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Kannat"
+  },
+  "effectPage": {
+    "title": "{effect} Kannabiskannat in Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} Kannat — Labs Cannabis Pattaya",
+    "description": "Selaa {effect} kannabiskantoja Labs Cannabis -ambulanssissa Pattaya, Thaimaa. Kävele sisään, tapaamista ei tarvita.",
+    "h1": "{effect} Kannabiskannat Pattaya",
+    "intro": "Etsitkö tehosteita {effect}? Selaa nykyistä valikoimaamme Labs Cannabis, Pattaya. Kävele sisään – tapaamista ei tarvita.",
+    "breadcrumbStrains": "Kannat",
+    "reserve": "Kysy siitä",
+    "soldOut": "Loppuunmyyty",
+    "noResults": "Ei {effect} rasituksia juuri nyt. Tarkista pian uudelleen.",
+    "effect_relax": "Rentouttava",
+    "effect_energy": "Energisoiva",
+    "effect_creative": "Luova",
+    "effect_sleep": "Nukkua",
+    "effect_euphoria": "Euforinen",
+    "effect_focus": "Keskity",
+    "effect_happy": "Onnellinen",
+    "effect_uplifted": "Kohottavaa",
+    "effect_talkative": "Puhelias",
+    "effect_hungry": "Ruokahalu"
+  },
+  "typePage": {
+    "title": "{type} Kannabiskannat in Pattaya | Labs Cannabis",
+    "ogTitle": "{type} Kannat — Labs Cannabis Pattaya",
+    "description": "Selaa {type} kannabiskantoja Labs Cannabis -ambulanssissa Pattaya, Thaimaa. Kävele sisään, tapaamista ei tarvita.",
+    "h1": "{type} Kannabiskannat Pattaya",
+    "intro": "Selaa nykyistä valikoimaamme {type} kannabislajista Labs Cannabis, Pattaya. Kävele sisään – tapaamista ei tarvita.",
+    "breadcrumbStrains": "Kannat",
+    "reserve": "Kysy siitä",
+    "soldOut": "Loppuunmyyty",
+    "noResults": "Ei {type} -kantoja tällä hetkellä saatavilla.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybridi"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybridi",
+    "effect_relax": "Rentoutua",
+    "effect_energy": "Energiaa",
+    "effect_creative": "Luova",
+    "effect_sleep": "Nukkua",
+    "effect_euphoria": "Euforia",
+    "effect_focus": "Keskity",
+    "effect_happy": "Onnellinen",
+    "effect_uplifted": "Ylöstynyt",
+    "effect_talkative": "Puhelias",
+    "effect_hungry": "Nälkäinen",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} kannabiksen kanta Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} – Asiantuntijan valinta osoitteessa Labs Cannabis Pattaya",
+    "strainAltText": "{name} kannabiskanta saatavilla Labs Cannabis -ambulanssista Pattaya",
+    "tagType_effect": "Vaikutus",
+    "tagType_type": "Tyyppi",
+    "tagType_terpene": "Terpeeni"
+  }
+}

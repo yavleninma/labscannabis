@@ -77,9 +77,17 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
   };
 
   return (
-    <a
-      href={detailsHref}
-      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all"
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={() => window.location.assign(detailsHref)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          window.location.assign(detailsHref);
+        }
+      }}
+      className="group block bg-bg-card rounded-xl overflow-hidden border border-border hover:border-emerald-500/30 transition-all cursor-pointer"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {imageUrl ? (
@@ -163,8 +171,7 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
               {soldOutLabel}
             </span>
           ) : (
-            <button
-              type="button"
+            <span
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -173,10 +180,10 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
               className="text-[11px] sm:text-xs text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               {reserveLabel}
-            </button>
+            </span>
           )}
         </div>
       </div>
-    </a>
+    </div>
   );
 }

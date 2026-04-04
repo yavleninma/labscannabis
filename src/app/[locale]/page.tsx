@@ -10,9 +10,6 @@ import { LocationSection } from "@/components/LocationSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
-import { fetchGoogleReviews } from "@/lib/google-reviews";
-
-export const revalidate = 60;
 
 export default async function HomePage({
   params,
@@ -20,19 +17,18 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const [strains, staffPick, shopSettings, googleReviews] = await Promise.all([
+  const [strains, staffPick, shopSettings] = await Promise.all([
     getAllStrains(),
     getStaffPick(),
     getShopSettings(),
-    fetchGoogleReviews(),
   ]);
 
   return (
     <>
       <Hero />
       <SocialProofStrip
-        rating={googleReviews?.rating ?? shopSettings.googleRating}
-        reviewCount={googleReviews?.reviewCount ?? shopSettings.googleReviewCount}
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
       />
       {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} />
@@ -40,9 +36,8 @@ export default async function HomePage({
       <AboutTeam shopSettings={shopSettings} />
       <FAQ />
       <Reviews
-        rating={googleReviews?.rating ?? shopSettings.googleRating}
-        reviewCount={googleReviews?.reviewCount ?? shopSettings.googleReviewCount}
-        reviews={googleReviews?.reviews}
+        rating={shopSettings.googleRating}
+        reviewCount={shopSettings.googleReviewCount}
       />
       <LocationSection
         openTime={shopSettings.openTime}

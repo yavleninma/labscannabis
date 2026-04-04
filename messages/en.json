@@ -1,22 +1,39 @@
 {
   "meta": {
-    "title": "Labs Cannabis — Cannabis Shop in Pattaya",
-    "description": "Licensed cannabis shop in Pattaya. On-site medical card in 2 minutes, walk-in friendly, 5 min from Walking Street. Russian- and English-speaking staff.",
-    "ogTitle": "Labs Cannabis — Cannabis Shop Pattaya",
-    "ogDescription": "Licensed cannabis shop in Pattaya. Walk in, get your medical card on the spot, pick your strain. 5 min from Walking Street."
+    "title": "Labs Cannabis — Cannabis Shop in Pattaya | Try Before You Buy",
+    "description": "Licensed cannabis shop in Pattaya. Free sample in store, so you can try before you buy and check freshness first. On-site medical card in 2 minutes, 5 min from Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Cannabis Shop | Try Before You Buy",
+    "ogDescription": "Free sample in store, so you can try before you buy and check freshness first. Labs Cannabis is 5 min from Walking Street.",
+    "keywords": [
+      "cannabis shop pattaya",
+      "weed shop pattaya",
+      "dispensary pattaya",
+      "free sample cannabis shop",
+      "try before you buy cannabis",
+      "walk in dispensary pattaya"
+    ]
   },
   "header": {
     "openNow": "Open now",
     "closed": "Closed",
     "switching": "Switching",
-    "menu": "Catalog"
+    "menu": "Catalog",
+    "allLanguages": "All languages",
+    "searchLanguages": "Search languages",
+    "currentLanguage": "Current language"
   },
   "hero": {
     "title": "Cannabis shop in Pattaya",
     "subtitle": "Fresh buds & pre-rolls — 5 min from Walking Street. Walk in, we'll help you pick.",
     "getDirections": "Get Directions",
     "messageUs": "Message Us",
-    "seeMenu": "What's in Stock"
+    "seeMenu": "What's in Stock",
+    "sampleBadge": "Free sample in store",
+    "sampleTitle": "Try before you buy",
+    "sampleText": "Come in, check freshness and quality first. If you like it, then buy.",
+    "sampleFresh": "Fresh shelf",
+    "samplePressure": "Try first",
+    "sampleTrust": "Quality first"
   },
   "noPrescription": {
     "title": "No prescription? We've got you.",
@@ -61,7 +78,27 @@
     "sourceGoogle": "via Google",
     "showOriginal": "Original",
     "showTranslation": "Translation",
-    "translating": "Translating..."
+    "translating": "Translating...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Best dispensary in Pattaya hands down. The staff really knows their strains and helped me pick the perfect one. Clean shop, great vibes."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Excellent shop. The team helped me sort out the medical card right there in a couple of minutes. Good strain selection and fair prices. Recommended."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "So easy. I was nervous about the medical card thing, but they walked me through everything. Great selection and very knowledgeable staff."
+      }
+    }
   },
   "location": {
     "title": "Find Us",
@@ -99,11 +136,13 @@
   "about": {
     "guideName": "Dima",
     "guideRole": "Labs Cannabis consultant and your cannabis guide",
-    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
+    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. Clear, honest advice.",
     "guidePhotoAlt": "Dima — Labs Cannabis consultant"
   },
   "faq": {
     "title": "Common Questions",
+    "q8": "Is there a free sample or can I try before I buy?",
+    "a8": "Yes. We offer a free sample in store, so you can check freshness and quality before you decide to buy.",
     "q1": "Do I need a prescription or medical card?",
     "a1": "Thailand requires a medical card for cannabis purchases. We help you get one on the spot — it's a quick digital form on your phone, takes about 2 minutes. Our staff walks you through every step.",
     "q2": "Is it legal for tourists?",
@@ -117,7 +156,7 @@
     "q6": "What are your hours?",
     "a6": "We're open every day, no appointment needed. Check the hours in the header — they update in real time.",
     "q7": "I've never tried cannabis. Can your staff help me choose?",
-    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time."
+    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount that make sense for you."
   },
   "strainPage": {
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
