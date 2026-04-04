@@ -29,9 +29,19 @@ interface HeaderProps {
   isOpen24h?: boolean;
 }
 
+function localeMatchesSearch(candidateLocale: AppLocale, searchTerm: string) {
+  if (!searchTerm) {
+    return true;
+  }
+
+  const definition = localeDefinitions[candidateLocale];
+  const haystack = `${definition.nativeLabel} ${definition.englishLabel} ${candidateLocale}`.toLowerCase();
+
+  return haystack.includes(searchTerm);
+}
+
 export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
-  const [pendingLocale, setPendingLocale] = useState<AppLocale | null>(null);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -78,19 +88,20 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
     };
   }, [isPickerOpen]);
 
-  const filteredSecondaryLocales = useMemo(() => {
-    if (!deferredSearchValue) {
-      return secondaryLocaleCodes;
-    }
-
-    return secondaryLocaleCodes.filter((candidateLocale) => {
-      const definition = localeDefinitions[candidateLocale];
-      const haystack = `${definition.nativeLabel} ${definition.englishLabel} ${candidateLocale}`
-        .toLowerCase();
-
-      return haystack.includes(deferredSearchValue);
-    });
-  }, [deferredSearchValue]);
+  const filteredPrimaryLocales = useMemo(
+    () =>
+      primaryLocaleCodes.filter((candidateLocale) =>
+        localeMatchesSearch(candidateLocale, deferredSearchValue),
+      ),
+    [deferredSearchValue],
+  );
+  const filteredSecondaryLocales = useMemo(
+    () =>
+      secondaryLocaleCodes.filter((candidateLocale) =>
+        localeMatchesSearch(candidateLocale, deferredSearchValue),
+      ),
+    [deferredSearchValue],
+  );
 
   function switchLocale(nextLocale: AppLocale) {
     if (nextLocale === locale || isPending) {
@@ -102,7 +113,6 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
     const localizedPathname = buildLocalizedPathname(pathname, nextLocale);
     const href = `${localizedPathname}${query ? `?${query}` : ""}${hash}`;
 
-    setPendingLocale(nextLocale);
     setIsPickerOpen(false);
     startTransition(() => {
       router.replace(href);
@@ -111,6 +121,7 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
 
   const currentLocaleDefinition = localeDefinitions[locale];
   const pickerPositionStyle = isRtl ? { left: 0 } : { right: 0 };
+  const hasVisibleLocales = filteredPrimaryLocales.length > 0 || filteredSecondaryLocales.length > 0;
 
   return (
     <header
@@ -135,41 +146,20 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
           <OpenIndicator openTime={openTime} closeTime={closeTime} isOpen24h={isOpen24h} />
           <ThemeToggle />
 
-          <div ref={pickerRef} className="relative flex items-center gap-1 text-[11px] sm:text-xs">
-            <div className="hidden items-center gap-1 sm:flex">
-              {primaryLocaleCodes.map((primaryLocale) => (
-                <button
-                  key={primaryLocale}
-                  type="button"
-                  onClick={() => switchLocale(primaryLocale)}
-                  disabled={isPending}
-                  aria-busy={isPending}
-                  aria-current={locale === primaryLocale ? "page" : undefined}
-                  className={`rounded-full px-2.5 py-1.5 transition-colors disabled:cursor-not-allowed ${
-                    locale === primaryLocale
-                      ? "border border-emerald-500/30 bg-emerald-500/15 text-emerald-600"
-                      : "text-text-muted hover:text-text-secondary"
-                  } ${pendingLocale === primaryLocale && isPending ? "animate-pulse" : ""}`}
-                >
-                  {primaryLocale.toUpperCase()}
-                </button>
-              ))}
-            </div>
-
+          <div ref={pickerRef} className="relative text-[11px] sm:text-xs">
             <button
               type="button"
               onClick={() => setIsPickerOpen((value) => !value)}
               disabled={isPending}
               aria-expanded={isPickerOpen}
               aria-label={tHeader("allLanguages")}
-              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 transition-colors ${
+              className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm ring-1 transition-colors ${
                 isPickerOpen
-                  ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700"
-                  : "border-border bg-bg-card text-text-secondary hover:text-text-primary"
+                  ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/25"
+                  : "bg-bg-card/90 text-text-secondary ring-border/50 hover:text-text-primary"
               }`}
             >
-              <span className="hidden sm:inline">{currentLocaleDefinition.nativeLabel}</span>
-              <span className="sm:hidden">{locale.toUpperCase()}</span>
+              <span className="max-w-[8.5rem] truncate">{currentLocaleDefinition.nativeLabel}</span>
               <svg
                 className={`h-3.5 w-3.5 transition-transform ${isPickerOpen ? "rotate-180" : ""}`}
                 fill="none"
@@ -189,94 +179,99 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
 
             {isPickerOpen && (
               <div
-                className="absolute top-[calc(100%+0.75rem)] z-50 w-[min(88vw,20rem)] overflow-hidden rounded-2xl border border-border bg-bg-card/95 p-3 shadow-[0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl"
+                className="absolute top-[calc(100%+0.55rem)] z-50 w-[min(88vw,19rem)] overflow-hidden rounded-[1.75rem] bg-bg-card/95 p-3 shadow-[0_24px_60px_rgba(0,0,0,0.18)] ring-1 ring-border/50 backdrop-blur-xl"
                 style={pickerPositionStyle}
               >
-                <div className="mb-3 rounded-2xl border border-emerald-500/20 bg-emerald-500/8 px-3 py-2">
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted">
-                    {tHeader("currentLanguage")}
-                  </p>
-                  <p className="mt-1 text-sm font-medium text-text-primary">
+                <div className="mb-2 px-1">
+                  <p className="text-sm font-medium text-text-primary">
                     {currentLocaleDefinition.nativeLabel}
-                    <span className="ml-2 text-text-muted">
+                    <span className={`${isRtl ? "mr-2" : "ml-2"} text-text-muted`}>
                       {currentLocaleDefinition.englishLabel}
                     </span>
                   </p>
                 </div>
 
-                <label className="mb-3 block">
+                <label className="mb-2 block">
                   <span className="sr-only">{tHeader("searchLanguages")}</span>
                   <input
                     value={searchValue}
                     onChange={(event) => setSearchValue(event.target.value)}
                     placeholder={tHeader("searchLanguages")}
-                    className="w-full rounded-xl border border-border bg-bg-primary px-3 py-2 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-emerald-500/40"
+                    className="w-full rounded-2xl bg-bg-primary/85 px-3 py-2.5 text-sm text-text-primary outline-none ring-1 ring-border/45 transition-colors placeholder:text-text-muted focus:ring-emerald-500/25"
                   />
                 </label>
 
-                <div className="max-h-72 space-y-3 overflow-y-auto pr-1">
-                  <div>
-                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-text-muted">
-                      {tHeader("menu")}
-                    </p>
-                    <div className="space-y-1">
-                      {primaryLocaleCodes.map((primaryLocale) => {
-                        const definition = localeDefinitions[primaryLocale];
+                <div className="max-h-72 overflow-y-auto px-1 pb-1 pr-2">
+                  <div className="space-y-1">
+                    {filteredPrimaryLocales.map((primaryLocale) => {
+                      const definition = localeDefinitions[primaryLocale];
+                      const isActive = primaryLocale === locale;
 
-                        return (
-                          <button
-                            key={primaryLocale}
-                            type="button"
-                            onClick={() => switchLocale(primaryLocale)}
-                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm transition-colors ${
-                              primaryLocale === locale
-                                ? "bg-emerald-500/12 text-emerald-700"
-                                : "text-text-secondary hover:bg-bg-primary hover:text-text-primary"
-                            }`}
-                          >
-                            <span className="font-medium">{definition.nativeLabel}</span>
-                            <span className="text-text-muted">{primaryLocale.toUpperCase()}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="mb-2 text-[10px] uppercase tracking-[0.18em] text-text-muted">
-                      {tHeader("allLanguages")}
-                    </p>
-                    <div className="space-y-1">
-                      {filteredSecondaryLocales.map((secondaryLocale) => {
-                        const definition = localeDefinitions[secondaryLocale];
-
-                        return (
-                          <button
-                            key={secondaryLocale}
-                            type="button"
-                            onClick={() => switchLocale(secondaryLocale)}
-                            className="flex w-full items-center justify-between rounded-xl px-3 py-2 text-sm text-text-secondary transition-colors hover:bg-bg-primary hover:text-text-primary"
-                          >
-                            <span className="min-w-0 text-left">
-                              <span className="block truncate font-medium text-text-primary">
-                                {definition.nativeLabel}
-                              </span>
-                              <span className="block truncate text-xs text-text-muted">
-                                {definition.englishLabel}
-                              </span>
+                      return (
+                        <button
+                          key={primaryLocale}
+                          type="button"
+                          onClick={() => switchLocale(primaryLocale)}
+                          className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm transition-colors ${
+                            isActive
+                              ? "bg-emerald-500/12 text-emerald-700"
+                              : "bg-emerald-500/[0.06] text-text-secondary hover:bg-emerald-500/[0.1] hover:text-text-primary"
+                          }`}
+                        >
+                          <span className="min-w-0 text-left">
+                            <span className={`block truncate font-medium ${isActive ? "text-emerald-700" : "text-text-primary"}`}>
+                              {definition.nativeLabel}
                             </span>
-                            <span className="ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] text-text-muted">
-                              {secondaryLocale}
+                            <span className={`block truncate text-xs ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                              {definition.englishLabel}
                             </span>
-                          </button>
-                        );
-                      })}
-                      {filteredSecondaryLocales.length === 0 && (
-                        <p className="rounded-xl border border-dashed border-border px-3 py-4 text-sm text-text-muted">
-                          {tHeader("searchLanguages")}
-                        </p>
-                      )}
-                    </div>
+                          </span>
+                          <span className={`ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                            {primaryLocale}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    {filteredPrimaryLocales.length > 0 && filteredSecondaryLocales.length > 0 && (
+                      <div className="h-2" aria-hidden />
+                    )}
+
+                    {filteredSecondaryLocales.map((secondaryLocale) => {
+                      const definition = localeDefinitions[secondaryLocale];
+                      const isActive = secondaryLocale === locale;
+
+                      return (
+                        <button
+                          key={secondaryLocale}
+                          type="button"
+                          onClick={() => switchLocale(secondaryLocale)}
+                          className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm transition-colors ${
+                            isActive
+                              ? "bg-emerald-500/12 text-emerald-700"
+                              : "text-text-secondary hover:bg-bg-primary/85 hover:text-text-primary"
+                          }`}
+                        >
+                          <span className="min-w-0 text-left">
+                            <span className={`block truncate font-medium ${isActive ? "text-emerald-700" : "text-text-primary"}`}>
+                              {definition.nativeLabel}
+                            </span>
+                            <span className={`block truncate text-xs ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                              {definition.englishLabel}
+                            </span>
+                          </span>
+                          <span className={`ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                            {secondaryLocale}
+                          </span>
+                        </button>
+                      );
+                    })}
+
+                    {!hasVisibleLocales && (
+                      <p className="px-3 py-4 text-sm text-text-muted">
+                        {tHeader("searchLanguages")}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
