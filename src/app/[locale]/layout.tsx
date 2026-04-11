@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
 import { Header } from "@/components/Header";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import { JsonLd } from "@/components/JsonLd";
 import { getShopSettings } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
@@ -106,7 +107,13 @@ export default async function LocaleLayout({
             googleRating={shopSettings.googleRating}
             googleReviewCount={shopSettings.googleReviewCount}
             phone={shopSettings.phone}
+            lineUrl={shopSettings.lineUrl}
+            whatsappUrl={shopSettings.whatsappUrl}
+            telegramUrl={shopSettings.telegramUrl}
+            deliveryEnabled={shopSettings.deliveryEnabled}
+            pickupEnabled={shopSettings.pickupEnabled}
           />
+          <AnnouncementBar announcement={shopSettings.announcement} />
           <Header
             openTime={shopSettings.openTime}
             closeTime={shopSettings.closeTime}

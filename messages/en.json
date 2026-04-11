@@ -1,9 +1,9 @@
 {
   "meta": {
     "title": "Labs Cannabis — Cannabis Shop in Pattaya",
-    "description": "Licensed cannabis shop in Pattaya. On-site medical card in 2 minutes, walk-in friendly, 5 min from Walking Street. Russian- and English-speaking staff.",
+    "description": "Licensed cannabis shop in Pattaya. Walk-in, pickup & delivery across Pattaya. On-site medical card in 2 minutes, 5 min from Walking Street. Russian- and English-speaking staff.",
     "ogTitle": "Labs Cannabis — Cannabis Shop Pattaya",
-    "ogDescription": "Licensed cannabis shop in Pattaya. Walk in, get your medical card on the spot, pick your strain. 5 min from Walking Street."
+    "ogDescription": "Licensed cannabis shop in Pattaya. Walk in, pick up your order, or get delivery across Pattaya. Medical card on the spot. 5 min from Walking Street."
   },
   "header": {
     "openNow": "Open now",
@@ -96,6 +96,34 @@
     "reviewCount": "{count} reviews on Google",
     "seeAll": "See all reviews"
   },
+  "fulfillment": {
+    "title": "3 ways to get your buds",
+    "subtitle": "Walk in, pick it up, or have it delivered — whichever works for your day.",
+    "walkin": {
+      "title": "Walk in",
+      "desc": "Drop by any time we're open. No appointment, medical card sorted on the spot.",
+      "point1": "No appointment needed",
+      "point2": "Medical card in 2 minutes",
+      "point3": "5 min from Walking Street",
+      "cta": "Get directions"
+    },
+    "pickup": {
+      "title": "Pickup",
+      "desc": "Message us in advance and we'll have your order ready when you arrive — zero waiting.",
+      "point1": "Message ahead",
+      "point2": "Ready when you arrive",
+      "point3": "Skip the counter",
+      "cta": "Reserve via chat"
+    },
+    "delivery": {
+      "title": "Delivery",
+      "desc": "We deliver across Pattaya. Tell us what you want — we'll confirm availability and timing in chat.",
+      "point1": "Across Pattaya",
+      "point2": "Pay on arrival",
+      "point3": "Discreet handoff",
+      "cta": "Order via chat"
+    }
+  },
   "about": {
     "guideName": "Dima",
     "guideRole": "Labs Cannabis consultant and your cannabis guide",
@@ -117,7 +145,11 @@
     "q6": "What are your hours?",
     "a6": "We're open every day, no appointment needed. Check the hours in the header — they update in real time.",
     "q7": "I've never tried cannabis. Can your staff help me choose?",
-    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time."
+    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time.",
+    "q8": "Do you deliver?",
+    "a8": "Yes — we deliver across Pattaya. Message us on LINE, WhatsApp or Telegram, tell us what you're after, and we'll confirm availability, timing and how to pay. No online checkout — we'll sort it out in chat.",
+    "q9": "Can I order ahead and pick it up?",
+    "a9": "Yes. Message us in advance with what you'd like, and we'll have it ready when you arrive — no waiting at the counter. Same chat works for questions and reservations."
   },
   "strainPage": {
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",

@@ -1,6 +1,7 @@
 import { Hero } from "@/components/Hero";
 import { SocialProofStrip } from "@/components/SocialProofStrip";
 import { NoPrescription } from "@/components/NoPrescription";
+import { FulfillmentOptions } from "@/components/FulfillmentOptions";
 import { AboutTeam } from "@/components/AboutTeam";
 import { FAQ } from "@/components/FAQ";
 import { Reviews } from "@/components/Reviews";
@@ -27,14 +28,17 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero />
+      <Hero shopSettings={shopSettings} locale={locale} />
       <SocialProofStrip
         rating={shopSettings.googleRating}
         reviewCount={shopSettings.googleReviewCount}
       />
-      {staffPick && <StaffPick strain={staffPick} locale={locale} />}
-      <StrainCatalog strains={strains} />
+      {staffPick && (
+        <StaffPick strain={staffPick} locale={locale} shopSettings={shopSettings} />
+      )}
+      <StrainCatalog strains={strains} shopSettings={shopSettings} />
       <NoPrescription />
+      <FulfillmentOptions shopSettings={shopSettings} locale={locale} />
       <AboutTeam shopSettings={shopSettings} />
       <FAQ />
       <Reviews

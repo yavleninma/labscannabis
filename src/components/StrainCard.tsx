@@ -48,9 +48,10 @@ interface StrainCardProps {
   reserveLabel: string;
   soldOutLabel: string;
   locale: string;
+  reserveUrl: string | null;
 }
 
-export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }: StrainCardProps) {
+export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale, reserveUrl }: StrainCardProps) {
   const tCommon = useTranslations("strainCommon");
   const imageUrl = strain.image ? urlFor(strain.image)?.width(400).height(300).url() : null;
   const gradient = gradients[index % gradients.length];
@@ -66,10 +67,6 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
   const extraEffectsCount = Math.max(0, effectEntries.length - 1);
   const hasThc = typeof strain.thcPercent === "number";
   const hasCbd = typeof strain.cbdPercent === "number";
-
-  // TODO: Replace with actual messenger URL
-  // TODO: Replace with actual messenger URL with pre-filled message
-  const reserveUrl = `#contact`;
 
   const openTagFilter = (href: string) => {
     window.location.assign(href);
@@ -167,18 +164,19 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale }
             <span className="text-[11px] sm:text-xs text-text-muted px-2.5 sm:px-3 py-1.5 rounded-lg bg-bg-secondary cursor-not-allowed whitespace-nowrap">
               {soldOutLabel}
             </span>
-          ) : (
-            <span
+          ) : reserveUrl ? (
+            <a
+              href={reserveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={(e) => {
-                e.preventDefault();
                 e.stopPropagation();
-                window.location.href = reserveUrl;
               }}
               className="text-[11px] sm:text-xs text-emerald-400 border border-emerald-500/30 px-2.5 sm:px-3 py-1.5 rounded-lg hover:bg-emerald-500/10 transition-colors cursor-pointer whitespace-nowrap"
             >
               {reserveLabel}
-            </span>
-          )}
+            </a>
+          ) : null}
         </div>
       </div>
     </div>

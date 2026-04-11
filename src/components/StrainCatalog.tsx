@@ -3,8 +3,9 @@
 import { useMemo } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import type { Strain } from "@/lib/mock-data";
+import type { Strain, ShopSettings } from "@/lib/mock-data";
 import { normalizeTagValue, parseTagFromSearchParams, strainMatchesTag } from "@/lib/strain-tags";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 import { StrainCard } from "./StrainCard";
 
 const effects = [
@@ -37,9 +38,10 @@ const effectEmoji: Record<string, string> = {
 
 interface StrainCatalogProps {
   strains: Strain[];
+  shopSettings: ShopSettings;
 }
 
-export function StrainCatalog({ strains }: StrainCatalogProps) {
+export function StrainCatalog({ strains, shopSettings }: StrainCatalogProps) {
   const t = useTranslations("catalog");
   const tCommon = useTranslations("strainCommon");
   const locale = useLocale();
@@ -132,16 +134,23 @@ export function StrainCatalog({ strains }: StrainCatalogProps) {
         )}
 
         <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-          {filtered.map((strain, i) => (
-            <StrainCard
-              key={strain._id}
-              strain={strain}
-              index={i}
-              reserveLabel={t("reserve")}
-              soldOutLabel={t("soldOut")}
-              locale={locale}
-            />
-          ))}
+          {filtered.map((strain, i) => {
+            const links = buildContactLinks(shopSettings, locale as ContactLocale, {
+              kind: "purchase",
+              productName: strain.name,
+            });
+            return (
+              <StrainCard
+                key={strain._id}
+                strain={strain}
+                index={i}
+                reserveLabel={t("reserve")}
+                soldOutLabel={t("soldOut")}
+                locale={locale}
+                reserveUrl={links.reserve}
+              />
+            );
+          })}
         </div>
 
         {filtered.length === 0 && (

@@ -59,6 +59,9 @@ export interface ShopSettings {
   telegramId?: string | null;
   phone?: string | null;
   announcement: string | null;
+  deliveryEnabled?: boolean;
+  pickupEnabled?: boolean;
+  fulfillmentNote?: string | null;
   googleRating?: number;
   googleReviewCount?: number;
   guidePhoto?: { asset: { _ref: string } } | null;
@@ -296,6 +299,9 @@ export const mockShopSettings: ShopSettings = {
   telegramId: null,
   phone: "+66 66 080 6784",
   announcement: null,
+  deliveryEnabled: true,
+  pickupEnabled: true,
+  fulfillmentNote: null,
   googleRating: 4.8,
   googleReviewCount: 91,
   guidePhoto: null,
