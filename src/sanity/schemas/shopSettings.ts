@@ -74,6 +74,29 @@ export const shopSettings = defineType({
       description: "Необязательный текст объявления вверху сайта",
     }),
     defineField({
+      name: "deliveryEnabled",
+      title: "Каналы выдачи — Доставка включена",
+      type: "boolean",
+      initialValue: true,
+      description:
+        "Показывать карточку доставки на главной. Мягкая подача — без зон и цен, клиент пишет в мессенджер.",
+    }),
+    defineField({
+      name: "pickupEnabled",
+      title: "Каналы выдачи — Самовывоз включён",
+      type: "boolean",
+      initialValue: true,
+      description:
+        "Показывать карточку самовывоза на главной. Клиент пишет заранее и забирает готовый заказ.",
+    }),
+    defineField({
+      name: "fulfillmentNote",
+      title: "Каналы выдачи — Заметка",
+      type: "string",
+      description:
+        "Необязательный короткий текст под заголовком блока (например: «Доставка только до 22:00»).",
+    }),
+    defineField({
       name: "googleRating",
       title: "Рейтинг Google",
       type: "number",

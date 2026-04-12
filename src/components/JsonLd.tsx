@@ -12,6 +12,11 @@ interface JsonLdProps {
   googleRating?: number;
   googleReviewCount?: number;
   phone?: string | null;
+  lineUrl?: string | null;
+  whatsappUrl?: string | null;
+  telegramUrl?: string | null;
+  deliveryEnabled?: boolean;
+  pickupEnabled?: boolean;
 }
 
 const descriptions: Record<Locale, string> = {
@@ -28,12 +33,26 @@ export async function JsonLd({
   googleRating,
   googleReviewCount,
   phone,
+  lineUrl,
+  whatsappUrl,
+  telegramUrl,
+  deliveryEnabled = true,
+  pickupEnabled = true,
 }: JsonLdProps) {
   const t = await getTranslations({ locale, namespace: "faq" });
 
   const baseUrl = getSiteUrl();
   const rating = googleRating ?? DEFAULT_GOOGLE_RATING;
   const reviewCount = googleReviewCount ?? DEFAULT_GOOGLE_REVIEW_COUNT;
+
+  const hasDeliveryMethod = [
+    ...(pickupEnabled ? ["https://schema.org/OnSitePickup"] : []),
+    ...(deliveryEnabled ? ["https://schema.org/DeliveryModeOwnFleet"] : []),
+  ];
+
+  const sameAs = [lineUrl, whatsappUrl, telegramUrl]
+    .map((value) => value?.trim())
+    .filter((value): value is string => Boolean(value));
 
   const localBusinessLd = {
     "@context": "https://schema.org",
@@ -43,7 +62,7 @@ export async function JsonLd({
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
     ...(phone ? { telephone: phone } : {}),
-    image: `${baseUrl}/og-image.svg`,
+    image: `${baseUrl}/${locale}/opengraph-image`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "32 Pattaya 13 Alley (Soi Hollywood)",
@@ -57,6 +76,12 @@ export async function JsonLd({
       latitude: 12.9236,
       longitude: 100.8825,
     },
+    areaServed: {
+      "@type": "City",
+      name: "Pattaya",
+    },
+    ...(hasDeliveryMethod.length > 0 ? { hasDeliveryMethod } : {}),
+    ...(sameAs.length > 0 ? { sameAs } : {}),
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: [
@@ -82,7 +107,7 @@ export async function JsonLd({
     paymentAccepted: "Cash, QR Bank Transfer",
   };
 
-  const faqKeys = ["1", "2", "3", "4", "5", "6", "7"] as const;
+  const faqKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
   const faqLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",

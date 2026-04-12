@@ -1,8 +1,9 @@
 import { getTranslations } from "next-intl/server";
 import { translateText } from "@/lib/auto-translate";
-import type { Strain } from "@/lib/mock-data";
+import type { Strain, ShopSettings } from "@/lib/mock-data";
 import { getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 import { urlFor } from "@/sanity/image";
 
 const effectEmoji: Record<string, string> = {
@@ -21,9 +22,10 @@ const effectEmoji: Record<string, string> = {
 interface StaffPickProps {
   strain: Strain;
   locale: string;
+  shopSettings: ShopSettings;
 }
 
-export async function StaffPick({ strain, locale }: StaffPickProps) {
+export async function StaffPick({ strain, locale, shopSettings }: StaffPickProps) {
   const t = await getTranslations({ locale, namespace: "staffPick" });
   const tCommon = await getTranslations({ locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(600).height(400).url() : null;
@@ -43,6 +45,11 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
     locale === "en" || !localizedShortDescription
       ? localizedShortDescription
       : await translateText(localizedShortDescription, locale as "ru" | "th");
+  const reserveLinks = buildContactLinks(shopSettings, locale as ContactLocale, {
+    kind: "purchase",
+    productName: strain.name,
+  });
+  const reserveHref = reserveLinks.reserve;
 
   return (
     <section className="py-8 px-4">
@@ -110,13 +117,16 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
                 <span className="text-2xl font-bold text-emerald-400">
                   {tCommon("pricePerGram", { price: strain.pricePerGram })}
                 </span>
-                {/* TODO: Replace with actual messenger URL */}
-                <a
-                  href="#contact"
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
-                >
-                  {t("reserve")}
-                </a>
+                {reserveHref && (
+                  <a
+                    href={reserveHref}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    {t("reserve")}
+                  </a>
+                )}
               </div>
               {terpeneEntries.length > 0 && (
                 <div className="mt-4 flex flex-wrap gap-1.5">

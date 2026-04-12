@@ -2,7 +2,7 @@ import type { ShopSettings } from "@/lib/mock-data";
 
 export type ContactLocale = "en" | "ru" | "th";
 
-type MessageKind = "general" | "purchase";
+type MessageKind = "general" | "purchase" | "pickup" | "delivery";
 
 export interface ContactLinks {
   phone: string | null;
@@ -65,6 +65,26 @@ export function createContactMessage(
       return `สวัสดีครับ/ค่ะ สนใจซื้อ "${safeName}" รบกวนแจ้งสต็อกและรายละเอียดเพิ่มเติมด้วยครับ/ค่ะ`;
     }
     return `Hello! We would like to buy "${safeName}". Could you please confirm availability and details?`;
+  }
+
+  if (kind === "pickup") {
+    if (locale === "ru") {
+      return "Здравствуйте! Хочу забрать заказ в магазине. Подскажите, что есть в наличии.";
+    }
+    if (locale === "th") {
+      return "สวัสดีครับ/ค่ะ อยากรับสินค้าที่ร้าน รบกวนแจ้งสต็อกที่มีด้วยครับ/ค่ะ";
+    }
+    return "Hello! I would like to pick up an order at the shop. Could you share what's in stock?";
+  }
+
+  if (kind === "delivery") {
+    if (locale === "ru") {
+      return "Здравствуйте! Интересует доставка по Паттайе. Подскажите наличие и как оформить.";
+    }
+    if (locale === "th") {
+      return "สวัสดีครับ/ค่ะ สนใจจัดส่งในพัทยา รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ";
+    }
+    return "Hello! I'm interested in delivery in Pattaya. Could you share availability and how to order?";
   }
 
   if (locale === "ru") return "Здравствуйте! Хочу уточнить наличие и цену.";
