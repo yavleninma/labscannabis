@@ -26,14 +26,6 @@ const strainProjection = `{
   fullDescription,
   fullDescriptionRu,
   fullDescriptionTh,
-  translations[]{
-    locale,
-    shortDescription,
-    fullDescription,
-    sourceHash,
-    translatedAt,
-    model
-  },
   terpenes,
   terpeneProfile,
   isStaffPick,

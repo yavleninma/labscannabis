@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "migrate:strain-profiles": "node scripts/migrate-strain-profiles.mjs",
-    "generate:locales": "node scripts/generate-locale-messages.mjs",
-    "backfill:strain-translations": "node scripts/backfill-strain-translations.mjs"
+    "migrate:strain-profiles": "node scripts/migrate-strain-profiles.mjs"
   },
   "repository": {
     "type": "git",

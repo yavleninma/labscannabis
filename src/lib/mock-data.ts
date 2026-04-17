@@ -1,14 +1,4 @@
-import type { AutomatedLocale } from "@/i18n/config";
 import type { PortableTextBlock } from "./portable-text";
-
-export interface StrainTranslation {
-  locale: AutomatedLocale;
-  shortDescription?: string | null;
-  fullDescription?: PortableTextBlock[] | null;
-  sourceHash?: string | null;
-  translatedAt?: string | null;
-  model?: string | null;
-}
 
 export interface Strain {
   _id: string;
@@ -52,7 +42,6 @@ export interface Strain {
   fullDescription: PortableTextBlock[] | null;
   fullDescriptionRu?: PortableTextBlock[] | null;
   fullDescriptionTh?: PortableTextBlock[] | null;
-  translations?: StrainTranslation[] | null;
   terpenes: string[] | null;
   terpeneProfile?: { name: string; amount: number }[] | null;
   isStaffPick: boolean;

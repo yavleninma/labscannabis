@@ -31,9 +31,7 @@ export default async function HomePage({
         rating={shopSettings.googleRating}
         reviewCount={shopSettings.googleReviewCount}
       />
-      {staffPick && (
-        <StaffPick strain={staffPick} locale={locale} shopSettings={shopSettings} />
-      )}
+      {staffPick && <StaffPick strain={staffPick} locale={locale} />}
       <StrainCatalog strains={strains} shopSettings={shopSettings} />
       <NoPrescription />
       <FulfillmentOptions shopSettings={shopSettings} locale={locale} />
