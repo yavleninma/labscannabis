@@ -50,17 +50,22 @@ export async function JsonLd({
     ...(deliveryEnabled ? ["https://schema.org/DeliveryModeOwnFleet"] : []),
   ];
 
-  const sameAs = [lineUrl, whatsappUrl, telegramUrl]
+  const socialLinks = [lineUrl, whatsappUrl, telegramUrl]
     .map((value) => value?.trim())
     .filter((value): value is string => Boolean(value));
+  const alternateLocaleUrls = (["en", "ru", "th"] as const)
+    .filter((l) => l !== locale)
+    .map((l) => `${baseUrl}/${l}`);
+  const sameAs = [...alternateLocaleUrls, ...socialLinks];
 
   const localBusinessLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": `${baseUrl}/${locale}`,
+    "@id": `${baseUrl}/#business`,
     name: "Labs Cannabis",
     description: descriptions[locale],
     url: `${baseUrl}/${locale}`,
+    inLanguage: locale,
     ...(phone ? { telephone: phone } : {}),
     image: `${baseUrl}/${locale}/opengraph-image`,
     address: {
@@ -81,7 +86,7 @@ export async function JsonLd({
       name: "Pattaya",
     },
     ...(hasDeliveryMethod.length > 0 ? { hasDeliveryMethod } : {}),
-    ...(sameAs.length > 0 ? { sameAs } : {}),
+    sameAs,
     openingHoursSpecification: {
       "@type": "OpeningHoursSpecification",
       dayOfWeek: [
@@ -107,6 +112,16 @@ export async function JsonLd({
     paymentAccepted: "Cash, QR Bank Transfer",
   };
 
+  const organizationLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": `${baseUrl}/#organization`,
+    name: "Labs Cannabis",
+    url: baseUrl,
+    logo: `${baseUrl}/favicon.svg`,
+    sameAs,
+  };
+
   const faqKeys = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] as const;
   const faqLd = {
     "@context": "https://schema.org",
@@ -123,6 +138,10 @@ export async function JsonLd({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd).replace(/</g, "\\u003c") }}
+      />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd).replace(/</g, "\\u003c") }}

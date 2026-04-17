@@ -89,6 +89,7 @@ export async function generateMetadata({
         en: `${baseUrl}/en/strains/${slug}`,
         ru: `${baseUrl}/ru/strains/${slug}`,
         th: `${baseUrl}/th/strains/${slug}`,
+        "x-default": `${baseUrl}/en/strains/${slug}`,
       },
     },
     openGraph: {
@@ -113,6 +114,26 @@ export default async function StrainPage({
 
   const t = await getTranslations({ locale: locale, namespace: "strainPage" });
   const tCommon = await getTranslations({ locale: locale, namespace: "strainCommon" });
+  const tCatalog = await getTranslations({ locale: locale, namespace: "catalog" });
+  const baseUrl = getSiteUrl();
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: tCatalog("title"),
+        item: `${baseUrl}/${locale}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: strain.name,
+        item: `${baseUrl}/${locale}/strains/${slug}`,
+      },
+    ],
+  };
   const imageUrl = strain.image ? urlFor(strain.image)?.width(800).height(600).url() : null;
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as Locale);
   const localizedFullDescription = getLocalizedFullDescription(strain, locale as Locale);
@@ -148,6 +169,10 @@ export default async function StrainPage({
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd).replace(/</g, "\\u003c") }}
+      />
       <article className="pt-20 pb-12 px-4 max-w-4xl mx-auto">
         <a
           href={`/${locale}#catalog`}

@@ -1,5 +1,6 @@
 export interface Strain {
   _id: string;
+  _updatedAt?: string;
   name: string;
   slug: { current: string };
   image: { asset: { _ref: string } } | null;

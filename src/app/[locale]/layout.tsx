@@ -39,6 +39,7 @@ export async function generateMetadata({
         en: `${baseUrl}/en`,
         ru: `${baseUrl}/ru`,
         th: `${baseUrl}/th`,
+        "x-default": `${baseUrl}/en`,
       },
     },
     openGraph: {
@@ -82,19 +83,6 @@ export default async function LocaleLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&family=Noto+Serif:wght@400;500;600;700;800&family=Noto+Serif+Thai:wght@400;500;600;700&display=swap"
           rel="stylesheet"
-        />
-        {routing.locales.map((l) => (
-          <link
-            key={l}
-            rel="alternate"
-            hrefLang={l}
-            href={`${getSiteUrl()}/${l}`}
-          />
-        ))}
-        <link
-          rel="alternate"
-          hrefLang="x-default"
-          href={`${getSiteUrl()}/en`}
         />
       </head>
       <body className="bg-bg-primary text-text-primary antialiased min-h-screen">

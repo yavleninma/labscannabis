@@ -12,7 +12,7 @@ export async function getAllStrains(): Promise<Strain[]> {
   try {
     const strains = await sanityClient.fetch<Strain[]>(
       `*[_type == "strain" && isHidden != true] | order(sortOrder asc) {
-        _id, name, slug, image, type, effect, effects,
+        _id, _updatedAt, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
         fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
@@ -33,7 +33,7 @@ export async function getStrainBySlug(slug: string): Promise<Strain | null> {
   try {
     const strain = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain" && slug.current == $slug && isHidden != true][0] {
-        _id, name, slug, image, type, effect, effects,
+        _id, _updatedAt, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
         fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
@@ -55,7 +55,7 @@ export async function getStaffPick(): Promise<Strain | null> {
   try {
     const staffPick = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain" && isStaffPick == true && isHidden != true] | order(sortOrder asc)[0] {
-        _id, name, slug, image, type, effect, effects,
+        _id, _updatedAt, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
         fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
@@ -70,7 +70,7 @@ export async function getStaffPick(): Promise<Strain | null> {
 
     const onlyStrain = await sanityClient.fetch<Strain | null>(
       `*[_type == "strain" && isHidden != true] | order(sortOrder asc)[0] {
-        _id, name, slug, image, type, effect, effects,
+        _id, _updatedAt, name, slug, image, type, effect, effects,
         thcPercent, cbdPercent, pricePerGram,
         shortDescription, shortDescriptionRu, shortDescriptionTh,
         fullDescription, fullDescriptionRu, fullDescriptionTh, terpenes, terpeneProfile,
@@ -122,5 +122,25 @@ export async function getAllStrainSlugs(): Promise<string[]> {
     return result.length > 0 ? result : mockStrains.map((s) => s.slug.current);
   } catch {
     return mockStrains.map((s) => s.slug.current);
+  }
+}
+
+export type StrainSitemapEntry = { slug: string; updatedAt?: string };
+
+export async function getAllStrainsForSitemap(): Promise<StrainSitemapEntry[]> {
+  if (!sanityClient) {
+    return mockStrains.map((s) => ({ slug: s.slug.current, updatedAt: s._updatedAt }));
+  }
+
+  try {
+    const rows = await sanityClient.fetch<{ slug: { current: string }; _updatedAt: string }[]>(
+      `*[_type == "strain" && isHidden != true]{ slug, _updatedAt }`
+    );
+    const result = rows.map((r) => ({ slug: r.slug.current, updatedAt: r._updatedAt }));
+    return result.length > 0
+      ? result
+      : mockStrains.map((s) => ({ slug: s.slug.current, updatedAt: s._updatedAt }));
+  } catch {
+    return mockStrains.map((s) => ({ slug: s.slug.current, updatedAt: s._updatedAt }));
   }
 }
