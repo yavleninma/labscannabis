@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Cửa hàng cần sa ở Pattaya | Hãy thử trước khi mua",
+    "description": "Cửa hàng cần sa được cấp phép ở Pattaya. Mẫu miễn phí tại cửa hàng, vì vậy bạn có thể thử trước khi mua và kiểm tra độ tươi trước. Thẻ y tế tận nơi trong 2 phút, 5 phút từ Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Cửa hàng cần sa | Hãy thử trước khi mua",
+    "ogDescription": "Mẫu miễn phí tại cửa hàng, vì vậy bạn có thể thử trước khi mua và kiểm tra độ tươi trước. Labs Cannabis cách Walking Street 5 phút.",
+    "keywords": [
+      "cửa hàng cần sa pattaya",
+      "cửa hàng cỏ dại pattaya",
+      "bệnh xá pattaya",
+      "cửa hàng cần sa mẫu miễn phí",
+      "thử trước khi mua cần sa",
+      "đi bộ trong trạm y tế pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Mở ngay bây giờ",
+    "closed": "Đã đóng",
+    "switching": "Chuyển đổi",
+    "menu": "Danh mục",
+    "allLanguages": "Tất cả ngôn ngữ",
+    "searchLanguages": "Tìm kiếm ngôn ngữ",
+    "currentLanguage": "Ngôn ngữ hiện tại"
+  },
+  "hero": {
+    "title": "Cửa hàng cần sa ở Pattaya",
+    "subtitle": "Nụ tươi và bánh cuộn trước — 5 phút từ Walking Street. Hãy đến, chúng tôi sẽ giúp bạn chọn.",
+    "getDirections": "Nhận chỉ đường",
+    "messageUs": "Nhắn tin cho chúng tôi",
+    "seeMenu": "Có gì trong kho",
+    "sampleBadge": "Mẫu miễn phí tại cửa hàng",
+    "sampleTitle": "Hãy thử trước khi mua",
+    "sampleText": "Hãy vào, kiểm tra độ tươi và chất lượng đầu tiên. Thích thì mua thôi.",
+    "sampleFresh": "kệ tươi",
+    "samplePressure": "Hãy thử trước",
+    "sampleTrust": "Chất lượng đầu tiên"
+  },
+  "noPrescription": {
+    "title": "Không có đơn thuốc? Chúng tôi đã có bạn.",
+    "subtitle": "Thái Lan yêu cầu thẻ y tế — nhưng đừng lo, chúng tôi xử lý mọi việc ngay tại chỗ. Chỉ cần bước vào.",
+    "step1Title": "bước vào",
+    "step1Desc": "Không cần hẹn trước. Hãy đến cửa hàng bất cứ lúc nào chúng tôi mở cửa.",
+    "step2Title": "Quét và điền",
+    "step2Desc": "Biểu mẫu nhanh trên điện thoại của bạn - mất 2 phút. Nhân viên của chúng tôi sẽ hướng dẫn bạn từng bước.",
+    "step3Title": "Xong",
+    "step3Desc": "Chọn chủng của bạn, trả tiền và tận hưởng. Thế thôi.",
+    "badge1": "100% hợp pháp",
+    "badge2": "Mất 2 phút",
+    "badge3": "Tư vấn miễn phí"
+  },
+  "staffPick": {
+    "badge": "Lựa chọn chuyên gia",
+    "reserve": "Hỏi về nó",
+    "viewDetails": "Xem chi tiết"
+  },
+  "catalog": {
+    "title": "Có gì trong kho",
+    "count": "{count} chủng có sẵn",
+    "filter_all": "Tất cả",
+    "filter_relax": "Thư giãn",
+    "filter_energy": "Năng lượng",
+    "filter_creative": "Sáng tạo",
+    "filter_euphoria": "hưng phấn",
+    "filter_sleep": "Ngủ",
+    "filter_focus": "Tập trung",
+    "filter_happy": "Vui mừng",
+    "filter_uplifted": "nâng cao",
+    "filter_talkative": "lắm lời",
+    "filter_hungry": "Đói bụng",
+    "reserve": "Hỏi về nó",
+    "soldOut": "Bán hết",
+    "noResults": "Hiện tại không có chủng nào phù hợp với bộ lọc này.",
+    "activeFilter": "Được lọc bởi {tagType}: {tagLabel}",
+    "clearFilter": "Xóa bộ lọc"
+  },
+  "reviews": {
+    "subtitle": "{count} đánh giá về Google",
+    "sourceGoogle": "qua Google",
+    "showOriginal": "Nguyên bản",
+    "showTranslation": "Dịch thuật",
+    "translating": "Đang dịch...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Phòng khám tốt nhất ở Pattaya. Các nhân viên thực sự biết chủng loại của họ và đã giúp tôi chọn loại hoàn hảo. Cửa hàng sạch sẽ, rung cảm tuyệt vời."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Cửa hàng tuyệt vời. Nhóm đã giúp tôi sắp xếp thẻ y tế ngay trong vài phút. Lựa chọn chủng tốt và giá cả hợp lý. Khuyến khích."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Thật dễ dàng. Tôi rất lo lắng về vấn đề thẻ y tế, nhưng họ đã hướng dẫn tôi mọi thứ. Lựa chọn tuyệt vời và nhân viên rất am hiểu."
+      }
+    }
+  },
+  "location": {
+    "title": "Tìm chúng tôi",
+    "address": "Địa chỉ",
+    "landmark": "Cột mốc",
+    "landmarkDesc": "5 phút đi bộ từ Walking Street",
+    "directions": {
+      "title": "Tuyến đường đi bộ tốt nhất",
+      "step1": "Đi đến Pattaya Ngõ 13 (Soi Hollywood) từ Walking Street.",
+      "step2": "Đi tiếp trong con hẻm và tìm bảng hiệu LABS BỆNH VIỆN.",
+      "step3": "Chúng tôi ở phía bên trái của bạn, khoảng giữa Ngõ Pattaya 13."
+    },
+    "hours": "Giờ",
+    "hoursValueDynamic": "Hàng ngày {open} - {close}",
+    "hoursValue24_7": "Mở cửa 24/7",
+    "openInMaps": "Mở trong Google Bản đồ"
+  },
+  "contact": {
+    "title": "Liên hệ",
+    "subtitle": "Đặt câu hỏi hoặc kiểm tra những gì có sẵn — chúng tôi thường trả lời trong vòng 5 phút trong giờ làm việc."
+  },
+  "footer": {
+    "disclaimer": "Chỉ dành cho người lớn trên 20 tuổi. Cửa hàng cần sa được cấp phép hoạt động theo khuôn khổ cần sa y tế của Thái Lan.",
+    "rights": "Mọi quyền được bảo lưu."
+  },
+  "quickMenu": {
+    "title": "Hiện còn hàng",
+    "seeAll": "Xem danh mục",
+    "soldOut": "Bán hết"
+  },
+  "socialProof": {
+    "reviewCount": "{count} đánh giá về Google",
+    "seeAll": "Xem tất cả đánh giá"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis nhà tư vấn và hướng dẫn cần sa của bạn",
+    "guideDescription": "Dima đích thân lựa chọn từng chủng loại mà chúng tôi mang theo và theo dõi những gì sẽ xuất hiện trên kệ. Nói tiếng Nga và tiếng Anh trôi chảy. Lần đầu tiên? Anh ấy sẽ hướng dẫn bạn mọi thứ - mong đợi điều gì, chọn điều gì, bắt đầu với bao nhiêu. Lời khuyên rõ ràng, trung thực.",
+    "guidePhotoAlt": "Dima — Labs Cannabis nhà tư vấn"
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "q8": "Có mẫu miễn phí không hoặc tôi có thể thử trước khi mua không?",
+    "a8": "Đúng. Chúng tôi cung cấp mẫu miễn phí tại cửa hàng để bạn có thể kiểm tra độ tươi và chất lượng trước khi quyết định mua.",
+    "q1": "Tôi có cần đơn thuốc hoặc thẻ y tế không?",
+    "a1": "Thái Lan yêu cầu thẻ y tế khi mua cần sa. Chúng tôi giúp bạn lấy ngay tại chỗ — đó là một hình thức kỹ thuật số nhanh chóng trên điện thoại của bạn, mất khoảng 2 phút. Nhân viên của chúng tôi sẽ hướng dẫn bạn từng bước.",
+    "q2": "Có hợp pháp cho khách du lịch?",
+    "a2": "Đúng. Khách du lịch có thể mua cần sa y tế một cách hợp pháp ở Thái Lan bằng thẻ y tế mà chúng tôi giúp bạn lấy ngay tại cửa hàng.",
+    "q3": "Những phương thức thanh toán nào bạn chấp nhận?",
+    "a3": "Tiền mặt (Baht Thái) và chuyển khoản ngân hàng QR. Không có thẻ tín dụng vào thời điểm này.",
+    "q4": "Tôi có thể hút thuốc ở đây không hay chỉ mua mang đi?",
+    "a4": "Chỉ mang đi. Chúng tôi bán sản phẩm cho mục đích sử dụng cá nhân — tại chỗ không có khu vực hút thuốc.",
+    "q5": "Làm cách nào để tìm thấy bạn từ Walking Street?",
+    "a5": "5 phút đi bộ. Đi vào Soi Hollywood (Pattaya Ngõ 13), tìm biển báo LABS ở phía bên trái. Chúng tôi đang ở giữa làn đường.",
+    "q6": "Giờ của bạn là mấy giờ?",
+    "a6": "Chúng tôi mở cửa hàng ngày, không cần hẹn trước. Kiểm tra giờ trong tiêu đề — chúng cập nhật theo thời gian thực.",
+    "q7": "Tôi chưa bao giờ thử cần sa. Nhân viên của bạn có thể giúp tôi lựa chọn?",
+    "a7": "Tuyệt đối. Hãy cho chúng tôi biết điều bạn đang tìm kiếm — thư giãn, năng lượng, ngủ ngon hơn — và chúng tôi sẽ đề xuất loại và liều lượng phù hợp với bạn."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Mua tại Labs Cannabis Pattaya",
+    "backToCatalog": "Quay lại lựa chọn",
+    "reserve": "Hỏi về chủng này",
+    "reserveVia": "Liên hệ qua",
+    "call": "Gọi",
+    "soldOut": "Bán hết",
+    "terpenes": "Hồ sơ Terpene",
+    "about": "Về chủng này",
+    "metaDescriptionFallback": "{name} {type} chủng cần sa. THC {thc}%. Có sẵn tại Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} chủng cần sa. Có sẵn tại Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "chủng"
+  },
+  "effectPage": {
+    "title": "{effect} Các giống cần sa ở Pattaya | __THƯƠNG HIỆU_1__",
+    "ogTitle": "{effect} Chủng — Labs Cannabis Pattaya",
+    "description": "Duyệt qua các chủng cần sa {effect} tại trạm phân phối Labs Cannabis ở Pattaya, Thái Lan. Vào đi, không cần hẹn trước.",
+    "h1": "{effect} Các giống cần sa ở Pattaya",
+    "intro": "Đang tìm kiếm hiệu ứng {effect}? Duyệt qua lựa chọn hiện tại của chúng tôi tại Labs Cannabis, Pattaya. Đi vào - không cần hẹn trước.",
+    "breadcrumbStrains": "chủng",
+    "reserve": "Hỏi về nó",
+    "soldOut": "Bán hết",
+    "noResults": "Hiện không có dòng {effect} nào. Kiểm tra lại sớm.",
+    "effect_relax": "Thư giãn",
+    "effect_energy": "Tiếp thêm sinh lực",
+    "effect_creative": "Sáng tạo",
+    "effect_sleep": "Ngủ",
+    "effect_euphoria": "hưng phấn",
+    "effect_focus": "Tập trung",
+    "effect_happy": "Vui mừng",
+    "effect_uplifted": "nâng cao tinh thần",
+    "effect_talkative": "lắm lời",
+    "effect_hungry": "thèm ăn"
+  },
+  "typePage": {
+    "title": "{type} Các giống cần sa ở Pattaya | __THƯƠNG HIỆU_1__",
+    "ogTitle": "{type} Chủng — Labs Cannabis Pattaya",
+    "description": "Duyệt qua các chủng cần sa {type} tại trạm phân phối Labs Cannabis ở Pattaya, Thái Lan. Vào đi, không cần hẹn trước.",
+    "h1": "{type} Các giống cần sa ở Pattaya",
+    "intro": "Duyệt qua lựa chọn hiện tại của chúng tôi về {type} chủng cần sa tại Labs Cannabis, Pattaya. Đi vào - không cần hẹn trước.",
+    "breadcrumbStrains": "chủng",
+    "reserve": "Hỏi về nó",
+    "soldOut": "Bán hết",
+    "noResults": "Hiện không có chủng {type} nào.",
+    "type_indica": "Indica",
+    "type_sativa": "sativa",
+    "type_hybrid": "lai"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "sativa",
+    "type_hybrid": "lai",
+    "effect_relax": "Thư giãn",
+    "effect_energy": "Năng lượng",
+    "effect_creative": "Sáng tạo",
+    "effect_sleep": "Ngủ",
+    "effect_euphoria": "hưng phấn",
+    "effect_focus": "Tập trung",
+    "effect_happy": "Vui mừng",
+    "effect_uplifted": "nâng cao",
+    "effect_talkative": "lắm lời",
+    "effect_hungry": "Đói bụng",
+    "thc": "__THƯƠNG HIỆU_0__",
+    "cbd": "__THƯƠNG HIỆU_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} chủng cần sa tại Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Lựa chọn của chuyên gia tại Labs Cannabis Pattaya",
+    "strainAltText": "{name} chủng cần sa có sẵn tại trạm phân phối Labs Cannabis Pattaya",
+    "tagType_effect": "Tác dụng",
+    "tagType_type": "Kiểu",
+    "tagType_terpene": "Terpene"
+  }
+}

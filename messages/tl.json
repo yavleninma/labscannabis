@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Cannabis Shop sa Pattaya | Subukan Bago ka Bumili",
+    "description": "Lisensyadong tindahan ng cannabis sa Pattaya. Libreng sample sa tindahan, para masubukan mo bago ka bumili at tingnan muna ang pagiging bago. On-site na medical card sa loob ng 2 minuto, 5 minuto mula sa Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Cannabis Shop | Subukan Bago ka Bumili",
+    "ogDescription": "Libreng sample sa tindahan, para masubukan mo bago ka bumili at tingnan muna ang pagiging bago. Labs Cannabis ay 5 min mula sa Walking Street.",
+    "keywords": [
+      "tindahan ng cannabis sa pattaya",
+      "tindahan ng damo sa pattaya",
+      "dispensaryo pattaya",
+      "libreng sample na tindahan ng cannabis",
+      "subukan bago ka bumili ng cannabis",
+      "maglakad sa dispensaryo pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Buksan ngayon",
+    "closed": "sarado",
+    "switching": "Lumipat",
+    "menu": "Catalog",
+    "allLanguages": "Lahat ng wika",
+    "searchLanguages": "Maghanap ng mga wika",
+    "currentLanguage": "Kasalukuyang wika"
+  },
+  "hero": {
+    "title": "Tindahan ng Cannabis sa Pattaya",
+    "subtitle": "Mga sariwang buds at pre-roll — 5 min mula sa Walking Street. Pumasok ka, tutulungan ka naming pumili.",
+    "getDirections": "Kumuha ng mga Direksyon",
+    "messageUs": "Message Us",
+    "seeMenu": "Ano ang nasa Stock",
+    "sampleBadge": "Libreng sample sa tindahan",
+    "sampleTitle": "Subukan bago ka bumili",
+    "sampleText": "Halika, suriin muna ang pagiging bago at kalidad. Kung gusto mo, pagkatapos ay bumili.",
+    "sampleFresh": "Sariwang istante",
+    "samplePressure": "Subukan mo muna",
+    "sampleTrust": "Quality muna"
+  },
+  "noPrescription": {
+    "title": "Walang reseta? Nakuha ka na namin.",
+    "subtitle": "Nangangailangan ang Thailand ng medical card — ngunit huwag mag-alala, pinangangasiwaan namin ang lahat sa lugar. Maglakad ka lang.",
+    "step1Title": "Maglakad papasok",
+    "step1Desc": "Walang appointment na kailangan. Punta ka lang sa shop any time we are open.",
+    "step2Title": "I-scan at punan",
+    "step2Desc": "Mabilis na form sa iyong telepono — tumatagal ng 2 minuto. Gagabayan ka ng aming mga tauhan sa bawat hakbang.",
+    "step3Title": "Tapos na",
+    "step3Desc": "Piliin ang iyong strain, magbayad, at magsaya. yun lang.",
+    "badge1": "100% legal",
+    "badge2": "Tumatagal ng 2 min",
+    "badge3": "Libreng konsultasyon"
+  },
+  "staffPick": {
+    "badge": "Expert Pick",
+    "reserve": "Magtanong tungkol dito",
+    "viewDetails": "Tingnan ang mga detalye"
+  },
+  "catalog": {
+    "title": "Ano ang nasa Stock",
+    "count": "Available ang {count} strain",
+    "filter_all": "Lahat",
+    "filter_relax": "Magpahinga ka",
+    "filter_energy": "Enerhiya",
+    "filter_creative": "Malikhain",
+    "filter_euphoria": "Euphoria",
+    "filter_sleep": "Matulog",
+    "filter_focus": "Focus",
+    "filter_happy": "Masaya",
+    "filter_uplifted": "Nakataas",
+    "filter_talkative": "Madaldal",
+    "filter_hungry": "Gutom",
+    "reserve": "Magtanong tungkol dito",
+    "soldOut": "Sold Out",
+    "noResults": "Walang mga strain na tumutugma sa filter na ito sa ngayon.",
+    "activeFilter": "Na-filter ni {tagType}: {tagLabel}",
+    "clearFilter": "I-clear ang filter"
+  },
+  "reviews": {
+    "subtitle": "{count} review sa Google",
+    "sourceGoogle": "sa pamamagitan ng Google",
+    "showOriginal": "Orihinal",
+    "showTranslation": "Pagsasalin",
+    "translating": "Nagsasalin...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Pinakamahusay na dispensaryo sa Pattaya hands down. Talagang alam ng staff ang kanilang mga strain at tinulungan akong pumili ng perpekto. Malinis na tindahan, magandang vibes."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Mahusay na tindahan. Tinulungan ako ng team na ayusin ang medical card doon sa loob ng ilang minuto. Magandang pagpili ng strain at patas na presyo. Inirerekomenda."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Napakadali. Kinakabahan ako tungkol sa bagay na medikal, ngunit dinala nila ako sa lahat. Mahusay na pagpipilian at napakaraming kawani."
+      }
+    }
+  },
+  "location": {
+    "title": "Hanapin Kami",
+    "address": "Address",
+    "landmark": "Landmark",
+    "landmarkDesc": "5 minutong lakad mula sa Walking Street",
+    "directions": {
+      "title": "Pinakamahusay na ruta sa paglalakad",
+      "step1": "Tumungo sa Pattaya 13 Alley (Soi Hollywood) mula sa Walking Street.",
+      "step2": "Manatili sa eskinita at maghanap ng LABS DISPENSARY signage.",
+      "step3": "Kami ay nasa iyong kaliwang bahagi, sa paligid ng gitna ng Pattaya 13 Alley."
+    },
+    "hours": "Oras",
+    "hoursValueDynamic": "Araw-araw {open} - {close}",
+    "hoursValue24_7": "Bukas 24/7",
+    "openInMaps": "Buksan sa Google Maps"
+  },
+  "contact": {
+    "title": "Makipag-ugnayan",
+    "subtitle": "Magtanong o tingnan kung ano ang available — karaniwang tumutugon kami sa loob ng 5 minuto sa oras ng trabaho."
+  },
+  "footer": {
+    "disclaimer": "Mga nasa hustong gulang 20+ lamang. Lisensyadong tindahan ng cannabis na tumatakbo sa ilalim ng balangkas ng medikal na cannabis ng Thai.",
+    "rights": "Lahat ng karapatan ay nakalaan."
+  },
+  "quickMenu": {
+    "title": "May stock na ngayon",
+    "seeAll": "Tingnan ang catalog",
+    "soldOut": "Sold out"
+  },
+  "socialProof": {
+    "reviewCount": "{count} review sa Google",
+    "seeAll": "Tingnan ang lahat ng mga review"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis consultant at ang iyong gabay sa cannabis",
+    "guideDescription": "Personal na pinipili ni Dima ang bawat strain na dinadala namin at binabantayan kung ano ang napupunta sa istante. Nagsasalita ng Ruso at Ingles nang matatas. Unang beses? Gagabayan ka niya sa lahat ng bagay — kung ano ang aasahan, kung ano ang pipiliin, kung magkano ang sisimulan. Malinaw, matapat na payo.",
+    "guidePhotoAlt": "Dima — Labs Cannabis consultant"
+  },
+  "faq": {
+    "title": "Mga Karaniwang Tanong",
+    "q8": "Mayroon bang libreng sample o maaari ko bang subukan bago ako bumili?",
+    "a8": "Oo. Nag-aalok kami ng libreng sample sa tindahan, para masuri mo ang pagiging bago at kalidad bago ka magpasyang bumili.",
+    "q1": "Kailangan ko ba ng reseta o medical card?",
+    "a1": "Nangangailangan ang Thailand ng medical card para sa pagbili ng cannabis. Tinutulungan ka naming makakuha ng isa on the spot — isa itong mabilis na digital form sa iyong telepono, tumatagal nang humigit-kumulang 2 minuto. Ginagabayan ka ng aming staff sa bawat hakbang.",
+    "q2": "Legal ba ito para sa mga turista?",
+    "a2": "Oo. Ang mga turista ay maaaring legal na bumili ng medikal na cannabis sa Thailand gamit ang isang medical card, na tinutulungan ka naming makuha dito mismo sa tindahan.",
+    "q3": "Anong mga paraan ng pagbabayad ang tinatanggap mo?",
+    "a3": "Cash (Thai Baht) at QR bank transfer. Walang mga credit card sa ngayon.",
+    "q4": "Maaari ba akong manigarilyo dito o ito ba ay takeaway lang?",
+    "a4": "Takeaway lang. Nagbebenta kami ng produkto para sa personal na paggamit — walang paninigarilyo sa site.",
+    "q5": "Paano kita mahahanap mula sa Walking Street?",
+    "a5": "5 minutong lakad. Tumungo sa Soi Hollywood (Pattaya 13 Alley), hanapin ang LABS signage sa kaliwang bahagi. Nasa gitna na kami ng lane.",
+    "q6": "Ano ang iyong mga oras?",
+    "a6": "Bukas kami araw-araw, hindi kailangan ng appointment. Suriin ang mga oras sa header — nag-a-update sila nang real time.",
+    "q7": "Hindi ko pa nasubukan ang cannabis. Maaari ba akong tulungan ng iyong mga tauhan na pumili?",
+    "a7": "Talagang. Sabihin sa amin kung ano ang iyong hinahanap — pagpapahinga, enerhiya, mas magandang pagtulog — at magrerekomenda kami ng strain at halaga na makatuwiran para sa iyo."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Bumili sa Labs Cannabis Pattaya",
+    "backToCatalog": "Bumalik sa pagpili",
+    "reserve": "Magtanong Tungkol sa Strain na Ito",
+    "reserveVia": "Makipag-ugnayan sa pamamagitan ng",
+    "call": "Tumawag",
+    "soldOut": "Sold Out",
+    "terpenes": "Profile ng Terpene",
+    "about": "Tungkol sa Strain na Ito",
+    "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available sa Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available sa Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Mga strain"
+  },
+  "effectPage": {
+    "title": "{effect} Cannabis Strains sa Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} Strain — Labs Cannabis Pattaya",
+    "description": "Mag-browse ng {effect} cannabis strains sa Labs Cannabis dispensary sa Pattaya, Thailand. Maglakad sa loob, hindi kailangan ng appointment.",
+    "h1": "{effect} Cannabis Strains sa Pattaya",
+    "intro": "Naghahanap ng {effect} effect? I-browse ang aming kasalukuyang pagpipilian sa Labs Cannabis, Pattaya. Walk in — hindi kailangan ng appointment.",
+    "breadcrumbStrains": "Mga strain",
+    "reserve": "Magtanong tungkol dito",
+    "soldOut": "Sold Out",
+    "noResults": "Walang {effect} strain sa ngayon. Bumalik sa lalong madaling panahon.",
+    "effect_relax": "Nakakarelax",
+    "effect_energy": "Nagpapasigla",
+    "effect_creative": "Malikhain",
+    "effect_sleep": "Matulog",
+    "effect_euphoria": "Euphoric",
+    "effect_focus": "Focus",
+    "effect_happy": "Masaya",
+    "effect_uplifted": "Nakakaangat",
+    "effect_talkative": "Madaldal",
+    "effect_hungry": "gana sa pagkain"
+  },
+  "typePage": {
+    "title": "{type} Cannabis Strains sa Pattaya | Labs Cannabis",
+    "ogTitle": "{type} Strain — Labs Cannabis Pattaya",
+    "description": "Mag-browse ng {type} cannabis strains sa Labs Cannabis dispensary sa Pattaya, Thailand. Maglakad sa loob, hindi kailangan ng appointment.",
+    "h1": "{type} Cannabis Strains sa Pattaya",
+    "intro": "I-browse ang aming kasalukuyang seleksyon ng {type} na mga strain ng cannabis sa Labs Cannabis, Pattaya. Walk in — hindi kailangan ng appointment.",
+    "breadcrumbStrains": "Mga strain",
+    "reserve": "Magtanong tungkol dito",
+    "soldOut": "Sold Out",
+    "noResults": "Walang available na {type} strain sa ngayon.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid",
+    "effect_relax": "Magpahinga ka",
+    "effect_energy": "Enerhiya",
+    "effect_creative": "Malikhain",
+    "effect_sleep": "Matulog",
+    "effect_euphoria": "Euphoria",
+    "effect_focus": "Focus",
+    "effect_happy": "Masaya",
+    "effect_uplifted": "Nakataas",
+    "effect_talkative": "Madaldal",
+    "effect_hungry": "Gutom",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabis strain sa Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Expert Pick sa Labs Cannabis Pattaya",
+    "strainAltText": "{name} cannabis strain na available sa Labs Cannabis dispensary Pattaya",
+    "tagType_effect": "Epekto",
+    "tagType_type": "Uri",
+    "tagType_terpene": "Terpene"
+  }
+}

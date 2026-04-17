@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { automatedLocaleCodes } from "../../i18n/config";
 
 export const strain = defineType({
   name: "strain",
@@ -162,6 +163,82 @@ export const strain = defineType({
       title: "Полное описание (TH, страница товара)",
       type: "array",
       of: [{ type: "block" }],
+    }),
+    defineField({
+      name: "translations",
+      title: "SEO Translations",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          fields: [
+            defineField({
+              name: "locale",
+              title: "Locale",
+              type: "string",
+              options: {
+                list: automatedLocaleCodes.map((locale) => ({
+                  title: locale,
+                  value: locale,
+                })),
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: "shortDescription",
+              title: "Short Description",
+              type: "string",
+              validation: (Rule) => Rule.max(150),
+            }),
+            defineField({
+              name: "fullDescription",
+              title: "Full Description",
+              type: "array",
+              of: [{ type: "block" }],
+            }),
+            defineField({
+              name: "sourceHash",
+              title: "Source Hash",
+              type: "string",
+            }),
+            defineField({
+              name: "translatedAt",
+              title: "Translated At",
+              type: "datetime",
+            }),
+            defineField({
+              name: "model",
+              title: "Model",
+              type: "string",
+            }),
+          ],
+          preview: {
+            select: {
+              locale: "locale",
+              shortDescription: "shortDescription",
+              translatedAt: "translatedAt",
+            },
+            prepare(selection) {
+              const {
+                locale,
+                shortDescription,
+                translatedAt,
+              } = selection as {
+                locale?: string;
+                shortDescription?: string;
+                translatedAt?: string;
+              };
+
+              return {
+                title: locale || "Translation",
+                subtitle: translatedAt
+                  ? `${translatedAt} — ${(shortDescription || "").slice(0, 80)}`
+                  : shortDescription || "No translation",
+              };
+            },
+          },
+        },
+      ],
     }),
     defineField({
       name: "terpenes",

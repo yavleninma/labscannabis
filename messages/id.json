@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Toko Ganja di Pattaya | Coba Sebelum Anda Membeli",
+    "description": "Toko ganja berlisensi di Pattaya. Sampel gratis di toko, jadi Anda dapat mencoba sebelum membeli dan memeriksa kesegarannya terlebih dahulu. Kartu medis di tempat dalam 2 menit, 5 menit dari Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Toko Ganja | Coba Sebelum Anda Membeli",
+    "ogDescription": "Sampel gratis di toko, jadi Anda dapat mencoba sebelum membeli dan memeriksa kesegarannya terlebih dahulu. Labs Cannabis berjarak 5 menit dari Walking Street.",
+    "keywords": [
+      "toko ganja pattaya",
+      "toko gulma pattaya",
+      "apotik pattaya",
+      "sampel gratis toko ganja",
+      "cobalah sebelum Anda membeli ganja",
+      "berjalan di apotek pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Buka sekarang",
+    "closed": "Tertutup",
+    "switching": "Beralih",
+    "menu": "Katalog",
+    "allLanguages": "Semua bahasa",
+    "searchLanguages": "Cari bahasa",
+    "currentLanguage": "Bahasa saat ini"
+  },
+  "hero": {
+    "title": "Toko ganja di Pattaya",
+    "subtitle": "Tunas segar & pra-putar — 5 menit dari Walking Street. Masuklah, kami akan membantu Anda memilih.",
+    "getDirections": "Dapatkan Petunjuk Arah",
+    "messageUs": "Kirim Pesan kepada Kami",
+    "seeMenu": "Apa yang ada di Stok",
+    "sampleBadge": "Sampel gratis di toko",
+    "sampleTitle": "Cobalah sebelum Anda membeli",
+    "sampleText": "Masuk, cek dulu kesegaran dan kualitasnya. Jika Anda menyukainya, maka belilah.",
+    "sampleFresh": "Rak baru",
+    "samplePressure": "Coba dulu",
+    "sampleTrust": "Kualitas pertama"
+  },
+  "noPrescription": {
+    "title": "Tidak ada resep? Kami punya kamu.",
+    "subtitle": "Thailand memerlukan kartu medis — tapi jangan khawatir, kami menangani semuanya saat itu juga. Masuk saja.",
+    "step1Title": "Berjalan di",
+    "step1Desc": "Tidak perlu janji temu. Datang saja ke toko kapan pun kami buka.",
+    "step2Title": "Pindai & isi",
+    "step2Desc": "Formulir cepat di ponsel Anda — membutuhkan waktu 2 menit. Staf kami akan memandu Anda melalui setiap langkah.",
+    "step3Title": "Selesai",
+    "step3Desc": "Pilih ketegangan Anda, bayar, dan nikmati. Itu saja.",
+    "badge1": "100% sah",
+    "badge2": "Membutuhkan waktu 2 menit",
+    "badge3": "Konsultasi gratis"
+  },
+  "staffPick": {
+    "badge": "Pilihan Ahli",
+    "reserve": "Tanyakan tentang hal itu",
+    "viewDetails": "Lihat detailnya"
+  },
+  "catalog": {
+    "title": "Apa yang ada di Stok",
+    "count": "{count} strain tersedia",
+    "filter_all": "Semua",
+    "filter_relax": "Santai",
+    "filter_energy": "Energi",
+    "filter_creative": "Kreatif",
+    "filter_euphoria": "Euforia",
+    "filter_sleep": "Tidur",
+    "filter_focus": "Fokus",
+    "filter_happy": "Senang",
+    "filter_uplifted": "Terangkat",
+    "filter_talkative": "Banyak bicara",
+    "filter_hungry": "Lapar",
+    "reserve": "Tanyakan tentang hal itu",
+    "soldOut": "Terjual habis",
+    "noResults": "Tidak ada strain yang cocok dengan filter ini saat ini.",
+    "activeFilter": "Difilter menurut {tagType}: {tagLabel}",
+    "clearFilter": "Hapus penyaring"
+  },
+  "reviews": {
+    "subtitle": "{count} ulasan di Google",
+    "sourceGoogle": "melalui Google",
+    "showOriginal": "Asli",
+    "showTranslation": "Terjemahan",
+    "translating": "Menerjemahkan...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Apotik terbaik di Pattaya. Staf benar-benar mengetahui jenis mereka dan membantu saya memilih yang sempurna. Toko bersih, suasana luar biasa."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Toko yang luar biasa. Tim membantu saya memilah kartu medis di sana dalam beberapa menit. Pilihan strain yang bagus dan harga yang wajar. Direkomendasikan."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Sangat mudah. Saya gugup tentang masalah kartu medis, tetapi mereka memandu saya melalui semuanya. Banyak pilihan dan staf yang sangat berpengetahuan."
+      }
+    }
+  },
+  "location": {
+    "title": "Temukan Kami",
+    "address": "Alamat",
+    "landmark": "Tengara",
+    "landmarkDesc": "5 menit berjalan kaki dari Walking Street",
+    "directions": {
+      "title": "Rute terbaik dengan berjalan kaki",
+      "step1": "Pergilah ke Pattaya 13 Alley (Soi Hollywood) dari Walking Street.",
+      "step2": "Tetap di gang dan cari papan tanda LABS DISPENSARY.",
+      "step3": "Kami berada di sisi kiri Anda, sekitar tengah Pattaya 13 Alley."
+    },
+    "hours": "Jam",
+    "hoursValueDynamic": "Harian {open} - {close}",
+    "hoursValue24_7": "Buka 24/7",
+    "openInMaps": "Buka di Google Peta"
+  },
+  "contact": {
+    "title": "Hubungi kami",
+    "subtitle": "Ajukan pertanyaan atau periksa apa yang tersedia — kami biasanya membalas dalam waktu 5 menit selama jam kerja."
+  },
+  "footer": {
+    "disclaimer": "Khusus dewasa 20+. Toko ganja berlisensi yang beroperasi di bawah kerangka ganja medis Thailand.",
+    "rights": "Semua hak dilindungi undang-undang."
+  },
+  "quickMenu": {
+    "title": "Tersedia sekarang",
+    "seeAll": "Lihat katalog",
+    "soldOut": "Terjual habis"
+  },
+  "socialProof": {
+    "reviewCount": "{count} ulasan di Google",
+    "seeAll": "Lihat semua ulasan"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis konsultan dan pemandu ganja Anda",
+    "guideDescription": "Dima secara pribadi memilih setiap strain yang kami bawa dan mengawasi apa yang ada di rak. Berbicara bahasa Rusia dan Inggris dengan lancar. Pertama kali? Dia akan memandu Anda melalui segalanya — apa yang diharapkan, apa yang harus dipilih, berapa banyak yang harus Anda mulai. Nasihat yang jelas dan jujur.",
+    "guidePhotoAlt": "Dima — Labs Cannabis konsultan"
+  },
+  "faq": {
+    "title": "Pertanyaan Umum",
+    "q8": "Apakah ada sampel gratis atau bisakah saya mencobanya sebelum membeli?",
+    "a8": "Ya. Kami menawarkan sampel gratis di toko, sehingga Anda dapat memeriksa kesegaran dan kualitas sebelum memutuskan untuk membeli.",
+    "q1": "Apakah saya memerlukan resep atau kartu medis?",
+    "a1": "Thailand memerlukan kartu medis untuk pembelian ganja. Kami membantu Anda mendapatkannya saat itu juga — formulir digital cepat di ponsel Anda, membutuhkan waktu sekitar 2 menit. Staf kami memandu Anda melalui setiap langkah.",
+    "q2": "Apakah legal bagi wisatawan?",
+    "a2": "Ya. Wisatawan dapat membeli ganja medis secara legal di Thailand dengan kartu medis, yang kami bantu Anda dapatkan di sini, di toko.",
+    "q3": "Metode pembayaran apa yang Anda terima?",
+    "a3": "Tunai (Baht Thailand) dan transfer bank QR. Tidak ada kartu kredit saat ini.",
+    "q4": "Bolehkah saya merokok di sini atau hanya untuk dibawa pulang?",
+    "a4": "Hanya untuk dibawa pulang. Kami menjual produk untuk penggunaan pribadi — tidak ada area merokok di lokasi.",
+    "q5": "Bagaimana cara menemukan Anda dari Walking Street?",
+    "a5": "5 menit berjalan kaki. Pergilah ke Soi Hollywood (Pattaya 13 Alley), cari papan nama LABS di sisi kiri. Kami berada di tengah jalan.",
+    "q6": "Jam berapa?",
+    "a6": "Kami buka setiap hari, tidak perlu membuat janji terlebih dahulu. Periksa jam di header — jam diperbarui secara real-time.",
+    "q7": "Saya belum pernah mencoba ganja. Bisakah staf Anda membantu saya memilih?",
+    "a7": "Sangat. Beri tahu kami apa yang Anda cari — relaksasi, energi, tidur lebih nyenyak — dan kami akan merekomendasikan jenis dan jumlah yang sesuai untuk Anda."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Beli di Labs Cannabis Pattaya",
+    "backToCatalog": "Kembali ke seleksi",
+    "reserve": "Tanyakan Tentang Strain Ini",
+    "reserveVia": "Hubungi melalui",
+    "call": "Panggilan",
+    "soldOut": "Terjual habis",
+    "terpenes": "Profil Terpen",
+    "about": "Tentang Strain Ini",
+    "metaDescriptionFallback": "{name} {type} jenis ganja. __MEREK_4__ {thc}%. Tersedia di Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} jenis ganja. Tersedia di Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Strain"
+  },
+  "effectPage": {
+    "title": "{effect} Strain Ganja di Pattaya | __MEREK_1__",
+    "ogTitle": "{effect} Strain — Labs Cannabis Pattaya",
+    "description": "Telusuri strain ganja {effect} di apotek Labs Cannabis di Pattaya, Thailand. Masuklah, tidak perlu membuat janji.",
+    "h1": "{effect} Strain Ganja di Pattaya",
+    "intro": "Mencari efek {effect}? Jelajahi pilihan kami saat ini di Labs Cannabis, Pattaya. Masuk — tidak perlu membuat janji.",
+    "breadcrumbStrains": "Strain",
+    "reserve": "Tanyakan tentang hal itu",
+    "soldOut": "Terjual habis",
+    "noResults": "Tidak ada strain {effect} saat ini. Segera periksa kembali.",
+    "effect_relax": "Santai",
+    "effect_energy": "Memberi energi",
+    "effect_creative": "Kreatif",
+    "effect_sleep": "Tidur",
+    "effect_euphoria": "Euforia",
+    "effect_focus": "Fokus",
+    "effect_happy": "Senang",
+    "effect_uplifted": "Menggembirakan",
+    "effect_talkative": "Banyak bicara",
+    "effect_hungry": "Nafsu makan"
+  },
+  "typePage": {
+    "title": "{type} Strain Ganja di Pattaya | __MEREK_1__",
+    "ogTitle": "{type} Strain — Labs Cannabis Pattaya",
+    "description": "Telusuri strain ganja {type} di apotek Labs Cannabis di Pattaya, Thailand. Masuklah, tidak perlu membuat janji.",
+    "h1": "{type} Strain Ganja di Pattaya",
+    "intro": "Jelajahi pilihan strain ganja {type} kami saat ini di Labs Cannabis, Pattaya. Masuk — tidak perlu membuat janji.",
+    "breadcrumbStrains": "Strain",
+    "reserve": "Tanyakan tentang hal itu",
+    "soldOut": "Terjual habis",
+    "noResults": "Tidak ada strain {type} yang tersedia saat ini.",
+    "type_indica": "indikasi",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrida"
+  },
+  "strainCommon": {
+    "type_indica": "indikasi",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrida",
+    "effect_relax": "Santai",
+    "effect_energy": "Energi",
+    "effect_creative": "Kreatif",
+    "effect_sleep": "Tidur",
+    "effect_euphoria": "Euforia",
+    "effect_focus": "Fokus",
+    "effect_happy": "Senang",
+    "effect_uplifted": "Terangkat",
+    "effect_talkative": "Banyak bicara",
+    "effect_hungry": "Lapar",
+    "thc": "__MEREK_0__",
+    "cbd": "__MEREK_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} strain ganja di Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Pilihan Pakar di Labs Cannabis Pattaya",
+    "strainAltText": "{name} strain ganja tersedia di Labs Cannabis apotek Pattaya",
+    "tagType_effect": "Memengaruhi",
+    "tagType_type": "Jenis",
+    "tagType_terpene": "Terpen"
+  }
+}

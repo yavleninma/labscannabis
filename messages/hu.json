@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Cannabis Shop in Pattaya | Próbálja ki, mielőtt vásárol",
+    "description": "Engedélyezett kannabiszbolt a Pattaya-ban. Ingyenes minta az üzletben, így vásárlás előtt kipróbálhatja, és először ellenőrizze a frissességet. Helyszíni orvosi kártya 2 perc múlva, 5 percre a Walking Street-tól.",
+    "ogTitle": "Labs Cannabis — Pattaya Cannabis Shop | Próbálja ki, mielőtt vásárol",
+    "ogDescription": "Ingyenes minta az üzletben, így vásárlás előtt kipróbálhatja, és először ellenőrizze a frissességet. A Labs Cannabis 5 percre van a Walking Street-tól.",
+    "keywords": [
+      "cannabis bolt pattaya",
+      "gyombolt Pattaya",
+      "gyógyszertár Pattaya",
+      "ingyenes kannabisz bolt minta",
+      "próbáld ki, mielőtt kannabiszt vásárolsz",
+      "séta Pattayán"
+    ]
+  },
+  "header": {
+    "openNow": "Nyissa meg most",
+    "closed": "Zárt",
+    "switching": "Átkapcsolás",
+    "menu": "Katalógus",
+    "allLanguages": "Minden nyelv",
+    "searchLanguages": "Nyelvek keresése",
+    "currentLanguage": "Jelenlegi nyelv"
+  },
+  "hero": {
+    "title": "Kannabiszbolt a Pattaya-ban",
+    "subtitle": "Friss bimbók és előtekercsek – 5 perc a Walking Street-tól. Gyere be, segítünk a választásban.",
+    "getDirections": "Útvonalterv",
+    "messageUs": "Üzenjen nekünk",
+    "seeMenu": "Mi van raktáron",
+    "sampleBadge": "Ingyenes minta az üzletben",
+    "sampleTitle": "Vásárlás előtt próbálja ki",
+    "sampleText": "Gyere be, először ellenőrizze a frissességet és a minőséget. Ha tetszik, akkor vásárolj.",
+    "sampleFresh": "Friss polc",
+    "samplePressure": "Először próbáld meg",
+    "sampleTrust": "Első a minőség"
+  },
+  "noPrescription": {
+    "title": "Nincs recept? Megvan neked.",
+    "subtitle": "Thaiföldön orvosi kártya szükséges – de ne aggódjon, mindent a helyszínen intézünk. Csak menj be.",
+    "step1Title": "Sétálj be",
+    "step1Desc": "Nincs szükség időpont egyeztetésre. Csak jöjjön be a boltba, amikor nyitva vagyunk.",
+    "step2Title": "Szkennelés és kitöltés",
+    "step2Desc": "Gyors űrlap a telefonon – 2 percet vesz igénybe. Munkatársaink minden lépésen végigvezetik Önt.",
+    "step3Title": "Kész",
+    "step3Desc": "Válassza ki magát, fizessen, és élvezze. Ennyi.",
+    "badge1": "100% legális",
+    "badge2": "2 percet vesz igénybe",
+    "badge3": "Ingyenes konzultáció"
+  },
+  "staffPick": {
+    "badge": "Szakértői választás",
+    "reserve": "Kérdezz rá",
+    "viewDetails": "Részletek megtekintése"
+  },
+  "catalog": {
+    "title": "Mi van raktáron",
+    "count": "{count} törzs áll rendelkezésre",
+    "filter_all": "Minden",
+    "filter_relax": "Lazíts",
+    "filter_energy": "Energia",
+    "filter_creative": "Alkotó",
+    "filter_euphoria": "Eufória",
+    "filter_sleep": "Alvás",
+    "filter_focus": "Fókusz",
+    "filter_happy": "Boldog",
+    "filter_uplifted": "Felemelkedett",
+    "filter_talkative": "Beszédes",
+    "filter_hungry": "Éhes",
+    "reserve": "Kérdezz rá",
+    "soldOut": "Elfogyott",
+    "noResults": "Jelenleg egyetlen törzs sem felel meg ennek a szűrőnek.",
+    "activeFilter": "Szűrés: {tagType}: {tagLabel}",
+    "clearFilter": "Tiszta szűrő"
+  },
+  "reviews": {
+    "subtitle": "{count} vélemény a Google-ról",
+    "sourceGoogle": "a következőn keresztül: Google",
+    "showOriginal": "Eredeti",
+    "showTranslation": "Fordítás",
+    "translating": "Fordítás...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "A legjobb gyógyszertár a Pattaya-ban. A személyzet nagyon ismeri a fajtáikat, és segített kiválasztani a tökéleteset. Tiszta üzlet, remek hangulat."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Kiváló bolt. A csapat segített pár perc alatt rendbe tenni az orvosi kártyát. Jó törzsválasztás és korrekt árak. Ajánlott."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Olyan könnyű. Ideges voltam az orvosi kártya dolog miatt, de végigvezettek mindenen. Nagy választék és nagyon hozzáértő személyzet."
+      }
+    }
+  },
+  "location": {
+    "title": "Keressen minket",
+    "address": "Cím",
+    "landmark": "Tájékozódási pont",
+    "landmarkDesc": "5 perc sétára innen: Walking Street",
+    "directions": {
+      "title": "A legjobb útvonal gyalog",
+      "step1": "Irány a Pattaya 13 Alley (Soi Hollywood) innen: Walking Street.",
+      "step2": "Maradjon a sikátorban, és keresse a LABS DISPENSARY feliratokat.",
+      "step3": "Az Ön bal oldalán vagyunk, a Pattaya 13-as sikátor közepén."
+    },
+    "hours": "Órák",
+    "hoursValueDynamic": "Naponta {open} - {close}",
+    "hoursValue24_7": "Nyitva 24/7",
+    "openInMaps": "Megnyitás a Google Térképben"
+  },
+  "contact": {
+    "title": "Vegye fel a kapcsolatot",
+    "subtitle": "Tegyen fel kérdést, vagy ellenőrizze, mi áll rendelkezésre – munkaidőben általában 5 percen belül válaszolunk."
+  },
+  "footer": {
+    "disclaimer": "Csak felnőttek 20 év felett. Engedéllyel rendelkező kannabiszbolt, amely a thai orvosi kannabisz keretrendszerében működik.",
+    "rights": "Minden jog fenntartva."
+  },
+  "quickMenu": {
+    "title": "Jelenleg raktáron",
+    "seeAll": "Katalógus megtekintése",
+    "soldOut": "Elfogyott"
+  },
+  "socialProof": {
+    "reviewCount": "{count} vélemény a Google-ról",
+    "seeAll": "Az összes vélemény megtekintése"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis tanácsadó és a kannabisz-útmutató",
+    "guideDescription": "Dima személyesen választ ki minden fajtát, amit hordozunk, és figyelemmel kíséri, mi kerül a polcra. Folyékonyan beszél oroszul és angolul. Először? Mindenen végigvezeti Önt – mire számíthat, mit válasszon, mennyivel kezdjen. Világos, őszinte tanács.",
+    "guidePhotoAlt": "Dima – Labs Cannabis tanácsadó"
+  },
+  "faq": {
+    "title": "Gyakori kérdések",
+    "q8": "Van ingyenes minta, vagy kipróbálhatom vásárlás előtt?",
+    "a8": "Igen. Ingyenes mintát kínálunk az üzletben, így a vásárlás előtt ellenőrizheti a frissességet és a minőséget.",
+    "q1": "Szükségem van vényre vagy orvosi kártyára?",
+    "a1": "Thaiföldön orvosi kártya szükséges a kannabiszvásárláshoz. Segítünk a helyszínen szerezni egyet – ez egy gyors digitális űrlap a telefonon, körülbelül 2 percet vesz igénybe. Munkatársaink minden lépésen végigvezetik Önt.",
+    "q2": "Legális a turisták számára?",
+    "a2": "Igen. A turisták legálisan vásárolhatnak gyógyászati ​​kannabiszt Thaiföldön egy orvosi kártyával, amelynek beszerzésében itt, az üzletben segítünk.",
+    "q3": "Milyen fizetési módokat fogad el?",
+    "a3": "Készpénz (thai baht) és QR banki átutalás. Jelenleg nincs hitelkártya.",
+    "q4": "Dohányozhatok itt, vagy csak elvitelre?",
+    "a4": "Csak elvitelre. Termékeinket személyes használatra áruljuk – a helyszínen nincs dohányzóhely.",
+    "q5": "Hogyan találhatlak meg a Walking Street-tól?",
+    "a5": "5 perc séta. Menjen a Soi Hollywoodba (Pattaya 13 Alley), és keresse meg a LABS feliratokat a bal oldalon. A sáv közepén vagyunk.",
+    "q6": "mennyi az óra?",
+    "a6": "Minden nap nyitva vagyunk, időpont egyeztetés nem szükséges. Ellenőrizze az órákat a fejlécben – valós időben frissülnek.",
+    "q7": "Soha nem próbáltam a kannabiszt. Tudnak a munkatársai segíteni a választásban?",
+    "a7": "Teljesen. Mondja el, mit keres – kikapcsolódást, energiát, jobb alvást –, mi pedig javasoljuk az Ön számára ésszerű terhelést és mennyiséget."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Vásároljon itt: Labs Cannabis Pattaya",
+    "backToCatalog": "Vissza a kiválasztáshoz",
+    "reserve": "Kérdezzen erről a törzsről",
+    "reserveVia": "Kapcsolatfelvétel ezen keresztül",
+    "call": "Hívás",
+    "soldOut": "Elfogyott",
+    "terpenes": "Terpene profil",
+    "about": "Erről a törzsről",
+    "metaDescriptionFallback": "{name} {type} cannabis törzs. THC {thc}%. Elérhető itt: Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabis törzs. Elérhető itt: Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Törzsek"
+  },
+  "effectPage": {
+    "title": "{effect} Cannabis törzsek a Pattaya termékben | __MÁRKA_1__",
+    "ogTitle": "{effect} Törzsek – Labs Cannabis Pattaya",
+    "description": "Böngésszen a {effect} kannabisz törzsek között a Labs Cannabis rendelőjében, Pattaya, Thaiföld. Sétáljon be, nincs szükség időpont egyeztetésre.",
+    "h1": "{effect} Cannabis törzsek a Pattaya termékben",
+    "intro": "{effect} effektusokat keres? Böngésszen jelenlegi kínálatunkban a Labs Cannabis, Pattaya oldalon. Sétáljon be – nincs szükség időpont egyeztetésre.",
+    "breadcrumbStrains": "Törzsek",
+    "reserve": "Kérdezz rá",
+    "soldOut": "Elfogyott",
+    "noResults": "Jelenleg nincs {effect} törzs. Nézz vissza hamarosan.",
+    "effect_relax": "Nyugtató",
+    "effect_energy": "Energetizáló",
+    "effect_creative": "Alkotó",
+    "effect_sleep": "Alvás",
+    "effect_euphoria": "Eufórikus",
+    "effect_focus": "Fókusz",
+    "effect_happy": "Boldog",
+    "effect_uplifted": "Felemelő",
+    "effect_talkative": "Beszédes",
+    "effect_hungry": "Étvágy"
+  },
+  "typePage": {
+    "title": "{type} Cannabis törzsek a Pattaya termékben | __MÁRKA_1__",
+    "ogTitle": "{type} Törzsek – Labs Cannabis Pattaya",
+    "description": "Böngésszen a {type} kannabisz törzsek között a Labs Cannabis rendelőjében, Pattaya, Thaiföld. Sétáljon be, nincs szükség időpont egyeztetésre.",
+    "h1": "{type} Cannabis törzsek a Pattaya termékben",
+    "intro": "Böngésszen a {type} kannabisztörzsek aktuális kínálatában a Labs Cannabis, Pattaya webhelyeken. Sétáljon be – nincs szükség időpont egyeztetésre.",
+    "breadcrumbStrains": "Törzsek",
+    "reserve": "Kérdezz rá",
+    "soldOut": "Elfogyott",
+    "noResults": "Jelenleg nem érhető el {type} törzs.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrid"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hibrid",
+    "effect_relax": "Lazíts",
+    "effect_energy": "Energia",
+    "effect_creative": "Alkotó",
+    "effect_sleep": "Alvás",
+    "effect_euphoria": "Eufória",
+    "effect_focus": "Fókusz",
+    "effect_happy": "Boldog",
+    "effect_uplifted": "Felemelkedett",
+    "effect_talkative": "Beszédes",
+    "effect_hungry": "Éhes",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} cannabis törzs a Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} – Szakértő választás itt: Labs Cannabis Pattaya",
+    "strainAltText": "{name} A kannabisz törzs elérhető a Labs Cannabis rendelőjében Pattaya",
+    "tagType_effect": "Hatás",
+    "tagType_type": "Írja be",
+    "tagType_terpene": "Terpen"
+  }
+}

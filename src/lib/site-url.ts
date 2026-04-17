@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = "https://labscannabis.com";
+const DEFAULT_SITE_URL = "https://labscannabis.boutique";
 
 function normalizeUrl(url: string): string {
   return url.endsWith("/") ? url.slice(0, -1) : url;

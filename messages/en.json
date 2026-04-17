@@ -1,22 +1,39 @@
 {
   "meta": {
-    "title": "Labs Cannabis — Cannabis Shop in Pattaya",
-    "description": "Licensed cannabis shop in Pattaya. Walk-in, pickup & delivery across Pattaya. On-site medical card in 2 minutes, 5 min from Walking Street. Russian- and English-speaking staff.",
-    "ogTitle": "Labs Cannabis — Cannabis Shop Pattaya",
-    "ogDescription": "Licensed cannabis shop in Pattaya. Walk in, pick up your order, or get delivery across Pattaya. Medical card on the spot. 5 min from Walking Street."
+    "title": "Labs Cannabis — Cannabis Shop in Pattaya | Try Before You Buy",
+    "description": "Licensed cannabis shop in Pattaya. Free sample in store, so you can try before you buy and check freshness first. On-site medical card in 2 minutes, 5 min from Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Cannabis Shop | Try Before You Buy",
+    "ogDescription": "Free sample in store, so you can try before you buy and check freshness first. Labs Cannabis is 5 min from Walking Street.",
+    "keywords": [
+      "cannabis shop pattaya",
+      "weed shop pattaya",
+      "dispensary pattaya",
+      "free sample cannabis shop",
+      "try before you buy cannabis",
+      "walk in dispensary pattaya"
+    ]
   },
   "header": {
     "openNow": "Open now",
     "closed": "Closed",
     "switching": "Switching",
-    "menu": "Catalog"
+    "menu": "Catalog",
+    "allLanguages": "All languages",
+    "searchLanguages": "Search languages",
+    "currentLanguage": "Current language"
   },
   "hero": {
     "title": "Cannabis shop in Pattaya",
     "subtitle": "Fresh buds & pre-rolls — 5 min from Walking Street. Walk in, we'll help you pick.",
     "getDirections": "Get Directions",
     "messageUs": "Message Us",
-    "seeMenu": "What's in Stock"
+    "seeMenu": "What's in Stock",
+    "sampleBadge": "Free sample in store",
+    "sampleTitle": "Try before you buy",
+    "sampleText": "Come in, check freshness and quality first. If you like it, then buy.",
+    "sampleFresh": "Fresh shelf",
+    "samplePressure": "Try first",
+    "sampleTrust": "Quality first"
   },
   "noPrescription": {
     "title": "No prescription? We've got you.",
@@ -61,7 +78,27 @@
     "sourceGoogle": "via Google",
     "showOriginal": "Original",
     "showTranslation": "Translation",
-    "translating": "Translating..."
+    "translating": "Translating...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Best dispensary in Pattaya hands down. The staff really knows their strains and helped me pick the perfect one. Clean shop, great vibes."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Excellent shop. The team helped me sort out the medical card right there in a couple of minutes. Good strain selection and fair prices. Recommended."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "So easy. I was nervous about the medical card thing, but they walked me through everything. Great selection and very knowledgeable staff."
+      }
+    }
   },
   "location": {
     "title": "Find Us",
@@ -96,42 +133,16 @@
     "reviewCount": "{count} reviews on Google",
     "seeAll": "See all reviews"
   },
-  "fulfillment": {
-    "title": "3 ways to get your buds",
-    "subtitle": "Walk in, pick it up, or have it delivered — whichever works for your day.",
-    "walkin": {
-      "title": "Walk in",
-      "desc": "Drop by any time we're open. No appointment, medical card sorted on the spot.",
-      "point1": "No appointment needed",
-      "point2": "Medical card in 2 minutes",
-      "point3": "5 min from Walking Street",
-      "cta": "Get directions"
-    },
-    "pickup": {
-      "title": "Pickup",
-      "desc": "Message us in advance and we'll have your order ready when you arrive — zero waiting.",
-      "point1": "Message ahead",
-      "point2": "Ready when you arrive",
-      "point3": "Skip the counter",
-      "cta": "Reserve via chat"
-    },
-    "delivery": {
-      "title": "Delivery",
-      "desc": "We deliver across Pattaya. Tell us what you want — we'll confirm availability and timing in chat.",
-      "point1": "Across Pattaya",
-      "point2": "Pay on arrival",
-      "point3": "Discreet handoff",
-      "cta": "Order via chat"
-    }
-  },
   "about": {
     "guideName": "Dima",
     "guideRole": "Labs Cannabis consultant and your cannabis guide",
-    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. No pressure, just honest advice.",
+    "guideDescription": "Dima personally selects every strain we carry and keeps an eye on what ends up on the shelf. Speaks Russian and English fluently. First time? He'll walk you through everything — what to expect, what to pick, how much to start with. Clear, honest advice.",
     "guidePhotoAlt": "Dima — Labs Cannabis consultant"
   },
   "faq": {
     "title": "Common Questions",
+    "q8": "Is there a free sample or can I try before I buy?",
+    "a8": "Yes. We offer a free sample in store, so you can check freshness and quality before you decide to buy.",
     "q1": "Do I need a prescription or medical card?",
     "a1": "Thailand requires a medical card for cannabis purchases. We help you get one on the spot — it's a quick digital form on your phone, takes about 2 minutes. Our staff walks you through every step.",
     "q2": "Is it legal for tourists?",
@@ -145,11 +156,7 @@
     "q6": "What are your hours?",
     "a6": "We're open every day, no appointment needed. Check the hours in the header — they update in real time.",
     "q7": "I've never tried cannabis. Can your staff help me choose?",
-    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount. No pressure, take your time.",
-    "q8": "Do you deliver?",
-    "a8": "Yes — we deliver across Pattaya. Message us on LINE, WhatsApp or Telegram, tell us what you're after, and we'll confirm availability, timing and how to pay. No online checkout — we'll sort it out in chat.",
-    "q9": "Can I order ahead and pick it up?",
-    "a9": "Yes. Message us in advance with what you'd like, and we'll have it ready when you arrive — no waiting at the counter. Same chat works for questions and reservations."
+    "a7": "Absolutely. Tell us what you're looking for — relaxation, energy, better sleep — and we'll recommend a strain and amount that make sense for you."
   },
   "strainPage": {
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
@@ -161,7 +168,43 @@
     "terpenes": "Terpene Profile",
     "about": "About This Strain",
     "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya.",
-    "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available at Labs Cannabis Pattaya."
+    "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available at Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Strains"
+  },
+  "effectPage": {
+    "title": "{effect} Cannabis Strains in Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} Strains — Labs Cannabis Pattaya",
+    "description": "Browse {effect} cannabis strains at Labs Cannabis dispensary in Pattaya, Thailand. Walk in, no appointment needed.",
+    "h1": "{effect} Cannabis Strains in Pattaya",
+    "intro": "Looking for {effect} effects? Browse our current selection at Labs Cannabis, Pattaya. Walk in — no appointment needed.",
+    "breadcrumbStrains": "Strains",
+    "reserve": "Ask about it",
+    "soldOut": "Sold Out",
+    "noResults": "No {effect} strains right now. Check back soon.",
+    "effect_relax": "Relaxing",
+    "effect_energy": "Energizing",
+    "effect_creative": "Creative",
+    "effect_sleep": "Sleep",
+    "effect_euphoria": "Euphoric",
+    "effect_focus": "Focus",
+    "effect_happy": "Happy",
+    "effect_uplifted": "Uplifting",
+    "effect_talkative": "Talkative",
+    "effect_hungry": "Appetite"
+  },
+  "typePage": {
+    "title": "{type} Cannabis Strains in Pattaya | Labs Cannabis",
+    "ogTitle": "{type} Strains — Labs Cannabis Pattaya",
+    "description": "Browse {type} cannabis strains at Labs Cannabis dispensary in Pattaya, Thailand. Walk in, no appointment needed.",
+    "h1": "{type} Cannabis Strains in Pattaya",
+    "intro": "Browse our current selection of {type} cannabis strains at Labs Cannabis, Pattaya. Walk in — no appointment needed.",
+    "breadcrumbStrains": "Strains",
+    "reserve": "Ask about it",
+    "soldOut": "Sold Out",
+    "noResults": "No {type} strains available right now.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrid"
   },
   "strainCommon": {
     "type_indica": "Indica",

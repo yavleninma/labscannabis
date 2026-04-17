@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { Strain } from "@/lib/mock-data";
 import { createTagHref } from "@/lib/strain-tags";
@@ -87,10 +88,12 @@ export function StrainCard({ strain, index, reserveLabel, soldOutLabel, locale, 
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {imageUrl ? (
-          <img
+          <Image
             src={imageUrl}
             alt={tCommon("cardAltText", { name: strain.name })}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            fill
+            sizes="(max-width: 420px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
           <div

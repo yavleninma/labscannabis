@@ -1,5 +1,6 @@
 import { useLocale, useTranslations } from "next-intl";
-import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
+import { getContactMessageLocale } from "@/i18n/config";
+import { buildContactLinks } from "@/lib/contact-links";
 import type { ShopSettings } from "@/lib/mock-data";
 import { mockShopSettings } from "@/lib/mock-data";
 
@@ -7,15 +8,10 @@ interface FooterProps {
   shopSettings?: ShopSettings;
 }
 
-function toContactLocale(value: string): ContactLocale {
-  if (value === "ru" || value === "th") return value;
-  return "en";
-}
-
 export function Footer({ shopSettings = mockShopSettings }: FooterProps) {
   const t = useTranslations("footer");
   const locale = useLocale();
-  const links = buildContactLinks(shopSettings, toContactLocale(locale), { kind: "general" });
+  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), { kind: "general" });
   const lineHref = links.line || links.phone || "#";
   const whatsappHref = links.whatsapp || links.phone || "#";
   const telegramHref = links.telegram || links.phone || "#";

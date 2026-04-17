@@ -1,90 +1,71 @@
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
 
 export const runtime = "edge";
-export const contentType = "image/png";
+export const alt = "Labs Cannabis — Cannabis Shop in Pattaya";
 export const size = { width: 1200, height: 630 };
-export const alt = "Labs Cannabis — Licensed Cannabis Dispensary in Pattaya";
+export const contentType = "image/png";
 
-// Keep a single Latin version across all locales to avoid bundling Thai/Cyrillic
-// fonts into the edge runtime — OG images are mostly consumed by scrapers anyway.
-export default function OpengraphImage() {
+export default async function OgImage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "meta" });
+
   return new ImageResponse(
     (
       <div
         style={{
-          height: "100%",
+          background: "linear-gradient(135deg, #0a1a0f 0%, #0d2218 50%, #0a1a0f 100%)",
           width: "100%",
+          height: "100%",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
+          alignItems: "flex-start",
           justifyContent: "center",
-          background: "linear-gradient(135deg, #0a0a0a 0%, #111111 100%)",
-          position: "relative",
+          padding: "60px 80px",
+          fontFamily: "sans-serif",
         }}
       >
-        <div
-          style={{
-            position: "absolute",
-            top: 40,
-            left: 40,
-            right: 40,
-            bottom: 40,
-            border: "1px solid #262626",
-            borderRadius: 20,
-          }}
-        />
+        {/* Green accent bar */}
+        <div style={{ width: 80, height: 4, background: "#10b981", marginBottom: 32 }} />
+        {/* Brand */}
+        <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 16 }}>
+          <span style={{ fontSize: 80, fontWeight: 800, color: "#ffffff", lineHeight: 1 }}>
+            LABS
+          </span>
+          <span style={{ fontSize: 40, fontWeight: 500, color: "#10b981" }}>
+            Cannabis
+          </span>
+        </div>
+        {/* Tagline */}
+        <div style={{ fontSize: 34, color: "#6ee7b7", marginBottom: 48, lineHeight: 1.3 }}>
+          {t("ogTitle")}
+        </div>
+        {/* Location badge */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
-            justifyContent: "center",
-            width: 120,
-            height: 120,
-            borderRadius: 999,
-            border: "2px solid #10b981",
-            color: "#10b981",
-            fontSize: 48,
-            fontWeight: 700,
-            marginBottom: 32,
+            gap: 12,
+            background: "rgba(16,185,129,0.12)",
+            border: "1px solid rgba(16,185,129,0.3)",
+            borderRadius: 12,
+            padding: "14px 28px",
           }}
         >
-          LC
+          <div style={{ fontSize: 26, color: "#10b981" }}>📍</div>
+          <div style={{ fontSize: 26, color: "#d1fae5" }}>
+            Pattaya, Thailand · 5 min from Walking Street
+          </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            fontSize: 72,
-            fontWeight: 800,
-            marginBottom: 16,
-            letterSpacing: -1,
-          }}
-        >
-          <span style={{ color: "#10b981" }}>Labs</span>
-          <span style={{ color: "#ffffff" }}>&nbsp;Cannabis</span>
+        {/* Rating */}
+        <div style={{ marginTop: 32, display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontSize: 24, color: "#fbbf24" }}>★★★★★</span>
+          <span style={{ fontSize: 22, color: "#a3a3a3" }}>4.8 on Google</span>
         </div>
-        <div style={{ color: "#a3a3a3", fontSize: 28, marginBottom: 14 }}>
-          Licensed Medical Cannabis Dispensary
-        </div>
-        <div
-          style={{
-            color: "#737373",
-            fontSize: 22,
-            marginBottom: 32,
-            padding: "0 60px",
-            textAlign: "center",
-          }}
-        >
-          Soi Hollywood, Pattaya — Walk-in, Pickup &amp; Delivery
-        </div>
-        <div
-          style={{
-            width: 220,
-            height: 3,
-            backgroundColor: "#10b981",
-            opacity: 0.5,
-            borderRadius: 2,
-          }}
-        />
       </div>
     ),
     { ...size }

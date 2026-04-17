@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Obchod s konopím v Pattaya | Vyzkoušejte před nákupem",
+    "description": "Licencovaný obchod s konopím v Pattaya. Vzorek zdarma v obchodě, takže si ho můžete před nákupem vyzkoušet a zkontrolovat čerstvost. Zdravotní průkaz na místě za 2 minuty, 5 minut od Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Obchod s konopím | Vyzkoušejte před nákupem",
+    "ogDescription": "Vzorek zdarma v obchodě, takže si ho můžete před nákupem vyzkoušet a zkontrolovat čerstvost. Labs Cannabis je 5 minut od Walking Street.",
+    "keywords": [
+      "obchod s konopím pattaya",
+      "obchod s trávou pattaya",
+      "lékárna pattaya",
+      "bezplatný vzorkový obchod s konopím",
+      "vyzkoušejte, než si koupíte konopí",
+      "chodit v lékárně Pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Otevřete nyní",
+    "closed": "ZAVŘENO",
+    "switching": "Přepínání",
+    "menu": "Katalog",
+    "allLanguages": "Všechny jazyky",
+    "searchLanguages": "Hledat jazyky",
+    "currentLanguage": "Aktuální jazyk"
+  },
+  "hero": {
+    "title": "Obchod s konopím v Pattaya",
+    "subtitle": "Čerstvé pupeny a předvalky – 5 minut od Walking Street. Přijďte, pomůžeme vám vybrat.",
+    "getDirections": "Získejte trasu",
+    "messageUs": "Napište nám",
+    "seeMenu": "Co je na skladě",
+    "sampleBadge": "Vzorek zdarma na prodejně",
+    "sampleTitle": "Vyzkoušejte před nákupem",
+    "sampleText": "Pojďte dál, nejprve zkontrolujte čerstvost a kvalitu. Jestli se ti to líbí, tak kup.",
+    "sampleFresh": "Čerstvá police",
+    "samplePressure": "Zkuste nejprve",
+    "sampleTrust": "Kvalita na prvním místě"
+  },
+  "noPrescription": {
+    "title": "Žádný předpis? Máme tě.",
+    "subtitle": "Thajsko vyžaduje zdravotní kartu — ale nebojte, vše vyřídíme na místě. Stačí vejít.",
+    "step1Title": "Vejděte dovnitř",
+    "step1Desc": "Není potřeba žádná schůzka. Stačí přijít do obchodu kdykoliv máme otevřeno.",
+    "step2Title": "Naskenujte a vyplňte",
+    "step2Desc": "Rychlý formulář v telefonu – trvá 2 minuty. Naši pracovníci vás provedou každým krokem.",
+    "step3Title": "Hotovo",
+    "step3Desc": "Vyberte si kmen, zaplaťte a užívejte si. To je vše.",
+    "badge1": "100% legální",
+    "badge2": "Trvá 2 min",
+    "badge3": "Konzultace zdarma"
+  },
+  "staffPick": {
+    "badge": "Expertní výběr",
+    "reserve": "Zeptejte se na to",
+    "viewDetails": "Zobrazit podrobnosti"
+  },
+  "catalog": {
+    "title": "Co je na skladě",
+    "count": "K dispozici jsou {count} kmeny",
+    "filter_all": "Vše",
+    "filter_relax": "Relaxovat",
+    "filter_energy": "Energie",
+    "filter_creative": "Tvůrčí",
+    "filter_euphoria": "Euforie",
+    "filter_sleep": "Spát",
+    "filter_focus": "Soustředit",
+    "filter_happy": "Šťastný",
+    "filter_uplifted": "Povznesený",
+    "filter_talkative": "Hovorný",
+    "filter_hungry": "Hladový",
+    "reserve": "Zeptejte se na to",
+    "soldOut": "Vyprodáno",
+    "noResults": "Tomuto filtru momentálně neodpovídají žádné kmeny.",
+    "activeFilter": "Filtrováno podle {tagType}: {tagLabel}",
+    "clearFilter": "Vymazat filtr"
+  },
+  "reviews": {
+    "subtitle": "{count} recenzí na Google",
+    "sourceGoogle": "přes Google",
+    "showOriginal": "Originál",
+    "showTranslation": "Překlad",
+    "translating": "Překlad...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Nejlepší výdejna v Pattaya rukou. Zaměstnanci opravdu zná jejich kmeny a pomohli mi vybrat perfektní. Čistý obchod, skvělá atmosféra."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Skvělý obchod. Tým mi pomohl vyřešit zdravotní kartu přímo tam za pár minut. Dobrý výběr kmenů a férové ​​ceny. Doporučeno."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Tak snadné. Byl jsem nervózní z té věci s lékařskou kartou, ale všechno se mnou provedli. Velký výběr a velmi znalý personál."
+      }
+    }
+  },
+  "location": {
+    "title": "Najděte nás",
+    "address": "Adresa",
+    "landmark": "Mezník",
+    "landmarkDesc": "5 minut chůze od Walking Street",
+    "directions": {
+      "title": "Nejlepší trasa pěšky",
+      "step1": "Vydejte se do Pattaya 13 Alley (Soi Hollywood) z Walking Street.",
+      "step2": "Zůstaňte v uličce a hledejte značení LABS VÝDEJNA.",
+      "step3": "Jsme po vaší levé straně, zhruba uprostřed ulice Pattaya 13."
+    },
+    "hours": "hodiny",
+    "hoursValueDynamic": "Denně {open} – {close}",
+    "hoursValue24_7": "Otevřeno 24/7",
+    "openInMaps": "Otevřít v Mapách Google"
+  },
+  "contact": {
+    "title": "Kontaktujte nás",
+    "subtitle": "Zeptejte se nebo zkontrolujte, co je k dispozici – obvykle během pracovní doby odpovídáme do 5 minut."
+  },
+  "footer": {
+    "disclaimer": "Pouze dospělí 20+. Licencovaný obchod s konopím fungující v rámci thajského lékařského konopí.",
+    "rights": "Všechna práva vyhrazena."
+  },
+  "quickMenu": {
+    "title": "Nyní skladem",
+    "seeAll": "Zobrazit katalog",
+    "soldOut": "Vyprodáno"
+  },
+  "socialProof": {
+    "reviewCount": "{count} recenzí na Google",
+    "seeAll": "Zobrazit všechny recenze"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis konzultant a váš průvodce konopím",
+    "guideDescription": "Dima osobně vybírá každý kmen, který nosíme, a dohlíží na to, co skončí na poličce. Hovoří plynně rusky a anglicky. Poprvé? Provede vás vším – co očekávat, co si vybrat, jak moc začít. Jasná, upřímná rada.",
+    "guidePhotoAlt": "Dima — Labs Cannabis konzultant"
+  },
+  "faq": {
+    "title": "Běžné otázky",
+    "q8": "Existuje bezplatný vzorek nebo jej mohu před nákupem vyzkoušet?",
+    "a8": "Ano. Nabízíme bezplatný vzorek na prodejně, takže si můžete zkontrolovat čerstvost a kvalitu, než se rozhodnete pro nákup.",
+    "q1": "Potřebuji lékařský předpis nebo lékařskou kartu?",
+    "a1": "Thajsko vyžaduje lékařskou kartu pro nákupy konopí. Pomůžeme vám jej získat na místě – je to rychlý digitální formulář ve vašem telefonu, který trvá asi 2 minuty. Náš personál vás provede každým krokem.",
+    "q2": "Je to legální pro turisty?",
+    "a2": "Ano. Turisté si mohou v Thajsku legálně zakoupit léčebné konopí s lékařskou kartou, kterou vám pomůžeme získat přímo zde na prodejně.",
+    "q3": "Jaké platební metody přijímáte?",
+    "a3": "Hotovost (thajský baht) a bankovní převod QR. V tuto chvíli nejsou k dispozici žádné kreditní karty.",
+    "q4": "Můžu tady kouřit nebo je to jen s sebou?",
+    "a4": "Pouze s sebou. Prodáváme produkt pro osobní potřebu – na místě není kuřácký prostor.",
+    "q5": "Jak vás najdu od Walking Street?",
+    "a5": "5 minut chůze. Zamiřte do Soi Hollywood (Pattaya 13 Alley), hledejte značení LABS na levé straně. Jsme asi uprostřed pruhu.",
+    "q6": "Jaké máte hodiny?",
+    "a6": "Máme otevřeno každý den, není potřeba domluva. Zkontrolujte hodiny v záhlaví – aktualizují se v reálném čase.",
+    "q7": "Konopí jsem nikdy nezkoušel. Mohou mi vaši zaměstnanci pomoci s výběrem?",
+    "a7": "Absolutně. Řekněte nám, co hledáte – relaxaci, energii, lepší spánek – a my vám doporučíme kmen a množství, které vám dává smysl."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Koupit u Labs Cannabis Pattaya",
+    "backToCatalog": "Zpět k výběru",
+    "reserve": "Zeptejte se na tento kmen",
+    "reserveVia": "Kontakt přes",
+    "call": "Volání",
+    "soldOut": "Vyprodáno",
+    "terpenes": "Terpenový profil",
+    "about": "O tomto kmeni",
+    "metaDescriptionFallback": "{name} {type} kmen konopí. THC {thc}%. Dostupné na Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} kmen konopí. Dostupné na Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Kmeny"
+  },
+  "effectPage": {
+    "title": "{effect} Kmeny konopí v Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} Kmeny — Labs Cannabis Pattaya",
+    "description": "Prohlédněte si {effect} kmeny konopí v lékárně Labs Cannabis v Pattaya, Thajsko. Jděte dovnitř, není potřeba schůzka.",
+    "h1": "{effect} Kmeny konopí v Pattaya",
+    "intro": "Hledáte {effect} efekty? Prohlédněte si naši aktuální nabídku na Labs Cannabis, Pattaya. Vejděte dovnitř – není potřeba schůzka.",
+    "breadcrumbStrains": "Kmeny",
+    "reserve": "Zeptejte se na to",
+    "soldOut": "Vyprodáno",
+    "noResults": "Momentálně žádné kmeny {effect}. Vraťte se brzy.",
+    "effect_relax": "Relaxační",
+    "effect_energy": "Energizující",
+    "effect_creative": "Tvůrčí",
+    "effect_sleep": "Spát",
+    "effect_euphoria": "Euforický",
+    "effect_focus": "Soustředit",
+    "effect_happy": "Šťastný",
+    "effect_uplifted": "Povznášející",
+    "effect_talkative": "Hovorný",
+    "effect_hungry": "Chuť"
+  },
+  "typePage": {
+    "title": "{type} Kmeny konopí v Pattaya | Labs Cannabis",
+    "ogTitle": "{type} Kmeny — Labs Cannabis Pattaya",
+    "description": "Prohlédněte si {type} kmeny konopí v lékárně Labs Cannabis v Pattaya, Thajsko. Jděte dovnitř, není potřeba schůzka.",
+    "h1": "{type} Kmeny konopí v Pattaya",
+    "intro": "Prohlédněte si náš aktuální výběr {type} kmenů konopí na Labs Cannabis, Pattaya. Vejděte dovnitř – není potřeba schůzka.",
+    "breadcrumbStrains": "Kmeny",
+    "reserve": "Zeptejte se na to",
+    "soldOut": "Vyprodáno",
+    "noResults": "Momentálně nejsou k dispozici žádné kmeny {type}.",
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybridní"
+  },
+  "strainCommon": {
+    "type_indica": "Indica",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybridní",
+    "effect_relax": "Relaxovat",
+    "effect_energy": "Energie",
+    "effect_creative": "Tvůrčí",
+    "effect_sleep": "Spát",
+    "effect_euphoria": "Euforie",
+    "effect_focus": "Soustředit",
+    "effect_happy": "Šťastný",
+    "effect_uplifted": "Povznesený",
+    "effect_talkative": "Hovorný",
+    "effect_hungry": "Hladový",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} kmen konopí na Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Expertní výběr na Labs Cannabis Pattaya",
+    "strainAltText": "{name} kmen konopí dostupný v lékárně Labs Cannabis Pattaya",
+    "tagType_effect": "Účinek",
+    "tagType_type": "Typ",
+    "tagType_terpene": "terpen"
+  }
+}

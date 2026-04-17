@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Sklep z marihuaną w Pattaya | Wypróbuj przed zakupem",
+    "description": "Licencjonowany sklep z marihuaną w Pattaya. Darmowa próbka w sklepie, więc możesz przymierzyć przed zakupem i najpierw sprawdzić świeżość. Karta medyczna na miejscu w 2 minuty, 5 minut od Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya Sklep z marihuaną | Wypróbuj przed zakupem",
+    "ogDescription": "Darmowa próbka w sklepie, więc możesz przymierzyć przed zakupem i najpierw sprawdzić świeżość. Labs Cannabis jest 5 minut od Walking Street.",
+    "keywords": [
+      "sklep z konopiami indyjskimi Pattaya",
+      "sklep z chwastami Pattaya",
+      "przychodnia Pattaya",
+      "bezpłatny sklep z próbkami konopi indyjskich",
+      "spróbuj zanim kupisz marihuanę",
+      "chodzić po przychodni Pattaya"
+    ]
+  },
+  "header": {
+    "openNow": "Otwórz teraz",
+    "closed": "Zamknięte",
+    "switching": "Przełączanie",
+    "menu": "Katalog",
+    "allLanguages": "Wszystkie języki",
+    "searchLanguages": "Wyszukaj języki",
+    "currentLanguage": "Aktualny język"
+  },
+  "hero": {
+    "title": "Sklep z marihuaną w Pattaya",
+    "subtitle": "Świeże pąki i bułki — 5 minut od Walking Street. Przyjdź, pomożemy Ci wybrać.",
+    "getDirections": "Uzyskaj wskazówki",
+    "messageUs": "Napisz do nas",
+    "seeMenu": "Co jest w magazynie",
+    "sampleBadge": "Darmowa próbka w sklepie",
+    "sampleTitle": "Wypróbuj zanim kupisz",
+    "sampleText": "Przyjdź, najpierw sprawdź świeżość i jakość. Jeśli Ci się podoba, to kupuj.",
+    "sampleFresh": "Świeża półka",
+    "samplePressure": "Spróbuj najpierw",
+    "sampleTrust": "Jakość na pierwszym miejscu"
+  },
+  "noPrescription": {
+    "title": "Bez recepty? Mamy cię.",
+    "subtitle": "W Tajlandii wymagana jest karta medyczna — ale nie martw się, wszystkim zajmiemy się na miejscu. Po prostu wejdź.",
+    "step1Title": "Dosiadać",
+    "step1Desc": "Nie jest potrzebne żadne spotkanie. Po prostu przyjdź do sklepu, kiedy tylko jesteśmy otwarci.",
+    "step2Title": "Zeskanuj i wypełnij",
+    "step2Desc": "Szybki formularz w telefonie — zajmuje 2 minuty. Nasz personel przeprowadzi Cię przez każdy etap.",
+    "step3Title": "Zrobione",
+    "step3Desc": "Wybierz odmianę, zapłać i ciesz się. To wszystko.",
+    "badge1": "100% legalne",
+    "badge2": "Zajmuje 2 minuty",
+    "badge3": "Bezpłatne konsultacje"
+  },
+  "staffPick": {
+    "badge": "Wybór eksperta",
+    "reserve": "Zapytaj o to",
+    "viewDetails": "Zobacz szczegóły"
+  },
+  "catalog": {
+    "title": "Co jest w magazynie",
+    "count": "Dostępne odmiany {count}",
+    "filter_all": "Wszystko",
+    "filter_relax": "Zrelaksować się",
+    "filter_energy": "Energia",
+    "filter_creative": "Twórczy",
+    "filter_euphoria": "Euforia",
+    "filter_sleep": "Spać",
+    "filter_focus": "Centrum",
+    "filter_happy": "Szczęśliwy",
+    "filter_uplifted": "Podniesiony",
+    "filter_talkative": "Rozmowny",
+    "filter_hungry": "Głodny",
+    "reserve": "Zapytaj o to",
+    "soldOut": "Wyprzedane",
+    "noResults": "W tej chwili żaden szczep nie pasuje do tego filtra.",
+    "activeFilter": "Filtrowane według {tagType}: {tagLabel}",
+    "clearFilter": "Wyczyść filtr"
+  },
+  "reviews": {
+    "subtitle": "{count} recenzje na temat Google",
+    "sourceGoogle": "przez Google",
+    "showOriginal": "Oryginalny",
+    "showTranslation": "Tłumaczenie",
+    "translating": "Tłumaczenie...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Najlepsza przychodnia w Pattaya bez dwóch zdań. Personel naprawdę zna swoje odmiany i pomógł mi wybrać idealną. Czysty sklep, świetne wibracje."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "Doskonały sklep. Zespół pomógł mi uporządkować kartę medyczną w ciągu kilku minut. Dobry wybór odmian i uczciwe ceny. Zalecony."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "Takie łatwe. Denerwowałem się tą sprawą z kartą medyczną, ale przeprowadzili mnie przez wszystko. Duży wybór i bardzo kompetentny personel."
+      }
+    }
+  },
+  "location": {
+    "title": "Znajdź nas",
+    "address": "Adres",
+    "landmark": "Punkt orientacyjny",
+    "landmarkDesc": "5 minut spacerem od Walking Street",
+    "directions": {
+      "title": "Najlepsza trasa na piechotę",
+      "step1": "Udaj się do Pattaya 13 Alley (Soi Hollywood) z Walking Street.",
+      "step2": "Pozostań na alei i poszukaj oznakowania LABS PRZYCHODY.",
+      "step3": "Jesteśmy po lewej stronie, mniej więcej pośrodku alei Pattaya 13."
+    },
+    "hours": "Godziny",
+    "hoursValueDynamic": "Codziennie {open} - {close}",
+    "hoursValue24_7": "Otwarte 24 godziny na dobę, 7 dni w tygodniu",
+    "openInMaps": "Otwórz w Google Mapach"
+  },
+  "contact": {
+    "title": "Skontaktuj się",
+    "subtitle": "Zadaj pytanie lub sprawdź dostępność — odpowiadamy zazwyczaj w ciągu 5 minut w godzinach pracy."
+  },
+  "footer": {
+    "disclaimer": "Tylko dorośli 20+. Licencjonowany sklep z konopiami indyjskimi działający w ramach tajskich ram dotyczących marihuany medycznej.",
+    "rights": "Wszelkie prawa zastrzeżone."
+  },
+  "quickMenu": {
+    "title": "W magazynie",
+    "seeAll": "Zobacz katalog",
+    "soldOut": "Wyprzedane"
+  },
+  "socialProof": {
+    "reviewCount": "{count} recenzje na temat Google",
+    "seeAll": "Zobacz wszystkie recenzje"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Konsultant Labs Cannabis i Twój przewodnik po konopiach indyjskich",
+    "guideDescription": "Dima osobiście wybiera każdą odmianę, którą oferujemy i pilnuje, co ląduje na półce. Mówi biegle po rosyjsku i angielsku. Pierwszy raz? Przeprowadzi Cię przez wszystko – czego się spodziewać, co wybrać, od czego zacząć. Jasne i szczere porady.",
+    "guidePhotoAlt": "Dima — konsultant Labs Cannabis"
+  },
+  "faq": {
+    "title": "Często zadawane pytania",
+    "q8": "Czy dostępna jest bezpłatna próbka, czy mogę wypróbować przed zakupem?",
+    "a8": "Tak. Oferujemy bezpłatną próbkę w sklepie, dzięki czemu możesz sprawdzić świeżość i jakość przed podjęciem decyzji o zakupie.",
+    "q1": "Czy potrzebuję recepty lub karty medycznej?",
+    "a1": "W Tajlandii przy zakupie konopi indyjskich wymagana jest karta medyczna. Pomożemy Ci go uzyskać na miejscu — jest to szybki formularz cyfrowy na Twoim telefonie, zajmuje około 2 minut. Nasz personel przeprowadzi Cię przez każdy krok.",
+    "q2": "Czy jest to legalne dla turystów?",
+    "a2": "Tak. Turyści mogą legalnie kupować marihuanę medyczną w Tajlandii za pomocą karty medycznej, którą pomożemy Ci uzyskać tutaj, w sklepie.",
+    "q3": "Jakie metody płatności akceptujecie?",
+    "a3": "Gotówka (baht tajski) i przelew bankowy QR. W tej chwili brak kart kredytowych.",
+    "q4": "Czy mogę tu palić, czy jest to tylko na wynos?",
+    "a4": "Tylko na wynos. Sprzedajemy produkt do użytku osobistego – na terenie obiektu nie ma strefy dla palących.",
+    "q5": "Jak Cię znaleźć w firmie Walking Street?",
+    "a5": "5 minut spacerem. Udaj się do Soi Hollywood (alley Pattaya 13), poszukaj oznakowania LABS po lewej stronie. Jesteśmy mniej więcej na środku pasa.",
+    "q6": "Jakie masz godziny?",
+    "a6": "Jesteśmy otwarci codziennie, nie trzeba się umawiać. Sprawdź godziny w nagłówku — aktualizują się w czasie rzeczywistym.",
+    "q7": "Nigdy nie próbowałem marihuany. Czy Państwa pracownicy mogą mi pomóc w wyborze?",
+    "a7": "Absolutnie. Powiedz nam, czego szukasz — relaksu, energii, lepszego snu — a my zaproponujemy Ci odmianę i ilość, która będzie dla Ciebie odpowiednia."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Kup w Labs Cannabis Pattaya",
+    "backToCatalog": "Powrót do wyboru",
+    "reserve": "Zapytaj o tę odmianę",
+    "reserveVia": "Skontaktuj się przez",
+    "call": "Dzwonić",
+    "soldOut": "Wyprzedane",
+    "terpenes": "Profil terpenowy",
+    "about": "O tym szczepie",
+    "metaDescriptionFallback": "{name} {type} odmiana konopi. THC {thc}%. Dostępne w Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} odmiana konopi. Dostępne w Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "Szczepy"
+  },
+  "effectPage": {
+    "title": "{effect} Odmiany konopi w Pattaya | __ MARKA_1__",
+    "ogTitle": "{effect} Odmiany — Labs Cannabis Pattaya",
+    "description": "Przeglądaj {effect} odmiany konopi indyjskich w Labs Cannabis przychodni w Pattaya w Tajlandii. Wejdź, nie trzeba się umawiać.",
+    "h1": "{effect} Odmiany konopi w Pattaya",
+    "intro": "Szukasz efektów {effect}? Przeglądaj naszą aktualną ofertę na Labs Cannabis, Pattaya. Przyjdź – nie trzeba się umawiać.",
+    "breadcrumbStrains": "Szczepy",
+    "reserve": "Zapytaj o to",
+    "soldOut": "Wyprzedane",
+    "noResults": "Żadnych {effect} napięć w tej chwili. Sprawdź ponownie wkrótce.",
+    "effect_relax": "Odprężający",
+    "effect_energy": "Energetyzujący",
+    "effect_creative": "Twórczy",
+    "effect_sleep": "Spać",
+    "effect_euphoria": "Euforyk",
+    "effect_focus": "Centrum",
+    "effect_happy": "Szczęśliwy",
+    "effect_uplifted": "Podnoszący na duchu",
+    "effect_talkative": "Rozmowny",
+    "effect_hungry": "Apetyt"
+  },
+  "typePage": {
+    "title": "{type} Odmiany konopi w Pattaya | __ MARKA_1__",
+    "ogTitle": "{type} Odmiany — Labs Cannabis Pattaya",
+    "description": "Przeglądaj {type} odmiany konopi indyjskich w Labs Cannabis przychodni w Pattaya w Tajlandii. Wejdź, nie trzeba się umawiać.",
+    "h1": "{type} Odmiany konopi w Pattaya",
+    "intro": "Przeglądaj naszą aktualną ofertę odmian konopi {type} w Labs Cannabis, Pattaya. Przyjdź – nie trzeba się umawiać.",
+    "breadcrumbStrains": "Szczepy",
+    "reserve": "Zapytaj o to",
+    "soldOut": "Wyprzedane",
+    "noResults": "Obecnie nie są dostępne żadne odmiany {type}.",
+    "type_indica": "Indyka",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrydowy"
+  },
+  "strainCommon": {
+    "type_indica": "Indyka",
+    "type_sativa": "Sativa",
+    "type_hybrid": "Hybrydowy",
+    "effect_relax": "Zrelaksować się",
+    "effect_energy": "Energia",
+    "effect_creative": "Twórczy",
+    "effect_sleep": "Spać",
+    "effect_euphoria": "Euforia",
+    "effect_focus": "Centrum",
+    "effect_happy": "Szczęśliwy",
+    "effect_uplifted": "Podniesiony",
+    "effect_talkative": "Rozmowny",
+    "effect_hungry": "Głodny",
+    "thc": "__ MARKA_0__",
+    "cbd": "__ MARKA_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "{name} odmiana konopi w Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — Wybór eksperta w Labs Cannabis Pattaya",
+    "strainAltText": "{name} odmiana konopi dostępna w Labs Cannabis przychodni Pattaya",
+    "tagType_effect": "Efekt",
+    "tagType_type": "Typ",
+    "tagType_terpene": "Terpen"
+  }
+}

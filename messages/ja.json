@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Pattaya の大麻ショップ |購入する前にお試しください",
+    "description": "Pattaya にある認可された大麻ショップ。店頭には無料サンプルがあるので、購入前に試食して鮮度を確認してください。現場で医療カードを 2 分、Walking Street からは 5 分で入手できます。",
+    "ogTitle": "Labs Cannabis — Pattaya 大麻ショップ |購入する前にお試しください",
+    "ogDescription": "店頭には無料サンプルがあるので、購入前に試食して鮮度を確認してください。 Labs Cannabis は Walking Street から 5 分です。",
+    "keywords": [
+      "大麻ショップ パタヤ",
+      "ウィード ショップ パタヤ",
+      "パタヤ薬局",
+      "無料サンプル大麻ショップ",
+      "大麻を購入する前に試してください",
+      "パタヤの薬局を歩く"
+    ]
+  },
+  "header": {
+    "openNow": "今すぐオープン",
+    "closed": "閉店",
+    "switching": "スイッチング",
+    "menu": "カタログ",
+    "allLanguages": "すべての言語",
+    "searchLanguages": "検索言語",
+    "currentLanguage": "現在の言語"
+  },
+  "hero": {
+    "title": "Pattayaの大麻店",
+    "subtitle": "新鮮なつぼみとプレロール — Walking Street から 5 分。ご来店ください。選ぶお手伝いをいたします。",
+    "getDirections": "道順を調べる",
+    "messageUs": "メッセージをお送りください",
+    "seeMenu": "在庫は何ですか",
+    "sampleBadge": "店頭に無料サンプルあり",
+    "sampleTitle": "購入する前にお試しください",
+    "sampleText": "来店してまずは鮮度と品質をチェックしてください。気に入ったら購入してください。",
+    "sampleFresh": "新鮮な棚",
+    "samplePressure": "まずは試してみる",
+    "sampleTrust": "品質第一"
+  },
+  "noPrescription": {
+    "title": "処方箋はありませんか？君がいるよ。",
+    "subtitle": "タイでは医療カードが必要ですが、ご心配なく。すべてその場で対応いたします。ただ歩いて入ってください。",
+    "step1Title": "ウォークイン",
+    "step1Desc": "予約は必要ありません。開いている時間にいつでもお店に来てください。",
+    "step2Title": "スキャンして記入する",
+    "step2Desc": "携帯電話でのクイックフォーム — 所要時間は 2 分です。弊社スタッフがあらゆるステップをご案内いたします。",
+    "step3Title": "終わり",
+    "step3Desc": "品種を選択し、支払いをして、お楽しみください。それでおしまい。",
+    "badge1": "100%合法",
+    "badge2": "2分かかります",
+    "badge3": "無料相談"
+  },
+  "staffPick": {
+    "badge": "エキスパートの選択",
+    "reserve": "それについて尋ねてください",
+    "viewDetails": "詳細を見る"
+  },
+  "catalog": {
+    "title": "在庫は何ですか",
+    "count": "{count}株が利用可能",
+    "filter_all": "全て",
+    "filter_relax": "リラックス",
+    "filter_energy": "エネルギー",
+    "filter_creative": "クリエイティブ",
+    "filter_euphoria": "多幸感",
+    "filter_sleep": "寝る",
+    "filter_focus": "集中",
+    "filter_happy": "ハッピー",
+    "filter_uplifted": "高揚した",
+    "filter_talkative": "おしゃべり",
+    "filter_hungry": "お腹がすいた",
+    "reserve": "それについて尋ねてください",
+    "soldOut": "完売",
+    "noResults": "現在、このフィルターに一致する株はありません。",
+    "activeFilter": "{tagType} でフィルタリング: {tagLabel}",
+    "clearFilter": "クリアフィルター"
+  },
+  "reviews": {
+    "subtitle": "Google に関する {count} 件のレビュー",
+    "sourceGoogle": "Google 経由",
+    "showOriginal": "オリジナル",
+    "showTranslation": "翻訳",
+    "translating": "翻訳中...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "Pattaya で間違いなく最高の薬局です。スタッフは自分の品種をよく知っていて、完璧な品種を選ぶのを手伝ってくれました。清潔な店内、素晴らしい雰囲気。"
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "素晴らしいお店。チームは数分でその場で医療カードを整理するのを手伝ってくれました。優れた株の選択と公正な価格。推奨。"
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "とても簡単です。診察券のことで不安でしたが、丁寧に教えていただきました。素晴らしい品揃えと非常に知識豊富なスタッフ。"
+      }
+    }
+  },
+  "location": {
+    "title": "私たちを探す",
+    "address": "住所",
+    "landmark": "ランドマーク",
+    "landmarkDesc": "Walking Streetから徒歩5分",
+    "directions": {
+      "title": "徒歩でのベストルート",
+      "step1": "Walking Street から Pattaya 13 Alley (ソイ ハリウッド) へ向かいます。",
+      "step2": "路地に留まり、LABS DISPENSARY の看板を探してください。",
+      "step3": "当店は左側、Pattaya 13 Alley の真ん中あたりにございます。"
+    },
+    "hours": "営業時間",
+    "hoursValueDynamic": "毎日 {open} ～ {close}",
+    "hoursValue24_7": "24時間365日営業",
+    "openInMaps": "Google マップで開く"
+  },
+  "contact": {
+    "title": "連絡する",
+    "subtitle": "質問するか、利用可能なものを確認してください。通常、営業時間内に 5 分以内に返信されます。"
+  },
+  "footer": {
+    "disclaimer": "20歳以上の大人のみ。タイの医療大麻の枠組みに基づいて運営されている認可された大麻ショップ。",
+    "rights": "無断転載を禁じます。"
+  },
+  "quickMenu": {
+    "title": "在庫あり",
+    "seeAll": "カタログを見る",
+    "soldOut": "完売"
+  },
+  "socialProof": {
+    "reviewCount": "Google に関する {count} 件のレビュー",
+    "seeAll": "すべてのレビューを見る"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis コンサルタントと大麻ガイド",
+    "guideDescription": "ディマは私たちが取り扱うすべての菌株を個人的に選択し、何が棚に並ぶのかを常に監視しています。ロシア語と英語を流暢に話します。初めてですか？彼は、何を期待するか、何を選択するか、いくらから始めるべきかなど、すべてを説明します。明確で正直なアドバイス。",
+    "guidePhotoAlt": "ディマ — Labs Cannabis コンサルタント"
+  },
+  "faq": {
+    "title": "よくある質問",
+    "q8": "無料サンプルはありますか、または購入前に試してみることはできますか?",
+    "a8": "はい。店頭では無料サンプルをご用意しておりますので、ご購入前に鮮度や品質をご確認いただけます。",
+    "q1": "処方箋や医療カードは必要ですか?",
+    "a1": "タイでは大麻の購入には医療カードが必要です。私たちは、その場でフォームを取得できるようお手伝いします。携帯電話で簡単にデジタル フォームを作成できるため、所要時間は約 2 分です。当社スタッフが各ステップをご案内します。",
+    "q2": "観光客にとってそれは合法ですか？",
+    "a2": "はい。観光客はタイで医療カードを使用して医療用大麻を合法的に購入できます。私たちはこのショップで医療カードを取得するお手伝いをします。",
+    "q3": "どのような支払い方法を利用できますか?",
+    "a3": "現金（タイバーツ）およびQR銀行振込。現時点ではクレジット カードはありません。",
+    "q4": "ここで喫煙できますか、それとも持ち帰りのみですか?",
+    "a4": "持ち帰りのみ。当社は個人使用を目的として製品を販売しています。敷地内に喫煙エリアはありません。",
+    "q5": "Walking Street からあなたを見つけるにはどうすればよいですか?",
+    "a5": "徒歩5分。ソイ ハリウッド (Pattaya 13 Alley) に入り、左側にある LABS の看板を探してください。私たちは車線の真ん中あたりにいます。",
+    "q6": "営業時間は何時ですか?",
+    "a6": "毎日営業しておりますので、ご予約は不要です。ヘッダーの時間を確認してください。時間はリアルタイムで更新されます。",
+    "q7": "大麻を試したことはありません。スタッフが選択を手伝ってくれますか?",
+    "a7": "絶対に。リラクゼーション、エネルギー、より良い睡眠など、あなたが何を求めているかを教えてください。あなたにとって意味のある負荷と量をお勧めします。"
+  },
+  "strainPage": {
+    "metaTitleSuffix": "Labs Cannabis Pattaya で購入する",
+    "backToCatalog": "選択項目に戻る",
+    "reserve": "この株について質問する",
+    "reserveVia": "連絡先",
+    "call": "電話",
+    "soldOut": "完売",
+    "terpenes": "テルペンのプロファイル",
+    "about": "この株について",
+    "metaDescriptionFallback": "{name} {type} 大麻株。 THC {thc}%。 Labs Cannabis Pattaya で入手可能です。",
+    "metaDescriptionFallbackNoThc": "{name} {type} 大麻株。 Labs Cannabis Pattaya で入手可能です。",
+    "breadcrumbStrains": "株"
+  },
+  "effectPage": {
+    "title": "{effect} Pattaya の大麻株 | __ブランド_1__",
+    "ogTitle": "{effect} 株 — Labs Cannabis Pattaya",
+    "description": "タイのPattayaにあるLabs Cannabis薬局で{effect}の大麻株を閲覧してください。予約不要でご来店いただけます。",
+    "h1": "{effect} Pattaya の大麻株",
+    "intro": "{effect} エフェクトをお探しですか? Labs Cannabis、Pattaya で現在のセレクションをご覧ください。予約不要でご来店いただけます。",
+    "breadcrumbStrains": "株",
+    "reserve": "それについて尋ねてください",
+    "soldOut": "完売",
+    "noResults": "現在、{effect} 株はありません。すぐにもう一度確認してください。",
+    "effect_relax": "リラックス",
+    "effect_energy": "元気を与える",
+    "effect_creative": "クリエイティブ",
+    "effect_sleep": "寝る",
+    "effect_euphoria": "多幸感",
+    "effect_focus": "集中",
+    "effect_happy": "ハッピー",
+    "effect_uplifted": "高揚感",
+    "effect_talkative": "おしゃべり",
+    "effect_hungry": "食欲"
+  },
+  "typePage": {
+    "title": "{type} Pattaya の大麻株 | __ブランド_1__",
+    "ogTitle": "{type} 株 — Labs Cannabis Pattaya",
+    "description": "タイのPattayaにあるLabs Cannabis薬局で{type}の大麻株を閲覧してください。予約不要でご来店いただけます。",
+    "h1": "{type} Pattaya の大麻株",
+    "intro": "現在の{type}大麻株のセレクションをLabs Cannabis、Pattayaでご覧ください。予約不要でご来店いただけます。",
+    "breadcrumbStrains": "株",
+    "reserve": "それについて尋ねてください",
+    "soldOut": "完売",
+    "noResults": "現在利用可能な{type}株はありません。",
+    "type_indica": "インディカ",
+    "type_sativa": "サティバ",
+    "type_hybrid": "ハイブリッド"
+  },
+  "strainCommon": {
+    "type_indica": "インディカ",
+    "type_sativa": "サティバ",
+    "type_hybrid": "ハイブリッド",
+    "effect_relax": "リラックス",
+    "effect_energy": "エネルギー",
+    "effect_creative": "クリエイティブ",
+    "effect_sleep": "寝る",
+    "effect_euphoria": "多幸感",
+    "effect_focus": "集中",
+    "effect_happy": "ハッピー",
+    "effect_uplifted": "高揚した",
+    "effect_talkative": "おしゃべり",
+    "effect_hungry": "お腹がすいた",
+    "thc": "__ブランド_0__",
+    "cbd": "__ブランド_0__",
+    "pricePerGram": "฿{price}/g",
+    "cardAltText": "Labs Cannabis Pattaya の {name} 大麻株",
+    "staffPickAltText": "{name} — Labs Cannabis Pattaya の専門家による選出",
+    "strainAltText": "{name} 大麻株は Labs Cannabis 薬局 Pattaya で入手可能",
+    "tagType_effect": "効果",
+    "tagType_type": "タイプ",
+    "tagType_terpene": "テルペン"
+  }
+}

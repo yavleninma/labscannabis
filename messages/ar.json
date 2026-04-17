@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — متجر القنب في Pattaya | جرب قبل الشراء",
+    "description": "متجر حشيش مرخص في Pattaya. عينة مجانية في المتجر، لذا يمكنك تجربتها قبل الشراء والتحقق من نضارتها أولاً. الحصول على البطاقة الطبية في الموقع خلال دقيقتين، و5 دقائق من Walking Street.",
+    "ogTitle": "Labs Cannabis — Pattaya متجر القنب | جرب قبل الشراء",
+    "ogDescription": "عينة مجانية في المتجر، لذا يمكنك تجربتها قبل الشراء والتحقق من نضارتها أولاً. يقع Labs Cannabis على بعد 5 دقائق من Walking Street.",
+    "keywords": [
+      "متجر القنب باتايا",
+      "متجر الاعشاب باتايا",
+      "مستوصف باتايا",
+      "متجر القنب عينة مجانية",
+      "حاول قبل شراء الحشيش",
+      "المشي في مستوصف باتايا"
+    ]
+  },
+  "header": {
+    "openNow": "افتح الآن",
+    "closed": "مغلق",
+    "switching": "التبديل",
+    "menu": "كتالوج",
+    "allLanguages": "جميع اللغات",
+    "searchLanguages": "لغات البحث",
+    "currentLanguage": "اللغة الحالية"
+  },
+  "hero": {
+    "title": "متجر القنب في Pattaya",
+    "subtitle": "البراعم الطازجة واللفائف المسبقة — 5 دقائق من Walking Street. تفضل بالدخول، وسنساعدك في الاختيار.",
+    "getDirections": "الحصول على الاتجاهات",
+    "messageUs": "راسلنا",
+    "seeMenu": "ماذا يوجد في المخزون",
+    "sampleBadge": "عينة مجانية في المتجر",
+    "sampleTitle": "جرب قبل أن تشتري",
+    "sampleText": "تعال وتحقق من النضارة والجودة أولاً. إذا كنت ترغب في ذلك، ثم شراء.",
+    "sampleFresh": "الرف الطازج",
+    "samplePressure": "حاول أولا",
+    "sampleTrust": "الجودة أولا"
+  },
+  "noPrescription": {
+    "title": "لا وصفة طبية؟ لقد حصلنا عليك.",
+    "subtitle": "تتطلب تايلاند بطاقة طبية — ولكن لا تقلق، فنحن نتعامل مع كل شيء على الفور. فقط ادخل.",
+    "step1Title": "ادخل",
+    "step1Desc": "لا حاجة لموعد. فقط تعال إلى المتجر في أي وقت نكون فيه مفتوحين.",
+    "step2Title": "مسح وملء",
+    "step2Desc": "نموذج سريع على هاتفك - يستغرق دقيقتين. سيقوم موظفونا بإرشادك خلال كل خطوة.",
+    "step3Title": "منتهي",
+    "step3Desc": "اختر السلالة التي تناسبك، وادفع، واستمتع. هذا كل شيء.",
+    "badge1": "قانوني 100%",
+    "badge2": "يستغرق 2 دقيقة",
+    "badge3": "استشارة مجانية"
+  },
+  "staffPick": {
+    "badge": "اختيار الخبراء",
+    "reserve": "اسأل عن ذلك",
+    "viewDetails": "عرض التفاصيل"
+  },
+  "catalog": {
+    "title": "ماذا يوجد في المخزون",
+    "count": "{count} السلالات المتاحة",
+    "filter_all": "الجميع",
+    "filter_relax": "يستريح",
+    "filter_energy": "طاقة",
+    "filter_creative": "مبدع",
+    "filter_euphoria": "نشوة",
+    "filter_sleep": "ينام",
+    "filter_focus": "ركز",
+    "filter_happy": "سعيد",
+    "filter_uplifted": "مرفوع",
+    "filter_talkative": "ثرثار",
+    "filter_hungry": "جائع",
+    "reserve": "اسأل عن ذلك",
+    "soldOut": "نفذ",
+    "noResults": "لا توجد سلالات تتطابق مع هذا الفلتر في الوقت الحالي.",
+    "activeFilter": "تمت التصفية حسب {tagType}: {tagLabel}",
+    "clearFilter": "مسح الفلتر"
+  },
+  "reviews": {
+    "subtitle": "{count} تعليقات على Google",
+    "sourceGoogle": "عبر Google",
+    "showOriginal": "إبداعي",
+    "showTranslation": "ترجمة",
+    "translating": "ترجمة...",
+    "items": {
+      "mike": {
+        "name": "Mike R.",
+        "initial": "M",
+        "stars": 5,
+        "text": "أفضل مستوصف في Pattaya بلا أدنى شك. يعرف الموظفون حقًا سلالاتهم وساعدوني في اختيار الخيار المثالي. متجر نظيف، مشاعر رائعة."
+      },
+      "alex": {
+        "name": "Alexey K.",
+        "initial": "A",
+        "stars": 5,
+        "text": "متجر ممتاز. ساعدني الفريق في فرز البطاقة الطبية هناك في بضع دقائق. اختيار سلالة جيدة وأسعار عادلة. مُستَحسَن."
+      },
+      "sarah": {
+        "name": "Sarah T.",
+        "initial": "S",
+        "stars": 5,
+        "text": "سهل جدا. لقد كنت متوترة بشأن مسألة البطاقة الطبية، لكنهم أطلعوني على كل شيء. اختيار كبير والموظفين ذوي المعرفة للغاية."
+      }
+    }
+  },
+  "location": {
+    "title": "ابحث عنا",
+    "address": "عنوان",
+    "landmark": "معلم",
+    "landmarkDesc": "5 دقائق سيرا على الأقدام من Walking Street",
+    "directions": {
+      "title": "أفضل طريق سيرا على الأقدام",
+      "step1": "توجه إلى Pattaya 13 Alley (Soi Hollywood) من Walking Street.",
+      "step2": "ابق في الزقاق وابحث عن لافتات LABS المستوصف.",
+      "step3": "نحن على جانبك الأيسر، في منتصف زقاق Pattaya 13 تقريبًا."
+    },
+    "hours": "ساعات",
+    "hoursValueDynamic": "يوميًا {open} - {close}",
+    "hoursValue24_7": "مفتوح 24/7",
+    "openInMaps": "مفتوح في خرائط Google"
+  },
+  "contact": {
+    "title": "تواصل معنا",
+    "subtitle": "اطرح سؤالاً أو تحقق مما هو متاح — عادةً ما نقوم بالرد خلال 5 دقائق خلال ساعات العمل."
+  },
+  "footer": {
+    "disclaimer": "البالغين 20+ فقط. متجر حشيش مرخص يعمل ضمن إطار القنب الطبي التايلاندي.",
+    "rights": "جميع الحقوق محفوظة."
+  },
+  "quickMenu": {
+    "title": "في المخزون الآن",
+    "seeAll": "عرض الكتالوج",
+    "soldOut": "نفذ"
+  },
+  "socialProof": {
+    "reviewCount": "{count} تعليقات على Google",
+    "seeAll": "شاهد جميع التقييمات"
+  },
+  "about": {
+    "guideName": "Dima",
+    "guideRole": "Labs Cannabis مستشار ودليل القنب الخاص بك",
+    "guideDescription": "تختار ديما شخصيًا كل سلالة نحملها وتراقب ما ينتهي به الأمر على الرف. يتحدث الروسية والإنجليزية بطلاقة. المرة الأولى؟ سوف يرشدك خلال كل شيء - ما يمكن توقعه، وما الذي تختاره، وما هو المبلغ الذي يجب أن تبدأ به. نصيحة واضحة وصادقة.",
+    "guidePhotoAlt": "ديما — Labs Cannabis مستشارة"
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة",
+    "q8": "هل هناك عينة مجانية أم يمكنني تجربتها قبل الشراء؟",
+    "a8": "نعم. نحن نقدم عينة مجانية في المتجر، حتى تتمكن من التحقق من النضارة والجودة قبل أن تقرر الشراء.",
+    "q1": "هل أحتاج إلى وصفة طبية أو بطاقة طبية؟",
+    "a1": "تتطلب تايلاند بطاقة طبية لشراء القنب. نحن نساعدك في الحصول على واحد على الفور — وهو نموذج رقمي سريع على هاتفك، ويستغرق حوالي دقيقتين. يرشدك موظفونا خلال كل خطوة.",
+    "q2": "هل هو قانوني للسياح؟",
+    "a2": "نعم. يمكن للسياح شراء الحشيش الطبي بشكل قانوني في تايلاند باستخدام البطاقة الطبية، والتي نساعدك في الحصول عليها هنا في المتجر.",
+    "q3": "ما هي طرق الدفع التي تقبلونها؟",
+    "a3": "نقدًا (البات التايلندي) والتحويل البنكي QR. لا توجد بطاقات الائتمان في هذا الوقت.",
+    "q4": "هل يمكنني التدخين هنا أم أنه للوجبات الجاهزة فقط؟",
+    "a4": "الوجبات الجاهزة فقط. نبيع المنتج للاستخدام الشخصي — لا توجد منطقة للتدخين في الموقع.",
+    "q5": "كيف يمكنني العثور عليك من Walking Street؟",
+    "a5": "5 دقائق سيرا على الأقدام. توجه إلى Soi Hollywood (Pattaya 13 Alley)، وابحث عن لافتات LABS على الجانب الأيسر. نحن في منتصف المسار تقريبًا.",
+    "q6": "ما هي ساعات عملك؟",
+    "a6": "نحن مفتوحون كل يوم، لا حاجة لموعد. تحقق من الساعات في رأس الصفحة، حيث يتم تحديثها في الوقت الفعلي.",
+    "q7": "لم أجرب الحشيش قط. هل يمكن لموظفيك مساعدتي في الاختيار؟",
+    "a7": "قطعاً. أخبرنا بما تبحث عنه — الاسترخاء، والطاقة، والنوم الأفضل — وسنوصيك بالجهد والكمية التي تناسبك."
+  },
+  "strainPage": {
+    "metaTitleSuffix": "الشراء من Labs Cannabis Pattaya",
+    "backToCatalog": "العودة إلى الاختيار",
+    "reserve": "اسأل عن هذه السلالة",
+    "reserveVia": "التواصل عبر",
+    "call": "يتصل",
+    "soldOut": "نفذ",
+    "terpenes": "ملف تعريف تربين",
+    "about": "حول هذه السلالة",
+    "metaDescriptionFallback": "{name} {type} سلالة القنب. THC {thc}%. متوفر في Labs Cannabis Pattaya.",
+    "metaDescriptionFallbackNoThc": "{name} {type} سلالة القنب. متوفر في Labs Cannabis Pattaya.",
+    "breadcrumbStrains": "سلالات"
+  },
+  "effectPage": {
+    "title": "{effect} سلالات القنب في Pattaya | Labs Cannabis",
+    "ogTitle": "{effect} السلالات — Labs Cannabis Pattaya",
+    "description": "تصفح سلالات {effect} القنب في مستوصف Labs Cannabis في Pattaya، تايلاند. ادخل، لا حاجة لموعد.",
+    "h1": "{effect} سلالات القنب في Pattaya",
+    "intro": "هل تبحث عن تأثيرات {effect}؟ تصفح مجموعتنا الحالية في Labs Cannabis، Pattaya. ادخل - لا حاجة لموعد.",
+    "breadcrumbStrains": "سلالات",
+    "reserve": "اسأل عن ذلك",
+    "soldOut": "نفذ",
+    "noResults": "لا توجد سلالات {effect} في الوقت الحالي. التحقق مرة أخرى قريبا.",
+    "effect_relax": "مريح",
+    "effect_energy": "تنشيط",
+    "effect_creative": "مبدع",
+    "effect_sleep": "ينام",
+    "effect_euphoria": "مبتهج",
+    "effect_focus": "ركز",
+    "effect_happy": "سعيد",
+    "effect_uplifted": "الارتقاء",
+    "effect_talkative": "ثرثار",
+    "effect_hungry": "شهية"
+  },
+  "typePage": {
+    "title": "{type} سلالات القنب في Pattaya | Labs Cannabis",
+    "ogTitle": "{type} السلالات — Labs Cannabis Pattaya",
+    "description": "تصفح سلالات {type} القنب في مستوصف Labs Cannabis في Pattaya، تايلاند. ادخل، لا حاجة لموعد.",
+    "h1": "{type} سلالات القنب في Pattaya",
+    "intro": "تصفح مجموعتنا الحالية من سلالات {type} القنب في Labs Cannabis، Pattaya. ادخل - لا حاجة لموعد.",
+    "breadcrumbStrains": "سلالات",
+    "reserve": "اسأل عن ذلك",
+    "soldOut": "نفذ",
+    "noResults": "لا توجد سلالات {type} متاحة الآن.",
+    "type_indica": "إنديكا",
+    "type_sativa": "ساتيفا",
+    "type_hybrid": "هجين"
+  },
+  "strainCommon": {
+    "type_indica": "إنديكا",
+    "type_sativa": "ساتيفا",
+    "type_hybrid": "هجين",
+    "effect_relax": "يستريح",
+    "effect_energy": "طاقة",
+    "effect_creative": "مبدع",
+    "effect_sleep": "ينام",
+    "effect_euphoria": "نشوة",
+    "effect_focus": "ركز",
+    "effect_happy": "سعيد",
+    "effect_uplifted": "مرفوع",
+    "effect_talkative": "ثرثار",
+    "effect_hungry": "جائع",
+    "thc": "THC",
+    "cbd": "CBD",
+    "pricePerGram": "฿{price}/ز",
+    "cardAltText": "{name} سلالة القنب في Labs Cannabis Pattaya",
+    "staffPickAltText": "{name} — اختيار الخبراء في Labs Cannabis Pattaya",
+    "strainAltText": "{name} سلالة القنب متوفرة في مستوصف Labs Cannabis Pattaya",
+    "tagType_effect": "تأثير",
+    "tagType_type": "يكتب",
+    "tagType_terpene": "تربين"
+  }
+}
