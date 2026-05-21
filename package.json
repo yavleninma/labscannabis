@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "npm run gen:seo-fallback && astro build",
     "preview": "astro preview",
     "media": "node scripts/transcode-media.mjs",
-    "gen:seo": "node scripts/gen-seo-content.mjs"
+    "gen:seo": "node scripts/gen-seo-content.mjs",
+    "gen:seo-fallback": "node scripts/gen-seo-fallback.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",

@@ -4,5 +4,5 @@ import { localePath } from "@/lib/i18n";
 
 const accept = Astro.request.headers.get("accept-language");
 const locale = detectLocaleFromHeader(accept);
-return Astro.redirect(localePath(locale), 302);
+return Astro.redirect(localePath(locale), 301);
 ---

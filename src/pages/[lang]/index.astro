@@ -9,6 +9,7 @@ import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { REELS_SLIDES } from "@/data/media";
 import { t } from "@/lib/ui";
+import { HOME_FAQ } from "@/lib/content";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -19,7 +20,7 @@ const locale = lang as Locale;
 const ui = t(locale);
 ---
 
-<PageLayout locale={locale} pathSuffix="">
+<PageLayout locale={locale} pathSuffix="" faq={HOME_FAQ}>
   <Reels locale={locale} slides={REELS_SLIDES} />
   <PriceLadder locale={locale} />
   <ReviewStrip locale={locale} />

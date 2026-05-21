@@ -1,7 +1,7 @@
 ---
 import "@/styles/global.css";
 import type { Locale } from "@/lib/i18n";
-import { isRtl, LOCALE_HREFLANG } from "@/lib/i18n";
+import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
 import { t } from "@/lib/ui";
 import AgeGate from "@/components/AgeGate.astro";
@@ -23,7 +23,10 @@ const pageTitle = title ?? ui.meta.title;
 const pageDesc = description ?? ui.meta.description;
 const canonical = getCanonical(locale, pathSuffix);
 const hreflangs = getHreflangs(locale, pathSuffix);
+const xDefault = getCanonical("en", pathSuffix);
 const dir = isRtl(locale) ? "rtl" : "ltr";
+const ogLocale = LOCALE_HREFLANG[locale].replace("-", "_");
+const siteUrl = getSiteUrl();
 ---
 
 <!doctype html>
@@ -37,8 +40,10 @@ const dir = isRtl(locale) ? "rtl" : "ltr";
     {hreflangs.map((h) => (
       <link rel="alternate" hreflang={h.hreflang} href={h.href} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={hreflangs[0]?.href} />
+    <link rel="alternate" hreflang="x-default" href={xDefault} />
     <title>{pageTitle}</title>
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -49,7 +54,13 @@ const dir = isRtl(locale) ? "rtl" : "ltr";
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={`${import.meta.env.PUBLIC_SITE_URL || "https://labscannabis.boutique"}/media/IMG_20260517_175646.jpg`} />
+    <meta property="og:site_name" content="Labs Cannabis" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDesc} />
+    <meta name="twitter:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
   </head>
   <body>
     <AgeGate locale={locale} />

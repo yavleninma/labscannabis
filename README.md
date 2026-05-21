@@ -18,8 +18,9 @@ Static Astro site for **labscannabis.boutique**. Instagram Reels-style landing, 
 npm install
 npm run dev          # http://localhost:4321
 npm run media        # transcode stock-photo → public/media (local ffmpeg)
-npm run gen:seo      # generate content-cache via OpenAI (needs OPENAI_API_KEY)
-npm run build        # static export to dist/
+npm run gen:seo-fallback  # unique per-page copy for all locales (no API key)
+npm run gen:seo      # optional: richer copy via OpenAI (needs OPENAI_API_KEY)
+npm run build        # runs gen:seo-fallback, then static export to dist/
 ```
 
 ## Env
