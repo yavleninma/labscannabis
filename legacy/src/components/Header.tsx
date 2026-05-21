@@ -1,22 +1,14 @@
 "use client";
 
-import {
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   defaultLocale,
   getLocaleDirection,
   isValidLocale,
+  localeCodes,
   localeDefinitions,
-  primaryLocaleCodes,
-  secondaryLocaleCodes,
   type AppLocale,
 } from "@/i18n/config";
 import { buildLocalizedPathname } from "@/i18n/pathnames";
@@ -29,21 +21,9 @@ interface HeaderProps {
   isOpen24h?: boolean;
 }
 
-function localeMatchesSearch(candidateLocale: AppLocale, searchTerm: string) {
-  if (!searchTerm) {
-    return true;
-  }
-
-  const definition = localeDefinitions[candidateLocale];
-  const haystack = `${definition.nativeLabel} ${definition.englishLabel} ${candidateLocale}`.toLowerCase();
-
-  return haystack.includes(searchTerm);
-}
-
 export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
   const [scrolled, setScrolled] = useState(false);
   const [isPickerOpen, setIsPickerOpen] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
   const [isPending, startTransition] = useTransition();
   const localeValue = useLocale();
   const locale = isValidLocale(localeValue) ? localeValue : defaultLocale;
@@ -53,7 +33,6 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pickerRef = useRef<HTMLDivElement | null>(null);
-  const deferredSearchValue = useDeferredValue(searchValue.trim().toLowerCase());
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -88,21 +67,6 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
     };
   }, [isPickerOpen]);
 
-  const filteredPrimaryLocales = useMemo(
-    () =>
-      primaryLocaleCodes.filter((candidateLocale) =>
-        localeMatchesSearch(candidateLocale, deferredSearchValue),
-      ),
-    [deferredSearchValue],
-  );
-  const filteredSecondaryLocales = useMemo(
-    () =>
-      secondaryLocaleCodes.filter((candidateLocale) =>
-        localeMatchesSearch(candidateLocale, deferredSearchValue),
-      ),
-    [deferredSearchValue],
-  );
-
   function switchLocale(nextLocale: AppLocale) {
     if (nextLocale === locale || isPending) {
       return;
@@ -121,7 +85,6 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
 
   const currentLocaleDefinition = localeDefinitions[locale];
   const pickerPositionStyle = isRtl ? { left: 0 } : { right: 0 };
-  const hasVisibleLocales = filteredPrimaryLocales.length > 0 || filteredSecondaryLocales.length > 0;
 
   return (
     <header
@@ -152,7 +115,7 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
               onClick={() => setIsPickerOpen((value) => !value)}
               disabled={isPending}
               aria-expanded={isPickerOpen}
-              aria-label={tHeader("allLanguages")}
+              aria-label={tHeader("currentLanguage")}
               className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 shadow-sm ring-1 transition-colors ${
                 isPickerOpen
                   ? "bg-emerald-500/10 text-emerald-700 ring-emerald-500/25"
@@ -179,100 +142,39 @@ export function Header({ openTime, closeTime, isOpen24h }: HeaderProps) {
 
             {isPickerOpen && (
               <div
-                className="absolute top-[calc(100%+0.55rem)] z-50 w-[min(88vw,19rem)] overflow-hidden rounded-[1.75rem] bg-bg-card/95 p-3 shadow-[0_24px_60px_rgba(0,0,0,0.18)] ring-1 ring-border/50 backdrop-blur-xl"
+                className="absolute top-[calc(100%+0.55rem)] z-50 w-[min(88vw,16rem)] overflow-hidden rounded-[1.5rem] bg-bg-card/95 p-2 shadow-[0_24px_60px_rgba(0,0,0,0.18)] ring-1 ring-border/50 backdrop-blur-xl"
                 style={pickerPositionStyle}
               >
-                <div className="mb-2 px-1">
-                  <p className="text-sm font-medium text-text-primary">
-                    {currentLocaleDefinition.nativeLabel}
-                    <span className={`${isRtl ? "mr-2" : "ml-2"} text-text-muted`}>
-                      {currentLocaleDefinition.englishLabel}
-                    </span>
-                  </p>
-                </div>
+                <div className="space-y-1">
+                  {localeCodes.map((candidateLocale) => {
+                    const definition = localeDefinitions[candidateLocale];
+                    const isActive = candidateLocale === locale;
 
-                <label className="mb-2 block">
-                  <span className="sr-only">{tHeader("searchLanguages")}</span>
-                  <input
-                    value={searchValue}
-                    onChange={(event) => setSearchValue(event.target.value)}
-                    placeholder={tHeader("searchLanguages")}
-                    className="w-full rounded-2xl bg-bg-primary/85 px-3 py-2.5 text-sm text-text-primary outline-none ring-1 ring-border/45 transition-colors placeholder:text-text-muted focus:ring-emerald-500/25"
-                  />
-                </label>
-
-                <div className="max-h-72 overflow-y-auto px-1 pb-1 pr-2">
-                  <div className="space-y-1">
-                    {filteredPrimaryLocales.map((primaryLocale) => {
-                      const definition = localeDefinitions[primaryLocale];
-                      const isActive = primaryLocale === locale;
-
-                      return (
-                        <button
-                          key={primaryLocale}
-                          type="button"
-                          onClick={() => switchLocale(primaryLocale)}
-                          className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm transition-colors ${
-                            isActive
-                              ? "bg-emerald-500/12 text-emerald-700"
-                              : "bg-emerald-500/[0.06] text-text-secondary hover:bg-emerald-500/[0.1] hover:text-text-primary"
-                          }`}
-                        >
-                          <span className="min-w-0 text-left">
-                            <span className={`block truncate font-medium ${isActive ? "text-emerald-700" : "text-text-primary"}`}>
-                              {definition.nativeLabel}
-                            </span>
-                            <span className={`block truncate text-xs ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
-                              {definition.englishLabel}
-                            </span>
+                    return (
+                      <button
+                        key={candidateLocale}
+                        type="button"
+                        onClick={() => switchLocale(candidateLocale)}
+                        className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm transition-colors ${
+                          isActive
+                            ? "bg-emerald-500/12 text-emerald-700"
+                            : "text-text-secondary hover:bg-emerald-500/[0.08] hover:text-text-primary"
+                        }`}
+                      >
+                        <span className="min-w-0 text-left">
+                          <span className={`block truncate font-medium ${isActive ? "text-emerald-700" : "text-text-primary"}`}>
+                            {definition.nativeLabel}
                           </span>
-                          <span className={`ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
-                            {primaryLocale}
+                          <span className={`block truncate text-xs ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                            {definition.englishLabel}
                           </span>
-                        </button>
-                      );
-                    })}
-
-                    {filteredPrimaryLocales.length > 0 && filteredSecondaryLocales.length > 0 && (
-                      <div className="h-2" aria-hidden />
-                    )}
-
-                    {filteredSecondaryLocales.map((secondaryLocale) => {
-                      const definition = localeDefinitions[secondaryLocale];
-                      const isActive = secondaryLocale === locale;
-
-                      return (
-                        <button
-                          key={secondaryLocale}
-                          type="button"
-                          onClick={() => switchLocale(secondaryLocale)}
-                          className={`flex w-full items-center justify-between rounded-2xl px-3 py-2.5 text-sm transition-colors ${
-                            isActive
-                              ? "bg-emerald-500/12 text-emerald-700"
-                              : "text-text-secondary hover:bg-bg-primary/85 hover:text-text-primary"
-                          }`}
-                        >
-                          <span className="min-w-0 text-left">
-                            <span className={`block truncate font-medium ${isActive ? "text-emerald-700" : "text-text-primary"}`}>
-                              {definition.nativeLabel}
-                            </span>
-                            <span className={`block truncate text-xs ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
-                              {definition.englishLabel}
-                            </span>
-                          </span>
-                          <span className={`ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
-                            {secondaryLocale}
-                          </span>
-                        </button>
-                      );
-                    })}
-
-                    {!hasVisibleLocales && (
-                      <p className="px-3 py-4 text-sm text-text-muted">
-                        {tHeader("searchLanguages")}
-                      </p>
-                    )}
-                  </div>
+                        </span>
+                        <span className={`ml-3 shrink-0 text-[10px] uppercase tracking-[0.16em] ${isActive ? "text-emerald-700/70" : "text-text-muted"}`}>
+                          {candidateLocale}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

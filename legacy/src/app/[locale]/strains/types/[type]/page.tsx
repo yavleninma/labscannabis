@@ -8,6 +8,7 @@ import { strainMatchesTag } from "@/lib/strain-tags";
 import { getSiteUrl } from "@/lib/site-url";
 import { StrainCard } from "@/components/StrainCard";
 import { Footer } from "@/components/Footer";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 
 const VALID_TYPES = ["indica", "sativa", "hybrid"] as const;
 
@@ -135,16 +136,23 @@ export default async function TypePage({
 
         {filtered.length > 0 ? (
           <div className="grid grid-cols-1 min-[420px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-            {filtered.map((strain, i) => (
-              <StrainCard
-                key={strain._id}
-                strain={strain}
-                index={i}
-                reserveLabel={t("reserve")}
-                soldOutLabel={t("soldOut")}
-                locale={locale}
-              />
-            ))}
+            {filtered.map((strain, i) => {
+              const links = buildContactLinks(shopSettings, locale as ContactLocale, {
+                kind: "purchase",
+                productName: strain.name,
+              });
+              return (
+                <StrainCard
+                  key={strain._id}
+                  strain={strain}
+                  index={i}
+                  reserveLabel={t("reserve")}
+                  soldOutLabel={t("soldOut")}
+                  locale={locale}
+                  reserveUrl={links.reserve}
+                />
+              );
+            })}
           </div>
         ) : (
           <p className="text-center text-text-muted py-12">
