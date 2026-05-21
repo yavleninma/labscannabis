@@ -6,7 +6,8 @@
   "brand": "Labs Cannabis",
   "formerBrand": "เดิม Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "weights": { "1g": "1 กรัม", "10g": "10 กรัม", "1kg": "1 กก." },
+    "featuredBadge": "ยอดนิยม",
     "locationBadge": "เดิน 5 นาทีจาก Walking Street · มีบริการส่ง",
     "whatsapp": "WhatsApp",
     "map": "แผนที่"
@@ -48,7 +49,13 @@
   "reviews": {
     "title": "รีวิวจากลูกค้า",
     "subtitle": "{rating}★ · {count} รีวิว Google",
-    "readAll": "อ่าน {count} รีวิว Google →"
+    "readAll": "อ่าน {count} รีวิว Google →",
+    "translatedNote": "แปลจากรีวิว Google ต้นฉบับ ({lang})",
+    "sourceLang": {
+      "en": "อังกฤษ",
+      "ru": "รัสเซีย",
+      "th": "ไทย"
+    }
   },
   "location": {
     "title": "ที่ตั้ง",

@@ -4,7 +4,7 @@ import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
 import { PRICE_LADDER } from "@/data/prices";
 import { getSiteUrl, localePath } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
-import { REVIEWS_POOL, pickDailyReviews } from "@/data/reviews-pool";
+import { pickDailyLocalizedReviews } from "@/lib/reviews";
 
 interface FaqItem {
   q: string;
@@ -20,7 +20,7 @@ interface Props {
 const { locale, pathSuffix = "", faq = [] } = Astro.props;
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
-const reviews = pickDailyReviews(REVIEWS_POOL, new Date(), 3);
+const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -64,7 +64,7 @@ const localBusiness = {
     "@type": "Review",
     author: { "@type": "Person", name: r.name },
     reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-    reviewBody: r.text,
+    reviewBody: r.displayText,
     datePublished: r.date,
   })),
 };

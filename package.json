@@ -9,7 +9,8 @@
     "preview": "astro preview",
     "media": "node scripts/transcode-media.mjs",
     "gen:seo": "node scripts/gen-seo-content.mjs",
-    "gen:seo-fallback": "node scripts/gen-seo-fallback.mjs"
+    "gen:seo-fallback": "node scripts/gen-seo-fallback.mjs",
+    "gen:reviews": "node scripts/gen-review-translations.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",

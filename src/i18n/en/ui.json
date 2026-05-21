@@ -7,6 +7,7 @@
   "formerBrand": "formerly Labs Dispensary",
   "reels": {
     "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "featuredBadge": "Popular",
     "locationBadge": "5 min walk from Walking Street · delivery available",
     "whatsapp": "WhatsApp",
     "map": "Map"
@@ -48,7 +49,13 @@
   "reviews": {
     "title": "What guests say",
     "subtitle": "{rating}★ · {count} reviews on Google",
-    "readAll": "Read all {count} reviews on Google →"
+    "readAll": "Read all {count} reviews on Google →",
+    "translatedNote": "Translated from the original Google review ({lang})",
+    "sourceLang": {
+      "en": "English",
+      "ru": "Russian",
+      "th": "Thai"
+    }
   },
   "location": {
     "title": "Find us",

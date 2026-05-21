@@ -6,7 +6,8 @@
   "brand": "Labs Cannabis",
   "formerBrand": "سابقاً Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "weights": { "1g": "1 غ", "10g": "10 غ", "1kg": "1 كغ" },
+    "featuredBadge": "الأكثر",
     "locationBadge": "5 دقائق سيرًا من Walking Street · توصيل متاح",
     "whatsapp": "WhatsApp",
     "map": "الخريطة"
@@ -48,7 +49,13 @@
   "reviews": {
     "title": "آراء الزوار",
     "subtitle": "{rating}★ · {count} تقييم Google",
-    "readAll": "كل {count} تقييم على Google →"
+    "readAll": "كل {count} تقييم على Google →",
+    "translatedNote": "ترجمة من تقييم Google الأصلي ({lang})",
+    "sourceLang": {
+      "en": "الإنجليزية",
+      "ru": "الروسية",
+      "th": "التايلاندية"
+    }
   },
   "location": {
     "title": "موقعنا",

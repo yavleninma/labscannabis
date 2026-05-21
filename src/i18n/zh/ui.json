@@ -7,6 +7,7 @@
   "formerBrand": "原 Labs Dispensary",
   "reels": {
     "weights": { "1g": "1克", "10g": "10克", "1kg": "1公斤" },
+    "featuredBadge": "热销",
     "locationBadge": "距 Walking Street 步行 5 分钟 · 可配送",
     "whatsapp": "WhatsApp",
     "map": "地图"
@@ -48,7 +49,13 @@
   "reviews": {
     "title": "客人评价",
     "subtitle": "Google {rating}★ · {count}条评价",
-    "readAll": "查看全部{count}条Google评价 →"
+    "readAll": "查看全部{count}条Google评价 →",
+    "translatedNote": "译自Google原始评价（{lang}）",
+    "sourceLang": {
+      "en": "英语",
+      "ru": "俄语",
+      "th": "泰语"
+    }
   },
   "location": {
     "title": "找到我们",
