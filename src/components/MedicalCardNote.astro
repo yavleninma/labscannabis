@@ -1,0 +1,20 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+---
+
+<section class="px-4 py-8">
+  <div class="mx-auto max-w-lg rounded-xl border border-border/60 bg-bg-card/50 p-4">
+    <span class="mb-2 inline-block rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-wider text-text-muted">
+      {ui.medical.badge}
+    </span>
+    <p class="text-xs text-text-muted leading-relaxed">{ui.medical.text}</p>
+  </div>
+</section>

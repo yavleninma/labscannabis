@@ -1,126 +1,38 @@
-# Labs Cannabis — Website
+# Labs Cannabis v2 — Reels + Programmatic SEO
 
-Landing page for Labs Cannabis, a licensed medical cannabis dispensary in Pattaya, Thailand.
+Static Astro site for **labscannabis.boutique**. Instagram Reels-style landing, weight-tier pricing, 7 locales, ~250 SEO pages.
 
-## Tech Stack
+## Stack
 
-- **Next.js 16** (App Router) + TypeScript
-- **Tailwind CSS v4**
-- **next-intl** for i18n (EN, RU, TH)
-- Mobile-first, dark theme
-- SEO-optimized (JSON-LD, sitemap, hreflang, Open Graph)
+- Astro 5 (static) + React island (Reels)
+- Tailwind CSS v4
+- `@astrojs/sitemap` with hreflang
 
-## Getting Started
+## Locales
+
+`en` · `ru` · `th` · `ar` · `zh` · `ko` · `ja`
+
+## Commands
 
 ```bash
 npm install
-npm run dev
+npm run dev          # http://localhost:4321
+npm run media        # transcode stock-photo → public/media (local ffmpeg)
+npm run gen:seo      # generate content-cache via OpenAI (needs OPENAI_API_KEY)
+npm run build        # static export to dist/
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## Deploy to Vercel
-
-1. Push this repo to GitHub
-2. Import the repo at [vercel.com/new](https://vercel.com/new)
-3. Set `NEXT_PUBLIC_SITE_URL` in Vercel environment variables
-4. (Optional) add Sanity variables if CMS should be enabled:
-   - `NEXT_PUBLIC_SANITY_PROJECT_ID`
-   - `NEXT_PUBLIC_SANITY_DATASET`
-4. Vercel auto-detects Next.js and deploys
-
-## Domain Recommendations
-
-The domain has not been purchased yet. Recommendations:
-
-| Priority | Domain | Notes |
-|----------|--------|-------|
-| 1st | `labscannabis.com` | Best match, brand name |
-| 2nd | `labscannabis.co` | Short alternative |
-| 3rd | `labs-cannabis.com` | With hyphen |
-| 4th | `labsdispensary.com` | Alternative branding |
-
-**Recommended registrars:** Cloudflare Registrar (cheapest renewals, free DNS) or Namecheap.
-
-Site URL is centralized via `NEXT_PUBLIC_SITE_URL` (`src/lib/site-url.ts`).
-
-## TODOs
-
-Search for `TODO` in the codebase to find all placeholders:
+## Env
 
 ```bash
-rg "TODO" src
+PUBLIC_SITE_URL=https://labscannabis.boutique
+OPENAI_API_KEY=      # for npm run gen:seo
 ```
 
-Key items to fill in:
-- LINE / WhatsApp / Telegram links (`src/lib/mock-data.ts` or Sanity shop settings)
-- Exact working hours (`src/lib/mock-data.ts`, `src/components/JsonLd.tsx`)
-- Logo image (`src/components/Hero.tsx`)
-- OG image (`src/app/[locale]/layout.tsx`)
-- Phone number (`src/components/JsonLd.tsx`)
+## Legacy
 
-## Data Migration (Sanity)
+Previous Next.js site is in [`legacy/`](legacy/).
 
-For migration from legacy `effect` / `terpenes` to new `effects` / `terpeneProfile` fields:
+## Deploy
 
-1. Preview changes (no writes):
-
-```bash
-npm run migrate:strain-profiles -- --dry-run
-```
-
-Preview with legacy cleanup:
-
-```bash
-npm run migrate:strain-profiles -- --dry-run --cleanup-legacy
-```
-
-2. Apply changes:
-
-```bash
-SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles
-```
-
-Apply and remove legacy fields (`effect`, `terpenes`) when new fields are present:
-
-```bash
-SANITY_WRITE_TOKEN=your_token npm run migrate:strain-profiles -- --cleanup-legacy
-```
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── [locale]/
-│   │   ├── layout.tsx    # Root layout with metadata & hreflang
-│   │   └── page.tsx      # Home page
-│   │   └── strains/[slug]/page.tsx
-│   ├── globals.css       # Tailwind + theme
-│   ├── sitemap.ts
-│   └── robots.ts
-├── components/
-│   ├── Header.tsx        # Fixed header with locale switcher
-│   ├── Hero.tsx          # Hero section
-│   ├── NoPrescription.tsx
-│   ├── StrainCatalog.tsx
-│   ├── StaffPick.tsx
-│   ├── Reviews.tsx
-│   ├── LocationSection.tsx
-│   ├── ContactSection.tsx
-│   ├── Footer.tsx        # Disclaimer + copyright
-│   └── JsonLd.tsx        # Structured data
-├── lib/
-│   ├── queries.ts
-│   ├── mock-data.ts
-│   └── site-url.ts
-├── i18n/
-│   ├── request.ts
-│   ├── routing.ts
-│   └── navigation.ts
-└── proxy.ts              # Locale routing
-messages/
-├── en.json
-├── ru.json
-└── th.json
-```
+Vercel auto-detects Astro. Set `PUBLIC_SITE_URL` in project env. Media in `public/media/` is pre-rendered and committed — Vercel build runs `astro build` only.

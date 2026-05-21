@@ -1,0 +1,63 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import PriceLadder from "@/components/PriceLadder.astro";
+import Reels from "@/components/Reels.astro";
+import ReviewStrip from "@/components/ReviewStrip.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import MedicalCardNote from "@/components/MedicalCardNote.astro";
+import Footer from "@/components/Footer.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { SEO_PAGES } from "@/data/seo-matrix";
+import { REELS_SLIDES } from "@/data/media";
+import { loadSeoContent } from "@/lib/content";
+
+export function getStaticPaths() {
+  const paths: { params: { lang: string; seoSlug: string } }[] = [];
+  for (const lang of LOCALES) {
+    for (const page of SEO_PAGES) {
+      paths.push({ params: { lang, seoSlug: page.slug } });
+    }
+  }
+  return paths;
+}
+
+const { lang, seoSlug } = Astro.params;
+const locale = lang as Locale;
+const page = SEO_PAGES.find((p) => p.slug === seoSlug)!;
+const content = loadSeoContent(locale, seoSlug);
+const title = page.titleTemplate[locale];
+const keywords = page.keywords[locale];
+---
+
+<PageLayout locale={locale} pathSuffix={seoSlug} title={title} keywords={keywords} faq={content.faq}>
+  <article class="px-4 pt-8 pb-4">
+    <div class="mx-auto max-w-lg">
+      <h1 class="text-2xl font-bold">{content.h1 || page.h1Template[locale]}</h1>
+      <p class="mt-4 text-sm leading-relaxed text-text-muted">{content.intro}</p>
+      {content.sections.map((sec) => (
+        <section class="mt-6">
+          <h2 class="text-lg font-semibold text-emerald">{sec.h2}</h2>
+          <p class="mt-2 text-sm leading-relaxed text-text-muted">{sec.body}</p>
+        </section>
+      ))}
+      {content.faq.length > 0 && (
+        <section class="mt-8">
+          <h2 class="mb-3 text-lg font-semibold">FAQ</h2>
+          {content.faq.map((item) => (
+            <details class="mb-3 rounded-lg border border-border bg-bg-card p-3">
+              <summary class="cursor-pointer text-sm font-medium">{item.q}</summary>
+              <p class="mt-2 text-sm text-text-muted">{item.a}</p>
+            </details>
+          ))}
+        </section>
+      )}
+      <p class="mt-6 text-sm text-text-muted">{content.closing}</p>
+    </div>
+  </article>
+  <Reels locale={locale} slides={REELS_SLIDES.slice(0, 3)} mini />
+  <PriceLadder locale={locale} />
+  <ReviewStrip locale={locale} />
+  <MapBlock locale={locale} />
+  <MedicalCardNote locale={locale} />
+  <Footer locale={locale} />
+</PageLayout>

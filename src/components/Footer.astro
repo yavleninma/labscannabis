@@ -1,0 +1,29 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { HOURS } from "@/data/site";
+import { t } from "@/lib/ui";
+import { localePath } from "@/lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const hours = ui.location.hours.replace("{open}", HOURS.open).replace("{close}", HOURS.close);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-border px-4 py-10 pb-24">
+  <div class="mx-auto max-w-lg space-y-4 text-sm text-text-muted">
+    <nav class="flex flex-wrap gap-4">
+      <a href={localePath(locale)} class="hover:text-emerald">{ui.nav.home}</a>
+      <a href={`${localePath(locale)}#prices`} class="hover:text-emerald">{ui.nav.prices}</a>
+      <a href={localePath(locale, "wholesale")} class="hover:text-emerald">{ui.nav.wholesale}</a>
+      <a href={localePath(locale, "contact")} class="hover:text-emerald">{ui.nav.contact}</a>
+    </nav>
+    <p>{hours}</p>
+    <p class="text-xs leading-relaxed">{ui.footer.disclaimer}</p>
+    <p class="text-xs">© {year} Labs Cannabis. {ui.footer.rights}</p>
+  </div>
+</footer>

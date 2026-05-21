@@ -1,0 +1,45 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { t } from "@/lib/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+---
+
+<div id="age-gate" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 p-6" role="dialog" aria-modal="true">
+  <div class="max-w-sm rounded-2xl border border-border bg-bg-card p-8 text-center">
+    <h2 class="mb-2 text-xl font-bold">{ui.ageGate.title}</h2>
+    <p class="mb-6 text-sm text-text-muted">{ui.ageGate.text}</p>
+    <div class="flex flex-col gap-3">
+      <button
+        type="button"
+        id="age-enter"
+        class="rounded-full bg-emerald px-6 py-3 font-semibold text-black"
+      >
+        {ui.ageGate.enter}
+      </button>
+      <a href="https://www.google.com" class="text-sm text-text-muted underline">
+        {ui.ageGate.exit}
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const KEY = "lc_age_ok";
+  const gate = document.getElementById("age-gate");
+  const enter = document.getElementById("age-enter");
+  if (gate && !localStorage.getItem(KEY)) {
+    gate.classList.remove("hidden");
+    gate.classList.add("flex");
+  }
+  enter?.addEventListener("click", () => {
+    localStorage.setItem(KEY, "1");
+    gate?.classList.add("hidden");
+    gate?.classList.remove("flex");
+  });
+</script>

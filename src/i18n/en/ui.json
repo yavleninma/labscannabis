@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Pattaya Reels Shop | From 300฿/g to 1kg",
+    "description": "Premium indoor cannabis in Pattaya. White Widow flagship, weight tiers 1g–1kg, walk-in on Soi Hollywood. WhatsApp +66 66 080 6784."
+  },
+  "brand": "Labs Cannabis",
+  "formerBrand": "formerly Labs Dispensary",
+  "reels": {
+    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "locationBadge": "5 min walk from Walking Street · delivery available",
+    "whatsapp": "WhatsApp",
+    "map": "Map"
+  },
+  "prices": {
+    "title": "Pick Your Weight",
+    "subtitle": "More weight = lower price per gram. Tap to order on WhatsApp.",
+    "mostPopular": "MOST POPULAR",
+    "wholesale": "WHOLESALE",
+    "streetAnchor": "street price 500–700฿/g · ours 300฿",
+    "trustLine": "Cash · QR transfer · same-day pickup · WhatsApp replies in ~5 min",
+    "urgency": "Today: {grams}g sold",
+    "labels": {
+      "tryout": "Try it",
+      "evening": "Evening pack",
+      "intro": "Intro deal",
+      "popular": "Best value",
+      "monthly": "Monthly supply",
+      "bulk": "Bulk save",
+      "wholesale": "Wholesale"
+    },
+    "orderVia": "Order via WhatsApp"
+  },
+  "whatsappPrefill": {
+    "1g": "Hi Labs Cannabis 👋 I'd like 1g of White Widow. When can I pick up?",
+    "3g": "Hi Labs Cannabis 👋 I'd like 3g of White Widow. When can I pick up?",
+    "5g": "Hi Labs Cannabis 👋 I'd like 5g of White Widow. When can I pick up?",
+    "10g": "Hi Labs Cannabis 👋 I'd like 10g of White Widow. When can I pick up?",
+    "30g": "Hi Labs Cannabis 👋 I'd like 30g of White Widow. When can I pick up?",
+    "100g": "Hi Labs Cannabis 👋 I'd like 100g. Is it available? When can I pick up?",
+    "1kg": "Hi Labs Cannabis 👋 I'm interested in 1kg wholesale. What's availability and timing?"
+  },
+  "dima": {
+    "badge": "Russian-speaking host",
+    "title": "Dima speaks Russian",
+    "text": "First time in Pattaya? Dima will help you pick the right weight and strain — in Russian or English. Message on WhatsApp or walk in to Soi Hollywood.",
+    "cta": "Message Dima on WhatsApp"
+  },
+  "reviews": {
+    "title": "What guests say",
+    "subtitle": "{rating}★ · {count} reviews on Google",
+    "readAll": "Read all {count} reviews on Google →"
+  },
+  "location": {
+    "title": "Find us",
+    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
+    "landmark": "5 min walk from Walking Street",
+    "step1": "Head to Pattaya 13 Alley (Soi Hollywood) from Walking Street.",
+    "step2": "Look for LABS DISPENSARY / Labs Cannabis signage.",
+    "step3": "We're on your left, middle of the alley.",
+    "hours": "Daily {open} – {close}",
+    "openMaps": "Open in Google Maps"
+  },
+  "medical": {
+    "badge": "20+ only",
+    "text": "Thailand requires a medical card for adults 20+. We help you complete it on-site in about 2 minutes — free, no hassle."
+  },
+  "footer": {
+    "disclaimer": "Labs Cannabis (formerly Labs Dispensary). Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
+    "rights": "All rights reserved."
+  },
+  "ageGate": {
+    "title": "Are you 20 or older?",
+    "text": "This site is for adults only. Cannabis in Thailand is for medical use with a card — we help on-site.",
+    "enter": "Yes, I'm 20+",
+    "exit": "Leave"
+  },
+  "contact": {
+    "title": "Get in touch",
+    "subtitle": "One number for everything — we usually reply within 5 minutes.",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "line": "LINE",
+    "call": "Call"
+  },
+  "wholesale": {
+    "title": "Wholesale & bulk",
+    "subtitle": "100g to 1kg tiers — message us for availability before pickup."
+  },
+  "strains": {
+    "flagship": "Our flagship",
+    "alsoAvailable": "Also available on request"
+  },
+  "nav": {
+    "home": "Home",
+    "prices": "Prices",
+    "contact": "Contact",
+    "wholesale": "Wholesale"
+  }
+}

@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg: #0a0f0a;
+  --color-bg-card: #121a12;
+  --color-border: #1f2e1f;
+  --color-emerald: #34d399;
+  --color-emerald-dim: #059669;
+  --color-text: #f0fdf4;
+  --color-text-muted: #86efac99;
+  --font-sans: "Inter", "Noto Sans", "Noto Sans Arabic", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-bg text-text antialiased;
+  font-family: var(--font-sans);
+}
+
+.reels-overlay-gradient {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 40%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+
+.price-card-popular {
+  @apply border-emerald ring-1 ring-emerald/40;
+}
+
+.price-card-wholesale {
+  @apply border-emerald-dim ring-1 ring-emerald-dim/30;
+}
+
+.sticky-cta-shadow {
+  box-shadow: 0 4px 24px rgba(52, 211, 153, 0.35);
+}

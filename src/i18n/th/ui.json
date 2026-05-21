@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — พัทยา Reels | 300฿/g ถึง 1kg",
+    "description": "กัญชา indoor premium พัทยา White Widow น้ำหนัก 1g–1kg ร้าน Soi Hollywood WhatsApp +66 66 080 6784"
+  },
+  "brand": "Labs Cannabis",
+  "formerBrand": "เดิม Labs Dispensary",
+  "reels": {
+    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "locationBadge": "เดิน 5 นาทีจาก Walking Street · มีบริการส่ง",
+    "whatsapp": "WhatsApp",
+    "map": "แผนที่"
+  },
+  "prices": {
+    "title": "เลือกน้ำหนัก",
+    "subtitle": "ซื้อมาก ราคาต่อกรัมถูกลง แตะเพื่อสั่ง WhatsApp",
+    "mostPopular": "ยอดนิยม",
+    "wholesale": "ขายส่ง",
+    "streetAnchor": "ราคาทั่วไป 500–700฿/g · เรา 300฿",
+    "trustLine": "เงินสด · QR · รับวันเดียวกัน · ตอบ WhatsApp ~5 นาที",
+    "urgency": "วันนี้ขาย {grams}g แล้ว",
+    "labels": {
+      "tryout": "ลอง",
+      "evening": "เย็นนี้",
+      "intro": "เริ่มต้น",
+      "popular": "คุ้มสุด",
+      "monthly": "รายเดือน",
+      "bulk": "ก้อนใหญ่",
+      "wholesale": "ขายส่ง"
+    },
+    "orderVia": "สั่ง WhatsApp"
+  },
+  "whatsappPrefill": {
+    "1g": "สวัสดี Labs Cannabis 👋 ขอ 1g White Widow รับเมื่อไหร่ได้?",
+    "3g": "สวัสดี Labs Cannabis 👋 ขอ 3g White Widow รับเมื่อไหร่ได้?",
+    "5g": "สวัสดี Labs Cannabis 👋 ขอ 5g White Widow รับเมื่อไหร่ได้?",
+    "10g": "สวัสดี Labs Cannabis 👋 ขอ 10g White Widow รับเมื่อไหร่ได้?",
+    "30g": "สวัสดี Labs Cannabis 👋 ขอ 30g White Widow รับเมื่อไหร่ได้?",
+    "100g": "สวัสดี Labs Cannabis 👋 สนใจ 100g มีของไหม?",
+    "1kg": "สวัสดี Labs Cannabis 👋 สนใจ 1kg ขายส่ง มีของเมื่อไหร่?"
+  },
+  "dima": {
+    "badge": "พูดรัสเซียได้",
+    "title": "Dima พูดรัสเซีย",
+    "text": "มาครั้งแรก? Dima ช่วยเลือกน้ำหนักและสายพันธุ์ — รัสเซียหรืออังกฤษ ทัก WhatsApp หรือมาร้าน Soi Hollywood",
+    "cta": "ทัก Dima บน WhatsApp"
+  },
+  "reviews": {
+    "title": "รีวิวจากลูกค้า",
+    "subtitle": "{rating}★ · {count} รีวิว Google",
+    "readAll": "อ่าน {count} รีวิว Google →"
+  },
+  "location": {
+    "title": "ที่ตั้ง",
+    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
+    "landmark": "เดิน 5 นาทีจาก Walking Street",
+    "step1": "ไป Pattaya 13 Alley (Soi Hollywood) จาก Walking Street",
+    "step2": "มองหาป้าย LABS DISPENSARY / Labs Cannabis",
+    "step3": "อยู่ทางซ้าย กลางซอย",
+    "hours": "ทุกวัน {open} – {close}",
+    "openMaps": "เปิด Google Maps"
+  },
+  "medical": {
+    "badge": "20+",
+    "text": "ไทยต้องมีบัตรกัญชา 20+ ช่วยทำที่ร้าน ~2 นาที ฟรี"
+  },
+  "footer": {
+    "disclaimer": "Labs Cannabis (เดิม Labs Dispensary) ร้านกัญชาลиценз พัทยา 20+ เท่านั้น",
+    "rights": "สงวนลิขสิทธิ์"
+  },
+  "ageGate": {
+    "title": "คุณอายุ 20 ปีขึ้นไหม?",
+    "text": "เว็บนี้สำหรับผู้ใหญ่ กัญชาไทยต้องมีบัตร — ช่วยที่ร้าน",
+    "enter": "ใช่ 20+",
+    "exit": "ออก"
+  },
+  "contact": {
+    "title": "ติดต่อ",
+    "subtitle": "เบอร์เดียวครบ — ตอบ ~5 นาที",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "line": "LINE",
+    "call": "โทร"
+  },
+  "wholesale": {
+    "title": "ขายส่ง",
+    "subtitle": "100g–1kg ทักถามสต็อกก่อนมารับ"
+  },
+  "strains": {
+    "flagship": "สายหลัก",
+    "alsoAvailable": "มีเพิ่มตามสต็อก"
+  },
+  "nav": {
+    "home": "หน้าแรก",
+    "prices": "ราคา",
+    "contact": "ติดต่อ",
+    "wholesale": "ขายส่ง"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — Паттайя Reels | от 300฿/г до 1кг",
+    "description": "Premium indoor каннабис в Паттайе. White Widow, веса 1г–1кг, магазин на Soi Hollywood. WhatsApp +66 66 080 6784."
+  },
+  "brand": "Labs Cannabis",
+  "formerBrand": "ранее Labs Dispensary",
+  "reels": {
+    "weights": { "1g": "1г", "10g": "10г", "1kg": "1кг" },
+    "locationBadge": "5 мин пешком от Walking Street · есть доставка",
+    "whatsapp": "WhatsApp",
+    "map": "Карта"
+  },
+  "prices": {
+    "title": "Выбери вес",
+    "subtitle": "Чем больше — тем дешевле за грамм. Тап = заказ в WhatsApp.",
+    "mostPopular": "ХИТ",
+    "wholesale": "ОПТ",
+    "streetAnchor": "на улице 500–700฿/г · у нас 300฿",
+    "trustLine": "Нал · QR · самовывоз сегодня · ответ в WhatsApp ~5 мин",
+    "urgency": "Сегодня продано: {grams}г",
+    "labels": {
+      "tryout": "Попробовать",
+      "evening": "На вечер",
+      "intro": "Старт",
+      "popular": "Выгодно",
+      "monthly": "На месяц",
+      "bulk": "Оптом",
+      "wholesale": "Опт 1кг"
+    },
+    "orderVia": "Заказать в WhatsApp"
+  },
+  "whatsappPrefill": {
+    "1g": "Привет Labs Cannabis 👋 Хочу 1г White Widow. Когда можно забрать?",
+    "3g": "Привет Labs Cannabis 👋 Хочу 3г White Widow. Когда можно забрать?",
+    "5g": "Привет Labs Cannabis 👋 Хочу 5г White Widow. Когда можно забрать?",
+    "10g": "Привет Labs Cannabis 👋 Хочу 10г White Widow. Когда можно забрать?",
+    "30g": "Привет Labs Cannabis 👋 Хочу 30г White Widow. Когда можно забрать?",
+    "100g": "Привет Labs Cannabis 👋 Интересует 100г. Есть в наличии? Когда забрать?",
+    "1kg": "Привет Labs Cannabis 👋 Интересует 1кг оптом. Наличие и сроки?"
+  },
+  "dima": {
+    "badge": "Говорит по-русски",
+    "title": "Дима говорит по-русски",
+    "text": "Первый раз в Паттайе? Дима поможет выбрать вес и сорт — по-русски или по-английски. Напиши в WhatsApp или заходи на Soi Hollywood.",
+    "cta": "Написать Диме в WhatsApp"
+  },
+  "reviews": {
+    "title": "Отзывы гостей",
+    "subtitle": "{rating}★ · {count} отзывов в Google",
+    "readAll": "Все {count} отзывов в Google →"
+  },
+  "location": {
+    "title": "Как нас найти",
+    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
+    "landmark": "5 мин пешком от Walking Street",
+    "step1": "Иди по Pattaya 13 Alley (Soi Hollywood) от Walking Street.",
+    "step2": "Ищи вывеску LABS DISPENSARY / Labs Cannabis.",
+    "step3": "Мы слева, примерно в середине переулка.",
+    "hours": "Ежедневно {open} – {close}",
+    "openMaps": "Открыть в Google Maps"
+  },
+  "medical": {
+    "badge": "20+",
+    "text": "В Таиланде нужна медкарта для 20+. Помогаем оформить на месте за ~2 минуты — бесплатно."
+  },
+  "footer": {
+    "disclaimer": "Labs Cannabis (ранее Labs Dispensary). Лицензированный ритейлер в Паттайе. Только 20+.",
+    "rights": "Все права защищены."
+  },
+  "ageGate": {
+    "title": "Вам есть 20 лет?",
+    "text": "Сайт для совершеннолетних. Каннабис в Таиланде — с медкартой, помогаем на месте.",
+    "enter": "Да, мне 20+",
+    "exit": "Выйти"
+  },
+  "contact": {
+    "title": "Связаться",
+    "subtitle": "Один номер на всё — обычно отвечаем за 5 минут.",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "line": "LINE",
+    "call": "Позвонить"
+  },
+  "wholesale": {
+    "title": "Опт и bulk",
+    "subtitle": "100г–1кг — напишите для уточнения наличия."
+  },
+  "strains": {
+    "flagship": "Наш флагман",
+    "alsoAvailable": "Также по запросу"
+  },
+  "nav": {
+    "home": "Главная",
+    "prices": "Цены",
+    "contact": "Контакты",
+    "wholesale": "Опт"
+  }
+}

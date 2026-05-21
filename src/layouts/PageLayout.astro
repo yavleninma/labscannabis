@@ -1,0 +1,60 @@
+---
+import "@/styles/global.css";
+import type { Locale } from "@/lib/i18n";
+import { isRtl, LOCALE_HREFLANG } from "@/lib/i18n";
+import { getHreflangs, getCanonical } from "@/lib/seo";
+import { t } from "@/lib/ui";
+import AgeGate from "@/components/AgeGate.astro";
+import StickyCTA from "@/components/StickyCTA.astro";
+import JsonLd from "@/components/JsonLd.astro";
+
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  pathSuffix?: string;
+  keywords?: string[];
+  faq?: { q: string; a: string }[];
+}
+
+const { locale, title, description, pathSuffix = "", keywords = [], faq = [] } = Astro.props;
+const ui = t(locale);
+const pageTitle = title ?? ui.meta.title;
+const pageDesc = description ?? ui.meta.description;
+const canonical = getCanonical(locale, pathSuffix);
+const hreflangs = getHreflangs(locale, pathSuffix);
+const dir = isRtl(locale) ? "rtl" : "ltr";
+---
+
+<!doctype html>
+<html lang={LOCALE_HREFLANG[locale]} dir={dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="description" content={pageDesc} />
+    {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    <link rel="canonical" href={canonical} />
+    {hreflangs.map((h) => (
+      <link rel="alternate" hreflang={h.hreflang} href={h.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={hreflangs[0]?.href} />
+    <title>{pageTitle}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDesc} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${import.meta.env.PUBLIC_SITE_URL || "https://labscannabis.boutique"}/media/IMG_20260517_175646.jpg`} />
+  </head>
+  <body>
+    <AgeGate locale={locale} />
+    <slot />
+    <StickyCTA locale={locale} />
+    <JsonLd locale={locale} pathSuffix={pathSuffix} faq={faq} />
+  </body>
+</html>

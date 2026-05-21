@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — باتايا | من 300฿/g إلى 1kg",
+    "description": "قنب indoor premium في باتايا. White Widow، أوزان 1g–1kg، Soi Hollywood. WhatsApp +66 66 080 6784"
+  },
+  "brand": "Labs Cannabis",
+  "formerBrand": "سابقاً Labs Dispensary",
+  "reels": {
+    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "locationBadge": "5 دقائق سيرًا من Walking Street · توصيل متاح",
+    "whatsapp": "WhatsApp",
+    "map": "الخريطة"
+  },
+  "prices": {
+    "title": "اختر الوزن",
+    "subtitle": "كلما زاد الوزن انخفض السعر. اضغط للطلب عبر WhatsApp",
+    "mostPopular": "الأكثر طلباً",
+    "wholesale": "جملة",
+    "streetAnchor": "السوق 500–700฿/g · لدينا 300฿",
+    "trustLine": "نقد · QR · استلام اليوم · رد WhatsApp ~5 دقائق",
+    "urgency": "اليوم: {grams}g مباع",
+    "labels": {
+      "tryout": "جرّب",
+      "evening": "مساء",
+      "intro": "بداية",
+      "popular": "أفضل قيمة",
+      "monthly": "شهري",
+      "bulk": "كمية",
+      "wholesale": "جملة"
+    },
+    "orderVia": "اطلب WhatsApp"
+  },
+  "whatsappPrefill": {
+    "1g": "مرحباً Labs Cannabis 👋 أريد 1g White Widow. متى الاستلام؟",
+    "3g": "مرحباً Labs Cannabis 👋 أريد 3g White Widow",
+    "5g": "مرحباً Labs Cannabis 👋 أريد 5g White Widow",
+    "10g": "مرحباً Labs Cannabis 👋 أريد 10g White Widow",
+    "30g": "مرحباً Labs Cannabis 👋 أريد 30g White Widow",
+    "100g": "مرحباً Labs Cannabis 👋 مهتم بـ 100g. متوفر؟",
+    "1kg": "مرحباً Labs Cannabis 👋 مهتم بـ 1kg جملة. التوفر؟"
+  },
+  "dima": {
+    "badge": "يتحدث الروسية",
+    "title": "Dima يتحدث الروسية",
+    "text": "أول مرة في باتايا؟ Dima يساعدك بالروسية أو الإنجليزية. WhatsApp أو زُر Soi Hollywood",
+    "cta": "راسل Dima على WhatsApp"
+  },
+  "reviews": {
+    "title": "آراء الزوار",
+    "subtitle": "{rating}★ · {count} تقييم Google",
+    "readAll": "كل {count} تقييم على Google →"
+  },
+  "location": {
+    "title": "موقعنا",
+    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
+    "landmark": "5 دقائق مشياً من Walking Street",
+    "step1": "اذهب إلى Pattaya 13 Alley (Soi Hollywood)",
+    "step2": "ابحث عن LABS DISPENSARY / Labs Cannabis",
+    "step3": "على يسارك في منتصف الزقاق",
+    "hours": "يومياً {open} – {close}",
+    "openMaps": "Google Maps"
+  },
+  "medical": {
+    "badge": "20+",
+    "text": "تايلاند تتطلب بطاقة طبية 20+. نساعدك في المتجر ~2 دقيقة مجاناً"
+  },
+  "footer": {
+    "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). باتايا، تايلاند. 20+ فقط",
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "ageGate": {
+    "title": "هل عمرك 20+؟",
+    "text": "للبالغين فقط. القنب في تايلاند يتطلب بطاقة — نساعد في المتجر",
+    "enter": "نعم، 20+",
+    "exit": "مغادرة"
+  },
+  "contact": {
+    "title": "تواصل",
+    "subtitle": "رقم واحد لكل شيء — نرد خلال ~5 دقائق",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "line": "LINE",
+    "call": "اتصال"
+  },
+  "wholesale": {
+    "title": "جملة",
+    "subtitle": "100g–1kg — اسأل عن التوفر أولاً"
+  },
+  "strains": {
+    "flagship": "المنتج الرئيسي",
+    "alsoAvailable": "متوفر أيضاً حسب الطلب"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "prices": "الأسعار",
+    "contact": "تواصل",
+    "wholesale": "جملة"
+  }
+}

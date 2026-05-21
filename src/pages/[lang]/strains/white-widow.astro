@@ -1,0 +1,54 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Reels from "@/components/Reels.astro";
+import PriceLadder from "@/components/PriceLadder.astro";
+import ReviewStrip from "@/components/ReviewStrip.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import MedicalCardNote from "@/components/MedicalCardNote.astro";
+import Footer from "@/components/Footer.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { WHITE_WIDOW, SECONDARY_STRAINS } from "@/data/strains";
+import { REELS_SLIDES } from "@/data/media";
+import { t } from "@/lib/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = lang as Locale;
+const ui = t(locale);
+const desc = WHITE_WIDOW.shortDescription[locale] ?? WHITE_WIDOW.shortDescription.en;
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix="strains/white-widow"
+  title={`${WHITE_WIDOW.name} Pattaya | Labs Cannabis`}
+  description={desc}
+>
+  <section class="px-4 pt-8">
+    <div class="mx-auto max-w-lg">
+      <span class="text-xs uppercase tracking-wider text-emerald">{ui.strains.flagship}</span>
+      <h1 class="mt-1 text-3xl font-bold">{WHITE_WIDOW.name}</h1>
+      <p class="mt-2 text-sm capitalize text-text-muted">{WHITE_WIDOW.type}{WHITE_WIDOW.thcPercent ? ` · ${WHITE_WIDOW.thcPercent}% THC` : ""}</p>
+      <p class="mt-4 text-sm leading-relaxed text-text-muted">{desc}</p>
+    </div>
+  </section>
+  <Reels locale={locale} slides={REELS_SLIDES.slice(0, 4)} mini />
+  <PriceLadder locale={locale} />
+  <section class="px-4 py-6">
+    <div class="mx-auto max-w-lg">
+      <h2 class="mb-3 text-lg font-semibold">{ui.strains.alsoAvailable}</h2>
+      <div class="flex flex-wrap gap-2">
+        {SECONDARY_STRAINS.map((s) => (
+          <span class="rounded-full border border-border px-3 py-1 text-xs text-text-muted">{s.name}</span>
+        ))}
+      </div>
+    </div>
+  </section>
+  <ReviewStrip locale={locale} />
+  <MapBlock locale={locale} />
+  <MedicalCardNote locale={locale} />
+  <Footer locale={locale} />
+</PageLayout>

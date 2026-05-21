@@ -1,0 +1,49 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { GOOGLE } from "@/data/site";
+import { REVIEWS_POOL, pickDailyReviews } from "@/data/reviews-pool";
+import { t } from "@/lib/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const reviews = pickDailyReviews(REVIEWS_POOL, new Date(), 3);
+const subtitle = ui.reviews.subtitle
+  .replace("{rating}", String(GOOGLE.rating))
+  .replace("{count}", String(GOOGLE.reviewCount));
+const readAll = ui.reviews.readAll.replace("{count}", String(GOOGLE.reviewCount));
+---
+
+<section class="px-4 py-10">
+  <div class="mx-auto max-w-lg">
+    <h2 class="mb-1 text-2xl font-bold">{ui.reviews.title}</h2>
+    <p class="mb-6 text-sm text-text-muted">{subtitle}</p>
+    <div class="space-y-4">
+      {reviews.map((r) => (
+        <blockquote class="rounded-xl border border-border bg-bg-card p-4">
+          <div class="mb-2 flex items-center gap-2">
+            <span class="flex h-8 w-8 items-center justify-center rounded-full bg-emerald/20 text-sm font-bold text-emerald">
+              {r.name.charAt(0)}
+            </span>
+            <div>
+              <p class="text-sm font-medium">{r.name}</p>
+              <p class="text-xs text-emerald">{"★".repeat(r.stars)}</p>
+            </div>
+          </div>
+          <p class="text-sm text-text-muted leading-relaxed">{r.text}</p>
+        </blockquote>
+      ))}
+    </div>
+    <a
+      href={GOOGLE.listingUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-block text-sm text-emerald underline"
+    >
+      {readAll}
+    </a>
+  </div>
+</section>

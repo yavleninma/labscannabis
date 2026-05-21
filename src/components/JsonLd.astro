@@ -1,0 +1,106 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
+import { PRICE_LADDER } from "@/data/prices";
+import { getSiteUrl, localePath } from "@/lib/i18n";
+import { getCanonical } from "@/lib/seo";
+import { REVIEWS_POOL, pickDailyReviews } from "@/data/reviews-pool";
+
+interface FaqItem {
+  q: string;
+  a: string;
+}
+
+interface Props {
+  locale: Locale;
+  pathSuffix?: string;
+  faq?: FaqItem[];
+}
+
+const { locale, pathSuffix = "", faq = [] } = Astro.props;
+const baseUrl = getSiteUrl();
+const pageUrl = getCanonical(locale, pathSuffix);
+const reviews = pickDailyReviews(REVIEWS_POOL, new Date(), 3);
+
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": ["LocalBusiness", "Store"],
+  "@id": `${baseUrl}/#business`,
+  name: BRAND.name,
+  alternateName: BRAND.formerName,
+  url: pageUrl,
+  telephone: CONTACT.phoneIntl,
+  image: `${baseUrl}/media/IMG_20260517_175646.jpg`,
+  sameAs: [GOOGLE.listingUrl],
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: ADDRESS.street,
+    addressLocality: ADDRESS.locality,
+    addressRegion: ADDRESS.region,
+    postalCode: ADDRESS.postalCode,
+    addressCountry: ADDRESS.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: ADDRESS.lat,
+    longitude: ADDRESS.lng,
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: HOURS.open,
+    closes: HOURS.close,
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: String(GOOGLE.rating),
+    reviewCount: String(GOOGLE.reviewCount),
+    bestRating: "5",
+  },
+  priceRange: "฿",
+  currenciesAccepted: "THB",
+  paymentAccepted: "Cash, QR Bank Transfer",
+  review: reviews.map((r) => ({
+    "@type": "Review",
+    author: { "@type": "Person", name: r.name },
+    reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
+    reviewBody: r.text,
+    datePublished: r.date,
+  })),
+};
+
+const products = PRICE_LADDER.map((tier) => ({
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: `White Widow Cannabis — ${tier.weight}`,
+  brand: { "@type": "Brand", name: BRAND.name },
+  offers: {
+    "@type": "Offer",
+    price: tier.total,
+    priceCurrency: "THB",
+    availability: "https://schema.org/InStock",
+    url: `${baseUrl}${localePath(locale)}#prices`,
+  },
+}));
+
+const faqLd =
+  faq.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: faq.map((item) => ({
+          "@type": "Question",
+          name: item.q,
+          acceptedAnswer: { "@type": "Answer", text: item.a },
+        })),
+      }
+    : null;
+
+const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
+---
+
+{faqLd && <script type="application/ld+json" set:html={safeJson(faqLd)} />}
+<script type="application/ld+json" set:html={safeJson(localBusiness)} />
+{products.map((p) => (
+  <script type="application/ld+json" set:html={safeJson(p)} />
+))}

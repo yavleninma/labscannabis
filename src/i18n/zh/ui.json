@@ -1,0 +1,99 @@
+{
+  "meta": {
+    "title": "Labs Cannabis — 芭提雅 | 300฿/克起至1公斤",
+    "description": "芭提雅优质室内大麻 White Widow 1克–1公斤 Soi Hollywood 实体店 WhatsApp +66 66 080 6784"
+  },
+  "brand": "Labs Cannabis",
+  "formerBrand": "原 Labs Dispensary",
+  "reels": {
+    "weights": { "1g": "1克", "10g": "10克", "1kg": "1公斤" },
+    "locationBadge": "距 Walking Street 步行 5 分钟 · 可配送",
+    "whatsapp": "WhatsApp",
+    "map": "地图"
+  },
+  "prices": {
+    "title": "选择规格",
+    "subtitle": "量越大单价越低，点击WhatsApp下单",
+    "mostPopular": "最受欢迎",
+    "wholesale": "批发",
+    "streetAnchor": "市价500–700฿/克 · 我们300฿",
+    "trustLine": "现金 · QR · 当日取 · WhatsApp约5分钟回复",
+    "urgency": "今日已售{grams}克",
+    "labels": {
+      "tryout": "试用",
+      "evening": "晚间",
+      "intro": "入门",
+      "popular": "最划算",
+      "monthly": "月度",
+      "bulk": "批量",
+      "wholesale": "批发"
+    },
+    "orderVia": "WhatsApp下单"
+  },
+  "whatsappPrefill": {
+    "1g": "你好 Labs Cannabis 👋 想要1g White Widow，何时可取？",
+    "3g": "你好 Labs Cannabis 👋 想要3g White Widow",
+    "5g": "你好 Labs Cannabis 👋 想要5g White Widow",
+    "10g": "你好 Labs Cannabis 👋 想要10g White Widow",
+    "30g": "你好 Labs Cannabis 👋 想要30g White Widow",
+    "100g": "你好 Labs Cannabis 👋 咨询100g是否有货",
+    "1kg": "你好 Labs Cannabis 👋 咨询1kg批发及库存"
+  },
+  "dima": {
+    "badge": "俄语服务",
+    "title": "Dima说俄语",
+    "text": "第一次来芭提雅？Dima用俄语或英语帮你选规格。WhatsApp或到店Soi Hollywood",
+    "cta": "WhatsApp联系Dima"
+  },
+  "reviews": {
+    "title": "客人评价",
+    "subtitle": "Google {rating}★ · {count}条评价",
+    "readAll": "查看全部{count}条Google评价 →"
+  },
+  "location": {
+    "title": "找到我们",
+    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
+    "landmark": "Walking Street步行5分钟",
+    "step1": "从Walking Street前往Pattaya 13 Alley (Soi Hollywood)",
+    "step2": "寻找LABS DISPENSARY / Labs Cannabis招牌",
+    "step3": "在巷子左侧中段",
+    "hours": "每日 {open} – {close}",
+    "openMaps": "打开Google Maps"
+  },
+  "medical": {
+    "badge": "20+",
+    "text": "泰国需20+医疗卡，店内约2分钟免费办理"
+  },
+  "footer": {
+    "disclaimer": "Labs Cannabis（原Labs Dispensary）芭提雅持证零售商 仅限20+",
+    "rights": "版权所有"
+  },
+  "ageGate": {
+    "title": "您是否已满20岁？",
+    "text": "仅限成人。泰国大麻需医疗卡，店内协助办理",
+    "enter": "是，已满20",
+    "exit": "离开"
+  },
+  "contact": {
+    "title": "联系我们",
+    "subtitle": "一个号码全搞定，通常5分钟内回复",
+    "whatsapp": "WhatsApp",
+    "telegram": "Telegram",
+    "line": "LINE",
+    "call": "电话"
+  },
+  "wholesale": {
+    "title": "批发",
+    "subtitle": "100g–1kg 请先WhatsApp确认库存"
+  },
+  "strains": {
+    "flagship": "主打品种",
+    "alsoAvailable": "其他品种可咨询"
+  },
+  "nav": {
+    "home": "首页",
+    "prices": "价格",
+    "contact": "联系",
+    "wholesale": "批发"
+  }
+}

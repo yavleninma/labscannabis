@@ -1,0 +1,29 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Reels from "@/components/Reels.astro";
+import PriceLadder from "@/components/PriceLadder.astro";
+import ReviewStrip from "@/components/ReviewStrip.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import MedicalCardNote from "@/components/MedicalCardNote.astro";
+import Footer from "@/components/Footer.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { REELS_SLIDES } from "@/data/media";
+import { t } from "@/lib/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = lang as Locale;
+const ui = t(locale);
+---
+
+<PageLayout locale={locale} pathSuffix="">
+  <Reels locale={locale} slides={REELS_SLIDES} />
+  <PriceLadder locale={locale} />
+  <ReviewStrip locale={locale} />
+  <MapBlock locale={locale} />
+  <MedicalCardNote locale={locale} />
+  <Footer locale={locale} />
+</PageLayout>

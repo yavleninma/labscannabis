@@ -1,0 +1,47 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { ADDRESS, HOURS, getMapsEmbedUrl, getMapsSearchUrl } from "@/data/site";
+import { t } from "@/lib/ui";
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const ui = t(locale);
+const hours = ui.location.hours.replace("{open}", HOURS.open).replace("{close}", HOURS.close);
+---
+
+<section id="location" class="px-4 py-12">
+  <div class="mx-auto max-w-lg">
+    <h2 class="mb-4 text-2xl font-bold">{ui.location.title}</h2>
+    <div class="mb-4 aspect-video overflow-hidden rounded-xl border border-border">
+      <iframe
+        src={getMapsEmbedUrl()}
+        width="100%"
+        height="100%"
+        style="border:0"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        title="Labs Cannabis location"
+      />
+    </div>
+    <p class="font-medium">{ui.location.address}</p>
+    <p class="mt-1 text-sm text-text-muted">{ADDRESS.street}, {ADDRESS.locality}</p>
+    <p class="mt-2 text-sm text-emerald">{ui.location.landmark}</p>
+    <ol class="mt-4 space-y-2 text-sm text-text-muted">
+      <li>1. {ui.location.step1}</li>
+      <li>2. {ui.location.step2}</li>
+      <li>3. {ui.location.step3}</li>
+    </ol>
+    <p class="mt-4 text-sm"><span class="font-medium">{hours}</span></p>
+    <a
+      href={getMapsSearchUrl()}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-4 inline-flex rounded-lg border border-border px-4 py-2 text-sm hover:border-emerald/40"
+    >
+      {ui.location.openMaps}
+    </a>
+  </div>
+</section>
