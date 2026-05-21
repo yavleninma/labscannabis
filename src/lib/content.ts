@@ -49,13 +49,28 @@ export function seoDescription(content: SeoContent, max = 160): string {
   return `${text.slice(0, max - 1).trim()}…`;
 }
 
+function validateContent(data: unknown): data is SeoContent {
+  if (!data || typeof data !== "object") return false;
+  const c = data as SeoContent;
+  return (
+    typeof c.h1 === "string" &&
+    typeof c.intro === "string" &&
+    Array.isArray(c.sections) &&
+    c.sections.every((s) => s?.h2 && s?.body) &&
+    Array.isArray(c.faq) &&
+    c.faq.every((f) => f?.q && f?.a) &&
+    typeof c.closing === "string"
+  );
+}
+
 export function loadSeoContent(locale: Locale, slug: string): SeoContent {
   const cachePath = path.join(process.cwd(), "content-cache", locale, `${slug}.json`);
   if (fs.existsSync(cachePath)) {
     try {
-      return JSON.parse(fs.readFileSync(cachePath, "utf8")) as SeoContent;
+      const parsed = JSON.parse(fs.readFileSync(cachePath, "utf8")) as SeoContent;
+      if (validateContent(parsed)) return parsed;
     } catch {
-      return FALLBACK;
+      /* use fallback */
     }
   }
   return FALLBACK;
