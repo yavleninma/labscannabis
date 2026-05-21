@@ -35,16 +35,20 @@ const spotTiers = [
     <ReelsIsland client:load slides={slides} mini={mini} />
     {!mini && (
       <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
-        <div class="pointer-events-auto mx-auto w-full space-y-2">
-          <p class="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1 text-xl font-bold tracking-wide text-white drop-shadow-sm" role="list" aria-label={ui.prices.title}>
+        <div class="pointer-events-auto mx-auto w-full space-y-2 pt-1">
+          <p
+            class="flex flex-nowrap items-baseline justify-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-xl font-bold tracking-tight text-white drop-shadow-sm [scrollbar-width:none] sm:gap-x-2.5 sm:tracking-wide [&::-webkit-scrollbar]:hidden"
+            role="list"
+            aria-label={ui.prices.title}
+          >
             {spotTiers.map(({ key, waSlug, featured }, i) => (
-              <>
-                {i > 0 && <span class="text-white/40" aria-hidden="true">·</span>}
+              <span class="inline-flex shrink-0 items-baseline">
+                {i > 0 && <span class="me-1.5 text-white/40 sm:me-2.5" aria-hidden="true">·</span>}
                 <span role="listitem" class:list={[featured && "font-extrabold"]}>
                   {ui.reels.weights[key]}{" "}
                   <span>{formatPrice(tierTotal(waSlug), locale)}</span>
                 </span>
-              </>
+              </span>
             ))}
           </p>
           <a
