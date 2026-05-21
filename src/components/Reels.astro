@@ -27,54 +27,59 @@ const spotTiers = [
 ];
 ---
 
-<section id="reels-hero" class:list={["relative", mini ? "px-4 py-8" : ""]}>
-  <ReelsIsland client:load slides={slides} mini={mini} />
-  {!mini && (
-    <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
-      <div class="pointer-events-auto mx-auto max-w-lg space-y-2">
-        <p class="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1 text-sm text-white/85" role="list" aria-label={ui.prices.title}>
-          {spotTiers.map(({ key, waSlug, featured }, i) => (
-            <>
-              {i > 0 && <span class="text-white/35" aria-hidden="true">·</span>}
-              <span role="listitem" class:list={[featured && "text-emerald"]}>
-                {ui.reels.weights[key]}{" "}
-                <span class:list={["font-semibold", featured ? "text-emerald" : "text-white"]}>
-                  {formatPrice(tierTotal(waSlug), locale)}
+<section
+  id="reels-hero"
+  class:list={["relative w-full", mini ? "px-4 py-8" : "bg-black md:bg-zinc-950"]}
+>
+  <div class:list={["relative mx-auto w-full", !mini && "md:max-w-xl"]}>
+    <ReelsIsland client:load slides={slides} mini={mini} />
+    {!mini && (
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
+        <div class="pointer-events-auto mx-auto w-full space-y-2">
+          <p class="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1 text-sm text-white/85" role="list" aria-label={ui.prices.title}>
+            {spotTiers.map(({ key, waSlug, featured }, i) => (
+              <>
+                {i > 0 && <span class="text-white/35" aria-hidden="true">·</span>}
+                <span role="listitem" class:list={[featured && "text-emerald"]}>
+                  {ui.reels.weights[key]}{" "}
+                  <span class:list={["font-semibold", featured ? "text-emerald" : "text-white"]}>
+                    {formatPrice(tierTotal(waSlug), locale)}
+                  </span>
                 </span>
-              </span>
-            </>
-          ))}
-        </p>
-        <a
-          href={CONTACT.tel}
-          class="inline-flex items-center gap-2 text-xl font-bold tracking-wide text-white drop-shadow-sm transition-colors hover:text-emerald"
-          aria-label={`${ui.contact.call} ${CONTACT.phoneDisplay}`}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0 text-emerald" aria-hidden="true">
-            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.85 21 3 13.15 3 3a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
-          </svg>
-          {CONTACT.phoneDisplay}
-        </a>
-        <p class="text-sm leading-relaxed text-white/90 drop-shadow-sm">{ui.reels.locationBadge}</p>
-        <div class="flex gap-2 pt-1">
+              </>
+            ))}
+          </p>
           <a
-            href={CONTACT.whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex-1 rounded-full bg-emerald px-4 py-3.5 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
+            href={CONTACT.tel}
+            class="inline-flex items-center gap-2 text-xl font-bold tracking-wide text-white drop-shadow-sm transition-colors hover:text-emerald"
+            aria-label={`${ui.contact.call} ${CONTACT.phoneDisplay}`}
           >
-            {ui.reels.whatsapp}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0 text-emerald" aria-hidden="true">
+              <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.85 21 3 13.15 3 3a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
+            </svg>
+            {CONTACT.phoneDisplay}
           </a>
-          <a
-            href={getMapsSearchUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3.5 text-center text-base font-semibold text-white backdrop-blur-md"
-          >
-            {ui.reels.map}
-          </a>
+          <p class="text-sm leading-relaxed text-white/90 drop-shadow-sm">{ui.reels.locationBadge}</p>
+          <div class="flex gap-2 pt-1">
+            <a
+              href={CONTACT.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex-1 rounded-full bg-emerald px-4 py-3.5 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
+            >
+              {ui.reels.whatsapp}
+            </a>
+            <a
+              href={getMapsSearchUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3.5 text-center text-base font-semibold text-white backdrop-blur-md"
+            >
+              {ui.reels.map}
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-  )}
+    )}
+  </div>
 </section>

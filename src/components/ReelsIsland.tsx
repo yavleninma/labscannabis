@@ -158,7 +158,11 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
 
   return (
     <div
-      className={`relative overflow-hidden bg-black ${mini ? "h-[70vh] max-h-[640px] rounded-2xl" : "h-[100dvh] w-full"}`}
+      className={`relative mx-auto overflow-hidden bg-black ${
+        mini
+          ? "h-[70vh] max-h-[640px] rounded-2xl"
+          : "h-[100dvh] w-full md:h-[min(86dvh,720px)] md:max-h-[720px] md:rounded-b-2xl"
+      }`}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
       onClick={togglePause}
@@ -170,14 +174,14 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
         return (
           <div
             key={slide.id}
-            className={`absolute inset-0 transition-opacity duration-500 ${active ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
+            className={`absolute inset-0 flex items-center justify-center bg-black transition-opacity duration-500 ${active ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"}`}
           >
             {slide.type === "video" ? (
               <video
                 ref={(el) => {
                   videoRefs.current[i] = el;
                 }}
-                className="reels-media h-full w-full object-cover"
+                className="reels-media h-full w-full object-cover md:object-contain"
                 poster={slide.poster}
                 muted
                 playsInline
@@ -201,7 +205,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                 <img
                   src={slide.src}
                   alt={slide.alt ?? ""}
-                  className="reels-media h-full w-full object-cover"
+                  className="reels-media h-full w-full object-cover md:object-contain"
                   loading={i === 0 ? "eager" : "lazy"}
                 />
               </picture>
