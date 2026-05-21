@@ -15,8 +15,8 @@ const ui = t(locale);
 
 <section id="prices" class="px-4 py-12">
   <div class="mx-auto max-w-lg">
-    <h2 class="mb-1 text-2xl font-bold">{ui.prices.title}</h2>
-    <p class="mb-6 text-sm text-text-muted">{ui.prices.subtitle}</p>
+    <h2 class="section-title">{ui.prices.title}</h2>
+    <p class="section-lead">{ui.prices.subtitle}</p>
 
     <div class="space-y-3">
       {PRICE_LADDER.map((tier) => {
@@ -32,7 +32,7 @@ const ui = t(locale);
             target="_blank"
             rel="noopener noreferrer"
             class:list={[
-              "block rounded-2xl border border-border bg-bg-card p-4 transition-transform active:scale-[0.98]",
+              "card-surface block p-5 transition-transform active:scale-[0.98]",
               isPopular && "price-card-popular",
               isWholesale && "price-card-wholesale",
             ]}
@@ -40,54 +40,54 @@ const ui = t(locale);
             <div class="flex items-start justify-between gap-3">
               <div>
                 <div class="flex flex-wrap items-center gap-2">
-                  <span class="text-xl font-bold">{tier.weight}</span>
+                  <span class="text-2xl font-bold">{tier.weight}</span>
                   {isPopular && (
-                    <span class="rounded-full bg-emerald px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-black">
+                    <span class="rounded-full bg-emerald px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-black">
                       {ui.prices.mostPopular}
                     </span>
                   )}
                   {isWholesale && (
-                    <span class="rounded-full bg-emerald-dim px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">
+                    <span class="rounded-full bg-emerald-dim px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white">
                       {ui.prices.wholesale}
                     </span>
                   )}
-                  <span class="text-xs text-text-muted">{label}</span>
+                  <span class="text-sm text-text-muted">{label}</span>
                 </div>
-                <p class="mt-1 text-lg font-semibold text-emerald">
+                <p class="mt-1.5 text-xl font-bold text-emerald-dim">
                   {formatPrice(tier.total, locale)} · {formatPerGram(tier.perGram, locale)}
                 </p>
                 {tier.weight === "1g" && (
-                  <p class="mt-1 text-[11px] text-text-muted">{ui.prices.streetAnchor}</p>
+                  <p class="mt-1.5 text-sm text-text-muted">{ui.prices.streetAnchor}</p>
                 )}
               </div>
               {savings && (
-                <span class="shrink-0 rounded-lg bg-emerald/15 px-2 py-1 text-sm font-semibold text-emerald">
+                <span class="shrink-0 rounded-lg bg-emerald/15 px-2.5 py-1.5 text-base font-bold text-emerald-dim">
                   {savings}
                 </span>
               )}
             </div>
-            <p class="mt-2 text-xs text-text-muted">{ui.prices.orderVia} →</p>
+            <p class="mt-2.5 text-sm font-medium text-text-muted">{ui.prices.orderVia} →</p>
           </a>
         );
       })}
     </div>
 
     <div class="mt-6">
-      <p class="text-xs text-text-muted">{ui.prices.trustLine}</p>
+      <p class="text-sm leading-relaxed text-text-muted">{ui.prices.trustLine}</p>
     </div>
 
     <div class="mt-6">
-      <p class="mb-2 text-xs text-text-muted">฿/g by weight</p>
-      <div class="flex h-8 items-end gap-1">
+      <p class="mb-2 text-sm text-text-muted">฿/g by weight</p>
+      <div class="flex h-9 items-end gap-1">
         {PRICE_LADDER.map((tier) => (
           <div
-            class="flex-1 rounded-t bg-emerald/80 transition-all"
+            class="flex-1 rounded-t bg-emerald transition-all"
             style={`height: ${Math.max(12, (tier.perGram / MAX_PER_GRAM) * 100)}%`}
             title={`${tier.weight}: ${tier.perGram}฿/g`}
           />
         ))}
       </div>
-      <div class="mt-1 flex justify-between text-[9px] text-text-muted">
+      <div class="mt-1 flex justify-between text-xs text-text-muted">
         <span>1g</span>
         <span>1kg</span>
       </div>

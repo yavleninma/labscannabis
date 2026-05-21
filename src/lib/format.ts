@@ -2,17 +2,14 @@ import type { Locale } from "@/lib/i18n";
 
 const EN_NUMBER = new Intl.NumberFormat("en");
 
+function formatAmount(total: number, locale: Locale): string {
+  if (locale === "ar") return total.toLocaleString("ar-EG");
+  if (locale === "ru") return total.toLocaleString("ru-RU");
+  return EN_NUMBER.format(total);
+}
+
 export function formatPrice(total: number, locale: Locale): string {
-  if (locale === "ar") {
-    return `${total.toLocaleString("ar-EG")} ฿`;
-  }
-  if (locale === "ru") {
-    return `${total.toLocaleString("ru-RU")} ฿`;
-  }
-  if (locale === "th") {
-    return `${EN_NUMBER.format(total)} บาท`;
-  }
-  return `${EN_NUMBER.format(total)} ฿`;
+  return `฿${formatAmount(total, locale)}`;
 }
 
 export function formatPerGram(perGram: number, locale: Locale): string {

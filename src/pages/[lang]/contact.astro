@@ -19,14 +19,14 @@ const ui = t(locale);
 <PageLayout locale={locale} pathSuffix="contact" title={`${ui.contact.title} | Labs Cannabis`} description={ui.contact.subtitle}>
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-2xl font-bold">{ui.contact.title}</h1>
-      <p class="mt-2 text-sm text-text-muted">{ui.contact.subtitle}</p>
-      <p class="mt-4 text-lg font-semibold">{CONTACT.phoneDisplay}</p>
+      <h1 class="text-3xl font-bold">{ui.contact.title}</h1>
+      <p class="mt-2 text-base text-text-muted">{ui.contact.subtitle}</p>
+      <p class="mt-4 text-xl font-bold text-text">{CONTACT.phoneDisplay}</p>
       <div class="mt-6 grid grid-cols-2 gap-3">
-        <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3 text-center text-sm font-semibold text-black">{ui.contact.whatsapp}</a>
-        <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="rounded-xl border border-border py-3 text-center text-sm">{ui.contact.telegram}</a>
-        <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="rounded-xl border border-border py-3 text-center text-sm">{ui.contact.line}</a>
-        <a href={CONTACT.tel} class="rounded-xl border border-border py-3 text-center text-sm">{ui.contact.call}</a>
+        <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black">{ui.contact.whatsapp}</a>
+        <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.telegram}</a>
+        <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.line}</a>
+        <a href={CONTACT.tel} class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.call}</a>
       </div>
     </div>
   </section>

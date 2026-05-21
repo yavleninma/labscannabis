@@ -20,11 +20,11 @@ function tierTotal(waSlug: string) {
   return PRICE_LADDER.find((t) => t.waSlug === waSlug)!.total;
 }
 
-const spotPrice = [
-  `${ui.reels.weights["1g"]} ${formatPrice(tierTotal("1g"), locale)}`,
-  `${ui.reels.weights["10g"]} ${formatPrice(tierTotal("10g"), locale)}`,
-  `${ui.reels.weights["1kg"]} ${formatPrice(tierTotal("1kg"), locale)}`,
-].join(" · ");
+const spotTiers = [
+  { key: "1g" as const, waSlug: "1g" },
+  { key: "10g" as const, waSlug: "10g", featured: true },
+  { key: "1kg" as const, waSlug: "1kg" },
+];
 ---
 
 <section id="reels-hero" class:list={["relative", mini ? "px-4 py-8" : ""]}>
@@ -32,10 +32,44 @@ const spotPrice = [
   {!mini && (
     <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
       <div class="pointer-events-auto mx-auto max-w-lg space-y-2">
-        <p class="text-sm font-medium text-emerald">{spotPrice}</p>
+        <div class="flex items-stretch justify-between gap-2 sm:gap-3" role="list" aria-label={ui.prices.title}>
+          {spotTiers.map(({ key, waSlug, featured }) => (
+            <div
+              role="listitem"
+              class:list={[
+                "flex min-w-0 flex-1 flex-col items-center rounded-xl px-2.5 py-2.5 text-center backdrop-blur-md",
+                featured
+                  ? "bg-white/35 ring-2 ring-emerald shadow-lg shadow-emerald/30"
+                  : "bg-white/25 ring-1 ring-white/40",
+              ]}
+            >
+              <span
+                class:list={[
+                  "text-xs font-bold uppercase tracking-wide",
+                  featured ? "text-emerald" : "text-white/80",
+                ]}
+              >
+                {ui.reels.weights[key]}
+              </span>
+              <span
+                class:list={[
+                  "mt-0.5 text-lg font-bold tabular-nums leading-none",
+                  featured ? "text-white drop-shadow-sm" : "text-white/95",
+                ]}
+              >
+                {formatPrice(tierTotal(waSlug), locale)}
+              </span>
+              {featured && (
+                <span class="mt-1 text-[10px] font-bold uppercase leading-tight tracking-wide text-emerald drop-shadow-sm">
+                  {ui.reels.featuredBadge}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
         <a
           href={CONTACT.tel}
-          class="inline-flex items-center gap-2 text-lg font-semibold tracking-wide text-white transition-colors hover:text-emerald"
+          class="inline-flex items-center gap-2 text-xl font-bold tracking-wide text-white drop-shadow-sm transition-colors hover:text-emerald"
           aria-label={`${ui.contact.call} ${CONTACT.phoneDisplay}`}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0 text-emerald" aria-hidden="true">
@@ -43,13 +77,13 @@ const spotPrice = [
           </svg>
           {CONTACT.phoneDisplay}
         </a>
-        <p class="text-xs leading-relaxed text-white/75">{ui.reels.locationBadge}</p>
+        <p class="text-sm leading-relaxed text-white/90 drop-shadow-sm">{ui.reels.locationBadge}</p>
         <div class="flex gap-2 pt-1">
           <a
             href={CONTACT.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex-1 rounded-full bg-emerald px-4 py-3 text-center text-sm font-semibold text-black"
+            class="flex-1 rounded-full bg-emerald px-4 py-3.5 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
           >
             {ui.reels.whatsapp}
           </a>
@@ -57,7 +91,7 @@ const spotPrice = [
             href={getMapsSearchUrl()}
             target="_blank"
             rel="noopener noreferrer"
-            class="flex-1 rounded-full border border-white/30 bg-black/40 px-4 py-3 text-center text-sm font-medium text-white backdrop-blur"
+            class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3.5 text-center text-base font-semibold text-white backdrop-blur-md"
           >
             {ui.reels.map}
           </a>

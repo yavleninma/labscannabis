@@ -177,7 +177,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                 ref={(el) => {
                   videoRefs.current[i] = el;
                 }}
-                className="h-full w-full object-cover"
+                className="reels-media h-full w-full object-cover"
                 poster={slide.poster}
                 muted
                 playsInline
@@ -201,7 +201,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                 <img
                   src={slide.src}
                   alt={slide.alt ?? ""}
-                  className="h-full w-full object-cover"
+                  className="reels-media h-full w-full object-cover"
                   loading={i === 0 ? "eager" : "lazy"}
                 />
               </picture>
@@ -232,7 +232,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                 aria-label={`Slide ${i + 1}${slide.type === "video" ? " video" : ""}`}
                 aria-current={active}
               >
-                <img src={thumbSrc(slide)} alt="" className="h-full w-full object-cover" loading="lazy" />
+                <img src={thumbSrc(slide)} alt="" className="reels-media-thumb h-full w-full object-cover" loading="lazy" />
                 {slide.type === "video" && (
                   <span className="absolute inset-0 flex items-center justify-center bg-black/30 text-[10px] text-white">
                     ▶

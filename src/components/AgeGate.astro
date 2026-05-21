@@ -10,19 +10,19 @@ const { locale } = Astro.props;
 const ui = t(locale);
 ---
 
-<div id="age-gate" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/95 p-6" role="dialog" aria-modal="true">
-  <div class="max-w-sm rounded-2xl border border-border bg-bg-card p-8 text-center">
-    <h2 class="mb-2 text-xl font-bold">{ui.ageGate.title}</h2>
-    <p class="mb-6 text-sm text-text-muted">{ui.ageGate.text}</p>
+<div id="age-gate" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/75 p-6 backdrop-blur-sm" role="dialog" aria-modal="true">
+  <div class="card-surface max-w-sm p-8 text-center">
+    <h2 class="mb-3 text-2xl font-bold">{ui.ageGate.title}</h2>
+    <p class="mb-6 text-base leading-relaxed text-text-muted">{ui.ageGate.text}</p>
     <div class="flex flex-col gap-3">
       <button
         type="button"
         id="age-enter"
-        class="rounded-full bg-emerald px-6 py-3 font-semibold text-black"
+        class="rounded-full bg-emerald px-6 py-3.5 text-base font-bold text-black"
       >
         {ui.ageGate.enter}
       </button>
-      <a href="https://www.google.com" class="text-sm text-text-muted underline">
+      <a href="https://www.google.com" class="text-base text-text-muted underline">
         {ui.ageGate.exit}
       </a>
     </div>

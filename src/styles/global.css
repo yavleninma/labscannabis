@@ -1,37 +1,66 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #0a0f0a;
-  --color-bg-card: #121a12;
-  --color-border: #1f2e1f;
-  --color-emerald: #34d399;
-  --color-emerald-dim: #059669;
-  --color-text: #f0fdf4;
-  --color-text-muted: #86efac99;
+  --color-bg: #eef5ef;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #f6faf6;
+  --color-border: #b4cdb6;
+  --color-emerald: #10b981;
+  --color-emerald-dim: #047857;
+  --color-text: #0b160c;
+  --color-text-muted: #3d5340;
   --font-sans: "Inter", "Noto Sans", "Noto Sans Arabic", "Noto Sans SC", "Noto Sans JP", "Noto Sans KR", system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  font-size: 17px;
 }
 
 body {
   @apply bg-bg text-text antialiased;
   font-family: var(--font-sans);
+  line-height: 1.55;
+}
+
+.section-title {
+  @apply mb-2 text-[1.65rem] font-bold leading-tight tracking-tight text-text;
+}
+
+.section-lead {
+  @apply mb-6 text-base leading-relaxed text-text-muted;
+}
+
+.card-surface {
+  @apply rounded-2xl border border-border bg-bg-card shadow-sm shadow-black/5;
 }
 
 .reels-overlay-gradient {
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, transparent 40%, transparent 60%, rgba(0, 0, 0, 0.4) 100%);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.52) 0%,
+    transparent 38%,
+    transparent 62%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+
+.reels-media {
+  filter: brightness(1.14) contrast(1.05) saturate(1.1);
+}
+
+.reels-media-thumb {
+  filter: brightness(1.1) saturate(1.06);
 }
 
 .price-card-popular {
-  @apply border-emerald ring-1 ring-emerald/40;
+  @apply border-emerald bg-emerald/10 ring-2 ring-emerald/35;
 }
 
 .price-card-wholesale {
-  @apply border-emerald-dim ring-1 ring-emerald-dim/30;
+  @apply border-emerald-dim bg-emerald-dim/5 ring-2 ring-emerald-dim/25;
 }
 
 .sticky-cta-shadow {
-  box-shadow: 0 4px 24px rgba(52, 211, 153, 0.35);
+  box-shadow: 0 6px 28px rgba(16, 185, 129, 0.45);
 }

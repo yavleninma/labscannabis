@@ -33,26 +33,26 @@ const description = seoDescription(content);
 <PageLayout locale={locale} pathSuffix={seoSlug} title={title} description={description} keywords={keywords} faq={content.faq}>
   <article class="px-4 pt-8 pb-4">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-2xl font-bold">{content.h1 || page.h1Template[locale]}</h1>
-      <p class="mt-4 text-sm leading-relaxed text-text-muted">{content.intro}</p>
+      <h1 class="text-3xl font-bold leading-tight">{content.h1 || page.h1Template[locale]}</h1>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{content.intro}</p>
       {content.sections.map((sec) => (
         <section class="mt-6">
-          <h2 class="text-lg font-semibold text-emerald">{sec.h2}</h2>
-          <p class="mt-2 text-sm leading-relaxed text-text-muted">{sec.body}</p>
+          <h2 class="text-xl font-bold text-emerald-dim">{sec.h2}</h2>
+          <p class="mt-2 text-base leading-relaxed text-text-muted">{sec.body}</p>
         </section>
       ))}
       {content.faq.length > 0 && (
         <section class="mt-8">
-          <h2 class="mb-3 text-lg font-semibold">FAQ</h2>
+          <h2 class="mb-3 text-xl font-bold">FAQ</h2>
           {content.faq.map((item) => (
-            <details class="mb-3 rounded-lg border border-border bg-bg-card p-3">
-              <summary class="cursor-pointer text-sm font-medium">{item.q}</summary>
-              <p class="mt-2 text-sm text-text-muted">{item.a}</p>
+            <details class="card-surface mb-3 p-4">
+              <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
             </details>
           ))}
         </section>
       )}
-      <p class="mt-6 text-sm text-text-muted">{content.closing}</p>
+      <p class="mt-6 text-base leading-relaxed text-text-muted">{content.closing}</p>
     </div>
   </article>
   <Reels locale={locale} slides={REELS_SLIDES.slice(0, 3)} mini />
