@@ -36,15 +36,13 @@ const spotTiers = [
     {!mini && (
       <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
         <div class="pointer-events-auto mx-auto w-full space-y-2">
-          <p class="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1 text-sm text-white/85" role="list" aria-label={ui.prices.title}>
+          <p class="flex flex-wrap items-baseline justify-center gap-x-2.5 gap-y-1 text-xl font-bold tracking-wide text-white drop-shadow-sm" role="list" aria-label={ui.prices.title}>
             {spotTiers.map(({ key, waSlug, featured }, i) => (
               <>
-                {i > 0 && <span class="text-white/35" aria-hidden="true">·</span>}
-                <span role="listitem" class:list={[featured && "text-emerald"]}>
+                {i > 0 && <span class="text-white/40" aria-hidden="true">·</span>}
+                <span role="listitem" class:list={[featured && "font-extrabold"]}>
                   {ui.reels.weights[key]}{" "}
-                  <span class:list={["font-semibold", featured ? "text-emerald" : "text-white"]}>
-                    {formatPrice(tierTotal(waSlug), locale)}
-                  </span>
+                  <span>{formatPrice(tierTotal(waSlug), locale)}</span>
                 </span>
               </>
             ))}
