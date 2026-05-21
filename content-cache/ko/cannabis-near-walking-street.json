@@ -1,29 +1,30 @@
 {
-  "h1": "Walking Street 근처 매장 — Soi Hollywood",
-  "intro": "Walking Street 근처 매장 — Soi Hollywood. Soi Hollywood Labs Cannabis(구 Labs Dispensary) — Walking Street 및 파타야, White Widow indoor, 300฿/g~1kg 도매, 배달 가능. WhatsApp +66 66 080 6784",
+  "h1": "Walking Street 근처의 카나비스",
+  "intro": "파타야의 중심부에 위치한 Labs Cannabis는 Walking Street 근처에서 최고의 카나비스를 제공합니다. 저희는 고객님께 무료 인스토어 샘플을 제공하며, 다양한 중량 티어(1g–1kg)를 선택하실 수 있습니다. White Widow와 같은 인기 있는 품종을 포함하여 다양한 종류의 weed를 만나보세요.",
   "sections": [
     {
-      "h2": "Labs Cannabis를 선택하는 이유",
-      "body": "Google 4.8★ 91리뷰. 투명한 가격. Walking Street에서 5분. Walking Street 고객 방문 편리."
+      "h2": "Labs Cannabis의 제품",
+      "body": "저희 Labs Cannabis(구 Labs Dispensary)에서는 파타야에서 가장 신선하고 품질 좋은 카나비스를 제공하고 있습니다. 고객님은 White Widow와 같은 인기 품종을 포함하여 다양한 선택지를 즐기실 수 있습니다. 저희는 각종 중량 티어(1g–1kg)로 제공하여, 필요에 맞게 구매하실 수 있도록 돕습니다. 방문하시면 특별한 무료 인스토어 샘플도 제공하니, 직접 체험해 보세요."
     },
     {
-      "h2": "매장 방문 또는 WhatsApp",
-      "body": "32 Pattaya 13 Alley (Soi Hollywood). 매일 12:00–01:00. 파타야 배달 가능."
+      "h2": "Walking Street 근처에서의 편리함",
+      "body": "Walking Street와 가까운 Labs Cannabis는 편리한 위치로 많은 관광객과 지역 주민들에게 사랑받고 있습니다. 저희 매장은 Soi Hollywood에 위치하고 있어, 언제든지 쉽게 찾아오실 수 있습니다. 저희는 친절한 직원들과 함께 고객님께 최상의 쇼핑 경험을 제공하기 위해 항상 노력하고 있습니다. 궁금한 점이 있으시면 언제든지 WhatsApp으로 문의해 주세요."
     }
   ],
   "faq": [
     {
-      "q": "의료 카드 필요?",
-      "a": "20세 이상, 매장에서 무료 발급 지원."
+      "q": "Walking Street 근처에서 카나비스를 구매할 수 있나요?",
+      "a": "네, Labs Cannabis는 Walking Street 근처에 위치해 있어 편리하게 카나비스를 구매하실 수 있습니다."
     },
     {
-      "q": "배달 되나요?",
-      "a": "WhatsApp으로 지역 문의."
+      "q": "White Widow는 어떤 품종인가요?",
+      "a": "White Widow는 강한 향과 효과로 유명한 인기 있는 카나비스 품종입니다."
     },
     {
-      "q": "가성비?",
-      "a": "10g 1,800฿ 인기, 1kg 40,000฿."
+      "q": "어떤 중량으로 구매할 수 있나요?",
+      "a": "저희는 1g부터 1kg까지 다양한 중량 티어를 제공하고 있습니다."
     }
   ],
-  "closing": "아래 무게를 탭해 WhatsApp 주문 또는 Soi Hollywood 방문."
+  "closing": "Labs Cannabis를 방문하여 최고의 카나비스를 경험해 보세요. 궁금한 점이 있으시면 WhatsApp +66 66 080 6784로 문의해 주세요.",
+  "source": "openai"
 }

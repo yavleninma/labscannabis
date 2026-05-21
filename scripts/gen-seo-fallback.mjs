@@ -153,6 +153,7 @@ function buildContent(locale, page) {
   const area = page.area ? (AREA_NAMES[page.area]?.[locale] ?? page.area) : AREA_NAMES.pattaya[locale];
   const h1 = page.h1Template[locale] ?? page.h1Template.en ?? page.slug;
   return {
+    source: "fallback",
     h1,
     intro: t.intro(h1, area, page.weight),
     sections: [
@@ -164,6 +165,23 @@ function buildContent(locale, page) {
   };
 }
 
+function isValidGenerated(data) {
+  return data?.source === "openai" && validateContent(data);
+}
+
+function validateContent(data) {
+  return (
+    data &&
+    typeof data.h1 === "string" &&
+    typeof data.intro === "string" &&
+    Array.isArray(data.sections) &&
+    data.sections.length >= 2 &&
+    Array.isArray(data.faq) &&
+    data.faq.length >= 3 &&
+    typeof data.closing === "string"
+  );
+}
+
 const pages = loadSeoPages();
 let written = 0;
 
@@ -173,8 +191,8 @@ for (const locale of LOCALES) {
     fs.mkdirSync(outDir, { recursive: true });
     const outFile = path.join(outDir, `${page.slug}.json`);
     const existing = fs.existsSync(outFile) ? JSON.parse(fs.readFileSync(outFile, "utf8")) : null;
-    // Keep hand-crafted OpenAI content when present (longer intro)
-    if (existing?.intro?.length > 280) {
+    // Keep OpenAI / hand-crafted content; only fill missing or template files
+    if (isValidGenerated(existing)) {
       console.log(`keep ${locale}/${page.slug}`);
       continue;
     }

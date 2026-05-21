@@ -54,6 +54,10 @@ function validateContent(data) {
   );
 }
 
+function isValidGenerated(data) {
+  return data?.source === "openai" && validateContent(data);
+}
+
 function buildUserPrompt(locale, slug) {
   return `Write SEO page content for slug "${slug}" in locale "${locale}".
 Include keywords naturally: cannabis, weed, Pattaya, White Widow, Labs Dispensary (former name).
@@ -75,7 +79,7 @@ async function generateOne(client, locale, slug) {
   if (!force && fs.existsSync(outFile)) {
     try {
       const existing = JSON.parse(fs.readFileSync(outFile, "utf8"));
-      if (validateContent(existing)) {
+      if (isValidGenerated(existing)) {
         console.log(`skip ${locale}/${slug}`);
         return;
       }
@@ -105,7 +109,7 @@ async function generateOne(client, locale, slug) {
       if (!text) throw new Error("empty response");
       const parsed = JSON.parse(text);
       if (!validateContent(parsed)) throw new Error("invalid content schema");
-      fs.writeFileSync(outFile, JSON.stringify(parsed, null, 2) + "\n", "utf8");
+      fs.writeFileSync(outFile, JSON.stringify({ ...parsed, source: "openai" }, null, 2) + "\n", "utf8");
       return;
     } catch (err) {
       lastErr = err;

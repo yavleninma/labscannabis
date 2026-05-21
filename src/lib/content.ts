@@ -8,6 +8,7 @@ export interface SeoContent {
   sections: { h2: string; body: string }[];
   faq: { q: string; a: string }[];
   closing: string;
+  source?: "openai" | "fallback";
 }
 
 const FALLBACK: SeoContent = {
@@ -63,12 +64,18 @@ function validateContent(data: unknown): data is SeoContent {
   );
 }
 
+function isUsableContent(data: unknown): data is SeoContent {
+  if (!validateContent(data)) return false;
+  const c = data as SeoContent;
+  return c.source === "openai" || c.source === "fallback" || !c.source;
+}
+
 export function loadSeoContent(locale: Locale, slug: string): SeoContent {
   const cachePath = path.join(process.cwd(), "content-cache", locale, `${slug}.json`);
   if (fs.existsSync(cachePath)) {
     try {
       const parsed = JSON.parse(fs.readFileSync(cachePath, "utf8")) as SeoContent;
-      if (validateContent(parsed)) return parsed;
+      if (isUsableContent(parsed)) return parsed;
     } catch {
       /* use fallback */
     }
