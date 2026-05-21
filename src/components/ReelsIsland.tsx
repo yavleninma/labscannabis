@@ -213,7 +213,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
       <div className="reels-overlay-gradient pointer-events-none absolute inset-0 z-20" />
 
       <div
-        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-44 px-4"}`}
+        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-52 px-4"}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
