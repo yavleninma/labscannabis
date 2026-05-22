@@ -32,7 +32,7 @@ const spotTiers = [
   class:list={["relative w-full", mini ? "px-4 py-8" : "bg-black md:bg-zinc-950"]}
 >
   <div class:list={["relative mx-auto w-full", !mini && "md:max-w-xl"]}>
-    <ReelsIsland client:load slides={slides} mini={mini} />
+    <ReelsIsland client:load slides={slides} mini={mini} offerSlidePromo={ui.reels.jointsOfferPromo} />
     {!mini && (
       <div class="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-black/95 via-black/80 to-transparent px-3 pb-10 pt-3 sm:px-4 sm:pt-4">
         <p class="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300 sm:text-[11px]">
