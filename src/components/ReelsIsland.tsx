@@ -12,9 +12,14 @@ const HERO_PHOTO_INDICES = new Set([0, 1, 3]);
 /** HTMLMediaElement.HAVE_FUTURE_DATA — numeric to avoid SSR ReferenceError */
 const VIDEO_READY = 3;
 
+function hasMediaVariants(src: string): boolean {
+  return src.startsWith("/media/");
+}
+
 function thumbSrc(slide: MediaSlide): string {
   if (slide.type === "video" && slide.poster) return slide.poster;
-  return slide.src.replace(/\.jpg$/i, ".webp");
+  if (hasMediaVariants(slide.src)) return slide.src.replace(/\.jpg$/i, ".webp");
+  return slide.src;
 }
 
 function isVideoReady(video: HTMLVideoElement | null): boolean {
@@ -198,7 +203,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                 <source src={slide.src} type="video/mp4" />
                 {slide.webm && <source src={slide.webm} type="video/webm" />}
               </video>
-            ) : (
+            ) : hasMediaVariants(slide.src) ? (
               <picture>
                 <source srcSet={slide.src.replace(/\.jpg$/i, ".avif")} type="image/avif" />
                 <source srcSet={slide.src.replace(/\.jpg$/i, ".webp")} type="image/webp" />
@@ -209,6 +214,13 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
                   loading={i === 0 ? "eager" : "lazy"}
                 />
               </picture>
+            ) : (
+              <img
+                src={slide.src}
+                alt={slide.alt ?? ""}
+                className="reels-media h-full w-full object-cover md:object-contain"
+                loading={i === 0 ? "eager" : "lazy"}
+              />
             )}
           </div>
         );
@@ -217,7 +229,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false }:
       <div className="reels-overlay-gradient pointer-events-none absolute inset-0 z-20" />
 
       <div
-        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[13.75rem] px-4 sm:bottom-56"}`}
+        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[9.5rem] px-4 sm:bottom-40"}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
