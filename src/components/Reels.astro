@@ -59,25 +59,25 @@ const spotTiers = [
       </div>
     )}
     {!mini && (
-      <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
-        <div class="pointer-events-auto mx-auto w-full space-y-2 pt-1">
+      <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-6">
+        <div class="pointer-events-auto mx-auto w-full space-y-1.5 pt-1">
           <a
             href={CONTACT.tel}
-            class="inline-flex w-full items-center justify-center gap-2.5 rounded-xl border border-emerald/40 bg-black/80 px-4 py-3 text-2xl font-extrabold tracking-wide text-white shadow-[0_8px_28px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-colors hover:border-emerald/70 hover:bg-black/90 sm:text-[1.65rem]"
+            class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald/40 bg-black/80 px-3.5 py-2.5 text-xl font-extrabold tracking-wide text-white shadow-[0_8px_28px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-colors hover:border-emerald/70 hover:bg-black/90 sm:text-[1.35rem]"
             aria-label={`${ui.contact.call} ${CONTACT.phoneDisplay}`}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 shrink-0 text-emerald" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0 text-emerald" aria-hidden="true">
               <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.85 21 3 13.15 3 3a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
             </svg>
             {CONTACT.phoneDisplay}
           </a>
-          <p class="text-sm leading-relaxed text-white/90 drop-shadow-sm">{ui.reels.locationBadge}</p>
-          <div class="flex gap-2 pt-1">
+          <p class="text-xs leading-snug text-white/90 drop-shadow-sm sm:text-sm">{ui.reels.locationBadge}</p>
+          <div class="flex gap-2 pt-0.5">
             <a
               href={CONTACT.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex-1 rounded-full bg-emerald px-4 py-3.5 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
+              class="flex-1 rounded-full bg-emerald px-4 py-3 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
             >
               {ui.reels.whatsapp}
             </a>
@@ -85,7 +85,7 @@ const spotTiers = [
               href={getMapsSearchUrl()}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3.5 text-center text-base font-semibold text-white backdrop-blur-md"
+              class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3 text-center text-base font-semibold text-white backdrop-blur-md"
             >
               {ui.reels.map}
             </a>

@@ -240,7 +240,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
       )}
 
       <div
-        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[9.5rem] px-4 sm:bottom-40"}`}
+        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[14.25rem] px-4 sm:bottom-[14.75rem]"}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
