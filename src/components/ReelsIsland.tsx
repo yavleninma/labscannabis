@@ -8,7 +8,7 @@ interface Props {
 }
 
 const HERO_PHOTO_MS = 2000;
-const HERO_PHOTO_INDICES = new Set([0, 2]);
+const HERO_PHOTO_INDICES = new Set([0, 1, 3]);
 /** HTMLMediaElement.HAVE_FUTURE_DATA — numeric to avoid SSR ReferenceError */
 const VIDEO_READY = 3;
 

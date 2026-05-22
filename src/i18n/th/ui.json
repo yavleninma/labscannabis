@@ -7,6 +7,8 @@
   "formerBrand": "เดิม Labs Dispensary",
   "reels": {
     "weights": { "1g": "1 กรัม", "10g": "10 กรัม", "1kg": "1 กก." },
+    "pricingTitle": "ราคาดอก",
+    "strainsInStock": "White Widow และสายพันธุ์อื่น ๆ มีพร้อมส่ง",
     "featuredBadge": "ยอดนิยม",
     "locationBadge": "เดิน 5 นาทีจาก Walking Street · มีบริการส่ง",
     "whatsapp": "WhatsApp",

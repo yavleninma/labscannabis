@@ -7,6 +7,8 @@
   "formerBrand": "旧 Labs Dispensary",
   "reels": {
     "weights": { "1g": "1グラム", "10g": "10グラム", "1kg": "1kg" },
+    "pricingTitle": "花の価格",
+    "strainsInStock": "White Widowほか品種在庫あり",
     "featuredBadge": "人気",
     "locationBadge": "Walking Streetから徒歩5分 · 配達あり",
     "whatsapp": "WhatsApp",

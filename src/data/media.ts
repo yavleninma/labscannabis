@@ -7,8 +7,14 @@ export interface MediaSlide {
   alt?: string;
 }
 
-/** Hero → vid-1 → astronaut → vid-2 → rest of gallery */
+/** Offer → hero photo → vid-1 → astronaut → vid-2 → rest of gallery */
 export const REELS_SLIDES: MediaSlide[] = [
+  {
+    id: "offer-joints",
+    type: "image",
+    src: "/images/special-offer-joints.jpg",
+    alt: "Three pre-rolls special offer — Labs Cannabis Pattaya",
+  },
   {
     id: "img-1",
     type: "image",

@@ -7,6 +7,8 @@
   "formerBrand": "formerly Labs Dispensary",
   "reels": {
     "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "pricingTitle": "Bud prices",
+    "strainsInStock": "White Widow & more strains in stock",
     "featuredBadge": "Popular",
     "locationBadge": "5 min walk from Walking Street · delivery available",
     "whatsapp": "WhatsApp",

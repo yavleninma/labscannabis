@@ -7,6 +7,8 @@
   "formerBrand": "ранее Labs Dispensary",
   "reels": {
     "weights": { "1g": "1г", "10g": "10г", "1kg": "1кг" },
+    "pricingTitle": "Цены на шишки",
+    "strainsInStock": "White Widow и другие сорта в наличии",
     "featuredBadge": "Хит",
     "locationBadge": "5 мин пешком от Walking Street · есть доставка",
     "whatsapp": "WhatsApp",

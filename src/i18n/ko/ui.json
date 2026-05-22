@@ -7,6 +7,8 @@
   "formerBrand": "구 Labs Dispensary",
   "reels": {
     "weights": { "1g": "1그램", "10g": "10그램", "1kg": "1kg" },
+    "pricingTitle": "꽃 가격",
+    "strainsInStock": "White Widow 및 기타 품종 재고 있음",
     "featuredBadge": "인기",
     "locationBadge": "Walking Street에서 도보 5분 · 배달 가능",
     "whatsapp": "WhatsApp",

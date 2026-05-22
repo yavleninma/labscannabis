@@ -34,23 +34,36 @@ const spotTiers = [
   <div class:list={["relative mx-auto w-full", !mini && "md:max-w-xl"]}>
     <ReelsIsland client:load slides={slides} mini={mini} />
     {!mini && (
+      <div class="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-black/95 via-black/80 to-transparent px-3 pb-10 pt-3 sm:px-4 sm:pt-4">
+        <p class="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300 sm:text-[11px]">
+          {ui.reels.pricingTitle}
+        </p>
+        <div class="grid grid-cols-3 gap-1.5 sm:gap-2" role="list" aria-label={ui.prices.title}>
+          {spotTiers.map(({ key, waSlug, featured }) => (
+            <div
+              role="listitem"
+              class:list={[
+                "rounded-lg border border-white/15 bg-black/55 px-1.5 py-2 text-center backdrop-blur-sm sm:px-2",
+                featured && "border-amber-300/35",
+              ]}
+            >
+              <p class="text-[10px] font-semibold uppercase leading-tight text-white/90 sm:text-[11px]">
+                {ui.reels.weights[key]}
+              </p>
+              <p class:list={["mt-0.5 text-sm leading-none text-amber-300 sm:text-base", featured && "font-extrabold"]}>
+                {formatPrice(tierTotal(waSlug), locale)}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p class="mt-2.5 text-center text-[11px] font-semibold leading-snug text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.95)] sm:text-xs">
+          {ui.reels.strainsInStock}
+        </p>
+      </div>
+    )}
+    {!mini && (
       <div class="pointer-events-none absolute inset-x-0 bottom-0 z-40 p-4 pb-8">
         <div class="pointer-events-auto mx-auto w-full space-y-2 pt-1">
-          <p
-            class="flex flex-nowrap items-baseline justify-center gap-x-1.5 overflow-x-auto whitespace-nowrap text-xl font-bold tracking-tight text-white drop-shadow-sm [scrollbar-width:none] sm:gap-x-2.5 sm:tracking-wide [&::-webkit-scrollbar]:hidden"
-            role="list"
-            aria-label={ui.prices.title}
-          >
-            {spotTiers.map(({ key, waSlug, featured }, i) => (
-              <span class="inline-flex shrink-0 items-baseline">
-                {i > 0 && <span class="me-1.5 text-white/40 sm:me-2.5" aria-hidden="true">·</span>}
-                <span role="listitem" class:list={[featured && "font-extrabold"]}>
-                  {ui.reels.weights[key]}{" "}
-                  <span>{formatPrice(tierTotal(waSlug), locale)}</span>
-                </span>
-              </span>
-            ))}
-          </p>
           <a
             href={CONTACT.tel}
             class="inline-flex items-center gap-2 text-xl font-bold tracking-wide text-white drop-shadow-sm transition-colors hover:text-emerald"
