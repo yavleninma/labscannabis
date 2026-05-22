@@ -229,5 +229,16 @@
     "tagType_effect": "เอฟเฟกต์",
     "tagType_type": "ประเภท",
     "tagType_terpene": "เทอร์พีน"
+  },
+  "specialOffer": {
+    "imageAlt": "โปรโมชัน: มวน 3 มวน ฿200 ราคาดอกและสายพันธุ์ที่มีในสต็อก",
+    "pricingTitle": "ราคาดอก",
+    "tier1Amount": "1 ก.",
+    "tier1Price": "฿300",
+    "tier2Amount": "10 ก.",
+    "tier2Price": "฿1,800",
+    "tier3Amount": "1 กก.",
+    "tier3Price": "฿40,000",
+    "strainsInStock": "White Widow และสายพันธุ์อื่น ๆ มีพร้อมส่ง"
   }
 }

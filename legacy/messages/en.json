@@ -229,5 +229,16 @@
     "tagType_effect": "Effect",
     "tagType_type": "Type",
     "tagType_terpene": "Terpene"
+  },
+  "specialOffer": {
+    "imageAlt": "Special offer: three pre-rolls for ฿200. Bud pricing and strains in stock.",
+    "pricingTitle": "Bud prices",
+    "tier1Amount": "1 g",
+    "tier1Price": "฿300",
+    "tier2Amount": "10 g",
+    "tier2Price": "฿1,800",
+    "tier3Amount": "1 kg",
+    "tier3Price": "฿40,000",
+    "strainsInStock": "White Widow & more strains in stock"
   }
 }

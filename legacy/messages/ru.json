@@ -229,5 +229,16 @@
     "tagType_effect": "Эффект",
     "tagType_type": "Тип",
     "tagType_terpene": "Терпен"
+  },
+  "specialOffer": {
+    "imageAlt": "Акция: три джойнта за ฿200. Цены на шишки и сорта в наличии.",
+    "pricingTitle": "Цены на шишки",
+    "tier1Amount": "1 г",
+    "tier1Price": "฿300",
+    "tier2Amount": "10 г",
+    "tier2Price": "฿1 800",
+    "tier3Amount": "1 кг",
+    "tier3Price": "฿40 000",
+    "strainsInStock": "White Widow и другие сорта в наличии"
   }
 }
