@@ -232,7 +232,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
       <div className="reels-overlay-gradient pointer-events-none absolute inset-0 z-20" />
 
       {offerSlidePromo && slides[index]?.id === OFFER_SLIDE_ID && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-[34%] z-[25] flex justify-center px-4 sm:bottom-[36%]">
+        <div className="pointer-events-none absolute inset-x-0 bottom-[42%] z-[25] flex justify-center px-4 sm:bottom-[44%]">
           <p className="max-w-sm rounded-xl border border-white/20 bg-black/75 px-4 py-2.5 text-center text-base font-bold leading-snug tracking-wide text-white shadow-[0_8px_32px_rgba(0,0,0,0.55)] backdrop-blur-sm sm:text-lg">
             {offerSlidePromo}
           </p>
@@ -240,7 +240,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
       )}
 
       <div
-        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[14.25rem] px-4 sm:bottom-[14.75rem]"}`}
+        className={`pointer-events-auto absolute inset-x-0 z-30 ${mini ? "bottom-3 px-3" : "bottom-[10.75rem] px-4 sm:bottom-[11.25rem]"}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
