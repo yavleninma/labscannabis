@@ -39,9 +39,16 @@ const effectEmoji: Record<string, string> = {
 interface StrainCatalogProps {
   strains: Strain[];
   shopSettings: ShopSettings;
+  utmSource?: string | null;
+  utmCampaign?: string | null;
 }
 
-export function StrainCatalog({ strains, shopSettings }: StrainCatalogProps) {
+export function StrainCatalog({
+  strains,
+  shopSettings,
+  utmSource,
+  utmCampaign,
+}: StrainCatalogProps) {
   const t = useTranslations("catalog");
   const tCommon = useTranslations("strainCommon");
   const locale = useLocale();
@@ -131,6 +138,8 @@ export function StrainCatalog({ strains, shopSettings }: StrainCatalogProps) {
             const links = buildContactLinks(shopSettings, locale as ContactLocale, {
               kind: "purchase",
               productName: strain.name,
+              source: utmSource,
+              campaign: utmCampaign,
             });
             return (
               <StrainCard

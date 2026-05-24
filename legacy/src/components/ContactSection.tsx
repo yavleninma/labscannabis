@@ -6,12 +6,22 @@ import { mockShopSettings } from "@/lib/mock-data";
 
 interface ContactSectionProps {
   shopSettings?: ShopSettings;
+  utmSource?: string | null;
+  utmCampaign?: string | null;
 }
 
-export function ContactSection({ shopSettings = mockShopSettings }: ContactSectionProps) {
+export function ContactSection({
+  shopSettings = mockShopSettings,
+  utmSource,
+  utmCampaign,
+}: ContactSectionProps) {
   const t = useTranslations("contact");
   const locale = useLocale();
-  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), { kind: "general" });
+  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), {
+    kind: "general",
+    source: utmSource,
+    campaign: utmCampaign,
+  });
 
   const channels = [
     {

@@ -9,8 +9,10 @@ import { StaffPick } from "@/components/StaffPick";
 import { StrainCatalog } from "@/components/StrainCatalog";
 import { LocationSection } from "@/components/LocationSection";
 import { ContactSection } from "@/components/ContactSection";
+import { DeliveryAreasGrid } from "@/components/DeliveryAreasGrid";
 import { Footer } from "@/components/Footer";
-import { getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
+import { getAllAreas, getAllStrains, getStaffPick, getShopSettings } from "@/lib/queries";
+import { getStoredUtm } from "@/lib/utm-tracking";
 
 export default async function HomePage({
   params,
@@ -18,23 +20,49 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const [strains, staffPick, shopSettings] = await Promise.all([
+  const [strains, staffPick, shopSettings, areas, utm] = await Promise.all([
     getAllStrains(),
     getStaffPick(),
     getShopSettings(),
+    getAllAreas(),
+    getStoredUtm(),
   ]);
 
   return (
     <>
-      <Hero shopSettings={shopSettings} locale={locale} />
+      <Hero
+        shopSettings={shopSettings}
+        locale={locale}
+        utmSource={utm.source}
+        utmCampaign={utm.campaign}
+      />
       <SocialProofStrip
         rating={shopSettings.googleRating}
         reviewCount={shopSettings.googleReviewCount}
       />
-      {staffPick && <StaffPick strain={staffPick} locale={locale} />}
-      <StrainCatalog strains={strains} shopSettings={shopSettings} />
+      {staffPick && (
+        <StaffPick
+          strain={staffPick}
+          locale={locale}
+          shopSettings={shopSettings}
+          utmSource={utm.source}
+          utmCampaign={utm.campaign}
+        />
+      )}
+      <StrainCatalog
+        strains={strains}
+        shopSettings={shopSettings}
+        utmSource={utm.source}
+        utmCampaign={utm.campaign}
+      />
       <NoPrescription />
-      <FulfillmentOptions shopSettings={shopSettings} locale={locale} />
+      <FulfillmentOptions
+        shopSettings={shopSettings}
+        locale={locale}
+        utmSource={utm.source}
+        utmCampaign={utm.campaign}
+      />
+      <DeliveryAreasGrid areas={areas} locale={locale} />
       <AboutTeam shopSettings={shopSettings} />
       <FAQ />
       <Reviews
@@ -48,8 +76,10 @@ export default async function HomePage({
       />
       <ContactSection
         shopSettings={shopSettings}
+        utmSource={utm.source}
+        utmCampaign={utm.campaign}
       />
-      <Footer shopSettings={shopSettings} />
+      <Footer shopSettings={shopSettings} utmSource={utm.source} utmCampaign={utm.campaign} />
     </>
   );
 }

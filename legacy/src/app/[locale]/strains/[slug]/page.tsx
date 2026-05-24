@@ -12,11 +12,16 @@ import { buildLanguageAlternates } from "@/i18n/metadata";
 import { routing } from "@/i18n/routing";
 import { Footer } from "@/components/Footer";
 import { StrainJsonLd } from "@/components/StrainJsonLd";
+import { StrainCard } from "@/components/StrainCard";
+import { StrainStickyCta } from "@/components/StrainStickyCta";
 import { buildContactLinks } from "@/lib/contact-links";
-import { getAllStrainSlugs, getShopSettings, getStrainBySlug } from "@/lib/queries";
+import { getLocalizedAreaDescription, getLocalizedAreaName, getLocalizedAreaPath } from "@/lib/area-localization";
+import { getAllAreas, getAllStrainSlugs, getAllStrains, getShopSettings, getStrainBySlug } from "@/lib/queries";
 import { getSiteUrl } from "@/lib/site-url";
+import type { Strain } from "@/lib/mock-data";
 import { getLocalizedFullDescription, getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
+import { getStoredUtm } from "@/lib/utm-tracking";
 import { urlFor } from "@/sanity/image";
 
 const effectEmoji: Record<string, string> = {
@@ -37,6 +42,22 @@ const gradients = [
   "from-purple-900/40 to-purple-700/20",
   "from-blue-900/40 to-blue-700/20",
 ];
+
+function getRelatedStrains(current: Strain, strains: Strain[]): Strain[] {
+  const currentEffects = new Set((current.effects || []).map((effect) => effect.key));
+  const candidates = strains.filter((strain) => strain._id !== current._id && !strain.isSoldOut);
+  const sameType = candidates.filter((strain) => strain.type === current.type);
+  const sameEffects = candidates.filter((strain) =>
+    (strain.effects || []).some((effect) => currentEffects.has(effect.key)),
+  );
+  const seen = new Set<string>();
+
+  return [...sameType, ...sameEffects, ...candidates].filter((strain) => {
+    if (seen.has(strain._id)) return false;
+    seen.add(strain._id);
+    return true;
+  }).slice(0, 3);
+}
 
 export async function generateStaticParams() {
   const slugs = await getAllStrainSlugs();
@@ -67,20 +88,22 @@ export async function generateMetadata({
   }
 
   const baseUrl = getSiteUrl();
-  const title = `${strain.name} — ${t("metaTitleSuffix")}`;
-  const localizedShortDescription = getLocalizedShortDescription(strain, locale);
+  const typeLabel = tCommon(`type_${strain.type}`);
+  const title = t("metaTitleDelivery", {
+    name: strain.name,
+    type: typeLabel,
+  });
   const description =
-    localizedShortDescription ||
-    (typeof strain.thcPercent === "number"
-      ? t("metaDescriptionFallback", {
+    typeof strain.thcPercent === "number"
+      ? t("metaDescriptionDelivery", {
           name: strain.name,
-          type: tCommon(`type_${strain.type}`),
+          type: typeLabel,
           thc: strain.thcPercent,
         })
-      : t("metaDescriptionFallbackNoThc", {
+      : t("metaDescriptionDeliveryNoThc", {
           name: strain.name,
-          type: tCommon(`type_${strain.type}`),
-        }));
+          type: typeLabel,
+        });
 
   const ogImageUrl = strain.image
     ? urlFor(strain.image)?.width(1200).height(630).url()
@@ -122,7 +145,13 @@ export default async function StrainPage({
 }) {
   const { locale: requestedLocale, slug } = await params;
   const locale = isValidLocale(requestedLocale) ? requestedLocale : "en";
-  const [strain, shopSettings] = await Promise.all([getStrainBySlug(slug), getShopSettings()]);
+  const [strain, allStrains, areas, shopSettings, utm] = await Promise.all([
+    getStrainBySlug(slug),
+    getAllStrains(),
+    getAllAreas(),
+    getShopSettings(),
+    getStoredUtm(),
+  ]);
 
   if (!strain) {
     notFound();
@@ -147,8 +176,15 @@ export default async function StrainPage({
   const contactLinks = buildContactLinks(
     shopSettings,
     getContactMessageLocale(locale),
-    { kind: "purchase", productName: strain.name },
+    {
+      kind: "delivery",
+      productName: strain.name,
+      source: utm.source,
+      campaign: utm.campaign,
+    },
   );
+  const relatedStrains = getRelatedStrains(strain, allStrains);
+  const visibleAreas = areas.filter((area) => !area.isHidden).slice(0, 6);
   const reserveChannels = [
     { id: "line", label: "LINE", href: contactLinks.line },
     { id: "whatsapp", label: "WhatsApp", href: contactLinks.whatsapp },
@@ -168,6 +204,7 @@ export default async function StrainPage({
         locale={locale}
         baseUrl={baseUrl}
         breadcrumbStrainsLabel={t("breadcrumbStrains")}
+        description={localizedShortDescription}
       />
       <article className="max-w-4xl mx-auto px-4 pt-20 pb-12">
         <a
@@ -306,8 +343,118 @@ export default async function StrainPage({
             <PortableText value={localizedFullDescription} />
           </div>
         )}
+
+        {!strain.isSoldOut && contactLinks.reserve && (
+          <section className="mt-10 rounded-2xl border border-emerald-500/25 bg-bg-card p-5 sm:p-6">
+            <h2
+              className="mb-2 text-2xl font-bold"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              {t("deliveryBlock.title", { name: strain.name })}
+            </h2>
+            <p className="mb-4 text-text-secondary">{t("deliveryBlock.subtitle")}</p>
+            <ul className="mb-5 space-y-2 text-sm text-text-secondary">
+              <li>✓ {t("deliveryBlock.point1")}</li>
+              <li>✓ {t("deliveryBlock.point2")}</li>
+              <li>✓ {t("deliveryBlock.point3")}</li>
+            </ul>
+            <a
+              href={contactLinks.reserve}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-500"
+            >
+              {t("deliveryBlock.cta", { name: strain.name })}
+            </a>
+          </section>
+        )}
+
+        {visibleAreas.length > 0 && (
+          <section className="mt-10">
+            <h2
+              className="mb-2 text-2xl font-bold"
+              style={{ fontFamily: "var(--font-heading)" }}
+            >
+              {t("whereToBuy.title", { name: strain.name })}
+            </h2>
+            <p className="mb-4 text-text-secondary">
+              {t("whereToBuy.body", { name: strain.name })}
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {visibleAreas.map((area) => {
+                const areaName = getLocalizedAreaName(area, locale);
+                return (
+                  <a
+                    key={area._id}
+                    href={getLocalizedAreaPath(locale, area)}
+                    className="rounded-xl border border-border bg-bg-card p-4 transition-colors hover:border-emerald-500/40"
+                  >
+                    <div className="mb-1 flex items-center justify-between gap-3">
+                      <span className="font-semibold text-text-primary">{areaName}</span>
+                      <span className="shrink-0 text-sm text-emerald-600">
+                        ~{area.etaMinutes} min
+                      </span>
+                    </div>
+                    <p className="text-sm text-text-secondary">
+                      {getLocalizedAreaDescription(area, locale)}
+                    </p>
+                  </a>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {relatedStrains.length > 0 && (
+          <section className="mt-10">
+            <div className="mb-4 flex items-center justify-between gap-3">
+              <h2
+                className="text-2xl font-bold"
+                style={{ fontFamily: "var(--font-heading)" }}
+              >
+                {t("relatedStrains.title")}
+              </h2>
+              <a href={`/${locale}#catalog`} className="text-sm font-semibold text-emerald-600">
+                {t("relatedStrains.viewAll")}
+              </a>
+            </div>
+            <div className="grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:grid-cols-3">
+              {relatedStrains.map((related, index) => {
+                const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), {
+                  kind: "delivery",
+                  productName: related.name,
+                  source: utm.source,
+                  campaign: utm.campaign,
+                });
+                return (
+                  <StrainCard
+                    key={related._id}
+                    strain={related}
+                    index={index}
+                    reserveLabel={t("reserve")}
+                    soldOutLabel={t("soldOut")}
+                    locale={locale}
+                    reserveUrl={links.reserve}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
       </article>
-      <Footer shopSettings={shopSettings} />
+      {!strain.isSoldOut && (
+        <StrainStickyCta
+          href={contactLinks.reserve}
+          priceLabel={tCommon("pricePerGram", { price: strain.pricePerGram })}
+          thcLabel={
+            typeof strain.thcPercent === "number"
+              ? `${t("stickyCta.thc")} ${strain.thcPercent}%`
+              : null
+          }
+          buttonLabel={t("stickyCta.delivery")}
+        />
+      )}
+      <Footer shopSettings={shopSettings} utmSource={utm.source} utmCampaign={utm.campaign} />
     </>
   );
 }

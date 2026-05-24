@@ -3,7 +3,15 @@ import type { ShopSettings } from "@/lib/mock-data";
 
 export type ContactLocale = ContactMessageLocale;
 
-type MessageKind = "general" | "purchase" | "pickup" | "delivery";
+export type MessageKind = "general" | "purchase" | "pickup" | "delivery";
+
+export interface ContactLinkOptions {
+  kind?: MessageKind;
+  productName?: string;
+  destinationName?: string;
+  source?: string | null;
+  campaign?: string | null;
+}
 
 export interface ContactLinks {
   phone: string | null;
@@ -13,9 +21,15 @@ export interface ContactLinks {
   reserve: string | null;
 }
 
+type ContactOptionsInput = ContactLinkOptions | string;
+
 function cleanValue(value?: string | null): string | null {
   const trimmed = value?.trim();
   return trimmed ? trimmed : null;
+}
+
+function normalizeContactOptions(options?: ContactOptionsInput): ContactLinkOptions {
+  return typeof options === "string" ? { productName: options } : options ?? {};
 }
 
 function normalizePhone(value?: string | null): string | null {
@@ -52,13 +66,27 @@ function appendQueryParam(urlValue: string, key: string, value: string): string 
   }
 }
 
+function getRefTag(source?: string | null, campaign?: string | null): string {
+  const safeSource = cleanValue(source)?.replace(/[\[\]\n\r]/g, "").slice(0, 80);
+  const safeCampaign = cleanValue(campaign)?.replace(/[\[\]\n\r]/g, "").slice(0, 80);
+  if (!safeSource) return "";
+  return safeCampaign ? `[ref: ${safeSource}/${safeCampaign}]` : `[ref: ${safeSource}]`;
+}
+
+function appendRefTag(message: string, options?: ContactLinkOptions): string {
+  const refTag = getRefTag(options?.source, options?.campaign);
+  return refTag ? `${message}\n\n${refTag}` : message;
+}
+
 export function createContactMessage(
   locale: ContactLocale,
   kind: MessageKind,
-  productName?: string
+  options?: ContactOptionsInput,
 ): string {
+  const normalizedOptions = normalizeContactOptions(options);
+
   if (kind === "purchase") {
-    const safeName = productName?.trim() || "this strain";
+    const safeName = normalizedOptions.productName?.trim() || "this strain";
     if (locale === "ru") {
       return `Здравствуйте! Хотим купить "${safeName}". Подскажите, пожалуйста, наличие и детали.`;
     }
@@ -79,13 +107,45 @@ export function createContactMessage(
   }
 
   if (kind === "delivery") {
+    const product = normalizedOptions.productName?.trim();
+    const destination = normalizedOptions.destinationName?.trim();
+    if (product && destination) {
+      if (locale === "ru") {
+        return `Здравствуйте! Хочу заказать доставку "${product}" в ${destination}. Подскажите наличие и как оформить.`;
+      }
+      if (locale === "th") {
+        return `สวัสดีครับ/ค่ะ ต้องการสั่งจัดส่ง "${product}" ไปที่ ${destination} รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ`;
+      }
+      return `Hello! I would like to order delivery of "${product}" to ${destination}. Could you confirm availability and how to order?`;
+    }
+
+    if (product) {
+      if (locale === "ru") {
+        return `Здравствуйте! Хочу заказать доставку "${product}" по Паттайе. Подскажите наличие и как оформить.`;
+      }
+      if (locale === "th") {
+        return `สวัสดีครับ/ค่ะ ต้องการสั่งจัดส่ง "${product}" ในพัทยา รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ`;
+      }
+      return `Hello! I would like to order delivery of "${product}" in Pattaya. Could you confirm availability and how to order?`;
+    }
+
+    if (destination) {
+      if (locale === "ru") {
+        return `Здравствуйте! Хочу заказать доставку в ${destination}. Подскажите наличие и как оформить.`;
+      }
+      if (locale === "th") {
+        return `สวัสดีครับ/ค่ะ ต้องการสั่งจัดส่งไปที่ ${destination} รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ`;
+      }
+      return `Hello! I would like to order delivery to ${destination}. Could you share availability and how to order?`;
+    }
+
     if (locale === "ru") {
-      return "Здравствуйте! Интересует доставка по Паттайе. Подскажите наличие и как оформить.";
+      return "Здравствуйте! Хочу заказать доставку по Паттайе. Подскажите наличие и как оформить.";
     }
     if (locale === "th") {
-      return "สวัสดีครับ/ค่ะ สนใจจัดส่งในพัทยา รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ";
+      return "สวัสดีครับ/ค่ะ ต้องการสั่งจัดส่งในพัทยา รบกวนแจ้งสต็อกและวิธีสั่งด้วยครับ/ค่ะ";
     }
-    return "Hello! I'm interested in delivery in Pattaya. Could you share availability and how to order?";
+    return "Hello! I would like to order delivery in Pattaya. Could you share availability and how to order?";
   }
 
   if (locale === "ru") return "Здравствуйте! Хочу уточнить наличие и цену.";
@@ -137,10 +197,14 @@ function buildLineLink(settings: ShopSettings): string | null {
 export function buildContactLinks(
   settings: ShopSettings,
   locale: ContactLocale,
-  options?: { kind?: MessageKind; productName?: string }
+  options?: ContactLinkOptions,
 ): ContactLinks {
-  const kind = options?.kind ?? "general";
-  const message = createContactMessage(locale, kind, options?.productName);
+  const normalizedOptions = normalizeContactOptions(options);
+  const kind = normalizedOptions.kind ?? "general";
+  const message = appendRefTag(
+    createContactMessage(locale, kind, normalizedOptions),
+    normalizedOptions,
+  );
   const phone = buildPhoneLink(settings);
   const whatsapp = buildWhatsappLink(settings, message);
   const telegram = buildTelegramLink(settings, message);

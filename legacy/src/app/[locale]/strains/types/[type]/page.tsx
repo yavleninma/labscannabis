@@ -6,6 +6,7 @@ import { routing } from "@/i18n/routing";
 import { getAllStrains, getShopSettings } from "@/lib/queries";
 import { strainMatchesTag } from "@/lib/strain-tags";
 import { getSiteUrl } from "@/lib/site-url";
+import { getStoredUtm } from "@/lib/utm-tracking";
 import { StrainCard } from "@/components/StrainCard";
 import { Footer } from "@/components/Footer";
 import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
@@ -67,9 +68,10 @@ export default async function TypePage({
   const { locale, type } = await params;
   if (!VALID_TYPES.includes(type as (typeof VALID_TYPES)[number])) notFound();
 
-  const [allStrains, shopSettings] = await Promise.all([
+  const [allStrains, shopSettings, utm] = await Promise.all([
     getAllStrains(),
     getShopSettings(),
+    getStoredUtm(),
   ]);
 
   const filtered = allStrains.filter((s) => strainMatchesTag(s, "type", type));
@@ -140,6 +142,8 @@ export default async function TypePage({
               const links = buildContactLinks(shopSettings, locale as ContactLocale, {
                 kind: "purchase",
                 productName: strain.name,
+                source: utm.source,
+                campaign: utm.campaign,
               });
               return (
                 <StrainCard
@@ -160,7 +164,7 @@ export default async function TypePage({
           </p>
         )}
       </div>
-      <Footer shopSettings={shopSettings} />
+      <Footer shopSettings={shopSettings} utmSource={utm.source} utmCampaign={utm.campaign} />
     </>
   );
 }

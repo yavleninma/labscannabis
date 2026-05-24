@@ -6,6 +6,7 @@ interface StrainJsonLdProps {
   locale: string;
   baseUrl: string;
   breadcrumbStrainsLabel: string;
+  description?: string | null;
 }
 
 export function StrainJsonLd({
@@ -13,6 +14,7 @@ export function StrainJsonLd({
   locale,
   baseUrl,
   breadcrumbStrainsLabel,
+  description,
 }: StrainJsonLdProps) {
   const imageUrl = strain.image ? urlFor(strain.image)?.width(800).height(600).url() : null;
   const strainUrl = `${baseUrl}/${locale}/strains/${strain.slug.current}`;
@@ -44,7 +46,9 @@ export function StrainJsonLd({
     "@context": "https://schema.org",
     "@type": "Product",
     name: strain.name,
-    ...(strain.shortDescription ? { description: strain.shortDescription } : {}),
+    ...(description || strain.shortDescription
+      ? { description: description || strain.shortDescription }
+      : {}),
     ...(imageUrl ? { image: imageUrl } : {}),
     url: strainUrl,
     brand: {
@@ -58,6 +62,7 @@ export function StrainJsonLd({
       availability: strain.isSoldOut
         ? "https://schema.org/OutOfStock"
         : "https://schema.org/InStock",
+      url: strainUrl,
       seller: {
         "@type": "LocalBusiness",
         name: "Labs Cannabis",

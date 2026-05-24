@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 const faqKeys = ["8", "1", "2", "3", "4", "5", "6", "7"] as const;
 
 export function FAQ() {
   const t = useTranslations("faq");
+  const locale = useLocale();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
@@ -73,6 +74,13 @@ export function FAQ() {
             );
           })}
         </div>
+
+        <a
+          href={`/${locale}/guides/legal-cannabis-tourists`}
+          className="mt-5 inline-flex text-sm font-semibold text-emerald-600 hover:text-emerald-500"
+        >
+          {t("legalGuideLink")} →
+        </a>
       </div>
     </section>
   );

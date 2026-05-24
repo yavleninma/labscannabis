@@ -71,6 +71,22 @@ export interface ShopSettings {
   teamPhoto?: { asset: { _ref: string } } | null;
 }
 
+export interface Area {
+  _id: string;
+  _updatedAt?: string;
+  name: string;
+  nameRu?: string | null;
+  nameTh?: string | null;
+  slug: { current: string };
+  etaMinutes: number;
+  shortDescription: string;
+  shortDescriptionRu?: string | null;
+  shortDescriptionTh?: string | null;
+  landmarks: string[];
+  isHidden?: boolean;
+  sortOrder: number;
+}
+
 export const mockStrains: Strain[] = [
   {
     _id: "1",
@@ -291,9 +307,9 @@ export const mockStrains: Strain[] = [
 ];
 
 export const mockShopSettings: ShopSettings = {
-  openTime: "12:00",
-  closeTime: "01:00",
-  isOpen24h: false,
+  openTime: "00:00",
+  closeTime: "23:59",
+  isOpen24h: true,
   lineUrl: null, // TODO: Add LINE URL
   lineId: null,
   whatsappUrl: null, // TODO: Add WhatsApp URL
@@ -310,3 +326,102 @@ export const mockShopSettings: ShopSettings = {
   guidePhoto: null,
   teamPhoto: null,
 };
+
+export const mockAreas: Area[] = [
+  {
+    _id: "area-walking-street",
+    name: "Walking Street",
+    nameRu: "Walking Street",
+    nameTh: "Walking Street",
+    slug: { current: "walking-street" },
+    etaMinutes: 15,
+    shortDescription:
+      "Pattaya's main nightlife strip. We're a 5-minute walk into Soi Hollywood, with quick 24/7 delivery nearby.",
+    shortDescriptionRu:
+      "Главная ночная улица Паттайи. Мы в 5 минутах пешком в Soi Hollywood, рядом быстрая доставка 24/7.",
+    shortDescriptionTh:
+      "ย่านไนท์ไลฟ์หลักของพัทยา ร้านอยู่ในซอยฮอลลีวูด เดินประมาณ 5 นาที และจัดส่งใกล้ๆ ได้ตลอด 24 ชั่วโมง",
+    landmarks: ["Walking Street", "Pattaya 13 Alley", "Bali Hai Pier"],
+    sortOrder: 1,
+  },
+  {
+    _id: "area-soi-buakhao",
+    name: "Soi Buakhao",
+    nameRu: "Soi Buakhao",
+    nameTh: "ซอยบัวขาว",
+    slug: { current: "soi-buakhao" },
+    etaMinutes: 20,
+    shortDescription:
+      "Bars, guesthouses, condos, and long-stay rooms. We deliver from Labs Cannabis around the clock.",
+    shortDescriptionRu:
+      "Бары, гестхаусы, кондо и жильё для зимовщиков. Доставляем из Labs Cannabis круглосуточно.",
+    shortDescriptionTh:
+      "โซนบาร์ เกสต์เฮาส์ คอนโด และที่พักระยะยาว จัดส่งจาก Labs Cannabis ได้ตลอดวัน",
+    landmarks: ["LK Metro", "Soi Diana", "Tree Town"],
+    sortOrder: 2,
+  },
+  {
+    _id: "area-jomtien-beach",
+    name: "Jomtien Beach",
+    nameRu: "Джомтьен",
+    nameTh: "หาดจอมเทียน",
+    slug: { current: "jomtien-beach" },
+    etaMinutes: 30,
+    shortDescription:
+      "Quieter beach south of Pattaya. We deliver 24/7 to Jomtien hotels, condos, and villas.",
+    shortDescriptionRu:
+      "Более спокойный пляж к югу от Паттайи. Доставляем 24/7 в отели, кондо и виллы Джомтьена.",
+    shortDescriptionTh:
+      "ชายหาดที่เงียบกว่าทางใต้ของพัทยา จัดส่ง 24/7 ถึงโรงแรม คอนโด และวิลล่าในจอมเทียน",
+    landmarks: ["Jomtien Beach Road", "Jomtien Night Market", "View Talay"],
+    sortOrder: 3,
+  },
+  {
+    _id: "area-pratumnak-hill",
+    name: "Pratumnak Hill",
+    nameRu: "Пратумнак",
+    nameTh: "เขาพระตำหนัก",
+    slug: { current: "pratumnak-hill" },
+    etaMinutes: 25,
+    shortDescription:
+      "Premium hill between Pattaya and Jomtien. Discreet hotel and condo delivery, day or night.",
+    shortDescriptionRu:
+      "Премиальный район между Паттайей и Джомтьеном. Аккуратная доставка в отели и кондо днём и ночью.",
+    shortDescriptionTh:
+      "ย่านพรีเมียมระหว่างพัทยาและจอมเทียน จัดส่งถึงโรงแรมและคอนโดอย่างมิดชิดทั้งกลางวันและกลางคืน",
+    landmarks: ["Big Buddha", "Cosy Beach", "Royal Cliff"],
+    sortOrder: 4,
+  },
+  {
+    _id: "area-naklua",
+    name: "Naklua",
+    nameRu: "Наклуа",
+    nameTh: "นาเกลือ",
+    slug: { current: "naklua" },
+    etaMinutes: 30,
+    shortDescription:
+      "North Pattaya and Wong Amat side. Message us and we will arrange delivery to your hotel or condo.",
+    shortDescriptionRu:
+      "Северная Паттайя и район Wong Amat. Напиши нам — организуем доставку в отель или кондо.",
+    shortDescriptionTh:
+      "โซนพัทยาเหนือและวงศ์อมาตย์ ทักมาแล้วเราจะจัดส่งถึงโรงแรมหรือคอนโดของคุณ",
+    landmarks: ["Wong Amat", "Terminal 21 Pattaya", "Sanctuary of Truth"],
+    sortOrder: 5,
+  },
+  {
+    _id: "area-pattaya-klang",
+    name: "Pattaya Klang",
+    nameRu: "Центральная Паттайя",
+    nameTh: "พัทยากลาง",
+    slug: { current: "pattaya-klang" },
+    etaMinutes: 15,
+    shortDescription:
+      "Central Pattaya is close to the shop, so delivery is usually fast and easy to coordinate.",
+    shortDescriptionRu:
+      "Центральная Паттайя близко к магазину, поэтому доставка обычно быстрая и простая.",
+    shortDescriptionTh:
+      "พัทยากลางอยู่ใกล้ร้าน จึงจัดส่งได้รวดเร็วและประสานงานง่าย",
+    landmarks: ["Central Pattaya", "Beach Road", "Royal Garden Plaza"],
+    sortOrder: 6,
+  },
+];

@@ -127,7 +127,10 @@ export function ChatWidget({ locale }: { locale: string }) {
         const res = await fetch("/api/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ messages: next.map(({ role, content }) => ({ role, content })) }),
+          body: JSON.stringify({
+            locale,
+            messages: next.map(({ role, content }) => ({ role, content })),
+          }),
         });
         const data = (await res.json()) as { content?: string; contacts?: ContactCard[]; error?: string };
         if (data.error) console.error("[chat api error]", data.error);

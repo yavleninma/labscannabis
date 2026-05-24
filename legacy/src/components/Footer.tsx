@@ -6,12 +6,18 @@ import { mockShopSettings } from "@/lib/mock-data";
 
 interface FooterProps {
   shopSettings?: ShopSettings;
+  utmSource?: string | null;
+  utmCampaign?: string | null;
 }
 
-export function Footer({ shopSettings = mockShopSettings }: FooterProps) {
+export function Footer({ shopSettings = mockShopSettings, utmSource, utmCampaign }: FooterProps) {
   const t = useTranslations("footer");
   const locale = useLocale();
-  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), { kind: "general" });
+  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), {
+    kind: "general",
+    source: utmSource,
+    campaign: utmCampaign,
+  });
   const lineHref = links.line || links.phone || "#";
   const whatsappHref = links.whatsapp || links.phone || "#";
   const telegramHref = links.telegram || links.phone || "#";

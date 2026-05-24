@@ -1,15 +1,16 @@
 {
   "meta": {
-    "title": "Labs Cannabis — Cannabis Shop in Pattaya | Try Before You Buy",
-    "description": "Licensed cannabis shop in Pattaya. Free sample in store, so you can try before you buy and check freshness first. On-site medical card in 2 minutes, 5 min from Walking Street.",
-    "ogTitle": "Labs Cannabis — Pattaya Cannabis Shop | Try Before You Buy",
-    "ogDescription": "Free sample in store, so you can try before you buy and check freshness first. Labs Cannabis is 5 min from Walking Street.",
+    "title": "Labs Cannabis — 24/7 Cannabis Delivery in Pattaya | Walk In or Order to Hotel",
+    "description": "24/7 cannabis delivery in Pattaya & Jomtien — to your hotel in about 30 min. Fresh buds, walk-in welcome 5 min from Walking Street. Free in-store sample, medical card support in 2 min.",
+    "ogTitle": "24/7 Cannabis Delivery in Pattaya — Labs Cannabis",
+    "ogDescription": "To your hotel in about 30 minutes. Fresh buds, honest prices, open late. Walk in or order on WhatsApp.",
     "keywords": [
-      "cannabis shop pattaya",
-      "weed shop pattaya",
+      "cannabis delivery pattaya",
+      "weed delivery pattaya",
+      "24/7 cannabis pattaya",
+      "weed delivery jomtien",
+      "cannabis to hotel pattaya",
       "dispensary pattaya",
-      "free sample cannabis shop",
-      "try before you buy cannabis",
       "walk in dispensary pattaya"
     ]
   },
@@ -23,8 +24,16 @@
     "currentLanguage": "Current language"
   },
   "hero": {
-    "title": "Cannabis shop in Pattaya",
-    "subtitle": "Fresh buds & pre-rolls — 5 min from Walking Street. Walk in, we'll help you pick.",
+    "title": "Pattaya 24/7 cannabis delivery",
+    "subtitle": "To your hotel in about 30 minutes. Fresh buds, honest prices — and you can still walk in, 5 minutes from Walking Street.",
+    "deliveryCta": "Order delivery on WhatsApp",
+    "directionsCta": "Open in Google Maps",
+    "statusOpenNow": "Open now",
+    "statusClosed": "Message us",
+    "status24_7": "24/7 · Pattaya & Jomtien",
+    "statusEta": "Average delivery: ~30 min",
+    "statusPayment": "Cash or QR on arrival",
+    "statusDiscreet": "Discreet packaging",
     "getDirections": "Get Directions",
     "messageUs": "Message Us",
     "seeMenu": "What's in Stock",
@@ -35,18 +44,57 @@
     "samplePressure": "Try first",
     "sampleTrust": "Quality first"
   },
+  "specialOffer": {
+    "imageAlt": "Special offer: three pre-rolls for ฿200. Bud pricing and strains in stock.",
+    "pricingTitle": "Bud prices",
+    "tier1Amount": "1 g",
+    "tier1Price": "฿300",
+    "tier2Amount": "10 g",
+    "tier2Price": "฿1,800",
+    "tier3Amount": "1 kg",
+    "tier3Price": "฿40,000",
+    "strainsInStock": "White Widow & more strains in stock"
+  },
   "noPrescription": {
-    "title": "No prescription? We've got you.",
-    "subtitle": "Thailand requires a medical card — but don't worry, we handle everything on the spot. Just walk in.",
+    "title": "Need Thai medical paperwork?",
+    "subtitle": "Thailand requires cannabis purchases to sit inside a medical framework. Walk in and our staff will explain the current process before any sale.",
     "step1Title": "Walk in",
     "step1Desc": "No appointment needed. Just come to the shop any time we're open.",
-    "step2Title": "Scan & fill",
-    "step2Desc": "Quick form on your phone — takes 2 minutes. Our staff will guide you through every step.",
-    "step3Title": "Done",
-    "step3Desc": "Pick your strain, pay, and enjoy. That's it.",
-    "badge1": "100% legal",
-    "badge2": "Takes 2 min",
+    "step2Title": "Health-intake form",
+    "step2Desc": "A short form on your phone. Staff will guide you through the compliant steps.",
+    "step3Title": "Choose in shop",
+    "step3Desc": "If everything fits the current rules, choose your strain and pay at the shop.",
+    "badge1": "Medical framework",
+    "badge2": "Staff-guided process",
     "badge3": "Free consultation"
+  },
+  "fulfillment": {
+    "title": "How to get it",
+    "subtitle": "Walk in, pre-order pickup, or 24/7 delivery to your hotel — whichever fits your night.",
+    "walkin": {
+      "title": "Walk in",
+      "desc": "Come by, sample first, ask Dima anything. The whole shop is yours to browse.",
+      "point1": "Free sample on the shelf",
+      "point2": "Medical card support in 2 min",
+      "point3": "5 min from Walking Street",
+      "cta": "Open in Google Maps"
+    },
+    "pickup": {
+      "title": "Pre-order pickup",
+      "desc": "Message us first — we'll prep your order so you grab and go in under a minute.",
+      "point1": "Skip the choosing time",
+      "point2": "Pay on pickup, cash or QR",
+      "point3": "Same Walking Street walking distance",
+      "cta": "Pre-order on WhatsApp"
+    },
+    "delivery": {
+      "title": "24/7 delivery to your hotel",
+      "desc": "Pattaya and Jomtien — to your door in about 30 minutes, day or night. Discreet packaging, cash on delivery or QR.",
+      "point1": "Open 24/7, even at 4 AM",
+      "point2": "30 min to Pattaya, Jomtien, Pratumnak",
+      "point3": "Cash or QR on arrival, no card needed",
+      "cta": "Order on WhatsApp"
+    }
   },
   "staffPick": {
     "badge": "Expert Pick",
@@ -141,6 +189,7 @@
   },
   "faq": {
     "title": "Common Questions",
+    "legalGuideLink": "Read the full tourist legal guide",
     "q8": "Is there a free sample or can I try before I buy?",
     "a8": "Yes. We offer a free sample in store, so you can check freshness and quality before you decide to buy.",
     "q1": "Do I need a prescription or medical card?",
@@ -160,6 +209,7 @@
   },
   "strainPage": {
     "metaTitleSuffix": "Buy at Labs Cannabis Pattaya",
+    "metaTitleDelivery": "{name} — {type} Strain | Cannabis Delivery in Pattaya | Labs Cannabis",
     "backToCatalog": "Back to selection",
     "reserve": "Ask About This Strain",
     "reserveVia": "Contact via",
@@ -167,9 +217,141 @@
     "soldOut": "Sold Out",
     "terpenes": "Terpene Profile",
     "about": "About This Strain",
+    "deliveryBlock": {
+      "title": "Get {name} to your hotel — 24/7",
+      "subtitle": "We'll bring it to Pattaya, Jomtien, or anywhere nearby. Average ~30 min, even late at night.",
+      "point1": "Open 24/7, no waiting for shop hours",
+      "point2": "Cash or QR on arrival, no card needed",
+      "point3": "Discreet packaging for hotel delivery",
+      "cta": "Order {name} on WhatsApp"
+    },
+    "whereToBuy": {
+      "title": "Where to buy {name} in Pattaya",
+      "body": "Labs Cannabis is 5 minutes from Walking Street and delivers 24/7 across the main tourist areas. Pick a delivery zone below or message us directly."
+    },
+    "relatedStrains": {
+      "title": "Similar strains in stock",
+      "viewAll": "Browse all strains"
+    },
+    "stickyCta": {
+      "perGram": "/g",
+      "thc": "THC",
+      "delivery": "Order delivery 24/7"
+    },
     "metaDescriptionFallback": "{name} {type} cannabis strain. THC {thc}%. Available at Labs Cannabis Pattaya.",
     "metaDescriptionFallbackNoThc": "{name} {type} cannabis strain. Available at Labs Cannabis Pattaya.",
+    "metaDescriptionDelivery": "Buy {name} ({type}, THC {thc}%) at Labs Cannabis Pattaya. 24/7 delivery to your hotel in about 30 min, or walk in 5 min from Walking Street.",
+    "metaDescriptionDeliveryNoThc": "Buy {name} ({type}) at Labs Cannabis Pattaya. 24/7 delivery to your hotel in about 30 min, or walk in 5 min from Walking Street.",
     "breadcrumbStrains": "Strains"
+  },
+  "areaPage": {
+    "metaTitle": "Cannabis delivery to {area} in Pattaya | 24/7 — Labs Cannabis",
+    "metaDescription": "Order 24/7 cannabis delivery to {area} in Pattaya. Average delivery about {eta} minutes, discreet packaging, cash or QR on arrival.",
+    "breadcrumbDelivery": "Delivery areas",
+    "badge": "24/7 Pattaya delivery",
+    "h1": "Cannabis delivery to {area} — 24/7",
+    "intro": "{description} Average delivery: about {eta} minutes.",
+    "orderCta": "Order delivery on WhatsApp",
+    "mapsCta": "Walk in: open Maps",
+    "statusTitle": "How delivery works",
+    "statusEta": "Average ETA: {eta} min",
+    "statusPayment": "Cash or QR on arrival",
+    "statusDiscreet": "Discreet hotel-friendly packaging",
+    "areasTitle": "Delivery areas in Pattaya",
+    "areasSubtitle": "We cover the main tourist zones around Pattaya and Jomtien.",
+    "viewArea": "View delivery page",
+    "eta": "~{eta} min",
+    "landmarksTitle": "Nearby landmarks",
+    "catalogTitle": "Popular strains for delivery",
+    "faqTitle": "Delivery questions",
+    "faq1q": "Can you deliver to my hotel reception?",
+    "faq1a": "Yes. Message us your hotel name and room or reception preference, and we will coordinate the easiest handoff.",
+    "faq2q": "Can I pay cash?",
+    "faq2a": "Yes. Cash and Thai QR are both available on arrival.",
+    "faq3q": "Do tourists need medical paperwork?",
+    "faq3a": "Thailand uses a medical cannabis framework. If paperwork is needed, our team explains the current process before purchase."
+  },
+  "legalGuide": {
+    "metaTitle": "Is Cannabis Legal for Tourists in Thailand? 2026 Guide | Labs Cannabis",
+    "metaDescription": "A conservative 2026 guide for tourists in Pattaya: cannabis flower, Thai prescription rules, medical framework, public-use limits, and how to buy safely.",
+    "h1": "Is cannabis legal for tourists in Thailand? 2026 guide",
+    "lead": "Short answer: cannabis flower is controlled and should be treated as medical-only. Tourists should buy only through licensed, compliant channels with Thai prescription support.",
+    "lastUpdated": "Last updated: May 14, 2026",
+    "readingTime": "Reading time: 6 min",
+    "tocTitle": "On this page",
+    "tldrTitle": "TL;DR",
+    "tldr": [
+      "Cannabis flower is not a casual recreational free-for-all in Thailand.",
+      "Tourists should use a valid Thai prescription or medical framework before buying.",
+      "Do not smoke in public, do not drive after use, and never take cannabis out of Thailand."
+    ],
+    "sections": {
+      "status": {
+        "title": "Current legal status",
+        "body": [
+          "Thailand decriminalized cannabis in 2022, but that never meant public recreational use was fully legal. In 2025, the government tightened the rules again and classified cannabis flower as a controlled herb.",
+          "For tourists, the practical rule is simple: treat cannabis flower as medical-only. Buy from licensed shops, avoid street sellers, and expect the shop to follow a medical documentation process."
+        ]
+      },
+      "prescription": {
+        "title": "What the Thai prescription requirement means",
+        "body": [
+          "Official tourist guidance says visitors should not buy, carry, or use cannabis flower unless they have a valid prescription issued in Thailand by an authorized medical professional.",
+          "A compliant shop should be able to explain what paperwork is required before purchase. If a seller avoids the topic completely, that is a warning sign."
+        ]
+      },
+      "tourists": {
+        "title": "Can tourists buy cannabis in Pattaya?",
+        "body": [
+          "Tourists can access cannabis through the medical framework, but the safest path is to use licensed, transparent shops that help you understand the current process.",
+          "At Labs Cannabis, the site keeps the flow simple: message us, confirm what you want, and our team explains the current legal steps before purchase or delivery."
+        ]
+      },
+      "dont": {
+        "title": "What you should not do",
+        "body": [
+          "Do not smoke in public places, do not drive after using cannabis, do not buy from street touts, and do not try to take cannabis through the airport.",
+          "Keep packaging discreet and private. If you are unsure where use is allowed, ask the shop before opening anything."
+        ]
+      },
+      "scams": {
+        "title": "Common scams and red flags",
+        "body": [
+          "Be careful with anonymous delivery accounts, street sellers on Walking Street, and shops with no visible license, no reviews, or no willingness to discuss the medical framework.",
+          "A good shop should have real reviews, a real location, clear contact channels, and staff who can explain what is legal without pressuring you."
+        ]
+      }
+    },
+    "faqTitle": "Legal questions tourists ask",
+    "faq": [
+      {
+        "q": "Is weed legal in Thailand for tourists?",
+        "a": "Cannabis flower is controlled and should be treated as medical-only. Tourists should use a valid Thai prescription or compliant medical process."
+      },
+      {
+        "q": "Can I order cannabis delivery to a hotel?",
+        "a": "Delivery can be arranged through a licensed shop, but the shop should still follow the current medical and verification process before purchase."
+      },
+      {
+        "q": "Can I smoke cannabis in public?",
+        "a": "No. Public smoking can create legal trouble and complaints. Keep use private and ask staff if you are unsure."
+      },
+      {
+        "q": "Can I fly home with cannabis from Thailand?",
+        "a": "No. Do not take cannabis out of Thailand or through the airport."
+      }
+    ],
+    "finalCtaTitle": "Need a safe Pattaya shop?",
+    "finalCtaText": "Labs Cannabis is 5 minutes from Walking Street and can arrange 24/7 delivery after the current purchase steps are confirmed.",
+    "deliveryCta": "Order delivery on WhatsApp",
+    "mapsCta": "Open Labs Cannabis in Maps",
+    "relatedTitle": "Related pages",
+    "relatedStrains": "Browse strains",
+    "relatedDelivery": "Delivery to Walking Street",
+    "sourcesTitle": "Sources",
+    "sourceOfficial": "Thailand.go.th tourist notice, 27 June 2025",
+    "sourceLegal": "Tilleke & Gibbins Thailand Cannabis and Hemp Business Guide 2025",
+    "disclaimer": "This page is general information, not legal advice. Cannabis rules can change; confirm current requirements with licensed professionals before buying or using cannabis in Thailand."
   },
   "effectPage": {
     "title": "{effect} Cannabis Strains in Pattaya | Labs Cannabis",
@@ -229,16 +411,5 @@
     "tagType_effect": "Effect",
     "tagType_type": "Type",
     "tagType_terpene": "Terpene"
-  },
-  "specialOffer": {
-    "imageAlt": "Special offer: three pre-rolls for ฿200. Bud pricing and strains in stock.",
-    "pricingTitle": "Bud prices",
-    "tier1Amount": "1 g",
-    "tier1Price": "฿300",
-    "tier2Amount": "10 g",
-    "tier2Price": "฿1,800",
-    "tier3Amount": "1 kg",
-    "tier3Price": "฿40,000",
-    "strainsInStock": "White Widow & more strains in stock"
   }
 }

@@ -1,6 +1,9 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { getContactMessageLocale } from "@/i18n/config";
+import { buildContactLinks, type ContactLocale } from "@/lib/contact-links";
 import { getAllStrains, getShopSettings } from "@/lib/queries";
+import { getStoredUtm, type StoredUtm } from "@/lib/utm-tracking";
 import type { Strain, ShopSettings } from "@/lib/mock-data";
 
 // --- Types ---
@@ -35,29 +38,33 @@ function formatCatalog(strains: Strain[]): string {
   return lines.join("\n") || "Catalog temporarily unavailable.";
 }
 
-function buildContactCards(s: ShopSettings): ContactCard[] {
+function buildContactCards(
+  settings: ShopSettings,
+  locale: ContactLocale,
+  utm: StoredUtm,
+): ContactCard[] {
   const cards: ContactCard[] = [];
+  const links = buildContactLinks(settings, locale, {
+    kind: "delivery",
+    source: utm.source,
+    campaign: utm.campaign,
+  });
 
-  // WhatsApp (prefer explicit URL, else build from number or phone)
-  const waUrl = s.whatsappUrl?.trim() || null;
-  const waNumber = (s.whatsappNumber || s.phone || "").replace(/\D/g, "");
-  const whatsapp = waUrl || (waNumber ? `https://wa.me/${waNumber}` : null);
-  if (whatsapp) cards.push({ label: "WhatsApp", url: whatsapp, color: "#25D366", icon: "whatsapp" });
+  if (links.whatsapp) {
+    cards.push({ label: "WhatsApp", url: links.whatsapp, color: "#25D366", icon: "whatsapp" });
+  }
 
-  // Telegram
-  const tgId = s.telegramId?.replace(/^@+/, "").trim();
-  const telegram = s.telegramUrl?.trim() || (tgId ? `https://t.me/${tgId}` : null);
-  if (telegram) cards.push({ label: "Telegram", url: telegram, color: "#0088cc", icon: "telegram" });
+  if (links.telegram) {
+    cards.push({ label: "Telegram", url: links.telegram, color: "#0088cc", icon: "telegram" });
+  }
 
-  // LINE
-  const lineId = s.lineId?.replace(/^@+/, "").trim();
-  const line = s.lineUrl?.trim() || (lineId ? `https://line.me/ti/p/~${lineId}` : null);
-  if (line) cards.push({ label: "LINE", url: line, color: "#06C755", icon: "line" });
+  if (links.line && !links.line.startsWith("tel:")) {
+    cards.push({ label: "LINE", url: links.line, color: "#06C755", icon: "line" });
+  }
 
-  // Phone (always last)
-  if (s.phone) {
-    const digits = s.phone.replace(/\D/g, "");
-    if (digits) cards.push({ label: s.phone, url: `tel:+${digits}`, color: "#059669", icon: "phone" });
+  if (links.phone) {
+    const label = settings.phone?.trim() || links.phone.replace(/^tel:/, "");
+    cards.push({ label, url: links.phone, color: "#059669", icon: "phone" });
   }
 
   return cards;
@@ -67,7 +74,7 @@ function buildContactCards(s: ShopSettings): ContactCard[] {
 
 type CtxCache = {
   catalog: string;
-  contactCards: ContactCard[];
+  settings: ShopSettings;
   ts: number;
 };
 let cachedCtx: CtxCache | null = null;
@@ -78,7 +85,7 @@ async function getContext(): Promise<CtxCache> {
   const [strains, settings] = await Promise.all([getAllStrains(), getShopSettings()]);
   cachedCtx = {
     catalog: formatCatalog(strains),
-    contactCards: buildContactCards(settings),
+    settings,
     ts: Date.now(),
   };
   return cachedCtx;
@@ -113,7 +120,7 @@ type ChatMessage = { role: "user" | "assistant"; content: string };
 
 export async function POST(request: Request) {
   try {
-    const body = (await request.json()) as { messages: ChatMessage[] };
+    const body = (await request.json()) as { messages: ChatMessage[]; locale?: string };
     const messages = (body.messages ?? []).slice(-20);
 
     if (!messages.length) {
@@ -126,6 +133,8 @@ export async function POST(request: Request) {
     }
 
     const ctx = await getContext();
+    const locale = getContactMessageLocale(body.locale ?? "en");
+    const utm = await getStoredUtm();
 
     const systemPrompt = `${BASE_PROMPT}
 
@@ -146,7 +155,7 @@ ${ctx.catalog}`;
 
     return NextResponse.json({
       content,
-      contacts: showContacts ? ctx.contactCards : [],
+      contacts: showContacts ? buildContactCards(ctx.settings, locale, utm) : [],
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);

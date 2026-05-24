@@ -6,6 +6,8 @@ import { GOOGLE_LISTING_URL } from "@/lib/constants";
 interface FulfillmentOptionsProps {
   shopSettings: ShopSettings;
   locale: string;
+  utmSource?: string | null;
+  utmCampaign?: string | null;
 }
 
 type CardKey = "walkin" | "pickup" | "delivery";
@@ -20,14 +22,20 @@ interface CardConfig {
 export async function FulfillmentOptions({
   shopSettings,
   locale,
+  utmSource,
+  utmCampaign,
 }: FulfillmentOptionsProps) {
   const t = await getTranslations({ locale, namespace: "fulfillment" });
 
   const pickupLinks = buildContactLinks(shopSettings, locale as ContactLocale, {
     kind: "pickup",
+    source: utmSource,
+    campaign: utmCampaign,
   });
   const deliveryLinks = buildContactLinks(shopSettings, locale as ContactLocale, {
     kind: "delivery",
+    source: utmSource,
+    campaign: utmCampaign,
   });
 
   const pickupHref =

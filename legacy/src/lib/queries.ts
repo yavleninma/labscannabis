@@ -1,9 +1,11 @@
 import { unstable_cache } from "next/cache";
 import { sanityClient } from "@/sanity/client";
-import { SHOP_SETTINGS_TAG, STRAINS_TAG } from "./cache-tags";
+import { AREAS_TAG, SHOP_SETTINGS_TAG, STRAINS_TAG, getAreaTag } from "./cache-tags";
 import {
+  mockAreas,
   mockStrains,
   mockShopSettings,
+  type Area,
   type Strain,
   type ShopSettings,
 } from "./mock-data";
@@ -30,6 +32,22 @@ const strainProjection = `{
   terpeneProfile,
   isStaffPick,
   isSoldOut,
+  isHidden,
+  sortOrder
+}`;
+
+const areaProjection = `{
+  _id,
+  _updatedAt,
+  name,
+  nameRu,
+  nameTh,
+  slug,
+  etaMinutes,
+  shortDescription,
+  shortDescriptionRu,
+  shortDescriptionTh,
+  landmarks,
   isHidden,
   sortOrder
 }`;
@@ -83,6 +101,9 @@ async function fetchShopSettings(): Promise<ShopSettings> {
         telegramUrl, telegramId,
         phone,
         announcement,
+        deliveryEnabled,
+        pickupEnabled,
+        fulfillmentNote,
         googleRating,
         googleReviewCount,
         guidePhoto,
@@ -107,4 +128,42 @@ export async function getShopSettings(): Promise<ShopSettings> {
 export async function getAllStrainSlugs(): Promise<string[]> {
   const strains = await getAllStrains();
   return strains.map((strain) => strain.slug.current);
+}
+
+async function fetchAllAreas(): Promise<Area[]> {
+  if (!sanityClient) return mockAreas;
+
+  try {
+    const areas = await sanityClient.fetch<Area[]>(
+      `*[_type == "area" && isHidden != true] | order(sortOrder asc) ${areaProjection}`,
+    );
+    return areas.length > 0 ? areas : mockAreas;
+  } catch {
+    return mockAreas;
+  }
+}
+
+const getAllAreasCached = unstable_cache(fetchAllAreas, ["all-areas"], {
+  revalidate: false,
+  tags: [AREAS_TAG],
+});
+
+export async function getAllAreas(): Promise<Area[]> {
+  return getAllAreasCached();
+}
+
+export async function getAreaBySlug(slug: string): Promise<Area | null> {
+  const getAreaCached = unstable_cache(
+    async () => {
+      const areas = await fetchAllAreas();
+      return areas.find((area) => area.slug.current === slug) || null;
+    },
+    ["area-by-slug", slug],
+    {
+      revalidate: false,
+      tags: [AREAS_TAG, getAreaTag(slug)],
+    },
+  );
+
+  return getAreaCached();
 }

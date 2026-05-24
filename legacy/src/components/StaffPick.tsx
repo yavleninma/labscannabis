@@ -1,7 +1,8 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
-import type { AppLocale } from "@/i18n/config";
-import type { Strain } from "@/lib/mock-data";
+import { getContactMessageLocale, type AppLocale } from "@/i18n/config";
+import { buildContactLinks } from "@/lib/contact-links";
+import type { ShopSettings, Strain } from "@/lib/mock-data";
 import { getLocalizedShortDescription } from "@/lib/strain-localization";
 import { createTagHref } from "@/lib/strain-tags";
 import { urlFor } from "@/sanity/image";
@@ -22,9 +23,18 @@ const effectEmoji: Record<string, string> = {
 interface StaffPickProps {
   strain: Strain;
   locale: string;
+  shopSettings: ShopSettings;
+  utmSource?: string | null;
+  utmCampaign?: string | null;
 }
 
-export async function StaffPick({ strain, locale }: StaffPickProps) {
+export async function StaffPick({
+  strain,
+  locale,
+  shopSettings,
+  utmSource,
+  utmCampaign,
+}: StaffPickProps) {
   const t = await getTranslations({ locale, namespace: "staffPick" });
   const tCommon = await getTranslations({ locale, namespace: "strainCommon" });
   const imageUrl = strain.image ? urlFor(strain.image)?.width(600).height(400).url() : null;
@@ -40,6 +50,12 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
   const hasThc = typeof strain.thcPercent === "number";
   const hasCbd = typeof strain.cbdPercent === "number";
   const localizedShortDescription = getLocalizedShortDescription(strain, locale as AppLocale);
+  const links = buildContactLinks(shopSettings, getContactMessageLocale(locale), {
+    kind: "delivery",
+    productName: strain.name,
+    source: utmSource,
+    campaign: utmCampaign,
+  });
 
   return (
     <section className="py-8 px-4">
@@ -110,9 +126,10 @@ export async function StaffPick({ strain, locale }: StaffPickProps) {
                 <span className="text-2xl font-bold text-emerald-400">
                   {tCommon("pricePerGram", { price: strain.pricePerGram })}
                 </span>
-                {/* TODO: Replace with actual messenger URL */}
                 <a
-                  href="#contact"
+                  href={links.reserve || "#contact"}
+                  target={links.reserve?.startsWith("http") ? "_blank" : undefined}
+                  rel={links.reserve?.startsWith("http") ? "noopener noreferrer" : undefined}
                   className="bg-emerald-600 hover:bg-emerald-500 text-white px-5 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   {t("reserve")}
