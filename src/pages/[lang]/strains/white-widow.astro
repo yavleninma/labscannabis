@@ -19,6 +19,10 @@ const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
 const desc = WHITE_WIDOW.shortDescription[locale] ?? WHITE_WIDOW.shortDescription.en;
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: WHITE_WIDOW.name, pathSuffix: "strains/white-widow" },
+];
 ---
 
 <PageLayout
@@ -26,6 +30,8 @@ const desc = WHITE_WIDOW.shortDescription[locale] ?? WHITE_WIDOW.shortDescriptio
   pathSuffix="strains/white-widow"
   title={`${WHITE_WIDOW.name} Pattaya | Labs Cannabis`}
   description={desc}
+  pageType="strain"
+  breadcrumbs={breadcrumbs}
 >
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
@@ -50,5 +56,5 @@ const desc = WHITE_WIDOW.shortDescription[locale] ?? WHITE_WIDOW.shortDescriptio
   <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
   <MedicalCardNote locale={locale} />
-  <Footer locale={locale} />
+  <Footer locale={locale} pathSuffix="strains/white-widow" />
 </PageLayout>

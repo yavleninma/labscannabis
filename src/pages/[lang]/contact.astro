@@ -14,9 +14,21 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.contact.title, pathSuffix: "contact" },
+];
 ---
 
-<PageLayout locale={locale} pathSuffix="contact" title={`${ui.contact.title} | Labs Cannabis`} description={ui.contact.subtitle}>
+<PageLayout
+  locale={locale}
+  pathSuffix="contact"
+  title={`${ui.contact.title} | Labs Cannabis`}
+  description={ui.contact.subtitle}
+  pageType="contact"
+  breadcrumbs={breadcrumbs}
+  includeOfferCatalog={false}
+>
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold">{ui.contact.title}</h1>
@@ -32,5 +44,5 @@ const ui = t(locale);
   </section>
   <MapBlock locale={locale} />
   <MedicalCardNote locale={locale} />
-  <Footer locale={locale} />
+  <Footer locale={locale} pathSuffix="contact" />
 </PageLayout>

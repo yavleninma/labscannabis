@@ -7,9 +7,10 @@ import MapBlock from "@/components/MapBlock.astro";
 import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
-import { SEO_PAGES } from "@/data/seo-matrix";
+import { SEO_PAGES, getAreaBySlug } from "@/data/seo-matrix";
 import { REELS_SLIDES } from "@/data/media";
 import { loadSeoContent, seoDescription } from "@/lib/content";
+import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
   const paths: { params: { lang: string; seoSlug: string } }[] = [];
@@ -28,9 +29,28 @@ const content = loadSeoContent(locale, seoSlug);
 const title = page.titleTemplate[locale];
 const keywords = page.keywords[locale];
 const description = seoDescription(content);
+const ui = t(locale);
+const areaName = page.area ? getAreaBySlug(page.area)?.name[locale] : undefined;
+const pageType = page.intent === "delivery" ? "delivery" : page.intent === "wholesale" ? "wholesale" : "seo";
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.locations.title, pathSuffix: "locations" },
+  { name: content.h1 || page.h1Template[locale], pathSuffix: seoSlug },
+];
 ---
 
-<PageLayout locale={locale} pathSuffix={seoSlug} title={title} description={description} keywords={keywords} faq={content.faq}>
+<PageLayout
+  locale={locale}
+  pathSuffix={seoSlug}
+  title={title}
+  description={description}
+  keywords={keywords}
+  faq={content.faq}
+  pageType={pageType}
+  breadcrumbs={breadcrumbs}
+  serviceAreaName={areaName}
+  includeOfferCatalog={page.intent !== "delivery"}
+>
   <article class="px-4 pt-8 pb-4">
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold leading-tight">{content.h1 || page.h1Template[locale]}</h1>
@@ -60,5 +80,5 @@ const description = seoDescription(content);
   <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
   <MedicalCardNote locale={locale} />
-  <Footer locale={locale} />
+  <Footer locale={locale} pathSuffix={seoSlug} />
 </PageLayout>

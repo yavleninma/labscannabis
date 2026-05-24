@@ -20,7 +20,8 @@ const locale = lang as Locale;
 const ui = t(locale);
 ---
 
-<PageLayout locale={locale} pathSuffix="" faq={HOME_FAQ}>
+<PageLayout locale={locale} pathSuffix="" faq={HOME_FAQ} pageType="home">
+  <h1 class="sr-only">{ui.meta.title}</h1>
   <Reels locale={locale} slides={REELS_SLIDES} />
   <PriceLadder locale={locale} />
   <ReviewStrip locale={locale} />

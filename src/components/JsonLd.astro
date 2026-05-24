@@ -2,7 +2,7 @@
 import type { Locale } from "@/lib/i18n";
 import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
 import { PRICE_LADDER } from "@/data/prices";
-import { getSiteUrl, localePath } from "@/lib/i18n";
+import { getSiteUrl, localePath, LOCALE_HREFLANG } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
 import { pickDailyLocalizedReviews } from "@/lib/reviews";
 
@@ -11,24 +11,58 @@ interface FaqItem {
   a: string;
 }
 
+type PageType = "home" | "seo" | "area" | "delivery" | "guide" | "strain" | "contact" | "wholesale" | "locations";
+
+interface BreadcrumbItem {
+  name: string;
+  pathSuffix?: string;
+  href?: string;
+}
+
+interface ArticleData {
+  headline?: string;
+  datePublished?: string;
+  dateModified?: string;
+  author?: string;
+}
+
 interface Props {
   locale: Locale;
   pathSuffix?: string;
+  title?: string;
+  description?: string;
   faq?: FaqItem[];
+  pageType?: PageType;
+  breadcrumbs?: BreadcrumbItem[];
+  serviceAreaName?: string;
+  article?: ArticleData;
+  includeOfferCatalog?: boolean;
 }
 
-const { locale, pathSuffix = "", faq = [] } = Astro.props;
+const {
+  locale,
+  pathSuffix = "",
+  title = BRAND.name,
+  description = "",
+  faq = [],
+  pageType = "seo",
+  breadcrumbs = [],
+  serviceAreaName,
+  article,
+  includeOfferCatalog,
+} = Astro.props;
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
+const businessId = `${baseUrl}/#business`;
 
 const localBusiness = {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "Store"],
-  "@id": `${baseUrl}/#business`,
+  "@id": businessId,
   name: BRAND.name,
   alternateName: BRAND.formerName,
-  url: pageUrl,
+  url: `${baseUrl}${localePath(locale)}`,
   telephone: CONTACT.phoneIntl,
   image: `${baseUrl}/media/IMG_20260517_175646.jpg`,
   sameAs: [GOOGLE.listingUrl],
@@ -57,7 +91,7 @@ const localBusiness = {
     reviewCount: String(GOOGLE.reviewCount),
     bestRating: "5",
   },
-  priceRange: "฿",
+  priceRange: "\u0e3f",
   currenciesAccepted: "THB",
   paymentAccepted: "Cash, QR Bank Transfer",
   review: reviews.map((r) => ({
@@ -69,19 +103,105 @@ const localBusiness = {
   })),
 };
 
-const products = PRICE_LADDER.map((tier) => ({
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: `White Widow Cannabis — ${tier.weight}`,
-  brand: { "@type": "Brand", name: BRAND.name },
-  offers: {
-    "@type": "Offer",
-    price: tier.total,
-    priceCurrency: "THB",
-    availability: "https://schema.org/InStock",
-    url: `${baseUrl}${localePath(locale)}#prices`,
-  },
-}));
+const shouldIncludeOfferCatalog =
+  includeOfferCatalog ?? ["home", "seo", "strain", "wholesale"].includes(pageType);
+
+const offerCatalog = shouldIncludeOfferCatalog
+  ? {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      "@id": `${baseUrl}${localePath(locale)}#offer-catalog`,
+      name: `${BRAND.name} cannabis weight menu`,
+      url: `${baseUrl}${localePath(locale)}#prices`,
+      itemListElement: PRICE_LADDER.map((tier) => ({
+        "@type": "Offer",
+        name: `${tier.weight} White Widow`,
+        price: tier.total,
+        priceCurrency: "THB",
+        availability: "https://schema.org/InStock",
+        url: `${baseUrl}${localePath(locale)}#prices`,
+        itemOffered: {
+          "@type": "Product",
+          name: `White Widow Cannabis - ${tier.weight}`,
+          brand: { "@type": "Brand", name: BRAND.name },
+        },
+      })),
+    }
+  : null;
+
+const breadcrumbItems =
+  breadcrumbs.length > 0
+    ? breadcrumbs
+    : pathSuffix
+      ? [
+          { name: BRAND.name, pathSuffix: "" },
+          { name: title, pathSuffix },
+        ]
+      : [];
+
+const getBreadcrumbUrl = (item: BreadcrumbItem) => {
+  if (item.href?.startsWith("https://") || item.href?.startsWith("http://")) return item.href;
+  if (item.href?.startsWith("/")) return `${baseUrl}${item.href}`;
+  return `${baseUrl}${localePath(locale, item.pathSuffix ?? "")}`;
+};
+
+const breadcrumbLd =
+  breadcrumbItems.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: breadcrumbItems.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.name,
+          item: getBreadcrumbUrl(item),
+        })),
+      }
+    : null;
+
+const serviceLd =
+  pageType === "area" || pageType === "delivery"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "@id": `${pageUrl}#service`,
+        name:
+          pageType === "delivery"
+            ? `Cannabis pickup and delivery coordination - ${serviceAreaName ?? "Pattaya"}`
+            : `Cannabis retail service - ${serviceAreaName ?? "Pattaya"}`,
+        serviceType: "Cannabis retail consultation and pickup coordination",
+        provider: { "@id": businessId },
+        areaServed: {
+          "@type": "Place",
+          name: serviceAreaName ?? "Pattaya",
+        },
+        url: pageUrl,
+      }
+    : null;
+
+const articleLd =
+  pageType === "guide"
+    ? {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": `${pageUrl}#article`,
+        headline: article?.headline ?? title,
+        description,
+        inLanguage: LOCALE_HREFLANG[locale],
+        mainEntityOfPage: pageUrl,
+        author: {
+          "@type": "Organization",
+          name: article?.author ?? BRAND.name,
+        },
+        publisher: {
+          "@type": "Organization",
+          name: BRAND.name,
+          url: baseUrl,
+        },
+        datePublished: article?.datePublished ?? "2026-05-24",
+        dateModified: article?.dateModified ?? "2026-05-24",
+      }
+    : null;
 
 const faqLd =
   faq.length > 0
@@ -97,10 +217,17 @@ const faqLd =
     : null;
 
 const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
+
+const jsonBlocks = [
+  localBusiness,
+  offerCatalog,
+  breadcrumbLd,
+  serviceLd,
+  articleLd,
+  faqLd,
+].filter(Boolean);
 ---
 
-{faqLd && <script type="application/ld+json" set:html={safeJson(faqLd)} />}
-<script type="application/ld+json" set:html={safeJson(localBusiness)} />
-{products.map((p) => (
-  <script type="application/ld+json" set:html={safeJson(p)} />
+{jsonBlocks.map((block) => (
+  <script type="application/ld+json" set:html={safeJson(block)} />
 ))}

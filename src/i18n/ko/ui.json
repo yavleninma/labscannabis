@@ -72,7 +72,7 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "태국 20+ 의료카드 필요 · 매장에서 ~2분 무료 발급"
+    "text": "태국에서 대마초 꽃은 관리 대상이며 20세 이상도 유효한 태국 처방 또는 필요한 의료 문서가 필요합니다. 구매 전 문의하세요."
   },
   "footer": {
     "disclaimer": "Labs Cannabis (구 Labs Dispensary) 파타야 licensed · 20+ only",
@@ -80,7 +80,7 @@
   },
   "ageGate": {
     "title": "만 20세 이상?",
-    "text": "성인 전용. 태국 대마초는 카드 필요 — 매장에서 도움",
+    "text": "성인 전용. 태국 대마초 꽃은 관리 대상이며 유효한 태국 의료 문서가 필요합니다.",
     "enter": "예, 20+",
     "exit": "나가기"
   },
@@ -105,5 +105,35 @@
     "prices": "가격",
     "contact": "연락",
     "wholesale": "도매"
+  },
+  "langSwitcher": {
+    "label": "언어 선택"
+  },
+  "footerSeo": {
+    "areasTitle": "지역",
+    "buyTitle": "무게별",
+    "moreTitle": "더보기",
+    "allPages": "모든 페이지",
+    "pattaya": "파타야",
+    "jomtien": "좀티엔",
+    "walkingStreet": "Walking Street",
+    "soiHollywood": "Soi Hollywood",
+    "naklua": "나클루아",
+    "w1g": "1g",
+    "w10g": "10g",
+    "w30g": "30g",
+    "w100g": "100g",
+    "w1kg": "1kg",
+    "wholesale": "도매",
+    "delivery": "배달",
+    "bestShop": "최고 매장",
+    "whiteWidow": "White Widow"
+  },
+  "locations": {
+    "title": "파타야 대마초 — 모든 페이지",
+    "subtitle": "지역, 무게, 배달별로 보기.",
+    "areasGroup": "지역",
+    "weightsGroup": "무게별",
+    "otherGroup": "기타"
   }
 }

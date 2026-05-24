@@ -1,0 +1,75 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Footer from "@/components/Footer.astro";
+import MedicalCardNote from "@/components/MedicalCardNote.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCE_URL } from "@/data/legal-guide";
+import { t } from "@/lib/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = lang as Locale;
+const ui = t(locale);
+const copy = LEGAL_GUIDE_COPY[locale] ?? LEGAL_GUIDE_COPY.en;
+const pathSuffix = "guides/legal-cannabis-tourists";
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: copy.breadcrumb, pathSuffix },
+];
+const article = {
+  headline: copy.h1,
+  datePublished: "2026-05-24",
+  dateModified: "2026-05-24",
+  author: "Labs Cannabis",
+};
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={pathSuffix}
+  title={copy.title}
+  description={copy.description}
+  faq={copy.faq}
+  pageType="guide"
+  breadcrumbs={breadcrumbs}
+  article={article}
+  includeOfferCatalog={false}
+>
+  <article class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.sourceLabel}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.intro}</p>
+      <a
+        href={LEGAL_GUIDE_SOURCE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-5 inline-flex rounded-xl bg-emerald px-4 py-3 text-base font-bold text-black"
+      >
+        {copy.sourceCta}
+      </a>
+
+      {copy.sections.map((section) => (
+        <section class="mt-8">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          <p class="mt-2 text-base leading-relaxed text-text-muted">{section.body}</p>
+        </section>
+      ))}
+
+      <section class="mt-8">
+        <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
+        {copy.faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+    </div>
+  </article>
+  <MedicalCardNote locale={locale} />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

@@ -4,8 +4,11 @@
   "framework": "astro",
   "redirects": [
     { "source": "/:path*", "has": [{ "type": "host", "value": "labscannabis.com" }], "destination": "https://labscannabis.boutique/:path*", "permanent": true },
-    { "source": "/strains/:slug*", "destination": "/en/strains/:slug*", "permanent": false },
-    { "source": "/wholesale", "destination": "/en/wholesale", "permanent": false },
-    { "source": "/contact", "destination": "/en/contact", "permanent": false }
+    { "source": "/", "destination": "/en/", "permanent": true },
+    { "source": "/strains/:slug", "destination": "/en/strains/:slug/", "permanent": false },
+    { "source": "/delivery/:area", "destination": "/en/delivery/:area/", "permanent": false },
+    { "source": "/guides/:slug", "destination": "/en/guides/:slug/", "permanent": false },
+    { "source": "/wholesale", "destination": "/en/wholesale/", "permanent": false },
+    { "source": "/contact", "destination": "/en/contact/", "permanent": false }
   ]
 }

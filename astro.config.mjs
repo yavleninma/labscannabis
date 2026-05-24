@@ -7,10 +7,23 @@ const site = process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique";
 
 export default defineConfig({
   site,
+  trailingSlash: "always",
   output: "static",
   integrations: [
     react(),
     sitemap({
+      filter: (page) => new URL(page).pathname !== "/",
+      serialize: (item) => {
+        const links = item.links ?? [];
+        const enLink = links.find((link) => link.lang === "en");
+        if (!enLink || links.some((link) => link.lang === "x-default")) {
+          return item;
+        }
+        return {
+          ...item,
+          links: [...links, { lang: "x-default", url: enLink.url }],
+        };
+      },
       i18n: {
         defaultLocale: "en",
         locales: {

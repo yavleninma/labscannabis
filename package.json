@@ -10,7 +10,8 @@
     "media": "node scripts/transcode-media.mjs",
     "gen:seo": "node scripts/gen-seo-content.mjs",
     "gen:seo-fallback": "node scripts/gen-seo-fallback.mjs",
-    "gen:reviews": "node scripts/gen-review-translations.mjs"
+    "gen:reviews": "node scripts/gen-review-translations.mjs",
+    "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",

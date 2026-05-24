@@ -5,6 +5,7 @@ import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
 import { t } from "@/lib/ui";
 import AgeGate from "@/components/AgeGate.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
 import JsonLd from "@/components/JsonLd.astro";
 
@@ -15,9 +16,31 @@ interface Props {
   pathSuffix?: string;
   keywords?: string[];
   faq?: { q: string; a: string }[];
+  pageType?: "home" | "seo" | "area" | "delivery" | "guide" | "strain" | "contact" | "wholesale" | "locations";
+  breadcrumbs?: { name: string; pathSuffix?: string; href?: string }[];
+  serviceAreaName?: string;
+  article?: {
+    headline?: string;
+    datePublished?: string;
+    dateModified?: string;
+    author?: string;
+  };
+  includeOfferCatalog?: boolean;
 }
 
-const { locale, title, description, pathSuffix = "", keywords = [], faq = [] } = Astro.props;
+const {
+  locale,
+  title,
+  description,
+  pathSuffix = "",
+  keywords = [],
+  faq = [],
+  pageType = "seo",
+  breadcrumbs = [],
+  serviceAreaName,
+  article,
+  includeOfferCatalog,
+} = Astro.props;
 const ui = t(locale);
 const pageTitle = title ?? ui.meta.title;
 const pageDesc = description ?? ui.meta.description;
@@ -53,7 +76,7 @@ const siteUrl = getSiteUrl();
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={pageType === "guide" ? "article" : "website"} />
     <meta property="og:site_name" content="Labs Cannabis" />
     <meta property="og:locale" content={ogLocale} />
     <meta property="og:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
@@ -64,8 +87,20 @@ const siteUrl = getSiteUrl();
   </head>
   <body>
     <AgeGate locale={locale} />
+    <SiteHeader locale={locale} pathSuffix={pathSuffix} />
     <slot />
     <StickyCTA locale={locale} />
-    <JsonLd locale={locale} pathSuffix={pathSuffix} faq={faq} />
+    <JsonLd
+      locale={locale}
+      pathSuffix={pathSuffix}
+      title={pageTitle}
+      description={pageDesc}
+      faq={faq}
+      pageType={pageType}
+      breadcrumbs={breadcrumbs}
+      serviceAreaName={serviceAreaName}
+      article={article}
+      includeOfferCatalog={includeOfferCatalog}
+    />
   </body>
 </html>

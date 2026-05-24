@@ -72,7 +72,7 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "泰国需20+医疗卡，店内约2分钟免费办理"
+    "text": "泰国大麻花受管制，20岁以上购买需有效泰国处方或所需医疗文件。购买前请先咨询我们。"
   },
   "footer": {
     "disclaimer": "Labs Cannabis（原Labs Dispensary）芭提雅持证零售商 仅限20+",
@@ -80,7 +80,7 @@
   },
   "ageGate": {
     "title": "您是否已满20岁？",
-    "text": "仅限成人。泰国大麻需医疗卡，店内协助办理",
+    "text": "仅限成人。泰国大麻花受管制，需要有效泰国医疗文件。",
     "enter": "是，已满20",
     "exit": "离开"
   },
@@ -105,5 +105,35 @@
     "prices": "价格",
     "contact": "联系",
     "wholesale": "批发"
+  },
+  "langSwitcher": {
+    "label": "选择语言"
+  },
+  "footerSeo": {
+    "areasTitle": "区域",
+    "buyTitle": "按重量",
+    "moreTitle": "更多",
+    "allPages": "所有页面",
+    "pattaya": "芭提雅",
+    "jomtien": "乔木提恩",
+    "walkingStreet": "Walking Street",
+    "soiHollywood": "Soi Hollywood",
+    "naklua": "那库阿",
+    "w1g": "1克",
+    "w10g": "10克",
+    "w30g": "30克",
+    "w100g": "100克",
+    "w1kg": "1公斤",
+    "wholesale": "批发",
+    "delivery": "配送",
+    "bestShop": "最佳店",
+    "whiteWidow": "White Widow"
+  },
+  "locations": {
+    "title": "芭提雅大麻 — 所有页面",
+    "subtitle": "按区域、重量或配送浏览。",
+    "areasGroup": "区域",
+    "weightsGroup": "按重量",
+    "otherGroup": "其他"
   }
 }

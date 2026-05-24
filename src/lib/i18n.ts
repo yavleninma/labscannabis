@@ -32,8 +32,8 @@ export function getSiteUrl(): string {
 }
 
 export function localePath(locale: Locale, path = ""): string {
-  const clean = path.startsWith("/") ? path.slice(1) : path;
-  return clean ? `/${locale}/${clean}` : `/${locale}/`;
+  const clean = path.replace(/^\/+|\/+$/g, "");
+  return clean ? `/${locale}/${clean}/` : `/${locale}/`;
 }
 
 export function detectLocaleFromHeader(acceptLanguage: string | null): Locale {

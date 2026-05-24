@@ -1,0 +1,108 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import Footer from "@/components/Footer.astro";
+import { LOCALES, localePath, type Locale } from "@/lib/i18n";
+import { AREAS, SEO_PAGES } from "@/data/seo-matrix";
+import { t } from "@/lib/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const locale = lang as Locale;
+const ui = t(locale);
+
+const areaPages = SEO_PAGES.filter((p) => p.area && !p.weight);
+const weightPages = SEO_PAGES.filter((p) => p.weight);
+const otherPages = SEO_PAGES.filter((p) => !p.area && !p.weight);
+const generatedAreaPages = AREAS.map((area) => ({
+  href: localePath(locale, `areas/${area.slug}`),
+  label: area.name[locale],
+}));
+const deliveryPages = AREAS.map((area) => ({
+  href: localePath(locale, `delivery/${area.slug}`),
+  label: `${ui.footerSeo.delivery} ${area.name[locale]}`,
+}));
+const guidePages = [
+  {
+    href: localePath(locale, "guides/legal-cannabis-tourists"),
+    label: ui.footerSeo.legalGuide ?? "Tourist legal guide",
+  },
+  {
+    href: localePath(locale, "strains/white-widow"),
+    label: ui.footerSeo.strainPage ?? "White Widow strain",
+  },
+];
+
+const groups = [
+  {
+    title: ui.locations.areasGroup,
+    links: [
+      ...areaPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+      ...generatedAreaPages,
+    ],
+  },
+  {
+    title: ui.footerSeo.delivery,
+    links: [
+      ...SEO_PAGES.filter((p) => p.intent === "delivery").map((page) => ({
+        href: localePath(locale, page.slug),
+        label: page.h1Template[locale],
+      })),
+      ...deliveryPages,
+    ],
+  },
+  {
+    title: ui.locations.weightsGroup,
+    links: weightPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+  },
+  {
+    title: ui.locations.otherGroup,
+    links: [
+      ...otherPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+      ...guidePages,
+    ],
+  },
+].filter((g) => g.links.length > 0);
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.locations.title, pathSuffix: "locations" },
+];
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix="locations"
+  title={`${ui.locations.title} | Labs Cannabis`}
+  description={ui.locations.subtitle}
+  pageType="locations"
+  breadcrumbs={breadcrumbs}
+  includeOfferCatalog={false}
+>
+  <section class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <h1 class="text-3xl font-bold leading-tight">{ui.locations.title}</h1>
+      <p class="mt-3 text-base leading-relaxed text-text-muted">{ui.locations.subtitle}</p>
+
+      {groups.map((group) => (
+        <div class="mt-8">
+          <h2 class="mb-3 text-lg font-bold text-emerald-dim">{group.title}</h2>
+          <ul class="space-y-2">
+            {group.links.map((page) => (
+              <li>
+                <a
+                  href={page.href}
+                  class="block rounded-xl border border-border bg-bg-card px-4 py-3 text-base font-medium hover:border-emerald/40 hover:text-emerald-dim"
+                >
+                  {page.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+  <Footer locale={locale} pathSuffix="locations" />
+</PageLayout>

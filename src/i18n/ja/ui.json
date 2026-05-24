@@ -72,7 +72,7 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "タイは20+の医療カード必要 · 店内約2分で無料発行"
+    "text": "タイでは大麻花は管理対象で、20歳以上でも有効なタイの処方または必要な医療書類が必要です。購入前にご確認ください。"
   },
   "footer": {
     "disclaimer": "Labs Cannabis（旧Labs Dispensary）パタヤ licensed · 20+のみ",
@@ -80,7 +80,7 @@
   },
   "ageGate": {
     "title": "20歳以上ですか？",
-    "text": "成人向け。タイの大麻はカード必要 — 店内でサポート",
+    "text": "成人向け。タイの大麻花は管理対象で、有効なタイの医療書類が必要です。",
     "enter": "はい、20+",
     "exit": "退出"
   },
@@ -105,5 +105,35 @@
     "prices": "価格",
     "contact": "連絡",
     "wholesale": "卸売"
+  },
+  "langSwitcher": {
+    "label": "言語を選択"
+  },
+  "footerSeo": {
+    "areasTitle": "エリア",
+    "buyTitle": "重量別",
+    "moreTitle": "その他",
+    "allPages": "すべてのページ",
+    "pattaya": "パタヤ",
+    "jomtien": "ジョムティエン",
+    "walkingStreet": "Walking Street",
+    "soiHollywood": "Soi Hollywood",
+    "naklua": "ナクルア",
+    "w1g": "1g",
+    "w10g": "10g",
+    "w30g": "30g",
+    "w100g": "100g",
+    "w1kg": "1kg",
+    "wholesale": "卸売",
+    "delivery": "配達",
+    "bestShop": "最高の店",
+    "whiteWidow": "White Widow"
+  },
+  "locations": {
+    "title": "パタヤの大麻 — すべてのページ",
+    "subtitle": "エリア・重量・配達別に閲覧。",
+    "areasGroup": "エリア",
+    "weightsGroup": "重量別",
+    "otherGroup": "その他"
   }
 }

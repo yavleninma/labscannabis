@@ -1,28 +1,61 @@
 ---
 import type { Locale } from "@/lib/i18n";
 import { HOURS } from "@/data/site";
+import { FOOTER_SEO_SECTIONS } from "@/data/footer-seo-links";
 import { t } from "@/lib/ui";
 import { localePath } from "@/lib/i18n";
+import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
 
 interface Props {
   locale: Locale;
+  pathSuffix?: string;
 }
 
-const { locale } = Astro.props;
+const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
+const seo = ui.footerSeo;
+const fallbackSeo = t("en").footerSeo;
 const hours = ui.location.hours.replace("{open}", HOURS.open).replace("{close}", HOURS.close);
 const year = new Date().getFullYear();
 ---
 
 <footer class="border-t border-border bg-bg-elevated py-10 pb-24">
-  <div class="site-main space-y-4 text-base text-text-muted">
+  <div class="site-main space-y-8 text-base text-text-muted">
     <nav class="flex flex-wrap gap-4 font-medium">
       <a href={localePath(locale)} class="hover:text-emerald-dim">{ui.nav.home}</a>
       <a href={`${localePath(locale)}#prices`} class="hover:text-emerald-dim">{ui.nav.prices}</a>
       <a href={localePath(locale, "wholesale")} class="hover:text-emerald-dim">{ui.nav.wholesale}</a>
       <a href={localePath(locale, "contact")} class="hover:text-emerald-dim">{ui.nav.contact}</a>
     </nav>
-    <p>{hours}</p>
+
+    <div class="grid gap-6 sm:grid-cols-3">
+      {FOOTER_SEO_SECTIONS.map((section) => (
+        <div>
+          <h2 class="mb-2 text-sm font-bold uppercase tracking-wide text-text">{seo[section.titleKey]}</h2>
+          <ul class="space-y-1.5 text-sm">
+            {section.links.map((link) => (
+              <li>
+                <a href={localePath(locale, link.slug)} class="hover:text-emerald-dim">
+                  {seo[link.labelKey] ?? fallbackSeo[link.labelKey] ?? link.labelKey}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <p>
+      <a href={localePath(locale, "locations")} class="font-medium text-emerald-dim hover:underline">
+        {seo.allPages} →
+      </a>
+    </p>
+
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
+      <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
+      <p class="text-sm">{hours}</p>
+    </div>
+
     <p class="text-sm leading-relaxed">{ui.footer.disclaimer}</p>
     <p class="text-sm">© {year} Labs Cannabis. {ui.footer.rights}</p>
   </div>

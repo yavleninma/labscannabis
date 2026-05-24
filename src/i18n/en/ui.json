@@ -72,7 +72,7 @@
   },
   "medical": {
     "badge": "20+ only",
-    "text": "Thailand requires a medical card for adults 20+. We help you complete it on-site in about 2 minutes — free, no hassle."
+    "text": "Thailand requires a valid Thai prescription or required medical documentation for adults 20+. Ask us what is needed before you buy."
   },
   "footer": {
     "disclaimer": "Labs Cannabis (formerly Labs Dispensary). Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
@@ -80,7 +80,7 @@
   },
   "ageGate": {
     "title": "Are you 20 or older?",
-    "text": "This site is for adults only. Cannabis in Thailand is for medical use with a card — we help on-site.",
+    "text": "This site is for adults only. Cannabis flower in Thailand is controlled and requires valid Thai medical documentation.",
     "enter": "Yes, I'm 20+",
     "exit": "Leave"
   },
@@ -105,5 +105,38 @@
     "prices": "Prices",
     "contact": "Contact",
     "wholesale": "Wholesale"
+  },
+  "langSwitcher": {
+    "label": "Choose language"
+  },
+  "footerSeo": {
+    "areasTitle": "Areas",
+    "buyTitle": "Buy by weight",
+    "moreTitle": "More",
+    "allPages": "All location pages",
+    "pattaya": "Pattaya",
+    "jomtien": "Jomtien",
+    "walkingStreet": "Walking Street",
+    "soiHollywood": "Soi Hollywood",
+    "naklua": "Naklua",
+    "w1g": "1g",
+    "w10g": "10g",
+    "w30g": "30g",
+    "w100g": "100g",
+    "w1kg": "1kg",
+    "wholesale": "Wholesale",
+    "delivery": "Delivery",
+    "pattayaDelivery": "Pattaya delivery",
+    "bestShop": "Best shop",
+    "whiteWidow": "White Widow",
+    "strainPage": "White Widow strain",
+    "legalGuide": "Tourist legal guide"
+  },
+  "locations": {
+    "title": "Cannabis in Pattaya — all pages",
+    "subtitle": "Browse by neighborhood, weight, or delivery.",
+    "areasGroup": "Areas & neighborhoods",
+    "weightsGroup": "By weight",
+    "otherGroup": "Other"
   }
 }

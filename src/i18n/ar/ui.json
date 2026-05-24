@@ -72,7 +72,7 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "تايلاند تتطلب بطاقة طبية 20+. نساعدك في المتجر ~2 دقيقة مجاناً"
+    "text": "زهور القنب في تايلاند تتطلب وصفة تايلاندية صالحة أو وثائق طبية مطلوبة لمن هم 20+. اسألنا قبل الشراء."
   },
   "footer": {
     "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). باتايا، تايلاند. 20+ فقط",
@@ -80,7 +80,7 @@
   },
   "ageGate": {
     "title": "هل عمرك 20+؟",
-    "text": "للبالغين فقط. القنب في تايلاند يتطلب بطاقة — نساعد في المتجر",
+    "text": "للبالغين فقط. زهور القنب في تايلاند خاضعة للرقابة وتتطلب وثائق طبية تايلاندية صالحة.",
     "enter": "نعم، 20+",
     "exit": "مغادرة"
   },
@@ -105,5 +105,35 @@
     "prices": "الأسعار",
     "contact": "تواصل",
     "wholesale": "جملة"
+  },
+  "langSwitcher": {
+    "label": "اختر اللغة"
+  },
+  "footerSeo": {
+    "areasTitle": "المناطق",
+    "buyTitle": "حسب الوزن",
+    "moreTitle": "المزيد",
+    "allPages": "جميع الصفحات",
+    "pattaya": "باتايا",
+    "jomtien": "جومتين",
+    "walkingStreet": "Walking Street",
+    "soiHollywood": "Soi Hollywood",
+    "naklua": "ناكلوا",
+    "w1g": "1g",
+    "w10g": "10g",
+    "w30g": "30g",
+    "w100g": "100g",
+    "w1kg": "1kg",
+    "wholesale": "جملة",
+    "delivery": "توصيل",
+    "bestShop": "أفضل متجر",
+    "whiteWidow": "White Widow"
+  },
+  "locations": {
+    "title": "القنب في باتايا — جميع الصفحات",
+    "subtitle": "تصفح حسب الحي أو الوزن أو التوصيل.",
+    "areasGroup": "المناطق",
+    "weightsGroup": "حسب الوزن",
+    "otherGroup": "أخرى"
   }
 }
