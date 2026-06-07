@@ -8,7 +8,6 @@ import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { REELS_SLIDES } from "@/data/media";
-import { t } from "@/lib/ui";
 import { HOME_FAQ } from "@/lib/content";
 
 export function getStaticPaths() {
@@ -17,11 +16,17 @@ export function getStaticPaths() {
 
 const { lang } = Astro.params;
 const locale = lang as Locale;
-const ui = t(locale);
 ---
 
-<PageLayout locale={locale} pathSuffix="" faq={HOME_FAQ} pageType="home">
-  <h1 class="sr-only">{ui.meta.title}</h1>
+<PageLayout
+  locale={locale}
+  pathSuffix=""
+  title="Labs Cannabis Pattaya | Medical cannabis inquiry"
+  description="Ask Labs Cannabis Pattaya about lawful medical cannabis eligibility, Thai documentation, and directions before visiting Soi Hollywood."
+  faq={HOME_FAQ}
+  pageType="home"
+>
+  <h1 class="sr-only">Labs Cannabis Pattaya medical cannabis inquiry</h1>
   <Reels locale={locale} slides={REELS_SLIDES} />
   <PriceLadder locale={locale} />
   <ReviewStrip locale={locale} />

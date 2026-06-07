@@ -1,57 +1,38 @@
 ---
 import type { Locale } from "@/lib/i18n";
 import { GOOGLE } from "@/data/site";
-import { pickDailyLocalizedReviews } from "@/lib/reviews";
-import { t } from "@/lib/ui";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const ui = t(locale);
-const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
-const subtitle = ui.reviews.subtitle
-  .replace("{rating}", String(GOOGLE.rating))
-  .replace("{count}", String(GOOGLE.reviewCount));
-const readAll = ui.reviews.readAll.replace("{count}", String(GOOGLE.reviewCount));
 ---
 
 <section class="py-10">
   <div class="site-main">
-    <h2 class="section-title">{ui.reviews.title}</h2>
-    <p class="section-lead">{subtitle}</p>
-    <div class="space-y-4">
-      {reviews.map((r) => (
-        <blockquote class="card-surface p-5">
-          <div class="mb-3 flex items-center gap-3">
-            <span class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald/15 text-base font-bold text-emerald-dim">
-              {r.name.charAt(0)}
-            </span>
-            <div>
-              <p class="text-base font-semibold text-text">{r.name}</p>
-              <p class="text-sm text-emerald-dim" aria-label={`${r.stars} stars`}>{"★".repeat(r.stars)}</p>
-            </div>
-          </div>
-          <p class="text-base leading-relaxed text-text-muted">{r.displayText}</p>
-          {r.isTranslation && (
-            <p class="mt-3 border-s-2 border-border ps-3 text-sm leading-snug text-text-muted/90">
-              {ui.reviews.translatedNote.replace(
-                "{lang}",
-                ui.reviews.sourceLang[r.originalLang],
-              )}
-            </p>
-          )}
-        </blockquote>
-      ))}
+    <h2 class="section-title">Verify the listing</h2>
+    <p class="section-lead">
+      Use the Google Business Profile for the latest public listing details, directions, and review
+      context before visiting.
+    </p>
+    <div class="card-surface p-5">
+      <p class="text-base font-semibold text-text">Labs Cannabis on Google Maps</p>
+      <p class="mt-2 text-base leading-relaxed text-text-muted">
+        Review counts, hours, and listing details can change. Google Maps is the source of truth for
+        public listing signals.
+      </p>
+      <a
+        href={GOOGLE.listingUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-4 inline-flex rounded-xl bg-emerald px-4 py-3 text-base font-bold text-black"
+        data-track="review_listing_click"
+        data-track-placement="review_strip"
+        data-track-detail="review_strip:google_listing"
+      >
+        Open Google listing
+      </a>
     </div>
-    <a
-      href={GOOGLE.listingUrl}
-      target="_blank"
-      rel="noopener noreferrer"
-      class="mt-5 inline-block text-base font-semibold text-emerald-dim underline underline-offset-2"
-    >
-      {readAll}
-    </a>
   </div>
 </section>

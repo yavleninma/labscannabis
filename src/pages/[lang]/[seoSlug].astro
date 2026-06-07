@@ -9,7 +9,7 @@ import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { SEO_PAGES, getAreaBySlug } from "@/data/seo-matrix";
 import { REELS_SLIDES } from "@/data/media";
-import { loadSeoContent, seoDescription } from "@/lib/content";
+import { loadSeoContent, safeSeoTitle, seoDescription } from "@/lib/content";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
@@ -26,8 +26,8 @@ const { lang, seoSlug } = Astro.params;
 const locale = lang as Locale;
 const page = SEO_PAGES.find((p) => p.slug === seoSlug)!;
 const content = loadSeoContent(locale, seoSlug);
-const title = page.titleTemplate[locale];
-const keywords = page.keywords[locale];
+const title = safeSeoTitle(page.slug, page.titleTemplate[locale]);
+const keywords: string[] = [];
 const description = seoDescription(content);
 const ui = t(locale);
 const areaName = page.area ? getAreaBySlug(page.area)?.name[locale] : undefined;
@@ -49,7 +49,6 @@ const breadcrumbs = [
   pageType={pageType}
   breadcrumbs={breadcrumbs}
   serviceAreaName={areaName}
-  includeOfferCatalog={page.intent !== "delivery"}
 >
   <article class="px-4 pt-8 pb-4">
     <div class="mx-auto max-w-lg">

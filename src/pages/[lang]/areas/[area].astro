@@ -27,7 +27,7 @@ const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
 const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
-const copy = AREA_PAGE_COPY[locale] ?? AREA_PAGE_COPY.en;
+const copy = AREA_PAGE_COPY.en;
 const ui = t(locale);
 const vars = { area: areaName, eta: details.etaMinutes };
 const title = renderCopy(copy.title, vars);
@@ -47,7 +47,6 @@ const breadcrumbs = [
   pageType="area"
   breadcrumbs={breadcrumbs}
   serviceAreaName={areaName}
-  includeOfferCatalog={false}
 >
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
@@ -78,7 +77,7 @@ const breadcrumbs = [
 
       <nav class="mt-6 grid gap-3" aria-label="Related pages">
         <a href={localePath(locale, `delivery/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.delivery} {areaName}
+          Visit guidance for {areaName}
         </a>
         <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
           {ui.footerSeo.allPages}

@@ -28,7 +28,7 @@ export function isRtl(locale: Locale): boolean {
 }
 
 export function getSiteUrl(): string {
-  return import.meta.env.PUBLIC_SITE_URL || "https://labscannabis.boutique";
+  return (import.meta.env.PUBLIC_SITE_URL || "https://labscannabis.boutique").replace(/\/+$/, "");
 }
 
 export function localePath(locale: Locale, path = ""): string {

@@ -4,8 +4,6 @@ import type { MediaSlide } from "@/data/media";
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/ui";
 import { CONTACT, getMapsSearchUrl } from "@/data/site";
-import { PRICE_LADDER } from "@/data/prices";
-import { formatPrice } from "@/lib/format";
 
 interface Props {
   locale: Locale;
@@ -15,16 +13,10 @@ interface Props {
 
 const { locale, slides, mini = false } = Astro.props;
 const ui = t(locale);
-
-function tierTotal(waSlug: string) {
-  return PRICE_LADDER.find((t) => t.waSlug === waSlug)!.total;
-}
-
-const spotTiers = [
-  { key: "1g" as const, waSlug: "1g" },
-  { key: "10g" as const, waSlug: "10g" },
-  { key: "1kg" as const, waSlug: "1kg" },
-];
+const safeSlides = slides.filter((slide) => slide.id !== "offer-joints");
+const inquiryHref = CONTACT.whatsappWithMsg(
+  "Hi Labs Cannabis, I am 20+ and in Pattaya. I would like to ask about lawful medical cannabis eligibility before visiting.",
+);
 ---
 
 <section
@@ -32,29 +24,21 @@ const spotTiers = [
   class:list={["relative w-full", mini ? "px-4 py-8" : "bg-black md:bg-zinc-950"]}
 >
   <div class:list={["relative mx-auto w-full", !mini && "md:max-w-xl"]}>
-    <ReelsIsland client:load slides={slides} mini={mini} offerSlidePromo={ui.reels.jointsOfferPromo} />
+    <ReelsIsland client:load slides={safeSlides} mini={mini} />
     {!mini && (
       <div class="pointer-events-none absolute inset-x-0 top-0 z-40 bg-gradient-to-b from-black/95 via-black/80 to-transparent px-3 pb-10 pt-3 sm:px-4 sm:pt-4">
         <p class="mb-2 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-amber-300 sm:text-[11px]">
-          {ui.reels.pricingTitle}
+          Licensed medical inquiry
         </p>
-        <div class="grid grid-cols-3 gap-1.5 sm:gap-2" role="list" aria-label={ui.prices.title}>
-          {spotTiers.map(({ key, waSlug }) => (
-            <div
-              role="listitem"
-              class="rounded-lg border border-white/15 bg-black/55 px-1.5 py-2 text-center backdrop-blur-sm sm:px-2"
-            >
-              <p class="text-[10px] font-semibold uppercase leading-tight text-white/90 sm:text-[11px]">
-                {ui.reels.weights[key]}
-              </p>
-              <p class="mt-0.5 text-sm leading-none text-amber-300 sm:text-base">
-                {formatPrice(tierTotal(waSlug), locale)}
-              </p>
+        <div class="grid grid-cols-3 gap-1.5 sm:gap-2" role="list" aria-label="Compliance checkpoints">
+          {["20+ only", "Thai docs", "No online sale"].map((item) => (
+            <div role="listitem" class="rounded-lg border border-white/15 bg-black/55 px-1.5 py-2 text-center backdrop-blur-sm sm:px-2">
+              <p class="text-[10px] font-semibold uppercase leading-tight text-white/90 sm:text-[11px]">{item}</p>
             </div>
           ))}
         </div>
         <p class="mt-2.5 text-center text-[11px] font-semibold leading-snug text-white drop-shadow-[0_1px_6px_rgba(0,0,0,0.95)] sm:text-xs">
-          {ui.reels.strainsInStock}
+          Ask eligibility and directions before visiting Soi Hollywood.
         </p>
       </div>
     )}
@@ -65,19 +49,27 @@ const spotTiers = [
             href={CONTACT.tel}
             class="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-emerald/40 bg-black/80 px-3.5 py-2.5 text-xl font-extrabold tracking-wide text-white shadow-[0_8px_28px_rgba(0,0,0,0.55)] backdrop-blur-sm transition-colors hover:border-emerald/70 hover:bg-black/90 sm:text-[1.35rem]"
             aria-label={`${ui.contact.call} ${CONTACT.phoneDisplay}`}
+            data-track="contact_call_click"
+            data-track-placement="hero"
+            data-track-detail="hero:call"
           >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4 shrink-0 text-emerald" aria-hidden="true">
               <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24c1.12.37 2.33.57 3.58.57a1 1 0 011 1V20a1 1 0 01-1 1C10.85 21 3 13.15 3 3a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.46.57 3.58a1 1 0 01-.25 1.01l-2.2 2.2z"/>
             </svg>
             {CONTACT.phoneDisplay}
           </a>
-          <p class="text-xs leading-snug text-white/90 drop-shadow-sm sm:text-sm">{ui.reels.locationBadge}</p>
+          <p class="text-xs leading-snug text-white/90 drop-shadow-sm sm:text-sm">
+            5 min walk from Walking Street. No online sale or payment through this site.
+          </p>
           <div class="flex gap-2 pt-0.5">
             <a
-              href={CONTACT.whatsapp}
+              href={inquiryHref}
               target="_blank"
               rel="noopener noreferrer"
               class="flex-1 rounded-full bg-emerald px-4 py-3 text-center text-base font-bold text-black shadow-md shadow-emerald/30"
+              data-track="contact_whatsapp_click"
+              data-track-placement="hero"
+              data-track-detail="hero:whatsapp"
             >
               {ui.reels.whatsapp}
             </a>
@@ -86,6 +78,9 @@ const spotTiers = [
               target="_blank"
               rel="noopener noreferrer"
               class="flex-1 rounded-full border border-white/50 bg-white/25 px-4 py-3 text-center text-base font-semibold text-white backdrop-blur-md"
+              data-track="map_open_click"
+              data-track-placement="hero"
+              data-track-detail="hero:maps"
             >
               {ui.reels.map}
             </a>

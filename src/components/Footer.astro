@@ -1,6 +1,5 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { HOURS } from "@/data/site";
 import { FOOTER_SEO_SECTIONS } from "@/data/footer-seo-links";
 import { t } from "@/lib/ui";
 import { localePath } from "@/lib/i18n";
@@ -15,28 +14,68 @@ const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
 const seo = ui.footerSeo;
 const fallbackSeo = t("en").footerSeo;
-const hours = ui.location.hours.replace("{open}", HOURS.open).replace("{close}", HOURS.close);
 const year = new Date().getFullYear();
+
+const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
+  const safeLabels: Partial<Record<keyof typeof fallbackSeo, string>> = {
+    buyTitle: "Inquiry",
+    w1g: "Documentation inquiry",
+    w10g: "Visit inquiry",
+    w30g: "Eligibility inquiry",
+    w100g: "Business verification",
+    w1kg: "Licensed business review",
+    wholesale: "Business inquiry",
+    delivery: "Visit guidance",
+    pattayaDelivery: "Pattaya visit guidance",
+    bestShop: "Visit information",
+    whiteWidow: "White Widow information",
+  };
+  return safeLabels[labelKey] ?? seo[labelKey] ?? fallbackSeo[labelKey] ?? labelKey;
+};
 ---
 
 <footer class="border-t border-border bg-bg-elevated py-10 pb-24">
   <div class="site-main space-y-8 text-base text-text-muted">
     <nav class="flex flex-wrap gap-4 font-medium">
       <a href={localePath(locale)} class="hover:text-emerald-dim">{ui.nav.home}</a>
-      <a href={`${localePath(locale)}#prices`} class="hover:text-emerald-dim">{ui.nav.prices}</a>
-      <a href={localePath(locale, "wholesale")} class="hover:text-emerald-dim">{ui.nav.wholesale}</a>
-      <a href={localePath(locale, "contact")} class="hover:text-emerald-dim">{ui.nav.contact}</a>
+      <a
+        href={`${localePath(locale)}#inquiry`}
+        class="hover:text-emerald-dim"
+        data-track="menu_link_click"
+        data-track-placement="footer"
+        data-track-detail="footer:inquiry"
+      >
+        Inquiry
+      </a>
+      <a
+        href={localePath(locale, "wholesale")}
+        class="hover:text-emerald-dim"
+        data-track="menu_link_click"
+        data-track-placement="footer"
+        data-track-detail="footer:wholesale"
+      >
+        {ui.nav.wholesale}
+      </a>
+      <a
+        href={localePath(locale, "contact")}
+        class="hover:text-emerald-dim"
+        data-track="menu_link_click"
+        data-track-placement="footer"
+        data-track-detail="footer:contact"
+      >
+        {ui.nav.contact}
+      </a>
     </nav>
 
     <div class="grid gap-6 sm:grid-cols-3">
       {FOOTER_SEO_SECTIONS.map((section) => (
         <div>
-          <h2 class="mb-2 text-sm font-bold uppercase tracking-wide text-text">{seo[section.titleKey]}</h2>
+          <h2 class="mb-2 text-sm font-bold uppercase tracking-wide text-text">{safeFooterLabel(section.titleKey)}</h2>
           <ul class="space-y-1.5 text-sm">
             {section.links.map((link) => (
               <li>
                 <a href={localePath(locale, link.slug)} class="hover:text-emerald-dim">
-                  {seo[link.labelKey] ?? fallbackSeo[link.labelKey] ?? link.labelKey}
+                  {safeFooterLabel(link.labelKey)}
                 </a>
               </li>
             ))}
@@ -46,17 +85,27 @@ const year = new Date().getFullYear();
     </div>
 
     <p>
-      <a href={localePath(locale, "locations")} class="font-medium text-emerald-dim hover:underline">
+      <a
+        href={localePath(locale, "locations")}
+        class="font-medium text-emerald-dim hover:underline"
+        data-track="menu_link_click"
+        data-track-placement="footer"
+        data-track-detail="footer:locations"
+      >
         {seo.allPages} →
       </a>
     </p>
 
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
       <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
-      <p class="text-sm">{hours}</p>
+      <p class="text-sm">Check Google Maps for current hours.</p>
     </div>
 
-    <p class="text-sm leading-relaxed">{ui.footer.disclaimer}</p>
+    <p class="text-sm leading-relaxed">
+      This website is for general information and compliance inquiries only. It does not advertise,
+      sell, reserve, deliver, export, or accept payment for cannabis flower or controlled herbal
+      products. Cannabis flower in Thailand is restricted to lawful medical and licensed channels.
+    </p>
     <p class="text-sm">© {year} Labs Cannabis. {ui.footer.rights}</p>
   </div>
 </footer>

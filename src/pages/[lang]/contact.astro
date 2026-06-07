@@ -14,6 +14,9 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
+const inquiryHref = CONTACT.whatsappWithMsg(
+  "Hi Labs Cannabis, I am 20+ and would like to ask about lawful medical cannabis eligibility before visiting.",
+);
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.contact.title, pathSuffix: "contact" },
@@ -24,21 +27,23 @@ const breadcrumbs = [
   locale={locale}
   pathSuffix="contact"
   title={`${ui.contact.title} | Labs Cannabis`}
-  description={ui.contact.subtitle}
+  description="Contact Labs Cannabis for lawful medical cannabis eligibility questions, documentation guidance, and directions before visiting."
   pageType="contact"
   breadcrumbs={breadcrumbs}
-  includeOfferCatalog={false}
 >
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold">{ui.contact.title}</h1>
-      <p class="mt-2 text-base text-text-muted">{ui.contact.subtitle}</p>
+      <p class="mt-2 text-base text-text-muted">
+        Ask eligibility, documentation, and directions questions before visiting. No online sale,
+        reservation, delivery, or payment is completed through this website.
+      </p>
       <p class="mt-4 text-xl font-bold text-text">{CONTACT.phoneDisplay}</p>
       <div class="mt-6 grid grid-cols-2 gap-3">
-        <a href={CONTACT.whatsapp} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black">{ui.contact.whatsapp}</a>
-        <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.telegram}</a>
-        <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.line}</a>
-        <a href={CONTACT.tel} class="card-surface py-3.5 text-center text-base font-medium">{ui.contact.call}</a>
+        <a href={inquiryHref} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black" data-track="contact_whatsapp_click" data-track-placement="contact_page" data-track-detail="contact:whatsapp">{ui.contact.whatsapp}</a>
+        <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:telegram">{ui.contact.telegram}</a>
+        <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:line">{ui.contact.line}</a>
+        <a href={CONTACT.tel} class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_call_click" data-track-placement="contact_page" data-track-detail="contact:call">{ui.contact.call}</a>
       </div>
     </div>
   </section>

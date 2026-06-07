@@ -12,6 +12,9 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
+const pageTitle = "Cannabis visit guidance in Pattaya";
+const pageDescription =
+  "Area pages for lawful medical cannabis eligibility questions, directions, and visit planning in Pattaya. No online sale, reservation, delivery, or payment is completed here.";
 
 const areaPages = SEO_PAGES.filter((p) => p.area && !p.weight);
 const weightPages = SEO_PAGES.filter((p) => p.weight);
@@ -22,7 +25,7 @@ const generatedAreaPages = AREAS.map((area) => ({
 }));
 const deliveryPages = AREAS.map((area) => ({
   href: localePath(locale, `delivery/${area.slug}`),
-  label: `${ui.footerSeo.delivery} ${area.name[locale]}`,
+  label: `Visit guidance for ${area.name[locale]}`,
 }));
 const guidePages = [
   {
@@ -35,55 +38,68 @@ const guidePages = [
   },
 ];
 
+const safeSeoLabel = (slug: string) => {
+  if (slug.includes("wholesale") || slug.includes("100g") || slug.includes("1kg")) {
+    return "Licensed business inquiry";
+  }
+  if (slug.includes("delivery")) return "Visit guidance before travelling";
+  if (slug.includes("white-widow")) return "White Widow information";
+  if (slug.includes("best")) return "Labs Cannabis visit information";
+  if (slug.includes("cheap")) return "Eligibility information";
+  if (slug.includes("1g") || slug.includes("10g") || slug.includes("30g")) {
+    return "Documentation and visit inquiry";
+  }
+  return "Cannabis information";
+};
+
 const groups = [
   {
     title: ui.locations.areasGroup,
     links: [
-      ...areaPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+      ...areaPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
       ...generatedAreaPages,
     ],
   },
   {
-    title: ui.footerSeo.delivery,
+    title: "Visit guidance",
     links: [
       ...SEO_PAGES.filter((p) => p.intent === "delivery").map((page) => ({
         href: localePath(locale, page.slug),
-        label: page.h1Template[locale],
+        label: safeSeoLabel(page.slug),
       })),
       ...deliveryPages,
     ],
   },
   {
     title: ui.locations.weightsGroup,
-    links: weightPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+    links: weightPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
   },
   {
     title: ui.locations.otherGroup,
     links: [
-      ...otherPages.map((page) => ({ href: localePath(locale, page.slug), label: page.h1Template[locale] })),
+      ...otherPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
       ...guidePages,
     ],
   },
 ].filter((g) => g.links.length > 0);
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: ui.locations.title, pathSuffix: "locations" },
+  { name: "Visit guidance", pathSuffix: "locations" },
 ];
 ---
 
 <PageLayout
   locale={locale}
   pathSuffix="locations"
-  title={`${ui.locations.title} | Labs Cannabis`}
-  description={ui.locations.subtitle}
+  title={`${pageTitle} | Labs Cannabis`}
+  description={pageDescription}
   pageType="locations"
   breadcrumbs={breadcrumbs}
-  includeOfferCatalog={false}
 >
   <section class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold leading-tight">{ui.locations.title}</h1>
-      <p class="mt-3 text-base leading-relaxed text-text-muted">{ui.locations.subtitle}</p>
+      <h1 class="text-3xl font-bold leading-tight">{pageTitle}</h1>
+      <p class="mt-3 text-base leading-relaxed text-text-muted">{pageDescription}</p>
 
       {groups.map((group) => (
         <div class="mt-8">

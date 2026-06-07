@@ -1,10 +1,8 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
-import { PRICE_LADDER } from "@/data/prices";
+import { BRAND, ADDRESS, CONTACT, GOOGLE } from "@/data/site";
 import { getSiteUrl, localePath, LOCALE_HREFLANG } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
-import { pickDailyLocalizedReviews } from "@/lib/reviews";
 
 interface FaqItem {
   q: string;
@@ -36,7 +34,6 @@ interface Props {
   breadcrumbs?: BreadcrumbItem[];
   serviceAreaName?: string;
   article?: ArticleData;
-  includeOfferCatalog?: boolean;
 }
 
 const {
@@ -49,11 +46,9 @@ const {
   breadcrumbs = [],
   serviceAreaName,
   article,
-  includeOfferCatalog,
 } = Astro.props;
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
-const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
 const businessId = `${baseUrl}/#business`;
 
 const localBusiness = {
@@ -79,55 +74,7 @@ const localBusiness = {
     latitude: ADDRESS.lat,
     longitude: ADDRESS.lng,
   },
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    opens: HOURS.open,
-    closes: HOURS.close,
-  },
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: String(GOOGLE.rating),
-    reviewCount: String(GOOGLE.reviewCount),
-    bestRating: "5",
-  },
-  priceRange: "\u0e3f",
-  currenciesAccepted: "THB",
-  paymentAccepted: "Cash, QR Bank Transfer",
-  review: reviews.map((r) => ({
-    "@type": "Review",
-    author: { "@type": "Person", name: r.name },
-    reviewRating: { "@type": "Rating", ratingValue: "5", bestRating: "5" },
-    reviewBody: r.displayText,
-    datePublished: r.date,
-  })),
 };
-
-const shouldIncludeOfferCatalog =
-  includeOfferCatalog ?? ["home", "seo", "strain", "wholesale"].includes(pageType);
-
-const offerCatalog = shouldIncludeOfferCatalog
-  ? {
-      "@context": "https://schema.org",
-      "@type": "OfferCatalog",
-      "@id": `${baseUrl}${localePath(locale)}#offer-catalog`,
-      name: `${BRAND.name} cannabis weight menu`,
-      url: `${baseUrl}${localePath(locale)}#prices`,
-      itemListElement: PRICE_LADDER.map((tier) => ({
-        "@type": "Offer",
-        name: `${tier.weight} White Widow`,
-        price: tier.total,
-        priceCurrency: "THB",
-        availability: "https://schema.org/InStock",
-        url: `${baseUrl}${localePath(locale)}#prices`,
-        itemOffered: {
-          "@type": "Product",
-          name: `White Widow Cannabis - ${tier.weight}`,
-          brand: { "@type": "Brand", name: BRAND.name },
-        },
-      })),
-    }
-  : null;
 
 const breadcrumbItems =
   breadcrumbs.length > 0
@@ -167,9 +114,9 @@ const serviceLd =
         "@id": `${pageUrl}#service`,
         name:
           pageType === "delivery"
-            ? `Cannabis pickup and delivery coordination - ${serviceAreaName ?? "Pattaya"}`
+            ? `Cannabis visit guidance - ${serviceAreaName ?? "Pattaya"}`
             : `Cannabis retail service - ${serviceAreaName ?? "Pattaya"}`,
-        serviceType: "Cannabis retail consultation and pickup coordination",
+        serviceType: "Cannabis compliance information and visit guidance",
         provider: { "@id": businessId },
         areaServed: {
           "@type": "Place",
@@ -220,7 +167,6 @@ const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
 
 const jsonBlocks = [
   localBusiness,
-  offerCatalog,
   breadcrumbLd,
   serviceLd,
   articleLd,

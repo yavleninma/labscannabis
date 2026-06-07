@@ -42,6 +42,9 @@ const ui = t(locale);
               hreflang={LOCALE_HREFLANG[lang]}
               rel="alternate"
               class="block px-3 py-2 text-sm text-text hover:bg-bg-elevated hover:text-emerald-dim"
+              data-track="language_switch_click"
+              data-track-placement="language_switcher"
+              data-track-detail={`lang:${locale}-${lang}`}
             >
               {LOCALE_NAMES[lang]}
             </a>

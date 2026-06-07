@@ -175,7 +175,7 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
       onTouchEnd={onTouchEnd}
       onClick={togglePause}
       role="region"
-      aria-label="Product reels"
+      aria-label="Labs Cannabis visual gallery"
     >
       {slides.map((slide, i) => {
         const active = i === index;

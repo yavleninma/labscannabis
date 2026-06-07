@@ -1,96 +1,60 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { PRICE_LADDER, MAX_PER_GRAM } from "@/data/prices";
-import { CONTACT, STREET_PRICE_ANCHOR } from "@/data/site";
-import { t, getWhatsAppPrefill } from "@/lib/ui";
-import { formatPrice, formatPerGram, formatSavings } from "@/lib/format";
+import { CONTACT } from "@/data/site";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const ui = t(locale);
+const inquiryText =
+  "Hi Labs Cannabis, I am 20+ and in Pattaya. I would like to ask about lawful medical cannabis eligibility and what documentation is needed before visiting.";
+const inquiryHref = CONTACT.whatsappWithMsg(inquiryText);
+
+const checkpoints = [
+  {
+    title: "Eligibility first",
+    body: "Ask what Thai medical documentation is required before travelling to the shop.",
+  },
+  {
+    title: "No online sale",
+    body: "This website does not sell, reserve, deliver, or accept payment for cannabis flower.",
+  },
+  {
+    title: "Visit planning",
+    body: "Confirm directions to Pattaya 13 Alley (Soi Hollywood) and what to bring before you arrive.",
+  },
+];
 ---
 
-<section id="prices" class="py-12">
+<section id="inquiry" class="py-12">
   <div class="site-main">
-    <h2 class="section-title">{ui.prices.title}</h2>
-    <p class="section-lead">{ui.prices.subtitle}</p>
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-dim">Compliance inquiry</p>
+    <h2 class="section-title">Ask before visiting</h2>
+    <p class="section-lead">
+      WhatsApp is for eligibility questions, documentation guidance, and directions only. No online order,
+      reservation, delivery, or payment is completed through this website.
+    </p>
 
     <div class="space-y-3">
-      {PRICE_LADDER.map((tier) => {
-        const waMsg = getWhatsAppPrefill(locale, tier.waSlug);
-        const href = CONTACT.whatsappWithMsg(waMsg);
-        const label = ui.prices.labels[tier.label as keyof typeof ui.prices.labels];
-        const isPopular = tier.highlight === "popular";
-        const isWholesale = tier.highlight === "wholesale";
-        const savings = formatSavings(tier.savingsPct, locale);
-        return (
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            class:list={[
-              "card-surface block p-5 transition-transform active:scale-[0.98]",
-              isPopular && "price-card-popular",
-              isWholesale && "price-card-wholesale",
-            ]}
-          >
-            <div class="flex items-start justify-between gap-3">
-              <div>
-                <div class="flex flex-wrap items-center gap-2">
-                  <span class="text-2xl font-bold">{tier.weight}</span>
-                  {isPopular && (
-                    <span class="rounded-full bg-emerald px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-black">
-                      {ui.prices.mostPopular}
-                    </span>
-                  )}
-                  {isWholesale && (
-                    <span class="rounded-full bg-emerald-dim px-2.5 py-0.5 text-xs font-bold uppercase tracking-wide text-white">
-                      {ui.prices.wholesale}
-                    </span>
-                  )}
-                  <span class="text-sm text-text-muted">{label}</span>
-                </div>
-                <p class="mt-1.5 text-xl font-bold text-emerald-dim">
-                  {formatPrice(tier.total, locale)} · {formatPerGram(tier.perGram, locale)}
-                </p>
-                {tier.weight === "1g" && (
-                  <p class="mt-1.5 text-sm text-text-muted">{ui.prices.streetAnchor}</p>
-                )}
-              </div>
-              {savings && (
-                <span class="shrink-0 rounded-lg bg-emerald/15 px-2.5 py-1.5 text-base font-bold text-emerald-dim">
-                  {savings}
-                </span>
-              )}
-            </div>
-            <p class="mt-2.5 text-sm font-medium text-text-muted">{ui.prices.orderVia} →</p>
-          </a>
-        );
-      })}
+      {checkpoints.map((item) => (
+        <div class="card-surface p-5">
+          <h3 class="text-lg font-bold text-text">{item.title}</h3>
+          <p class="mt-1.5 text-base leading-relaxed text-text-muted">{item.body}</p>
+        </div>
+      ))}
     </div>
 
-    <div class="mt-6">
-      <p class="text-sm leading-relaxed text-text-muted">{ui.prices.trustLine}</p>
-    </div>
-
-    <div class="mt-6">
-      <p class="mb-2 text-sm text-text-muted">฿/g by weight</p>
-      <div class="flex h-9 items-end gap-1">
-        {PRICE_LADDER.map((tier) => (
-          <div
-            class="flex-1 rounded-t bg-emerald transition-all"
-            style={`height: ${Math.max(12, (tier.perGram / MAX_PER_GRAM) * 100)}%`}
-            title={`${tier.weight}: ${tier.perGram}฿/g`}
-          />
-        ))}
-      </div>
-      <div class="mt-1 flex justify-between text-xs text-text-muted">
-        <span>1g</span>
-        <span>1kg</span>
-      </div>
-    </div>
+    <a
+      href={inquiryHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-base font-bold text-black"
+      data-track="contact_whatsapp_click"
+      data-track-placement="inquiry_panel"
+      data-track-detail="inquiry_panel:whatsapp"
+    >
+      Request eligibility guidance
+    </a>
   </div>
 </section>

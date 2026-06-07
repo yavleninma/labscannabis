@@ -1,0 +1,94 @@
+---
+---
+
+<script>
+  (() => {
+    const storageKey = "labs_attribution";
+    const params = new URLSearchParams(window.location.search);
+
+    const getExternalReferrerHost = () => {
+      if (!document.referrer) return "";
+      try {
+        const ref = new URL(document.referrer);
+        return ref.hostname === window.location.hostname ? "" : ref.hostname;
+      } catch {
+        return "";
+      }
+    };
+
+    const readStored = () => {
+      try {
+        return JSON.parse(sessionStorage.getItem(storageKey) || "{}");
+      } catch {
+        return {};
+      }
+    };
+
+    const captured = {
+      source: params.get("utm_source") || params.get("source") || "",
+      medium: params.get("utm_medium") || "",
+      campaign: params.get("utm_campaign") || "",
+      referrer_host: getExternalReferrerHost(),
+      landing_path: `${window.location.pathname}${window.location.search}`,
+      captured_at: new Date().toISOString(),
+    };
+
+    const stored = readStored();
+    const attribution =
+      captured.source || captured.referrer_host
+        ? { ...stored, ...captured }
+        : stored.source || stored.referrer_host
+          ? stored
+          : { ...captured, source: "direct" };
+
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify(attribution));
+    } catch {
+      /* storage can be unavailable in private contexts */
+    }
+
+    const sourceKey = attribution.source
+      ? `${attribution.source}${attribution.campaign ? `/${attribution.campaign}` : ""}`
+      : attribution.referrer_host || "direct";
+
+    const appendWhatsAppSource = (href, placement) => {
+      if (!href.includes("wa.me/")) return href;
+      try {
+        const url = new URL(href);
+        const existing = url.searchParams.get("text") || "Hi Labs Cannabis, I am 20+ and would like to ask about lawful medical cannabis eligibility before visiting.";
+        const tag = `[source: ${sourceKey}; page: ${window.location.pathname}; cta: ${placement}]`;
+        if (!existing.includes("[source:")) {
+          url.searchParams.set("text", `${existing}\n\n${tag}`);
+        }
+        return url.toString();
+      } catch {
+        return href;
+      }
+    };
+
+    document.querySelectorAll("a[href]").forEach((link) => {
+      const href = link.getAttribute("href") || "";
+      const placement = link.dataset.trackPlacement || link.dataset.track || "link";
+      if (href.includes("wa.me/")) {
+        link.setAttribute("href", appendWhatsAppSource(href, placement));
+      }
+    });
+
+    document.addEventListener("click", (event) => {
+      const link = event.target instanceof Element ? event.target.closest("a[data-track]") : null;
+      if (!(link instanceof HTMLAnchorElement)) return;
+
+      const name = link.dataset.track || "link_click";
+      const detail = link.dataset.trackDetail || link.dataset.trackPlacement || link.textContent?.trim() || "link";
+      const payload = {
+        source_key: sourceKey.slice(0, 255),
+        detail: `${window.location.pathname}:${detail}`.slice(0, 255),
+      };
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: name, ...payload });
+      window.gtag?.("event", name, payload);
+      window.va?.("event", name, payload);
+    });
+  })();
+</script>

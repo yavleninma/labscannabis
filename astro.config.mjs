@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
 
-const site = process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique";
+const site = (process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique").replace(/\/+$/, "");
 
 export default defineConfig({
   site,

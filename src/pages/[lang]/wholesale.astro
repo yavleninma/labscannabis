@@ -16,24 +16,42 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
+const wholesaleHref = CONTACT.whatsappWithMsg(
+  "Hi Labs Cannabis, I would like to ask about a licensed business compliance review. No product, quantity, delivery, or payment request is being made through the website.",
+);
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: ui.wholesale.title, pathSuffix: "wholesale" },
+  { name: "Business inquiry", pathSuffix: "wholesale" },
 ];
 ---
 
 <PageLayout
   locale={locale}
   pathSuffix="wholesale"
-  title={`${ui.wholesale.title} | Labs Cannabis`}
-  description={ui.wholesale.subtitle}
+  title="Licensed cannabis business inquiry | Labs Cannabis"
+  description="Business inquiries are reviewed only after licence, lawful-use, and documentation verification. No public quantity, price, shipment, or payment is confirmed online."
   pageType="wholesale"
   breadcrumbs={breadcrumbs}
 >
   <section class="px-4 pt-8">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold">{ui.wholesale.title}</h1>
-      <p class="mt-3 text-base leading-relaxed text-text-muted">{ui.wholesale.subtitle}</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">Licensed counterparties only</p>
+      <h1 class="mt-1 text-3xl font-bold">Cannabis business inquiry in Pattaya</h1>
+      <p class="mt-3 text-base leading-relaxed text-text-muted">
+        This page is for compliance-first business questions only. No public menu, quantity,
+        price, shipment, reservation, delivery, or payment is confirmed through this website.
+      </p>
+      <a
+        href={wholesaleHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-base font-bold text-black"
+        data-track="contact_whatsapp_click"
+        data-track-placement="labs_wholesale"
+        data-track-detail="labs_wholesale:whatsapp"
+      >
+        Request business compliance review
+      </a>
     </div>
   </section>
   <PriceLadder locale={locale} />

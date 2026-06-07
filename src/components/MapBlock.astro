@@ -31,6 +31,9 @@ const ui = t(locale);
         target="_blank"
         rel="noopener noreferrer"
         class="flex items-center justify-center gap-1.5 border-t border-border bg-bg-elevated px-4 py-3.5 text-base font-semibold text-emerald-dim transition-colors hover:bg-emerald/10"
+        data-track="map_open_click"
+        data-track-placement="map_block"
+        data-track-detail="map_block:google_maps"
       >
         {ui.location.openMaps}
         <span aria-hidden="true">→</span>

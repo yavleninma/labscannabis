@@ -8,6 +8,7 @@ import AgeGate from "@/components/AgeGate.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
 import JsonLd from "@/components/JsonLd.astro";
+import TrackingScript from "@/components/TrackingScript.astro";
 
 interface Props {
   locale: Locale;
@@ -25,7 +26,6 @@ interface Props {
     dateModified?: string;
     author?: string;
   };
-  includeOfferCatalog?: boolean;
 }
 
 const {
@@ -39,7 +39,6 @@ const {
   breadcrumbs = [],
   serviceAreaName,
   article,
-  includeOfferCatalog,
 } = Astro.props;
 const ui = t(locale);
 const pageTitle = title ?? ui.meta.title;
@@ -100,7 +99,7 @@ const siteUrl = getSiteUrl();
       breadcrumbs={breadcrumbs}
       serviceAreaName={serviceAreaName}
       article={article}
-      includeOfferCatalog={includeOfferCatalog}
     />
+    <TrackingScript />
   </body>
 </html>

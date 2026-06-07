@@ -53,16 +53,16 @@ export const AREA_PAGE_COPY: Record<
   en: {
     title: "Cannabis near {area} | Labs Cannabis Pattaya",
     description:
-      "Premium cannabis near {area}. White Widow, 1g-1kg tiers, walk-in shop on Soi Hollywood and WhatsApp ordering.",
+      "Cannabis information near {area}. Ask Labs Cannabis about lawful medical eligibility, Thai documentation, and directions before visiting Soi Hollywood.",
     h1: "Cannabis near {area}",
     intro:
-      "Labs Cannabis on Soi Hollywood serves guests from {area} and across Pattaya with fresh indoor flower, clear weight tiers, and fast WhatsApp replies.",
+      "Labs Cannabis on Soi Hollywood answers adult visitor questions from {area} and across Pattaya about lawful medical access, Thai documentation, and directions.",
     whyTitle: "Why this area page matters",
     whyBody:
       "{area} visitors usually need a shop they can verify quickly: real Google reviews, a clear address, and direct WhatsApp contact before travelling.",
     visitTitle: "Walk in or ask first",
     visitBody:
-      "The shop is at 32 Pattaya 13 Alley (Soi Hollywood), close to Walking Street. Ask on WhatsApp for current stock, required Thai medical documentation, and pickup timing.",
+      "The shop is at 32 Pattaya 13 Alley (Soi Hollywood), close to Walking Street. Ask on WhatsApp what Thai medical documentation is required before visiting.",
     landmarksTitle: "Nearby landmarks",
   },
   ru: {
@@ -183,11 +183,11 @@ export const DELIVERY_PAGE_COPY: Record<
       "Message Labs Cannabis on WhatsApp before travelling from {area}. We can answer stock questions, explain compliant purchase requirements, and help plan a shop visit.",
     cta: "Ask before visiting",
     maps: "Open Maps",
-    statusTitle: "Before you order",
+    statusTitle: "Before you visit",
     eta: "Typical reply and visit coordination: about {eta} min",
     payment: "Cannabis flower sales are not completed online",
     discreet: "Valid Thai prescription or required medical documentation must be confirmed",
-    faqTitle: "Delivery FAQ",
+    faqTitle: "Visit guidance FAQ",
     faq: [
       {
         q: "Can I ask from {area} before visiting?",

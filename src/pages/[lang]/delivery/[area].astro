@@ -27,8 +27,8 @@ const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
 const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
-const copy = DELIVERY_PAGE_COPY[locale] ?? DELIVERY_PAGE_COPY.en;
-const compliance = DELIVERY_COMPLIANCE_NOTE[locale] ?? DELIVERY_COMPLIANCE_NOTE.en;
+const copy = DELIVERY_PAGE_COPY.en;
+const compliance = DELIVERY_COMPLIANCE_NOTE.en;
 const ui = t(locale);
 const vars = { area: areaName, eta: details.etaMinutes };
 const title = renderCopy(copy.title, vars);
@@ -41,7 +41,7 @@ const faq = copy.faq.map((item) => ({
 }));
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: ui.footerSeo.delivery, pathSuffix: "locations" },
+  { name: "Visit guidance", pathSuffix: "locations" },
   { name: areaName, pathSuffix: `delivery/${area.slug}` },
 ];
 const whatsappUrl = CONTACT.whatsappWithMsg(h1);
@@ -56,11 +56,10 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
   pageType="delivery"
   breadcrumbs={breadcrumbs}
   serviceAreaName={areaName}
-  includeOfferCatalog={false}
 >
   <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{ui.footerSeo.delivery}</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">Visit guidance</p>
       <h1 class="mt-1 text-3xl font-bold leading-tight">{h1}</h1>
       <p class="mt-4 text-base leading-relaxed text-text-muted">{intro}</p>
 
@@ -83,6 +82,9 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
           target="_blank"
           rel="noopener noreferrer"
           class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
+          data-track="contact_whatsapp_click"
+          data-track-placement="delivery_area"
+          data-track-detail={`delivery:${area.slug}:whatsapp`}
         >
           {copy.cta}
         </a>
@@ -91,6 +93,9 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
           target="_blank"
           rel="noopener noreferrer"
           class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          data-track="map_open_click"
+          data-track-placement="delivery_area"
+          data-track-detail={`delivery:${area.slug}:maps`}
         >
           {copy.maps}
         </a>
@@ -128,7 +133,7 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
 
       <nav class="mt-8 grid gap-3" aria-label="Related pages">
         <a href={localePath(locale, `areas/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          Cannabis near {areaName}
+          Visit guidance near {areaName}
         </a>
         <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
           {ui.footerSeo.allPages}

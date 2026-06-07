@@ -1,22 +1,24 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { t } from "@/lib/ui";
 
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const ui = t(locale);
 ---
 
 <section class="py-8">
   <div class="site-main">
     <div class="card-surface p-5">
       <span class="mb-2 inline-block rounded-full border border-border bg-bg-elevated px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
-        {ui.medical.badge}
+        20+ only
       </span>
-      <p class="text-base leading-relaxed text-text-muted">{ui.medical.text}</p>
+      <p class="text-base leading-relaxed text-text-muted">
+        Cannabis flower in Thailand is restricted to lawful medical and licensed channels. This
+        website does not provide medical advice, prescriptions, online ordering, delivery, or
+        payment processing.
+      </p>
     </div>
   </div>
 </section>
