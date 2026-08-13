@@ -20,3 +20,15 @@ export function getWhatsAppPrefill(locale: Locale, waSlug: string): string {
   const key = waSlug as keyof typeof strings.whatsappPrefill;
   return strings.whatsappPrefill[key] ?? strings.whatsappPrefill["10g"];
 }
+
+export {
+  DEFAULT_WHATSAPP_TRACKING_SOURCE,
+  WHATSAPP_TRACKING_SOURCES,
+  whatsappLinkProps,
+  whatsappTrackingAttrs,
+} from "@/lib/whatsapp";
+export type {
+  WhatsAppTrackingAttrs,
+  WhatsAppTrackingOptions,
+  WhatsAppTrackingSource,
+} from "@/lib/whatsapp";

@@ -7,13 +7,13 @@ export interface MediaSlide {
   alt?: string;
 }
 
-/** Offer → hero photo → vid-1 → astronaut → vid-2 → rest of gallery */
+/** Offer -> hero photo -> vid-1 -> astronaut -> vid-2 -> rest of gallery */
 export const REELS_SLIDES: MediaSlide[] = [
   {
     id: "offer-joints",
     type: "image",
     src: "/images/special-offer-joints.jpg",
-    alt: "Three pre-rolls special offer — Labs Cannabis Pattaya",
+    alt: "Three pre-rolls special offer - Labs Cannabis Pattaya",
   },
   {
     id: "img-1",
@@ -84,3 +84,30 @@ export const REELS_SLIDES: MediaSlide[] = [
     alt: "Fresh harvest",
   },
 ];
+
+export const HOME_MEDIA = {
+  hero: {
+    id: "home-hero-flower",
+    type: "image",
+    src: "/media/IMG_20260517_175646.jpg",
+    alt: "Fresh cannabis flower close-up at Labs Cannabis Pattaya",
+  },
+  freshness: {
+    id: "home-freshness-bulk",
+    type: "image",
+    src: "/media/IMG_0465.jpg",
+    alt: "Fresh indoor cannabis flower packed for the shop menu",
+  },
+  counter: {
+    id: "home-counter-flower",
+    type: "image",
+    src: "/media/IMG_20260517_175314.jpg",
+    alt: "Cannabis flower on the Labs Cannabis shop counter",
+  },
+  detail: {
+    id: "home-flower-detail",
+    type: "image",
+    src: "/media/IMG_20260517_173421.jpg",
+    alt: "Premium flower detail at Labs Cannabis Pattaya",
+  },
+} satisfies Record<string, MediaSlide>;

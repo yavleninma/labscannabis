@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "原 Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1克", "10g": "10克", "1kg": "1公斤" },
+    "weights": {
+      "1g": "1克",
+      "10g": "10克",
+      "1kg": "1公斤"
+    },
     "pricingTitle": "花价",
     "strainsInStock": "White Widow 及其他品种现货",
     "jointsOfferPromo": "优惠：3支卷 200泰铢",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "泰国大麻花受管制，20岁以上购买需有效泰国处方或所需医疗文件。购买前请先咨询我们。"
+    "text": "本网站没有 public checkout、在线付款、order form 或确认的配送/销售。个人细节请在 WhatsApp 沟通。"
   },
   "footer": {
     "disclaimer": "Labs Cannabis（原Labs Dispensary）芭提雅持证零售商 仅限20+",
     "rights": "版权所有"
   },
   "ageGate": {
+    "kicker": "仅限20岁以上成人",
     "title": "您是否已满20岁？",
-    "text": "仅限成人。泰国大麻花受管制，需要有效泰国医疗文件。",
+    "text": "本网站仅限20岁以上成人。仅当你已满20岁，并希望查看芭提雅大麻菜单信息或泰国批发咨询时继续。",
+    "note": "本网站没有 public checkout、在线付款、order form 或确认的配送/销售。个人细节请在 WhatsApp 沟通。",
     "enter": "是，已满20",
     "exit": "离开"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "区域",
-    "buyTitle": "按重量",
+    "buyTitle": "店铺",
     "moreTitle": "更多",
     "allPages": "所有页面",
     "pattaya": "芭提雅",
     "jomtien": "乔木提恩",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "那库阿",
+    "pratumnak": "Pratumnak",
+    "nearMe": "附近大麻",
+    "howToBuy": "如何购买",
     "w1g": "1克",
     "w10g": "10克",
     "w30g": "30克",
@@ -126,8 +136,11 @@
     "w1kg": "1公斤",
     "wholesale": "批发",
     "delivery": "配送",
+    "pattayaDelivery": "芭提雅配送",
     "bestShop": "最佳店",
-    "whiteWidow": "White Widow"
+    "whiteWidow": "White Widow",
+    "strainPage": "White Widow 品种",
+    "legalGuide": "游客法律指南"
   },
   "locations": {
     "title": "芭提雅大麻 — 所有页面",

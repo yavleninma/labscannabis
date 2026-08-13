@@ -151,6 +151,10 @@ for (const entry of entries) {
     fail(`${pageLabel}: expected exactly one H1, found ${h1Count}`);
   }
 
+  if (/body:not\(\[data-age-ok=["']?true["']?\]\)\s*>\s*:not\(#age-gate\)[\s\S]{0,120}display:\s*none/i.test(html)) {
+    fail(`${pageLabel}: age gate hides main content from crawlers with display:none`);
+  }
+
   const jsonLdScripts = [...html.matchAll(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
   if (jsonLdScripts.length === 0) {
     fail(`${pageLabel}: no JSON-LD found`);

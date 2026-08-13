@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "سابقاً Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1 غ", "10g": "10 غ", "1kg": "1 كغ" },
+    "weights": {
+      "1g": "1 غ",
+      "10g": "10 غ",
+      "1kg": "1 كغ"
+    },
     "pricingTitle": "أسعار الزهور",
     "strainsInStock": "White Widow وسلالات أخرى متوفرة",
     "jointsOfferPromo": "عرض: 3 سجائر بـ 200 بات",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "زهور القنب في تايلاند تتطلب وصفة تايلاندية صالحة أو وثائق طبية مطلوبة لمن هم 20+. اسألنا قبل الشراء."
+    "text": "لا يوجد public checkout أو دفع إلكتروني أو order form أو توصيل/بيع مؤكد على هذا الموقع. التفاصيل الفردية تتم عبر WhatsApp."
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). باتايا، تايلاند. 20+ فقط",
+    "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). متجر قنب مرخص في باتايا، تايلاند. للبالغين 20+ فقط.",
     "rights": "جميع الحقوق محفوظة"
   },
   "ageGate": {
+    "kicker": "للبالغين 20+ فقط",
     "title": "هل عمرك 20+؟",
-    "text": "للبالغين فقط. زهور القنب في تايلاند خاضعة للرقابة وتتطلب وثائق طبية تايلاندية صالحة.",
+    "text": "هذا الموقع للبالغين 20+ فقط. تابع فقط إذا كان عمرك 20 عاماً أو أكثر وتريد عرض معلومات قائمة القنب في باتايا أو استفسارات الجملة في تايلاند.",
+    "note": "لا يوجد public checkout أو دفع إلكتروني أو order form أو توصيل/بيع مؤكد على هذا الموقع. التفاصيل الفردية تتم عبر WhatsApp.",
     "enter": "نعم، 20+",
     "exit": "مغادرة"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "المناطق",
-    "buyTitle": "حسب الوزن",
+    "buyTitle": "المتجر",
     "moreTitle": "المزيد",
     "allPages": "جميع الصفحات",
     "pattaya": "باتايا",
     "jomtien": "جومتين",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "ناكلوا",
+    "pratumnak": "Pratumnak",
+    "nearMe": "قنب قريب",
+    "howToBuy": "كيفية الشراء",
     "w1g": "1g",
     "w10g": "10g",
     "w30g": "30g",
@@ -126,8 +136,11 @@
     "w1kg": "1kg",
     "wholesale": "جملة",
     "delivery": "توصيل",
+    "pattayaDelivery": "توصيل باتايا",
     "bestShop": "أفضل متجر",
-    "whiteWidow": "White Widow"
+    "whiteWidow": "White Widow",
+    "strainPage": "سلالة White Widow",
+    "legalGuide": "الدليل القانوني للسياح"
   },
   "locations": {
     "title": "القنب في باتايا — جميع الصفحات",

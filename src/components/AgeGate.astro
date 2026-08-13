@@ -10,36 +10,114 @@ const { locale } = Astro.props;
 const ui = t(locale);
 ---
 
-<div id="age-gate" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/75 p-6 backdrop-blur-sm" role="dialog" aria-modal="true">
-  <div class="card-surface max-w-sm p-8 text-center">
-    <h2 class="mb-3 text-2xl font-bold">{ui.ageGate.title}</h2>
-    <p class="mb-6 text-base leading-relaxed text-text-muted">{ui.ageGate.text}</p>
+<script is:inline>
+  (() => {
+    const KEY = "lc_age_ok_20";
+    const body = document.body;
+    if (!body) return;
+
+    const crawler =
+      /googlebot|bingbot|yandex|duckduckbot|slurp|baiduspider|applebot|facebookexternalhit|twitterbot|linkedinbot|embedly|pinterest|redditbot|slackbot|telegrambot|whatsapp|preview|crawler|spider|bot\b/i.test(
+        navigator.userAgent,
+      );
+
+    try {
+      if (crawler || localStorage.getItem(KEY) === "1") {
+        body.setAttribute("data-age-ok", "true");
+        return;
+      }
+    } catch {
+      /* localStorage can be blocked; keep the gate for humans. */
+    }
+
+    body.setAttribute("data-age-ok", "false");
+  })();
+</script>
+
+<div
+  id="age-gate"
+  class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-5 text-text backdrop-blur-md"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="age-gate-title"
+  aria-describedby="age-gate-copy"
+>
+  <div class="w-full max-w-sm rounded-lg border border-emerald/30 bg-bg-card p-6 text-center shadow-2xl shadow-black/30 sm:p-8">
+    <p class="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-emerald-dim">{ui.ageGate.kicker}</p>
+    <h2 id="age-gate-title" class="mb-3 text-2xl font-bold">{ui.ageGate.title}</h2>
+    <p id="age-gate-copy" class="mb-4 text-base leading-relaxed text-text-muted">{ui.ageGate.text}</p>
+    <p class="mb-6 text-sm leading-relaxed text-text-muted">{ui.ageGate.note}</p>
     <div class="flex flex-col gap-3">
       <button
         type="button"
         id="age-enter"
-        class="rounded-full bg-emerald px-6 py-3.5 text-base font-bold text-black"
+        class="rounded-lg bg-emerald px-6 py-3.5 text-base font-bold text-black transition-colors hover:bg-emerald/90 focus:outline-none focus:ring-2 focus:ring-emerald focus:ring-offset-2 focus:ring-offset-bg-card"
       >
         {ui.ageGate.enter}
       </button>
-      <a href="https://www.google.com" class="text-base text-text-muted underline">
+      <a href="https://www.google.com" class="text-base text-text-muted underline underline-offset-4">
         {ui.ageGate.exit}
       </a>
     </div>
   </div>
 </div>
 
-<script>
-  const KEY = "lc_age_ok";
-  const gate = document.getElementById("age-gate");
-  const enter = document.getElementById("age-enter");
-  if (gate && !localStorage.getItem(KEY)) {
-    gate.classList.remove("hidden");
-    gate.classList.add("flex");
+<style is:global>
+  body:not([data-age-ok="true"]) {
+    overflow: hidden;
   }
-  enter?.addEventListener("click", () => {
-    localStorage.setItem(KEY, "1");
-    gate?.classList.add("hidden");
-    gate?.classList.remove("flex");
-  });
+
+  body[data-age-ok="true"] #age-gate {
+    display: none !important;
+  }
+</style>
+
+<script is:inline>
+  (() => {
+    const KEY = "lc_age_ok_20";
+    const gate = document.getElementById("age-gate");
+    const enter = document.getElementById("age-enter");
+
+    const setSiblingsInert = (locked) => {
+      for (const child of Array.from(document.body.children)) {
+        if (!(child instanceof HTMLElement) || child.id === "age-gate") continue;
+        if (locked) {
+          child.setAttribute("inert", "");
+          child.setAttribute("aria-hidden", "true");
+        } else {
+          child.removeAttribute("inert");
+          child.removeAttribute("aria-hidden");
+        }
+      }
+    };
+
+    const lock = () => {
+      document.body.setAttribute("data-age-ok", "false");
+      gate?.setAttribute("aria-hidden", "false");
+      setSiblingsInert(true);
+    };
+
+    const unlock = () => {
+      try {
+        localStorage.setItem(KEY, "1");
+      } catch {
+        /* Continue the session even if localStorage is unavailable. */
+      }
+      document.body.setAttribute("data-age-ok", "true");
+      gate?.setAttribute("aria-hidden", "true");
+      setSiblingsInert(false);
+    };
+
+    if (document.body.getAttribute("data-age-ok") === "true") {
+      unlock();
+    } else {
+      lock();
+      window.addEventListener("DOMContentLoaded", () => setSiblingsInert(true), { once: true });
+    }
+
+    enter?.addEventListener("click", unlock);
+    gate?.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") event.preventDefault();
+    });
+  })();
 </script>

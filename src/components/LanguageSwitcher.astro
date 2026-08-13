@@ -11,7 +11,7 @@ const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
 ---
 
-<div class="relative">
+<div class="relative z-[90]">
   <details class="group/lang">
     <summary
       class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg border border-border bg-bg-card px-3 py-2 text-sm font-medium text-text hover:border-emerald/40 [&::-webkit-details-marker]:hidden"
@@ -27,7 +27,7 @@ const ui = t(locale);
       </svg>
     </summary>
     <ul
-      class="absolute end-0 top-full z-50 mt-1 min-w-[11rem] rounded-xl border border-border bg-bg-card py-1 shadow-lg shadow-black/10"
+      class="absolute end-0 top-full z-[120] mt-1 max-h-[min(70svh,28rem)] min-w-[11rem] overflow-y-auto rounded-lg border border-border bg-bg-card py-1 shadow-xl shadow-black/15"
       role="list"
     >
       {LOCALES.map((lang) => (

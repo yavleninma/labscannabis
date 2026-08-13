@@ -5,6 +5,9 @@ export interface Strain {
   thcPercent: number | null;
   shortDescription: Record<string, string>;
   isFlagship?: boolean;
+  effects: string[];
+  mood: string;
+  useCase: string;
 }
 
 export const WHITE_WIDOW: Strain = {
@@ -13,6 +16,9 @@ export const WHITE_WIDOW: Strain = {
   type: "hybrid",
   thcPercent: 22,
   isFlagship: true,
+  effects: ["Uplifting", "Relaxing", "Balanced"],
+  mood: "Clear lift with an easy comedown",
+  useCase: "Good first ask when you want one fresh indoor flower to compare against the rest of the menu.",
   shortDescription: {
     en: "Classic balanced hybrid with frosty white trichomes. Uplifting yet relaxing — our main indoor flower, always fresh.",
     ru: "Классический сбалансированный гибрид с белоснежными трихомами. Бодрит и расслабляет — наш основной indoor, всегда свежий.",
@@ -30,6 +36,9 @@ export const SECONDARY_STRAINS: Strain[] = [
     name: "Blue Dream",
     type: "hybrid",
     thcPercent: 21,
+    effects: ["Balanced"],
+    mood: "Smooth and easygoing",
+    useCase: "Ask when you want a balanced hybrid profile with a sweet berry aroma.",
     shortDescription: {
       en: "Balanced hybrid with sweet berry aroma.",
       ru: "Сбалансированный гибрид со сладким ягодным ароматом.",
@@ -45,6 +54,9 @@ export const SECONDARY_STRAINS: Strain[] = [
     name: "OG Kush",
     type: "hybrid",
     thcPercent: 22,
+    effects: ["Mellow euphoria"],
+    mood: "Earthy, piney, classic",
+    useCase: "Ask when you want a classic Kush-style profile with a calmer finish.",
     shortDescription: {
       en: "Classic earthy pine punch with mellow euphoria.",
       ru: "Классика: землистый сосновый вкус и мягкая эйфория.",
@@ -60,6 +72,9 @@ export const SECONDARY_STRAINS: Strain[] = [
     name: "Northern Lights",
     type: "indica",
     thcPercent: 18,
+    effects: ["Deep relaxation"],
+    mood: "Slow, quiet, body-led",
+    useCase: "Ask when you want the most relaxed indica direction on the current menu.",
     shortDescription: {
       en: "Pure indica legend for deep relaxation.",
       ru: "Легендарная чистая индика для глубокого релакса.",
@@ -75,6 +90,9 @@ export const SECONDARY_STRAINS: Strain[] = [
     name: "Green Crack",
     type: "sativa",
     thcPercent: 24,
+    effects: ["Sharp focus", "Energy"],
+    mood: "Bright and alert",
+    useCase: "Ask when you want a sativa direction for focus without the anxious edge.",
     shortDescription: {
       en: "Sharp focus and energy without anxiety.",
       ru: "Острая концентрация и энергия без тревоги.",
@@ -90,6 +108,9 @@ export const SECONDARY_STRAINS: Strain[] = [
     name: "Jack Herer",
     type: "sativa",
     thcPercent: 23,
+    effects: ["Clear-headed creativity"],
+    mood: "Crisp and creative",
+    useCase: "Ask when you want a sativa direction for clear thinking and creative momentum.",
     shortDescription: {
       en: "Award-winning sativa for clear-headed creativity.",
       ru: "Награждённая сатива для ясной креативности.",

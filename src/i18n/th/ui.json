@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "เดิม Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1 กรัม", "10g": "10 กรัม", "1kg": "1 กก." },
+    "weights": {
+      "1g": "1 กรัม",
+      "10g": "10 กรัม",
+      "1kg": "1 กก."
+    },
     "pricingTitle": "ราคาดอก",
     "strainsInStock": "White Widow และสายพันธุ์อื่น ๆ มีพร้อมส่ง",
     "jointsOfferPromo": "โปรโมชัน: มวน 3 มวน 200 บาท",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "ดอกกัญชาในไทยต้องมีใบสั่งยาหรือเอกสารทางการแพทย์ที่ถูกต้องสำหรับอายุ 20+ กรุณาถามเราก่อนซื้อ"
+    "text": "เว็บไซต์นี้ไม่มี public checkout การชำระเงินออนไลน์ order form หรือการยืนยัน delivery/sale รายละเอียดรายบุคคลคุยใน WhatsApp"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (เดิม Labs Dispensary) ร้านกัญชาลиценз พัทยา 20+ เท่านั้น",
+    "disclaimer": "Labs Cannabis (เดิม Labs Dispensary) ร้านกัญชาที่ได้รับอนุญาตในพัทยา สำหรับผู้ใหญ่ 20+ เท่านั้น",
     "rights": "สงวนลิขสิทธิ์"
   },
   "ageGate": {
+    "kicker": "สำหรับผู้ใหญ่ 20+ เท่านั้น",
     "title": "คุณอายุ 20 ปีขึ้นไหม?",
-    "text": "เว็บนี้สำหรับผู้ใหญ่ ดอกกัญชาในไทยถูกควบคุมและต้องมีเอกสารทางการแพทย์ที่ถูกต้อง",
+    "text": "เว็บไซต์สำหรับผู้ใหญ่ 20+ เท่านั้น กดต่อเมื่อคุณอายุอย่างน้อย 20 ปี และต้องการดูข้อมูลเมนูกัญชาในพัทยาหรือสอบถาม wholesale ในประเทศไทย",
+    "note": "เว็บไซต์นี้ไม่มี public checkout การชำระเงินออนไลน์ order form หรือการยืนยัน delivery/sale รายละเอียดรายบุคคลคุยใน WhatsApp",
     "enter": "ใช่ 20+",
     "exit": "ออก"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "พื้นที่",
-    "buyTitle": "ตามน้ำหนัก",
+    "buyTitle": "ร้าน",
     "moreTitle": "อื่นๆ",
     "allPages": "หน้าทั้งหมด",
     "pattaya": "พัทยา",
     "jomtien": "จอมเทียน",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "นาเกลือ",
+    "pratumnak": "พระตำหนัก",
+    "nearMe": "กัญชาใกล้ฉัน",
+    "howToBuy": "วิธีซื้อ",
     "w1g": "1g",
     "w10g": "10g",
     "w30g": "30g",
@@ -126,8 +136,11 @@
     "w1kg": "1kg",
     "wholesale": "ขายส่ง",
     "delivery": "จัดส่ง",
+    "pattayaDelivery": "จัดส่งในพัทยา",
     "bestShop": "ร้านดีที่สุด",
-    "whiteWidow": "White Widow"
+    "whiteWidow": "White Widow",
+    "strainPage": "สายพันธุ์ White Widow",
+    "legalGuide": "คู่มือกฎหมายสำหรับนักท่องเที่ยว"
   },
   "locations": {
     "title": "กัญชาในพัทยา — หน้าทั้งหมด",

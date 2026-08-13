@@ -14,9 +14,59 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
-const inquiryHref = CONTACT.whatsappWithMsg(
-  "Hi Labs Cannabis, I am 20+ and would like to ask about lawful medical cannabis eligibility before visiting.",
-);
+const copy: Record<Locale, { description: string; lead: string; prefill: string }> = {
+  en: {
+    description: "Contact Labs Cannabis for today's Pattaya cannabis menu, effects, freshness, directions, pickup, and delivery possibility.",
+    lead:
+      "Ask today's menu, effects, freshness, directions, pickup timing, or whether delivery possibility can be discussed for your area. No public checkout, payment, or order form is used.",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+  ru: {
+    description: "Связь с Labs Cannabis: сегодняшнее меню каннабиса в Паттайе, эффекты, свежесть, маршрут, самовывоз и возможность доставки.",
+    lead:
+      "Спросите сегодняшнее меню, эффекты, свежесть, маршрут, время самовывоза или возможность доставки для вашего района. На сайте нет публичного checkout, оплаты или order form.",
+    prefill:
+      "Привет, Labs Cannabis. Мне 20+, я в Паттайе. Пришлите сегодняшнее меню каннабиса, эффекты, свежесть, маршрут и варианты самовывоза/доставки.",
+  },
+  th: {
+    description: "ติดต่อ Labs Cannabis เพื่อถามเมนูกัญชาวันนี้ เอฟเฟกต์ ความสด เส้นทาง pickup และ delivery possibility ในพัทยา",
+    lead:
+      "ถามเมนูวันนี้ เอฟเฟกต์ ความสด เส้นทาง เวลา pickup หรือความเป็นไปได้ของ delivery สำหรับพื้นที่คุณ เว็บไซต์ไม่มี public checkout การชำระเงิน หรือ order form",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+  ar: {
+    description: "تواصل مع Labs Cannabis لقائمة قنب باتايا اليوم والتأثيرات والطزاجة والاتجاهات والاستلام وإمكانية التوصيل.",
+    lead:
+      "اسأل عن قائمة اليوم والتأثيرات والطزاجة والاتجاهات ووقت الاستلام أو إمكانية التوصيل لمنطقتك. لا يوجد public checkout أو دفع أو order form.",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+  zh: {
+    description: "联系 Labs Cannabis 查询芭提雅今日大麻菜单、效果、新鲜度、路线、取货和配送可能性。",
+    lead:
+      "询问今日菜单、效果、新鲜度、路线、取货时间，或你的区域是否可讨论配送。网站没有 public checkout、付款或 order form。",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+  ko: {
+    description: "Labs Cannabis에 파타야 오늘 대마 메뉴, 효과, 신선도, 길 안내, 픽업, 배송 가능성을 문의하세요.",
+    lead:
+      "오늘 메뉴, 효과, 신선도, 길 안내, 픽업 시간 또는 내 지역 배송 가능성을 문의하세요. 사이트에는 public checkout, 결제, order form이 없습니다.",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+  ja: {
+    description: "Labs Cannabis へ、パタヤの今日の大麻メニュー、効果、鮮度、道順、受け取り、配送可能性を確認。",
+    lead:
+      "今日のメニュー、効果、鮮度、道順、受け取り時間、またはエリア配送の相談可否を確認できます。サイトには public checkout、支払い、order form はありません。",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+  },
+};
+const contactCopy = copy[locale] ?? copy.en;
+const inquiryHref = `${CONTACT.whatsappWithMsg(contactCopy.prefill)}&source=seo_landing_page`;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.contact.title, pathSuffix: "contact" },
@@ -27,7 +77,7 @@ const breadcrumbs = [
   locale={locale}
   pathSuffix="contact"
   title={`${ui.contact.title} | Labs Cannabis`}
-  description="Contact Labs Cannabis for lawful medical cannabis eligibility questions, documentation guidance, and directions before visiting."
+  description={contactCopy.description}
   pageType="contact"
   breadcrumbs={breadcrumbs}
 >
@@ -35,12 +85,11 @@ const breadcrumbs = [
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold">{ui.contact.title}</h1>
       <p class="mt-2 text-base text-text-muted">
-        Ask eligibility, documentation, and directions questions before visiting. No online sale,
-        reservation, delivery, or payment is completed through this website.
+        {contactCopy.lead}
       </p>
       <p class="mt-4 text-xl font-bold text-text">{CONTACT.phoneDisplay}</p>
       <div class="mt-6 grid grid-cols-2 gap-3">
-        <a href={inquiryHref} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black" data-track="contact_whatsapp_click" data-track-placement="contact_page" data-track-detail="contact:whatsapp">{ui.contact.whatsapp}</a>
+        <a href={inquiryHref} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black" data-track="contact_whatsapp_click" data-track-placement="contact_page" data-track-detail="contact:whatsapp" data-wa-source="seo_landing_page" data-whatsapp-ref="contact_page">{ui.contact.whatsapp}</a>
         <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:telegram">{ui.contact.telegram}</a>
         <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:line">{ui.contact.line}</a>
         <a href={CONTACT.tel} class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_call_click" data-track-placement="contact_page" data-track-detail="contact:call">{ui.contact.call}</a>

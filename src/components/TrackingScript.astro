@@ -1,10 +1,35 @@
 ---
+import {
+  DEFAULT_WHATSAPP_TRACKING_SOURCE,
+  WHATSAPP_TRACKING_SOURCES,
+} from "@/lib/whatsapp";
 ---
 
-<script>
+<script define:vars={{ defaultWhatsAppSource: DEFAULT_WHATSAPP_TRACKING_SOURCE, whatsappTrackingSources: WHATSAPP_TRACKING_SOURCES }}>
   (() => {
     const storageKey = "labs_attribution";
     const params = new URLSearchParams(window.location.search);
+    const whatsappSources = new Set(whatsappTrackingSources);
+    const sourceAliases = {
+      sticky: "sticky_cta",
+      sticky_wa: "sticky_cta",
+      sticky_whatsapp: "sticky_cta",
+      delivery_area: "delivery",
+      delivery_page: "delivery",
+      labs_wholesale: "wholesale_quote",
+      wholesale: "wholesale_quote",
+      business_inquiry: "wholesale_quote",
+      map_block: "map",
+      maps: "map",
+      google_maps: "map",
+      language_switcher: "language",
+      lang: "language",
+      seo: "seo_landing_page",
+      seo_landing: "seo_landing_page",
+      landing: "seo_landing_page",
+      contact: "seo_landing_page",
+      contact_page: "seo_landing_page",
+    };
 
     const getExternalReferrerHost = () => {
       if (!document.referrer) return "";
@@ -33,6 +58,77 @@
       captured_at: new Date().toISOString(),
     };
 
+    const truncate = (value, max = 255) => String(value || "").slice(0, max);
+    const cleanToken = (value) =>
+      String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "_")
+        .replace(/^_+|_+$/g, "");
+
+    const normalizeWhatsAppSource = (value) => {
+      const token = cleanToken(value);
+      if (!token) return "";
+      const alias = sourceAliases[token];
+      if (alias) return alias;
+      return whatsappSources.has(token) ? token : "";
+    };
+
+    const getHrefParam = (link, name) => {
+      try {
+        return new URL(link.getAttribute("href") || "", window.location.href).searchParams.get(name) || "";
+      } catch {
+        return "";
+      }
+    };
+
+    const inferPageWhatsAppSource = () => {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes("/delivery/")) return "delivery";
+      if (path.includes("/wholesale") || path.includes("wholesale")) return "wholesale_quote";
+      if (path.includes("/strains/")) return "strain_page";
+      return defaultWhatsAppSource;
+    };
+
+    const getWhatsAppSource = (link) => {
+      const detailPrefix = link.dataset.trackDetail?.split(":")[0];
+      const candidates = [
+        link.dataset.whatsappSource,
+        link.dataset.waSource,
+        link.dataset.source,
+        link.dataset.trackSource,
+        link.dataset.trackPlacement,
+        getHrefParam(link, "source"),
+        getHrefParam(link, "wa_source"),
+        detailPrefix,
+      ];
+
+      for (const candidate of candidates) {
+        const source = normalizeWhatsAppSource(candidate);
+        if (source) return source;
+      }
+
+      return inferPageWhatsAppSource();
+    };
+
+    const getWhatsAppRef = (link) =>
+      truncate(
+        link.dataset.whatsappRef ||
+          link.dataset.trackRef ||
+          link.dataset.utmContent ||
+          link.dataset.trackDetail ||
+          link.dataset.trackPlacement ||
+          link.textContent?.trim() ||
+          "whatsapp",
+      );
+
+    const readCtaUtm = (link, whatsappSource) => ({
+      source: truncate(link.dataset.utmSource || getHrefParam(link, "utm_source") || "labscannabis_site"),
+      medium: truncate(link.dataset.utmMedium || getHrefParam(link, "utm_medium") || "whatsapp_cta"),
+      campaign: truncate(link.dataset.utmCampaign || getHrefParam(link, "utm_campaign") || whatsappSource),
+      content: truncate(link.dataset.utmContent || getHrefParam(link, "utm_content") || link.dataset.whatsappRef || ""),
+    });
+
     const stored = readStored();
     const attribution =
       captured.source || captured.referrer_host
@@ -51,13 +147,42 @@
       ? `${attribution.source}${attribution.campaign ? `/${attribution.campaign}` : ""}`
       : attribution.referrer_host || "direct";
 
-    const appendWhatsAppSource = (href, placement) => {
-      if (!href.includes("wa.me/")) return href;
+    const isWhatsAppHref = (href) =>
+      /^https?:\/\/(wa\.me|api\.whatsapp\.com)\b/i.test(href) || /^whatsapp:\/\/send\b/i.test(href);
+
+    const getInboundUtmKey = () =>
+      [attribution.source || "direct", attribution.medium, attribution.campaign]
+        .filter(Boolean)
+        .join("/");
+
+    const buildWhatsAppTag = (link) => {
+      const whatsappSource = getWhatsAppSource(link);
+      const whatsappRef = getWhatsAppRef(link);
+      const ctaUtm = readCtaUtm(link, whatsappSource);
+      const ctaUtmKey = [ctaUtm.source, ctaUtm.medium, ctaUtm.campaign, ctaUtm.content]
+        .filter(Boolean)
+        .join("/");
+      const parts = [
+        `source: ${whatsappSource}`,
+        whatsappRef ? `ref: ${whatsappRef}` : "",
+        `page: ${window.location.pathname}`,
+        `utm: ${getInboundUtmKey()}`,
+        ctaUtmKey ? `cta_utm: ${ctaUtmKey}` : "",
+        attribution.referrer_host ? `referrer: ${attribution.referrer_host}` : "",
+      ].filter(Boolean);
+
+      return `[${parts.join("; ")}]`;
+    };
+
+    const appendWhatsAppSource = (href, link) => {
+      if (!isWhatsAppHref(href)) return href;
       try {
-        const url = new URL(href);
-        const existing = url.searchParams.get("text") || "Hi Labs Cannabis, I am 20+ and would like to ask about lawful medical cannabis eligibility before visiting.";
-        const tag = `[source: ${sourceKey}; page: ${window.location.pathname}; cta: ${placement}]`;
-        if (!existing.includes("[source:")) {
+        const url = new URL(href, window.location.href);
+        const existing =
+          url.searchParams.get("text") ||
+          "Hi Labs Cannabis, I am 20+ and would like to ask today's menu, effects, freshness, and pickup/delivery possibilities.";
+        const tag = buildWhatsAppTag(link);
+        if (!/\[(source|wa_source):/i.test(existing)) {
           url.searchParams.set("text", `${existing}\n\n${tag}`);
         }
         return url.toString();
@@ -68,22 +193,49 @@
 
     document.querySelectorAll("a[href]").forEach((link) => {
       const href = link.getAttribute("href") || "";
-      const placement = link.dataset.trackPlacement || link.dataset.track || "link";
-      if (href.includes("wa.me/")) {
-        link.setAttribute("href", appendWhatsAppSource(href, placement));
+      if (isWhatsAppHref(href) && link instanceof HTMLAnchorElement) {
+        link.setAttribute("href", appendWhatsAppSource(href, link));
       }
     });
 
     document.addEventListener("click", (event) => {
-      const link = event.target instanceof Element ? event.target.closest("a[data-track]") : null;
+      const link = event.target instanceof Element
+        ? event.target.closest("a[data-track],a[data-whatsapp-source],a[data-wa-source],a[href*='wa.me/'],a[href*='api.whatsapp.com'],a[href^='whatsapp://']")
+        : null;
       if (!(link instanceof HTMLAnchorElement)) return;
 
-      const name = link.dataset.track || "link_click";
+      const href = link.getAttribute("href") || "";
+      const whatsappClick = isWhatsAppHref(href);
+      if (whatsappClick) {
+        link.setAttribute("href", appendWhatsAppSource(href, link));
+      }
+
+      const name = link.dataset.track || (whatsappClick ? "contact_whatsapp_click" : "link_click");
       const detail = link.dataset.trackDetail || link.dataset.trackPlacement || link.textContent?.trim() || "link";
+      const whatsappSource = whatsappClick ? getWhatsAppSource(link) : "";
+      const whatsappRef = whatsappClick ? getWhatsAppRef(link) : "";
+      const ctaUtm = whatsappClick ? readCtaUtm(link, whatsappSource) : {};
       const payload = {
         source_key: sourceKey.slice(0, 255),
         detail: `${window.location.pathname}:${detail}`.slice(0, 255),
+        page_path: truncate(window.location.pathname),
+        landing_path: truncate(attribution.landing_path),
+        referrer_host: truncate(attribution.referrer_host),
+        utm_source: truncate(attribution.source),
+        utm_medium: truncate(attribution.medium),
+        utm_campaign: truncate(attribution.campaign),
       };
+
+      if (whatsappClick) {
+        Object.assign(payload, {
+          whatsapp_source: truncate(whatsappSource),
+          whatsapp_ref: truncate(whatsappRef),
+          cta_utm_source: truncate(ctaUtm.source),
+          cta_utm_medium: truncate(ctaUtm.medium),
+          cta_utm_campaign: truncate(ctaUtm.campaign),
+          cta_utm_content: truncate(ctaUtm.content),
+        });
+      }
 
       window.dataLayer = window.dataLayer || [];
       window.dataLayer.push({ event: name, ...payload });

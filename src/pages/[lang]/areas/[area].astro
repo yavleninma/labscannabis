@@ -8,7 +8,7 @@ import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
-import { AREA_DETAILS, AREA_PAGE_COPY, renderCopy } from "@/data/area-copy";
+import { AREA_DETAILS, getAreaNotes, renderCopy } from "@/data/area-copy";
 import { REELS_SLIDES } from "@/data/media";
 import { t } from "@/lib/ui";
 
@@ -27,9 +27,146 @@ const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
 const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
-const copy = AREA_PAGE_COPY.en;
+const areaCopy: Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    h1: string;
+    intro: string;
+    whyTitle: string;
+    whyBody: string;
+    visitTitle: string;
+    visitBody: string;
+    landmarksTitle: string;
+    relatedLabel: string;
+    relatedDelivery: string;
+  }
+> = {
+  en: {
+    title: "Cannabis menu near {area} | Labs Cannabis Pattaya",
+    description:
+      "Fresh cannabis menu near {area}: strains, effects, best sellers, Soi Hollywood location, pickup, and delivery possibility by WhatsApp.",
+    h1: "Cannabis menu near {area}",
+    intro:
+      "Labs Cannabis on Soi Hollywood helps adult visitors from {area} check fresh flower, pre-rolls, effects, deals, and the fastest way to reach the shop.",
+    whyTitle: "Why ask from {area}",
+    whyBody:
+      "{area} visitors usually want quick proof before moving: real Google reviews, clear location, fresh menu notes, and direct WhatsApp answers.",
+    visitTitle: "Ask first or walk in",
+    visitBody:
+      "The shop is at 32 Pattaya 13 Alley (Soi Hollywood), close to Walking Street. Message on WhatsApp for today's menu, freshness, pickup timing, or delivery possibility.",
+    landmarksTitle: "Nearby landmarks",
+    relatedLabel: "Related pages",
+    relatedDelivery: "Delivery possibility for {area}",
+  },
+  ru: {
+    title: "Меню каннабиса рядом с {area} | Labs Cannabis Паттайя",
+    description:
+      "Свежее меню каннабиса рядом с {area}: сорта, эффекты, хиты, локация Soi Hollywood, самовывоз и возможность доставки через WhatsApp.",
+    h1: "Меню каннабиса рядом с {area}",
+    intro:
+      "Labs Cannabis на Soi Hollywood помогает взрослым гостям из {area} проверить свежие цветы, pre-rolls, эффекты, deals и самый быстрый маршрут до магазина.",
+    whyTitle: "Зачем спрашивать из {area}",
+    whyBody:
+      "Гостям из {area} обычно важно быстро проверить магазин: реальные Google-отзывы, понятная локация, заметки по свежему меню и прямой ответ в WhatsApp.",
+    visitTitle: "Спросите сначала или заходите",
+    visitBody:
+      "Магазин находится по адресу 32 Pattaya 13 Alley (Soi Hollywood), рядом с Walking Street. Напишите в WhatsApp про сегодняшнее меню, свежесть, самовывоз или возможность доставки.",
+    landmarksTitle: "Ориентиры рядом",
+    relatedLabel: "Связанные страницы",
+    relatedDelivery: "Возможность доставки для {area}",
+  },
+  th: {
+    title: "เมนูกัญชาใกล้ {area} | Labs Cannabis พัทยา",
+    description:
+      "เมนูกัญชาสดใกล้ {area}: สายพันธุ์ เอฟเฟกต์ best sellers ที่ตั้ง Soi Hollywood pickup และ delivery possibility ผ่าน WhatsApp",
+    h1: "เมนูกัญชาใกล้ {area}",
+    intro:
+      "Labs Cannabis บน Soi Hollywood ช่วยผู้ใหญ่จาก {area} เช็คดอกสด pre-rolls เอฟเฟกต์ deals และเส้นทางที่เร็วที่สุดไปที่ร้าน",
+    whyTitle: "ทำไมต้องถามจาก {area}",
+    whyBody:
+      "ผู้มาเยือน {area} มักต้องการเช็คอย่างรวดเร็วก่อนเดินทาง: รีวิว Google จริง โลเคชันชัดเจน notes เมนูสด และคำตอบตรงใน WhatsApp",
+    visitTitle: "ถามก่อนหรือแวะร้าน",
+    visitBody:
+      "ร้านอยู่ที่ 32 Pattaya 13 Alley (Soi Hollywood) ใกล้ Walking Street ทัก WhatsApp เพื่อถามเมนูวันนี้ ความสด เวลา pickup หรือ delivery possibility",
+    landmarksTitle: "จุดใกล้เคียง",
+    relatedLabel: "หน้าที่เกี่ยวข้อง",
+    relatedDelivery: "delivery possibility สำหรับ {area}",
+  },
+  ar: {
+    title: "قائمة القنب قرب {area} | Labs Cannabis باتايا",
+    description:
+      "قائمة قنب طازجة قرب {area}: سلالات، تأثيرات، best sellers، موقع Soi Hollywood، استلام، وإمكانية التوصيل عبر WhatsApp.",
+    h1: "قائمة القنب قرب {area}",
+    intro:
+      "Labs Cannabis في Soi Hollywood يساعد البالغين من {area} على التحقق من الزهور الطازجة وpre-rolls والتأثيرات وdeals وأسرع طريق إلى المتجر.",
+    whyTitle: "لماذا تسأل من {area}",
+    whyBody:
+      "زوار {area} يحتاجون عادة إلى تحقق سريع قبل التحرك: مراجعات Google حقيقية، موقع واضح، ملاحظات قائمة طازجة، ورد مباشر عبر WhatsApp.",
+    visitTitle: "اسأل أولاً أو زر المتجر",
+    visitBody:
+      "المتجر في 32 Pattaya 13 Alley (Soi Hollywood)، قرب Walking Street. راسلنا عبر WhatsApp لقائمة اليوم والطزاجة ووقت الاستلام أو إمكانية التوصيل.",
+    landmarksTitle: "معالم قريبة",
+    relatedLabel: "صفحات ذات صلة",
+    relatedDelivery: "إمكانية التوصيل إلى {area}",
+  },
+  zh: {
+    title: "{area}附近大麻菜单 | Labs Cannabis 芭提雅",
+    description:
+      "{area}附近新鲜大麻菜单：品种、效果、best sellers、Soi Hollywood 位置、取货和 WhatsApp 配送可能性。",
+    h1: "{area}附近大麻菜单",
+    intro:
+      "Soi Hollywood 的 Labs Cannabis 帮助来自 {area} 的成人访客查询新鲜 flower、pre-rolls、效果、deals 和最快到店路线。",
+    whyTitle: "为什么从 {area} 先询问",
+    whyBody:
+      "{area} 访客通常希望出发前快速确认：真实 Google 评价、清晰位置、新鲜菜单 notes，以及 WhatsApp 直接回复。",
+    visitTitle: "先询问或直接到店",
+    visitBody:
+      "门店位于 32 Pattaya 13 Alley (Soi Hollywood)，靠近 Walking Street。请在 WhatsApp 询问今日菜单、新鲜度、取货时间或配送可能性。",
+    landmarksTitle: "附近地标",
+    relatedLabel: "相关页面",
+    relatedDelivery: "{area} 配送可能性",
+  },
+  ko: {
+    title: "{area} 근처 대마 메뉴 | Labs Cannabis 파타야",
+    description:
+      "{area} 근처 신선한 대마 메뉴: 품종, 효과, best sellers, Soi Hollywood 위치, 픽업, WhatsApp 배송 가능성.",
+    h1: "{area} 근처 대마 메뉴",
+    intro:
+      "Soi Hollywood의 Labs Cannabis는 {area}에서 온 성인 방문자가 신선한 flower, pre-rolls, 효과, deals, 가장 빠른 매장 경로를 확인하도록 돕습니다.",
+    whyTitle: "{area}에서 먼저 묻는 이유",
+    whyBody:
+      "{area} 방문자는 이동 전 빠른 확인을 원합니다: 실제 Google 리뷰, 명확한 위치, 신선한 메뉴 notes, WhatsApp 직접 답변.",
+    visitTitle: "먼저 문의하거나 방문",
+    visitBody:
+      "매장은 Walking Street 근처 32 Pattaya 13 Alley (Soi Hollywood)에 있습니다. 오늘 메뉴, 신선도, 픽업 시간, 배송 가능성은 WhatsApp으로 문의하세요.",
+    landmarksTitle: "주변 랜드마크",
+    relatedLabel: "관련 페이지",
+    relatedDelivery: "{area} 배송 가능성",
+  },
+  ja: {
+    title: "{area}近くの大麻メニュー | Labs Cannabis パタヤ",
+    description:
+      "{area}近くの新鮮な大麻メニュー: 品種、効果、best sellers、Soi Hollywood の場所、受け取り、WhatsApp 配送可能性。",
+    h1: "{area}近くの大麻メニュー",
+    intro:
+      "Soi Hollywood の Labs Cannabis は、{area} からの成人訪問者が新鮮な flower、pre-rolls、効果、deals、最短ルートを確認できるようにします。",
+    whyTitle: "{area} から先に確認する理由",
+    whyBody:
+      "{area} の訪問者は移動前にすばやく確認したいものです: 実際の Google レビュー、明確な場所、新鮮なメニュー notes、WhatsApp の直接返信。",
+    visitTitle: "先に確認、または来店",
+    visitBody:
+      "店舗は Walking Street 近くの 32 Pattaya 13 Alley (Soi Hollywood) です。今日のメニュー、鮮度、受け取り時間、配送可能性は WhatsApp で確認してください。",
+    landmarksTitle: "近くの目印",
+    relatedLabel: "関連ページ",
+    relatedDelivery: "{area} の配送可能性",
+  },
+};
+const copy = areaCopy[locale] ?? areaCopy.en;
 const ui = t(locale);
 const vars = { area: areaName, eta: details.etaMinutes };
+const notes = getAreaNotes(area.slug, locale);
 const title = renderCopy(copy.title, vars);
 const description = renderCopy(copy.description, vars);
 const breadcrumbs = [
@@ -54,6 +191,7 @@ const breadcrumbs = [
       <p class="mt-3 text-base leading-relaxed text-text-muted">
         {renderCopy(copy.intro, vars)}
       </p>
+      {notes?.shop && <p class="mt-3 text-base leading-relaxed text-text-muted">{notes.shop}</p>}
     </div>
   </section>
   <section class="px-4 py-6">
@@ -75,9 +213,9 @@ const breadcrumbs = [
         </div>
       )}
 
-      <nav class="mt-6 grid gap-3" aria-label="Related pages">
+      <nav class="mt-6 grid gap-3" aria-label={copy.relatedLabel}>
         <a href={localePath(locale, `delivery/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          Visit guidance for {areaName}
+          {renderCopy(copy.relatedDelivery, vars)}
         </a>
         <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
           {ui.footerSeo.allPages}

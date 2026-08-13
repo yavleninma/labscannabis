@@ -22,6 +22,10 @@ export const AREA_DETAILS: Record<string, AreaDetails> = {
     etaMinutes: 10,
     landmarks: ["Soi Hollywood", "Pattaya 13 Alley", "Walking Street"],
   },
+  "soi-buakhao": {
+    etaMinutes: 15,
+    landmarks: ["Soi Buakhao", "Soi LK Metro", "Soi Diana", "Second Road"],
+  },
   naklua: {
     etaMinutes: 30,
     landmarks: ["Naklua", "Wong Amat", "Terminal 21 Pattaya"],
@@ -426,6 +430,95 @@ export const DELIVERY_COMPLIANCE_NOTE: Record<
     sourceCta: "公式旅行者通知",
   },
 };
+
+export const AREA_NOTES: Record<string, Partial<Record<Locale, { shop: string; delivery: string }>>> = {
+  pattaya: {
+    en: {
+      shop: "Pattaya here means the city, not one soi. The shop itself is on Soi Hollywood, useful if you are anywhere from Beach Road to Second Road and need a pin you can open in Maps.",
+      delivery: "City-wide delivery is only a WhatsApp possibility after you send the area, timing, and whether a hotel, condo, or meeting point is involved. This is not a live tracker.",
+    },
+    ru: {
+      shop: "Паттайя здесь — весь город, не один сой. Магазин на Soi Hollywood: удобно, если вы с Beach Road или Second Road и нужен пин в Maps.",
+      delivery: "Доставка по городу — только возможность в WhatsApp после района, времени и точки (отель, кондо, встреча). Это не трекер курьера.",
+    },
+  },
+  jomtien: {
+    en: {
+      shop: "Jomtien Beach, View Talay, and Jomtien Plaza are south of the shop. Most guests taxi or grab to Soi Hollywood rather than walk. Message before you cross Pratumnak if you want today's menu first.",
+      delivery: "Jomtien is a common ask because the beach condos sit away from Walking Street. Send the soi or condo name. Timing depends on traffic and is confirmed only in chat.",
+    },
+    ru: {
+      shop: "Jomtien Beach, View Talay и Jomtien Plaza южнее магазина. Обычно едут на такси/Grab до Soi Hollywood. Напишите до Пратамнака, если нужно меню дня.",
+      delivery: "Джомтьен часто спрашивают из-за кондо у пляжа. Пришлите сой или название кондо. Время зависит от пробок и подтверждается только в чате.",
+    },
+  },
+  "walking-street": {
+    en: {
+      shop: "Walking Street, Bali Hai Pier, and the Beach Road hotels sit a short walk from Pattaya 13 Alley. Follow the alley signage for Labs Cannabis / Labs Dispensary rather than hunting Beach Road storefronts.",
+      delivery: "If you are already on Walking Street at night, walking to Soi Hollywood is often faster than waiting on a chat. If you prefer not to leave the strip, ask whether a meeting point or delivery possibility can be discussed.",
+    },
+    ru: {
+      shop: "Walking Street, пирс Bali Hai и отели Beach Road — короткая прогулка до Pattaya 13 Alley. Ищите Labs Cannabis / Labs Dispensary в переулке, а не витрины на Beach Road.",
+      delivery: "Если вы уже на Walking Street вечером, дойти до Soi Hollywood часто быстрее, чем ждать чат. Если не хотите уходить с улицы — спросите про точку встречи или доставку.",
+    },
+  },
+  "soi-hollywood": {
+    en: {
+      shop: "This is the home alley: 32 Pattaya 13 Alley. You are already on the correct soi. Check the Google pin if the alley numbering is confusing at night.",
+      delivery: "If you are already on Soi Hollywood, walk-in is the default. Delivery chat is for guests who cannot reach the alley.",
+    },
+    ru: {
+      shop: "Это наш переулок: 32 Pattaya 13 Alley. Вы уже на нужном сое. Если ночью путаете нумерацию — откройте Google pin.",
+      delivery: "Если вы уже на Soi Hollywood, базовый сценарий — зайти. Доставка — для тех, кто не может дойти до переулка.",
+    },
+  },
+  "soi-buakhao": {
+    en: {
+      shop: "Soi Buakhao, Soi LK Metro, and Soi Diana sit between Second Road and the Walking Street side. It is a short ride to Soi Hollywood — useful if you are bar-hopping and want a Maps pin before you move.",
+      delivery: "Nightlife sois change meeting points often. Send a live location or a landmark such as LK Metro or Diana rather than a vague “Buakhao” if you want a delivery possibility checked.",
+    },
+    ru: {
+      shop: "Soi Buakhao, Soi LK Metro и Soi Diana — между Second Road и стороной Walking Street. До Soi Hollywood короткая поездка: удобно, если вы по барам и нужен пин до выхода.",
+      delivery: "Ночные сои часто меняют точку встречи. Пришлите live location или ориентир вроде LK Metro / Diana, а не просто «Буакхао».",
+    },
+  },
+  naklua: {
+    en: {
+      shop: "Naklua and Wong Amat sit north of Central Pattaya. Terminal 21 is a useful landmark when describing the taxi. Plan extra travel time versus a Walking Street hotel.",
+      delivery: "North Pattaya asks are common from Wong Amat condos. Send the area and a pin. Do not assume the same timing as Central Pattaya.",
+    },
+    ru: {
+      shop: "Наклуа и Wong Amat севернее центра. Terminal 21 — понятный ориентир для такси. Заложите больше времени, чем от отеля у Walking Street.",
+      delivery: "Север часто пишут из кондо Wong Amat. Пришлите район и пин. Не ждите то же время, что из центра.",
+    },
+  },
+  pratumnak: {
+    en: {
+      shop: "Pratumnak Hill sits between Central Pattaya and Jomtien, near Cosy Beach and Big Buddha. It is a short ride to Soi Hollywood, not a beachfront walk.",
+      delivery: "Hill and Cosy Beach addresses need a pin or condo name. Chat first if you want pickup versus a delivery possibility.",
+    },
+    ru: {
+      shop: "Пратамнак — между центром и Джомтьеном, рядом Cosy Beach и Big Buddha. До Soi Hollywood короткая поездка, не прогулка по пляжу.",
+      delivery: "Для холма и Cosy Beach нужен пин или имя кондо. Сначала чат: самовывоз или возможность доставки.",
+    },
+  },
+  "central-pattaya": {
+    en: {
+      shop: "Central Pattaya / Pattaya Klang is the closest city grid to the shop: Beach Road, Second Road, and the malls around Central Festival. Soi Hollywood is inside that grid.",
+      delivery: "If you are already in Central Pattaya, walking or a short tuk-tuk to the alley is usually simpler than a delivery chat. Ask anyway if you cannot leave the hotel.",
+    },
+    ru: {
+      shop: "Центр / Pattaya Klang ближе всего к магазину: Beach Road, Second Road, район Central Festival. Soi Hollywood внутри этой сетки.",
+      delivery: "Если вы уже в центре, пешком или на тук-туке до переулка обычно проще, чем ждать доставку. Спросите, если не можете выйти из отеля.",
+    },
+  },
+};
+
+export function getAreaNotes(slug: string, locale: Locale): { shop: string; delivery: string } | undefined {
+  const notes = AREA_NOTES[slug];
+  if (!notes) return undefined;
+  return notes[locale] ?? notes.en;
+}
 
 export function renderCopy(template: string, vars: Record<string, string | number>): string {
   return Object.entries(vars).reduce(

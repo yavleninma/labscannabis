@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { t } from "@/lib/ui";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
+import { CONTACT } from "@/data/site";
 
 interface Props {
   locale: Locale;
@@ -11,19 +12,68 @@ interface Props {
 
 const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
+const homeHref = localePath(locale);
+const source = "hero";
+const whatsappHref = `${CONTACT.whatsappWithMsg(
+  "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, and pickup/delivery options.",
+)}&source=${encodeURIComponent(source)}`;
+const headerLabels: Record<Locale, { menu: string; fresh: string; visit: string; whatsapp: string; primary: string }> = {
+  en: { menu: "Menu", fresh: "Fresh", visit: "Visit", whatsapp: "WhatsApp", primary: "Primary" },
+  ru: { menu: "Меню", fresh: "Свежесть", visit: "Локация", whatsapp: "WhatsApp", primary: "Главная навигация" },
+  th: { menu: "เมนู", fresh: "ความสด", visit: "ที่ตั้ง", whatsapp: "WhatsApp", primary: "เมนูหลัก" },
+  ar: { menu: "القائمة", fresh: "الطزاجة", visit: "الموقع", whatsapp: "WhatsApp", primary: "التنقل الرئيسي" },
+  zh: { menu: "菜单", fresh: "新鲜度", visit: "位置", whatsapp: "WhatsApp", primary: "主导航" },
+  ko: { menu: "메뉴", fresh: "신선도", visit: "위치", whatsapp: "WhatsApp", primary: "기본 탐색" },
+  ja: { menu: "メニュー", fresh: "鮮度", visit: "場所", whatsapp: "WhatsApp", primary: "主要ナビゲーション" },
+};
+const labels = headerLabels[locale] ?? headerLabels.en;
+const navItems = [
+  { href: `${homeHref}#menu`, label: labels.menu, key: "menu" },
+  { href: `${homeHref}#fresh`, label: labels.fresh, key: "fresh" },
+  { href: `${homeHref}#visit`, label: labels.visit, key: "visit" },
+];
 ---
 
-<header class="sticky top-0 z-40 border-b border-border/80 bg-bg/95 backdrop-blur-sm">
-  <div class="site-main flex items-center justify-between gap-3 py-3">
+<header class="sticky top-0 z-[80] border-b border-border/80 bg-bg/95 backdrop-blur-sm">
+  <div class="mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-3">
     <a
       href={localePath(locale)}
-      class="truncate text-base font-bold text-text hover:text-emerald-dim"
+      class="min-w-0 truncate text-base font-extrabold text-text hover:text-emerald-dim"
       data-track="menu_link_click"
       data-track-placement="header"
       data-track-detail="header:home"
     >
       {ui.brand}
     </a>
-    <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
+    <nav class="hidden items-center gap-1 md:flex" aria-label={labels.primary}>
+      {navItems.map((item) => (
+        <a
+          href={item.href}
+          class="rounded-lg px-3 py-2 text-sm font-semibold text-text-muted transition-colors hover:bg-bg-elevated hover:text-emerald-dim"
+          data-track="menu_link_click"
+          data-track-placement="header"
+          data-track-detail={`header:${item.key}`}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+    <div class="flex shrink-0 items-center gap-2">
+      <a
+        href={whatsappHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hidden rounded-lg bg-emerald px-3.5 py-2 text-sm font-extrabold text-black transition-colors hover:bg-emerald/90 sm:inline-flex"
+        data-track="contact_whatsapp_click"
+        data-track-placement={source}
+        data-track-detail="header:whatsapp"
+        data-wa-source={source}
+        data-whatsapp-ref="header_menu"
+        data-utm-campaign="hero"
+      >
+        {labels.whatsapp}
+      </a>
+      <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
+    </div>
   </div>
 </header>

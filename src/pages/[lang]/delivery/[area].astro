@@ -7,8 +7,7 @@ import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
-import { AREA_DETAILS, DELIVERY_COMPLIANCE_NOTE, DELIVERY_PAGE_COPY, renderCopy } from "@/data/area-copy";
-import { LEGAL_GUIDE_SOURCE_URL } from "@/data/legal-guide";
+import { AREA_DETAILS, getAreaNotes, renderCopy } from "@/data/area-copy";
 import { CONTACT, getMapsSearchUrl } from "@/data/site";
 import { t } from "@/lib/ui";
 
@@ -27,10 +26,255 @@ const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
 const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
-const copy = DELIVERY_PAGE_COPY.en;
-const compliance = DELIVERY_COMPLIANCE_NOTE.en;
+const deliveryCopy: Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    h1: string;
+    intro: string;
+    kicker: string;
+    cta: string;
+    maps: string;
+    statusTitle: string;
+    eta: string;
+    stock: string;
+    privateTerms: string;
+    faqTitle: string;
+    relatedLabel: string;
+    relatedArea: string;
+    faq: { q: string; a: string }[];
+  }
+> = {
+  en: {
+    title: "Cannabis delivery possibility for {area} | Labs Cannabis Pattaya",
+    description:
+      "Ask Labs Cannabis on WhatsApp about today's menu, freshness, pickup timing, and whether delivery possibility can be discussed for {area}.",
+    h1: "Cannabis delivery possibility for {area}",
+    intro:
+      "Message before travelling from {area}. We can share today's menu, effects, fresh flower notes, pickup timing, and whether delivery possibility can be discussed privately for your area.",
+    kicker: "WhatsApp delivery check",
+    cta: "Ask delivery possibility",
+    maps: "Open Maps",
+    statusTitle: "What to ask",
+    eta: "Typical reply and visit coordination: about {eta} min",
+    stock: "Current menu, effects, photos, and freshness are checked in WhatsApp",
+    privateTerms: "No public checkout, payment, order form, or confirmed delivery term appears on the website",
+    faqTitle: "Delivery FAQ",
+    relatedLabel: "Related pages",
+    relatedArea: "Cannabis menu near {area}",
+    faq: [
+      {
+        q: "Can I ask from {area} before visiting?",
+        a: "Yes. Send your area, timing, preferred effect, and whether you want pickup or delivery possibility checked.",
+      },
+      {
+        q: "Is delivery guaranteed online?",
+        a: "No. Delivery possibility is discussed privately after area, timing, and required details are checked.",
+      },
+      {
+        q: "Can I walk in instead?",
+        a: "Yes. The shop is on Soi Hollywood, a short walk from Walking Street.",
+      },
+    ],
+  },
+  ru: {
+    title: "Возможность доставки каннабиса в {area} | Labs Cannabis Паттайя",
+    description:
+      "Спросите Labs Cannabis в WhatsApp про сегодняшнее меню, свежесть, самовывоз и можно ли обсудить доставку для {area}.",
+    h1: "Возможность доставки каннабиса в {area}",
+    intro:
+      "Напишите перед поездкой из {area}. Мы можем прислать сегодняшнее меню, эффекты, заметки по свежим цветам, время самовывоза и обсудить возможность доставки приватно.",
+    kicker: "Проверка доставки в WhatsApp",
+    cta: "Спросить доставку",
+    maps: "Открыть карту",
+    statusTitle: "Что спросить",
+    eta: "Обычный ответ и координация: около {eta} минут",
+    stock: "Актуальное меню, эффекты, фото и свежесть проверяются в WhatsApp",
+    privateTerms: "На сайте нет публичного checkout, оплаты, order form или подтвержденных условий доставки",
+    faqTitle: "FAQ по доставке",
+    relatedLabel: "Связанные страницы",
+    relatedArea: "Меню каннабиса рядом с {area}",
+    faq: [
+      {
+        q: "Можно спросить из {area} перед визитом?",
+        a: "Да. Отправьте район, время, желаемый эффект и что нужно проверить: самовывоз или возможность доставки.",
+      },
+      {
+        q: "Доставка гарантируется онлайн?",
+        a: "Нет. Возможность доставки обсуждается приватно после проверки района, времени и нужных деталей.",
+      },
+      {
+        q: "Можно просто прийти?",
+        a: "Да. Магазин находится на Soi Hollywood, недалеко от Walking Street.",
+      },
+    ],
+  },
+  th: {
+    title: "ความเป็นไปได้ของ delivery กัญชาใน {area} | Labs Cannabis พัทยา",
+    description:
+      "ถาม Labs Cannabis ทาง WhatsApp เรื่องเมนูวันนี้ ความสด เวลา pickup และว่าสามารถคุย delivery possibility สำหรับ {area} ได้ไหม",
+    h1: "ความเป็นไปได้ของ delivery กัญชาใน {area}",
+    intro:
+      "ทักก่อนเดินทางจาก {area} เราส่งเมนูวันนี้ เอฟเฟกต์ notes ดอกสด เวลา pickup และคุย delivery possibility แบบส่วนตัวสำหรับพื้นที่คุณได้",
+    kicker: "เช็ค delivery ใน WhatsApp",
+    cta: "ถาม delivery possibility",
+    maps: "เปิดแผนที่",
+    statusTitle: "ควรถามอะไร",
+    eta: "เวลาตอบและประสานงานทั่วไปประมาณ {eta} นาที",
+    stock: "เมนูปัจจุบัน เอฟเฟกต์ รูปภาพ และความสด เช็คใน WhatsApp",
+    privateTerms: "เว็บไซต์ไม่มี public checkout การชำระเงิน order form หรือเงื่อนไข delivery ที่ยืนยันแล้ว",
+    faqTitle: "FAQ delivery",
+    relatedLabel: "หน้าที่เกี่ยวข้อง",
+    relatedArea: "เมนูกัญชาใกล้ {area}",
+    faq: [
+      {
+        q: "ถามจาก {area} ก่อนมาได้ไหม?",
+        a: "ได้ ส่งพื้นที่ เวลา เอฟเฟกต์ที่ต้องการ และต้องการให้เช็ค pickup หรือ delivery possibility",
+      },
+      {
+        q: "delivery ยืนยันออนไลน์ไหม?",
+        a: "ไม่ยืนยัน ความเป็นไปได้ของ delivery คุยส่วนตัวหลังเช็คพื้นที่ เวลา และรายละเอียดที่จำเป็น",
+      },
+      {
+        q: "เดินเข้าร้านได้ไหม?",
+        a: "ได้ ร้านอยู่บน Soi Hollywood เดินไม่นานจาก Walking Street",
+      },
+    ],
+  },
+  ar: {
+    title: "إمكانية توصيل القنب إلى {area} | Labs Cannabis باتايا",
+    description:
+      "اسأل Labs Cannabis عبر WhatsApp عن قائمة اليوم والطزاجة ووقت الاستلام وما إذا كان يمكن مناقشة التوصيل إلى {area}.",
+    h1: "إمكانية توصيل القنب إلى {area}",
+    intro:
+      "راسلنا قبل التحرك من {area}. يمكننا مشاركة قائمة اليوم والتأثيرات وملاحظات الزهور الطازجة ووقت الاستلام ومناقشة إمكانية التوصيل بشكل خاص.",
+    kicker: "فحص التوصيل عبر WhatsApp",
+    cta: "اسأل عن إمكانية التوصيل",
+    maps: "افتح الخريطة",
+    statusTitle: "ماذا تسأل",
+    eta: "الرد والتنسيق عادة حوالي {eta} دقيقة",
+    stock: "القائمة الحالية والتأثيرات والصور والطزاجة يتم فحصها في WhatsApp",
+    privateTerms: "لا يوجد public checkout أو دفع أو order form أو شرط توصيل مؤكد على الموقع",
+    faqTitle: "أسئلة التوصيل",
+    relatedLabel: "صفحات ذات صلة",
+    relatedArea: "قائمة القنب قرب {area}",
+    faq: [
+      {
+        q: "هل يمكنني السؤال من {area} قبل الزيارة؟",
+        a: "نعم. أرسل منطقتك والوقت والتأثير المفضل وما إذا كنت تريد الاستلام أو فحص إمكانية التوصيل.",
+      },
+      {
+        q: "هل التوصيل مضمون عبر الإنترنت؟",
+        a: "لا. إمكانية التوصيل تناقش بشكل خاص بعد فحص المنطقة والوقت والتفاصيل المطلوبة.",
+      },
+      {
+        q: "هل يمكنني زيارة المتجر مباشرة؟",
+        a: "نعم. المتجر في Soi Hollywood على مسافة قصيرة من Walking Street.",
+      },
+    ],
+  },
+  zh: {
+    title: "{area} 大麻配送可能性 | Labs Cannabis 芭提雅",
+    description:
+      "通过 WhatsApp 向 Labs Cannabis 询问今日菜单、新鲜度、取货时间，以及是否可讨论 {area} 配送可能性。",
+    h1: "{area} 大麻配送可能性",
+    intro:
+      "从 {area} 出发前请先发消息。我们可以分享今日菜单、效果、新鲜 flower notes、取货时间，并私下讨论你的区域配送可能性。",
+    kicker: "WhatsApp 配送确认",
+    cta: "询问配送可能性",
+    maps: "打开地图",
+    statusTitle: "应该询问什么",
+    eta: "通常回复和协调约 {eta} 分钟",
+    stock: "当前菜单、效果、照片和新鲜度都在 WhatsApp 确认",
+    privateTerms: "网站没有 public checkout、付款、order form 或已确认的配送条款",
+    faqTitle: "配送常见问题",
+    relatedLabel: "相关页面",
+    relatedArea: "{area} 附近大麻菜单",
+    faq: [
+      {
+        q: "可以从 {area} 出发前先问吗？",
+        a: "可以。发送你的区域、时间、偏好效果，以及想确认取货还是配送可能性。",
+      },
+      {
+        q: "线上会保证配送吗？",
+        a: "不会。配送可能性需在确认区域、时间和必要信息后私下讨论。",
+      },
+      {
+        q: "可以直接到店吗？",
+        a: "可以。门店在 Soi Hollywood，距离 Walking Street 步行不远。",
+      },
+    ],
+  },
+  ko: {
+    title: "{area} 대마 배송 가능성 | Labs Cannabis 파타야",
+    description:
+      "Labs Cannabis에 WhatsApp으로 오늘 메뉴, 신선도, 픽업 시간, {area} 배송 가능성 논의 여부를 문의하세요.",
+    h1: "{area} 대마 배송 가능성",
+    intro:
+      "{area}에서 이동 전 메시지 주세요. 오늘 메뉴, 효과, 신선한 flower notes, 픽업 시간, 내 지역 배송 가능성을 비공개로 확인할 수 있습니다.",
+    kicker: "WhatsApp 배송 확인",
+    cta: "배송 가능성 문의",
+    maps: "지도 열기",
+    statusTitle: "무엇을 물어볼까요",
+    eta: "일반 답변 및 조율: 약 {eta}분",
+    stock: "현재 메뉴, 효과, 사진, 신선도는 WhatsApp에서 확인합니다",
+    privateTerms: "사이트에는 public checkout, 결제, order form 또는 확정된 배송 조건이 없습니다",
+    faqTitle: "배송 FAQ",
+    relatedLabel: "관련 페이지",
+    relatedArea: "{area} 근처 대마 메뉴",
+    faq: [
+      {
+        q: "{area}에서 방문 전 문의할 수 있나요?",
+        a: "네. 지역, 시간, 원하는 효과, 픽업 또는 배송 가능성 확인 여부를 보내주세요.",
+      },
+      {
+        q: "온라인에서 배송이 보장되나요?",
+        a: "아니요. 배송 가능성은 지역, 시간, 필요한 세부 사항을 확인한 뒤 비공개로 논의합니다.",
+      },
+      {
+        q: "그냥 방문해도 되나요?",
+        a: "네. 매장은 Walking Street에서 가까운 Soi Hollywood에 있습니다.",
+      },
+    ],
+  },
+  ja: {
+    title: "{area} への大麻配送可能性 | Labs Cannabis パタヤ",
+    description:
+      "今日のメニュー、鮮度、受け取り時間、{area} への配送可能性を Labs Cannabis に WhatsApp で確認できます。",
+    h1: "{area} への大麻配送可能性",
+    intro:
+      "{area} から移動する前にメッセージしてください。今日のメニュー、効果、新鮮な flower notes、受け取り時間、エリア配送可能性を個別に確認できます。",
+    kicker: "WhatsApp配送確認",
+    cta: "配送可能性を確認",
+    maps: "地図を開く",
+    statusTitle: "確認する内容",
+    eta: "通常の返信と調整: 約{eta}分",
+    stock: "現在のメニュー、効果、写真、鮮度は WhatsApp で確認します",
+    privateTerms: "サイトには public checkout、支払い、order form、確定した配送条件はありません",
+    faqTitle: "配送FAQ",
+    relatedLabel: "関連ページ",
+    relatedArea: "{area}近くの大麻メニュー",
+    faq: [
+      {
+        q: "{area} から来店前に相談できますか？",
+        a: "はい。エリア、時間、希望する効果、受け取りか配送可能性確認かを送ってください。",
+      },
+      {
+        q: "オンラインで配送は保証されますか？",
+        a: "いいえ。配送可能性はエリア、時間、必要情報を確認した後に個別で相談します。",
+      },
+      {
+        q: "直接来店できますか？",
+        a: "はい。店舗は Walking Street から近い Soi Hollywood にあります。",
+      },
+    ],
+  },
+};
+const copy = deliveryCopy[locale] ?? deliveryCopy.en;
 const ui = t(locale);
 const vars = { area: areaName, eta: details.etaMinutes };
+const notes = getAreaNotes(area.slug, locale);
 const title = renderCopy(copy.title, vars);
 const description = renderCopy(copy.description, vars);
 const h1 = renderCopy(copy.h1, vars);
@@ -41,10 +285,10 @@ const faq = copy.faq.map((item) => ({
 }));
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: "Visit guidance", pathSuffix: "locations" },
+  { name: copy.kicker, pathSuffix: "locations" },
   { name: areaName, pathSuffix: `delivery/${area.slug}` },
 ];
-const whatsappUrl = CONTACT.whatsappWithMsg(h1);
+const whatsappUrl = `${CONTACT.whatsappWithMsg(h1)}&source=delivery`;
 ---
 
 <PageLayout
@@ -59,22 +303,10 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
 >
   <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">Visit guidance</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
       <h1 class="mt-1 text-3xl font-bold leading-tight">{h1}</h1>
       <p class="mt-4 text-base leading-relaxed text-text-muted">{intro}</p>
-
-      <section class="mt-5 rounded-xl border border-emerald/35 bg-emerald/10 p-4">
-        <h2 class="text-lg font-bold text-emerald-dim">{compliance.title}</h2>
-        <p class="mt-2 text-base leading-relaxed text-text-muted">{compliance.text}</p>
-        <a
-          href={LEGAL_GUIDE_SOURCE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="mt-3 inline-flex text-sm font-semibold text-emerald-dim hover:underline"
-        >
-          {compliance.sourceCta}
-        </a>
-      </section>
+      {notes?.delivery && <p class="mt-3 text-base leading-relaxed text-text-muted">{notes.delivery}</p>}
 
       <div class="mt-6 grid grid-cols-2 gap-3">
         <a
@@ -83,8 +315,10 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
           rel="noopener noreferrer"
           class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
           data-track="contact_whatsapp_click"
-          data-track-placement="delivery_area"
+          data-track-placement="delivery"
           data-track-detail={`delivery:${area.slug}:whatsapp`}
+          data-wa-source="delivery"
+          data-whatsapp-ref={`delivery:${area.slug}`}
         >
           {copy.cta}
         </a>
@@ -104,7 +338,7 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
       <section class="mt-8">
         <h2 class="text-xl font-bold text-emerald-dim">{copy.statusTitle}</h2>
         <div class="mt-3 grid gap-3">
-          {[renderCopy(copy.eta, vars), copy.payment, copy.discreet].map((item) => (
+          {[renderCopy(copy.eta, vars), copy.stock, copy.privateTerms].map((item) => (
             <p class="card-surface px-4 py-3 text-base text-text-muted">{item}</p>
           ))}
         </div>
@@ -131,9 +365,9 @@ const whatsappUrl = CONTACT.whatsappWithMsg(h1);
         ))}
       </section>
 
-      <nav class="mt-8 grid gap-3" aria-label="Related pages">
+      <nav class="mt-8 grid gap-3" aria-label={copy.relatedLabel}>
         <a href={localePath(locale, `areas/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          Visit guidance near {areaName}
+          {renderCopy(copy.relatedArea, vars)}
         </a>
         <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
           {ui.footerSeo.allPages}

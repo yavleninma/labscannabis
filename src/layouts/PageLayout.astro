@@ -4,6 +4,7 @@ import type { Locale } from "@/lib/i18n";
 import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
 import { t } from "@/lib/ui";
+import { ADDRESS } from "@/data/site";
 import AgeGate from "@/components/AgeGate.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
@@ -58,6 +59,10 @@ const siteUrl = getSiteUrl();
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content={pageDesc} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
+    <meta name="geo.region" content="TH-20" />
+    <meta name="geo.placename" content="Pattaya" />
+    <meta name="geo.position" content={`${ADDRESS.lat};${ADDRESS.lng}`} />
+    <meta name="ICBM" content={`${ADDRESS.lat}, ${ADDRESS.lng}`} />
     <link rel="canonical" href={canonical} />
     {hreflangs.map((h) => (
       <link rel="alternate" hreflang={h.hreflang} href={h.href} />

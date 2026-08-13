@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "구 Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1그램", "10g": "10그램", "1kg": "1kg" },
+    "weights": {
+      "1g": "1그램",
+      "10g": "10그램",
+      "1kg": "1kg"
+    },
     "pricingTitle": "꽃 가격",
     "strainsInStock": "White Widow 및 기타 품종 재고 있음",
     "jointsOfferPromo": "이벤트: 3 joints 200바트",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "태국에서 대마초 꽃은 관리 대상이며 20세 이상도 유효한 태국 처방 또는 필요한 의료 문서가 필요합니다. 구매 전 문의하세요."
+    "text": "이 웹사이트에는 public checkout, 온라인 결제, order form 또는 확정된 배송/판매가 없습니다. 개별 세부 사항은 WhatsApp에서 논의합니다."
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (구 Labs Dispensary) 파타야 licensed · 20+ only",
-    "rights": "All rights reserved"
+    "disclaimer": "Labs Cannabis (구 Labs Dispensary). 파타야 허가 대마초 소매점. 만 20세 이상만 이용 가능합니다.",
+    "rights": "모든 권리 보유."
   },
   "ageGate": {
+    "kicker": "성인 20+ 전용",
     "title": "만 20세 이상?",
-    "text": "성인 전용. 태국 대마초 꽃은 관리 대상이며 유효한 태국 의료 문서가 필요합니다.",
+    "text": "이 사이트는 성인 20+ 전용입니다. 만 20세 이상이며 파타야 대마 메뉴 정보 또는 태국 도매 문의를 보려는 경우에만 계속하세요.",
+    "note": "이 웹사이트에는 public checkout, 온라인 결제, order form 또는 확정된 배송/판매가 없습니다. 개별 세부 사항은 WhatsApp에서 논의합니다.",
     "enter": "예, 20+",
     "exit": "나가기"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "지역",
-    "buyTitle": "무게별",
+    "buyTitle": "매장",
     "moreTitle": "더보기",
     "allPages": "모든 페이지",
     "pattaya": "파타야",
     "jomtien": "좀티엔",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "나클루아",
+    "pratumnak": "Pratumnak",
+    "nearMe": "근처 대마초",
+    "howToBuy": "구매 방법",
     "w1g": "1g",
     "w10g": "10g",
     "w30g": "30g",
@@ -126,8 +136,11 @@
     "w1kg": "1kg",
     "wholesale": "도매",
     "delivery": "배달",
+    "pattayaDelivery": "파타야 배달",
     "bestShop": "최고 매장",
-    "whiteWidow": "White Widow"
+    "whiteWidow": "White Widow",
+    "strainPage": "White Widow 품종",
+    "legalGuide": "관광객 법률 가이드"
   },
   "locations": {
     "title": "파타야 대마초 — 모든 페이지",

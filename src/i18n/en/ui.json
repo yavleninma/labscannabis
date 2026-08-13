@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "formerly Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1g", "10g": "10g", "1kg": "1kg" },
+    "weights": {
+      "1g": "1g",
+      "10g": "10g",
+      "1kg": "1kg"
+    },
     "pricingTitle": "Bud prices",
     "strainsInStock": "White Widow & more strains in stock",
     "jointsOfferPromo": "Special: 3 joints for ฿200",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+ only",
-    "text": "Thailand requires a valid Thai prescription or required medical documentation for adults 20+. Ask us what is needed before you buy."
+    "text": "No public checkout, online payment, order form, or confirmed delivery/sale happens on this website. Individual details go to WhatsApp."
   },
   "footer": {
     "disclaimer": "Labs Cannabis (formerly Labs Dispensary). Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
     "rights": "All rights reserved."
   },
   "ageGate": {
+    "kicker": "Adults 20+ only",
     "title": "Are you 20 or older?",
-    "text": "This site is for adults only. Cannabis flower in Thailand is controlled and requires valid Thai medical documentation.",
+    "text": "This site is for adults 20+ only. Continue only if you are at least 20 and want to view cannabis menu information for Pattaya or wholesale inquiries in Thailand.",
+    "note": "No public checkout, online payment, order form, or confirmed delivery/sale happens on this website. Individual details go to WhatsApp.",
     "enter": "Yes, I'm 20+",
     "exit": "Leave"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "Areas",
-    "buyTitle": "Buy by weight",
+    "buyTitle": "Shop",
     "moreTitle": "More",
     "allPages": "All location pages",
     "pattaya": "Pattaya",
     "jomtien": "Jomtien",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "Naklua",
+    "pratumnak": "Pratumnak",
+    "nearMe": "Cannabis near me",
+    "howToBuy": "How to buy",
     "w1g": "1g",
     "w10g": "10g",
     "w30g": "30g",

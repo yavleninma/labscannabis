@@ -6,18 +6,54 @@ interface Props {
 }
 
 const { locale } = Astro.props;
+const copy: Record<Locale, { badge: string; text: string }> = {
+  en: {
+    badge: "20+ only",
+    text:
+      "Adults 20+ only. Use WhatsApp for today's menu, effects, freshness, location, pickup, and delivery possibility. This website has no public checkout, payment, order form, or confirmed online sale.",
+  },
+  ru: {
+    badge: "Только 20+",
+    text:
+      "Только для взрослых 20+. В WhatsApp можно спросить сегодняшнее меню, эффекты, свежесть, локацию, самовывоз и возможность доставки. На сайте нет публичного checkout, оплаты, order form или подтвержденной онлайн-продажи.",
+  },
+  th: {
+    badge: "20+ เท่านั้น",
+    text:
+      "สำหรับผู้ใหญ่ 20+ เท่านั้น ใช้ WhatsApp เพื่อถามเมนูวันนี้ เอฟเฟกต์ ความสด ที่ตั้ง การรับของ และความเป็นไปได้ในการจัดส่ง เว็บไซต์ไม่มี public checkout การชำระเงิน order form หรือการขายออนไลน์ที่ยืนยันแล้ว",
+  },
+  ar: {
+    badge: "20+ فقط",
+    text:
+      "للبالغين 20+ فقط. استخدم WhatsApp للسؤال عن قائمة اليوم والتأثيرات والطزاجة والموقع والاستلام وإمكانية التوصيل. لا يوجد في الموقع public checkout أو دفع أو order form أو بيع مؤكد عبر الإنترنت.",
+  },
+  zh: {
+    badge: "仅限20+",
+    text:
+      "仅限20岁以上成人。请通过 WhatsApp 咨询今日菜单、效果、新鲜度、位置、取货和配送可能性。网站没有 public checkout、付款、order form 或确认的在线销售。",
+  },
+  ko: {
+    badge: "20+ 전용",
+    text:
+      "성인 20+ 전용입니다. WhatsApp에서 오늘의 메뉴, 효과, 신선도, 위치, 픽업, 배송 가능성을 문의하세요. 이 웹사이트에는 public checkout, 결제, order form 또는 확정된 온라인 판매가 없습니다.",
+  },
+  ja: {
+    badge: "20+ のみ",
+    text:
+      "20歳以上の成人のみ。今日のメニュー、効果、鮮度、場所、受け取り、配送可能性は WhatsApp で確認してください。このサイトには public checkout、支払い、order form、確定したオンライン販売はありません。",
+  },
+};
+const note = copy[locale] ?? copy.en;
 ---
 
 <section class="py-8">
   <div class="site-main">
     <div class="card-surface p-5">
       <span class="mb-2 inline-block rounded-full border border-border bg-bg-elevated px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
-        20+ only
+        {note.badge}
       </span>
       <p class="text-base leading-relaxed text-text-muted">
-        Cannabis flower in Thailand is restricted to lawful medical and licensed channels. This
-        website does not provide medical advice, prescriptions, online ordering, delivery, or
-        payment processing.
+        {note.text}
       </p>
     </div>
   </div>

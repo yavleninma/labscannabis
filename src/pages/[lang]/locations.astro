@@ -12,20 +12,165 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
-const pageTitle = "Cannabis visit guidance in Pattaya";
-const pageDescription =
-  "Area pages for lawful medical cannabis eligibility questions, directions, and visit planning in Pattaya. No online sale, reservation, delivery, or payment is completed here.";
+const copy: Record<
+  Locale,
+  {
+    title: string;
+    description: string;
+    deliveryGroup: string;
+    breadcrumb: string;
+    deliveryAreaLabel: string;
+    labels: {
+      wholesale: string;
+      delivery: string;
+      whiteWidow: string;
+      best: string;
+      cheap: string;
+      weight: string;
+      guide: string;
+      info: string;
+    };
+  }
+> = {
+  en: {
+    title: "Cannabis menu pages in Pattaya",
+    description:
+      "Browse Labs Cannabis Pattaya pages by area, delivery possibility, strain, weight, and buying guide. Ask current details on WhatsApp.",
+    deliveryGroup: "Delivery possibility",
+    breadcrumb: "Menu pages",
+    deliveryAreaLabel: "Delivery possibility for {area}",
+    labels: {
+      wholesale: "Wholesale and bulk inquiry",
+      delivery: "Delivery possibility before travelling",
+      whiteWidow: "White Widow strain information",
+      best: "Best sellers and trust signals",
+      cheap: "Affordable menu options",
+      weight: "Weight and menu inquiry",
+      guide: "Buying guide",
+      info: "Cannabis menu information",
+    },
+  },
+  ru: {
+    title: "Страницы меню каннабиса в Паттайе",
+    description:
+      "Разделы Labs Cannabis Pattaya по районам, возможности доставки, сортам, весам и buying guide. Актуальные детали - в WhatsApp.",
+    deliveryGroup: "Возможность доставки",
+    breadcrumb: "Страницы меню",
+    deliveryAreaLabel: "Возможность доставки для {area}",
+    labels: {
+      wholesale: "Опт и bulk inquiry",
+      delivery: "Возможность доставки перед поездкой",
+      whiteWidow: "Информация о сорте White Widow",
+      best: "Хиты и сигналы доверия",
+      cheap: "Доступные варианты меню",
+      weight: "Запрос веса и меню",
+      guide: "Гайд по покупке",
+      info: "Информация о меню каннабиса",
+    },
+  },
+  th: {
+    title: "หน้าเมนูกัญชาในพัทยา",
+    description:
+      "ดูหน้า Labs Cannabis Pattaya ตามพื้นที่ ความเป็นไปได้ของ delivery สายพันธุ์ น้ำหนัก และ buying guide รายละเอียดล่าสุดถามใน WhatsApp",
+    deliveryGroup: "ความเป็นไปได้ของ delivery",
+    breadcrumb: "หน้าเมนู",
+    deliveryAreaLabel: "ความเป็นไปได้ของ delivery สำหรับ {area}",
+    labels: {
+      wholesale: "สอบถาม wholesale และ bulk",
+      delivery: "เช็ค delivery possibility ก่อนเดินทาง",
+      whiteWidow: "ข้อมูลสายพันธุ์ White Widow",
+      best: "Best sellers และ trust signals",
+      cheap: "ตัวเลือกเมนูราคาดี",
+      weight: "สอบถามน้ำหนักและเมนู",
+      guide: "คู่มือการซื้อ",
+      info: "ข้อมูลเมนูกัญชา",
+    },
+  },
+  ar: {
+    title: "صفحات قائمة القنب في باتايا",
+    description:
+      "تصفح صفحات Labs Cannabis Pattaya حسب المنطقة وإمكانية التوصيل والسلالة والوزن ودليل الشراء. التفاصيل الحالية عبر WhatsApp.",
+    deliveryGroup: "إمكانية التوصيل",
+    breadcrumb: "صفحات القائمة",
+    deliveryAreaLabel: "إمكانية التوصيل إلى {area}",
+    labels: {
+      wholesale: "استعلام جملة و bulk",
+      delivery: "إمكانية التوصيل قبل التحرك",
+      whiteWidow: "معلومات سلالة White Widow",
+      best: "الأكثر طلباً وإشارات الثقة",
+      cheap: "خيارات قائمة بسعر مناسب",
+      weight: "استعلام الوزن والقائمة",
+      guide: "دليل الشراء",
+      info: "معلومات قائمة القنب",
+    },
+  },
+  zh: {
+    title: "芭提雅大麻菜单页面",
+    description:
+      "按区域、配送可能性、品种、重量和购买指南浏览 Labs Cannabis Pattaya 页面。当前详情请在 WhatsApp 询问。",
+    deliveryGroup: "配送可能性",
+    breadcrumb: "菜单页面",
+    deliveryAreaLabel: "{area} 配送可能性",
+    labels: {
+      wholesale: "批发和 bulk 咨询",
+      delivery: "出发前确认配送可能性",
+      whiteWidow: "White Widow 品种信息",
+      best: "热卖与信任信号",
+      cheap: "高性价比菜单选项",
+      weight: "重量和菜单咨询",
+      guide: "购买指南",
+      info: "大麻菜单信息",
+    },
+  },
+  ko: {
+    title: "파타야 대마 메뉴 페이지",
+    description:
+      "지역, 배송 가능성, 품종, 중량, 구매 가이드별 Labs Cannabis Pattaya 페이지를 확인하세요. 최신 정보는 WhatsApp에서 문의하세요.",
+    deliveryGroup: "배송 가능성",
+    breadcrumb: "메뉴 페이지",
+    deliveryAreaLabel: "{area} 배송 가능성",
+    labels: {
+      wholesale: "도매 및 bulk 문의",
+      delivery: "이동 전 배송 가능성 확인",
+      whiteWidow: "White Widow 품종 정보",
+      best: "best sellers와 신뢰 정보",
+      cheap: "합리적인 메뉴 옵션",
+      weight: "중량 및 메뉴 문의",
+      guide: "구매 가이드",
+      info: "대마 메뉴 정보",
+    },
+  },
+  ja: {
+    title: "パタヤ大麻メニューページ",
+    description:
+      "エリア、配送可能性、品種、重量、購入ガイド別に Labs Cannabis Pattaya のページを確認できます。最新情報は WhatsApp で確認してください。",
+    deliveryGroup: "配送可能性",
+    breadcrumb: "メニューページ",
+    deliveryAreaLabel: "{area} の配送可能性",
+    labels: {
+      wholesale: "卸売と bulk 問い合わせ",
+      delivery: "移動前の配送可能性確認",
+      whiteWidow: "White Widow 品種情報",
+      best: "best sellers と信頼情報",
+      cheap: "手頃なメニュー選択肢",
+      weight: "重量とメニュー問い合わせ",
+      guide: "購入ガイド",
+      info: "大麻メニュー情報",
+    },
+  },
+};
+const pageCopy = copy[locale] ?? copy.en;
 
-const areaPages = SEO_PAGES.filter((p) => p.area && !p.weight);
+const areaPages = SEO_PAGES.filter((p) => ["near-me", "buy", "best"].includes(p.intent) && !p.weight);
 const weightPages = SEO_PAGES.filter((p) => p.weight);
-const otherPages = SEO_PAGES.filter((p) => !p.area && !p.weight);
+const otherPages = SEO_PAGES.filter((p) => p.intent === "wholesale" || p.intent === "guide");
 const generatedAreaPages = AREAS.map((area) => ({
   href: localePath(locale, `areas/${area.slug}`),
   label: area.name[locale],
 }));
 const deliveryPages = AREAS.map((area) => ({
   href: localePath(locale, `delivery/${area.slug}`),
-  label: `Visit guidance for ${area.name[locale]}`,
+  label: pageCopy.deliveryAreaLabel.replace("{area}", area.name[locale]),
 }));
 const guidePages = [
   {
@@ -40,16 +185,17 @@ const guidePages = [
 
 const safeSeoLabel = (slug: string) => {
   if (slug.includes("wholesale") || slug.includes("100g") || slug.includes("1kg")) {
-    return "Licensed business inquiry";
+    return pageCopy.labels.wholesale;
   }
-  if (slug.includes("delivery")) return "Visit guidance before travelling";
-  if (slug.includes("white-widow")) return "White Widow information";
-  if (slug.includes("best")) return "Labs Cannabis visit information";
-  if (slug.includes("cheap")) return "Eligibility information";
+  if (slug.includes("delivery")) return pageCopy.labels.delivery;
+  if (slug.includes("white-widow")) return pageCopy.labels.whiteWidow;
+  if (slug.includes("best")) return pageCopy.labels.best;
+  if (slug.includes("cheap")) return pageCopy.labels.cheap;
   if (slug.includes("1g") || slug.includes("10g") || slug.includes("30g")) {
-    return "Documentation and visit inquiry";
+    return pageCopy.labels.weight;
   }
-  return "Cannabis information";
+  if (slug.includes("how-to-buy") || slug.includes("near-me")) return pageCopy.labels.guide;
+  return pageCopy.labels.info;
 };
 
 const groups = [
@@ -61,7 +207,7 @@ const groups = [
     ],
   },
   {
-    title: "Visit guidance",
+    title: pageCopy.deliveryGroup,
     links: [
       ...SEO_PAGES.filter((p) => p.intent === "delivery").map((page) => ({
         href: localePath(locale, page.slug),
@@ -84,22 +230,22 @@ const groups = [
 ].filter((g) => g.links.length > 0);
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: "Visit guidance", pathSuffix: "locations" },
+  { name: pageCopy.breadcrumb, pathSuffix: "locations" },
 ];
 ---
 
 <PageLayout
   locale={locale}
   pathSuffix="locations"
-  title={`${pageTitle} | Labs Cannabis`}
-  description={pageDescription}
+  title={`${pageCopy.title} | Labs Cannabis`}
+  description={pageCopy.description}
   pageType="locations"
   breadcrumbs={breadcrumbs}
 >
   <section class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold leading-tight">{pageTitle}</h1>
-      <p class="mt-3 text-base leading-relaxed text-text-muted">{pageDescription}</p>
+      <h1 class="text-3xl font-bold leading-tight">{pageCopy.title}</h1>
+      <p class="mt-3 text-base leading-relaxed text-text-muted">{pageCopy.description}</p>
 
       {groups.map((group) => (
         <div class="mt-8">

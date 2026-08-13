@@ -22,11 +22,19 @@ export default defineConfig({
       serialize: (item) => {
         const links = item.links ?? [];
         const enLink = links.find((link) => link.lang === "en");
+        const pathname = new URL(item.url).pathname;
+        const isHome = /^\/[a-z]{2}\/$/.test(pathname);
+        const next = {
+          ...item,
+          lastmod: new Date().toISOString(),
+          changefreq: isHome ? "daily" : "weekly",
+          priority: isHome ? 1 : item.priority,
+        };
         if (!enLink || links.some((link) => link.lang === "x-default")) {
-          return item;
+          return next;
         }
         return {
-          ...item,
+          ...next,
           links: [...links, { lang: "x-default", url: enLink.url }],
         };
       },

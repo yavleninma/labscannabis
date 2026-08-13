@@ -1,6 +1,8 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { BRAND, ADDRESS, CONTACT, GOOGLE } from "@/data/site";
+import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
+import { AREAS } from "@/data/seo-matrix";
+import { PRICE_LADDER } from "@/data/prices";
 import { getSiteUrl, localePath, LOCALE_HREFLANG } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
 
@@ -50,6 +52,9 @@ const {
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const businessId = `${baseUrl}/#business`;
+const listedMin = PRICE_LADDER[0]?.total ?? 300;
+const listedMax = PRICE_LADDER[PRICE_LADDER.length - 1]?.total ?? 40000;
+const areaNames = [...new Set(AREAS.map((area) => area.name.en))];
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -61,6 +66,8 @@ const localBusiness = {
   telephone: CONTACT.phoneIntl,
   image: `${baseUrl}/media/IMG_20260517_175646.jpg`,
   sameAs: [GOOGLE.listingUrl],
+  priceRange: `฿${listedMin}-฿${listedMax}`,
+  hasMap: GOOGLE.listingUrl,
   address: {
     "@type": "PostalAddress",
     streetAddress: ADDRESS.street,
@@ -74,6 +81,23 @@ const localBusiness = {
     latitude: ADDRESS.lat,
     longitude: ADDRESS.lng,
   },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    opens: HOURS.open,
+    closes: HOURS.close,
+  },
+  aggregateRating: {
+    "@type": "AggregateRating",
+    ratingValue: String(GOOGLE.rating),
+    reviewCount: String(GOOGLE.reviewCount),
+    bestRating: "5",
+    worstRating: "1",
+  },
+  areaServed: areaNames.map((name) => ({
+    "@type": "Place",
+    name,
+  })),
 };
 
 const breadcrumbItems =
@@ -114,9 +138,12 @@ const serviceLd =
         "@id": `${pageUrl}#service`,
         name:
           pageType === "delivery"
-            ? `Cannabis visit guidance - ${serviceAreaName ?? "Pattaya"}`
-            : `Cannabis retail service - ${serviceAreaName ?? "Pattaya"}`,
-        serviceType: "Cannabis compliance information and visit guidance",
+            ? `Cannabis delivery inquiry - ${serviceAreaName ?? "Pattaya"}`
+            : `Cannabis shop near ${serviceAreaName ?? "Pattaya"}`,
+        serviceType:
+          pageType === "delivery"
+            ? "WhatsApp inquiry for pickup or delivery possibility"
+            : "Walk-in cannabis shop visit and WhatsApp menu inquiry",
         provider: { "@id": businessId },
         areaServed: {
           "@type": "Place",
@@ -146,7 +173,7 @@ const articleLd =
           url: baseUrl,
         },
         datePublished: article?.datePublished ?? "2026-05-24",
-        dateModified: article?.dateModified ?? "2026-05-24",
+        dateModified: article?.dateModified ?? "2026-08-13",
       }
     : null;
 
@@ -165,13 +192,7 @@ const faqLd =
 
 const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
 
-const jsonBlocks = [
-  localBusiness,
-  breadcrumbLd,
-  serviceLd,
-  articleLd,
-  faqLd,
-].filter(Boolean);
+const jsonBlocks = [localBusiness, breadcrumbLd, serviceLd, articleLd, faqLd].filter(Boolean);
 ---
 
 {jsonBlocks.map((block) => (

@@ -6,7 +6,11 @@
   "brand": "Labs Cannabis",
   "formerBrand": "旧 Labs Dispensary",
   "reels": {
-    "weights": { "1g": "1グラム", "10g": "10グラム", "1kg": "1kg" },
+    "weights": {
+      "1g": "1グラム",
+      "10g": "10グラム",
+      "1kg": "1kg"
+    },
     "pricingTitle": "花の価格",
     "strainsInStock": "White Widowほか品種在庫あり",
     "jointsOfferPromo": "キャンペーン：3本ジョイント 200バーツ",
@@ -72,15 +76,17 @@
   },
   "medical": {
     "badge": "20+",
-    "text": "タイでは大麻花は管理対象で、20歳以上でも有効なタイの処方または必要な医療書類が必要です。購入前にご確認ください。"
+    "text": "このサイトには public checkout、オンライン決済、order form、確定した配送/販売はありません。個別の詳細は WhatsApp で確認します。"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis（旧Labs Dispensary）パタヤ licensed · 20+のみ",
-    "rights": "All rights reserved"
+    "disclaimer": "Labs Cannabis（旧Labs Dispensary）。パタヤの認可大麻小売店。20歳以上のみ。",
+    "rights": "無断転載を禁じます。"
   },
   "ageGate": {
+    "kicker": "20歳以上の成人のみ",
     "title": "20歳以上ですか？",
-    "text": "成人向け。タイの大麻花は管理対象で、有効なタイの医療書類が必要です。",
+    "text": "このサイトは20歳以上の成人専用です。20歳以上で、パタヤの大麻メニュー情報またはタイ国内の卸売問い合わせを確認したい場合のみ続行してください。",
+    "note": "このサイトには public checkout、オンライン決済、order form、確定した配送/販売はありません。個別の詳細は WhatsApp で確認します。",
     "enter": "はい、20+",
     "exit": "退出"
   },
@@ -111,14 +117,18 @@
   },
   "footerSeo": {
     "areasTitle": "エリア",
-    "buyTitle": "重量別",
+    "buyTitle": "ショップ",
     "moreTitle": "その他",
     "allPages": "すべてのページ",
     "pattaya": "パタヤ",
     "jomtien": "ジョムティエン",
     "walkingStreet": "Walking Street",
     "soiHollywood": "Soi Hollywood",
+    "soiBuakhao": "Soi Buakhao",
     "naklua": "ナクルア",
+    "pratumnak": "プラタムナック",
+    "nearMe": "近くの大麻",
+    "howToBuy": "買い方",
     "w1g": "1g",
     "w10g": "10g",
     "w30g": "30g",
@@ -126,8 +136,11 @@
     "w1kg": "1kg",
     "wholesale": "卸売",
     "delivery": "配達",
+    "pattayaDelivery": "パタヤ配達",
     "bestShop": "最高の店",
-    "whiteWidow": "White Widow"
+    "whiteWidow": "White Widow",
+    "strainPage": "White Widow 品種",
+    "legalGuide": "旅行者向け法律ガイド"
   },
   "locations": {
     "title": "パタヤの大麻 — すべてのページ",

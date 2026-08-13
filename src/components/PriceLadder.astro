@@ -7,37 +7,128 @@ interface Props {
 }
 
 const { locale } = Astro.props;
-const inquiryText =
-  "Hi Labs Cannabis, I am 20+ and in Pattaya. I would like to ask about lawful medical cannabis eligibility and what documentation is needed before visiting.";
-const inquiryHref = CONTACT.whatsappWithMsg(inquiryText);
-
-const checkpoints = [
+const copy: Record<
+  Locale,
   {
-    title: "Eligibility first",
-    body: "Ask what Thai medical documentation is required before travelling to the shop.",
+    kicker: string;
+    title: string;
+    lead: string;
+    cta: string;
+    prefill: string;
+    cards: { title: string; body: string }[];
+  }
+> = {
+  en: {
+    kicker: "Menu flow",
+    title: "Ask what is fresh now",
+    lead:
+      "Use WhatsApp to check today's flower, best sellers, pre-roll deal, effects, pickup timing, and delivery possibility before you move.",
+    cta: "Ask today's menu on WhatsApp",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "Fresh flower", body: "Ask for current photos, strain notes, type, effects, and freshness before visiting." },
+      { title: "Deals and pre-rolls", body: "Check best sellers and current pre-roll deal privately in WhatsApp." },
+      { title: "Pickup or delivery possibility", body: "Confirm Soi Hollywood directions or ask whether delivery can be discussed for your area." },
+    ],
   },
-  {
-    title: "No online sale",
-    body: "This website does not sell, reserve, deliver, or accept payment for cannabis flower.",
+  ru: {
+    kicker: "Меню",
+    title: "Спросите, что свежее сейчас",
+    lead:
+      "В WhatsApp можно уточнить сегодняшние цветы, хиты, pre-roll deal, эффекты, время самовывоза и возможность доставки до поездки.",
+    cta: "Спросить меню в WhatsApp",
+    prefill:
+      "Привет, Labs Cannabis. Мне 20+, я в Паттайе. Пришлите, пожалуйста, сегодняшнее свежее меню, хиты, эффекты, pre-roll deal и варианты самовывоза/доставки.",
+    cards: [
+      { title: "Свежие цветы", body: "Спросите актуальные фото, заметки по сортам, тип, эффекты и свежесть перед визитом." },
+      { title: "Deals и pre-rolls", body: "Проверьте хиты и текущий pre-roll deal приватно в WhatsApp." },
+      { title: "Самовывоз или доставка", body: "Подтвердите маршрут на Soi Hollywood или спросите, можно ли обсудить доставку для вашего района." },
+    ],
   },
-  {
-    title: "Visit planning",
-    body: "Confirm directions to Pattaya 13 Alley (Soi Hollywood) and what to bring before you arrive.",
+  th: {
+    kicker: "เมนู",
+    title: "ถามว่ามีอะไรสดตอนนี้",
+    lead:
+      "ใช้ WhatsApp เช็คดอกวันนี้ best sellers, pre-roll deal, เอฟเฟกต์ เวลา pickup และความเป็นไปได้ของ delivery ก่อนออกเดินทาง",
+    cta: "ถามเมนูวันนี้ใน WhatsApp",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "ดอกสด", body: "ถามรูปปัจจุบัน notes ของสายพันธุ์ type เอฟเฟกต์ และความสดก่อนมาที่ร้าน" },
+      { title: "Deals และ pre-rolls", body: "เช็ค best sellers และ pre-roll deal ล่าสุดแบบส่วนตัวใน WhatsApp" },
+      { title: "Pickup หรือ delivery", body: "ยืนยันเส้นทาง Soi Hollywood หรือถามว่าสามารถคุยเรื่อง delivery สำหรับพื้นที่คุณได้ไหม" },
+    ],
   },
-];
+  ar: {
+    kicker: "القائمة",
+    title: "اسأل عما هو طازج الآن",
+    lead:
+      "استخدم WhatsApp للتحقق من زهور اليوم، best sellers، pre-roll deal، التأثيرات، وقت الاستلام، وإمكانية التوصيل قبل التحرك.",
+    cta: "اسأل عن قائمة اليوم عبر WhatsApp",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "زهور طازجة", body: "اطلب الصور الحالية وملاحظات السلالات والنوع والتأثيرات والطزاجة قبل الزيارة." },
+      { title: "Deals و pre-rolls", body: "تحقق من best sellers و pre-roll deal الحالي بشكل خاص في WhatsApp." },
+      { title: "استلام أو توصيل", body: "أكد اتجاهات Soi Hollywood أو اسأل إن كان يمكن مناقشة التوصيل لمنطقتك." },
+    ],
+  },
+  zh: {
+    kicker: "菜单流程",
+    title: "先问现在什么新鲜",
+    lead:
+      "出发前通过 WhatsApp 查询今日 flower、best sellers、pre-roll deal、效果、取货时间和配送可能性。",
+    cta: "在 WhatsApp 询问今日菜单",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "新鲜花", body: "到店前索取当前照片、品种 notes、type、效果和新鲜度。" },
+      { title: "Deals 与 pre-rolls", body: "在 WhatsApp 私下查看 best sellers 和当前 pre-roll deal。" },
+      { title: "取货或配送可能性", body: "确认 Soi Hollywood 路线，或询问你的区域是否可讨论配送。" },
+    ],
+  },
+  ko: {
+    kicker: "메뉴 흐름",
+    title: "지금 신선한 것을 물어보세요",
+    lead:
+      "이동 전 WhatsApp에서 오늘의 flower, best sellers, pre-roll deal, 효과, 픽업 시간, 배송 가능성을 확인하세요.",
+    cta: "WhatsApp에서 오늘 메뉴 문의",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "신선한 flower", body: "방문 전 현재 사진, 품종 notes, type, 효과, 신선도를 문의하세요." },
+      { title: "Deals와 pre-rolls", body: "best sellers와 현재 pre-roll deal을 WhatsApp에서 비공개로 확인하세요." },
+      { title: "픽업 또는 배송 가능성", body: "Soi Hollywood 길 안내를 확인하거나 내 지역 배송 가능성을 문의하세요." },
+    ],
+  },
+  ja: {
+    kicker: "メニュー確認",
+    title: "今なにが新鮮か確認",
+    lead:
+      "移動前に WhatsApp で今日の flower、best sellers、pre-roll deal、効果、受け取り時間、配送可能性を確認できます。",
+    cta: "WhatsAppで今日のメニューを確認",
+    prefill:
+      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's fresh cannabis menu, best sellers, effects, pre-roll deal, and pickup/delivery possibilities.",
+    cards: [
+      { title: "新鮮な flower", body: "来店前に現在の写真、品種 notes、type、効果、鮮度を確認してください。" },
+      { title: "Deals と pre-rolls", body: "best sellers と現在の pre-roll deal を WhatsApp で非公開確認できます。" },
+      { title: "受け取りまたは配送可能性", body: "Soi Hollywood への道順、またはエリア配送の相談可否を確認してください。" },
+    ],
+  },
+};
+const panel = copy[locale] ?? copy.en;
+const inquiryHref = `${CONTACT.whatsappWithMsg(panel.prefill)}&source=product_card`;
 ---
 
 <section id="inquiry" class="py-12">
   <div class="site-main">
-    <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-dim">Compliance inquiry</p>
-    <h2 class="section-title">Ask before visiting</h2>
-    <p class="section-lead">
-      WhatsApp is for eligibility questions, documentation guidance, and directions only. No online order,
-      reservation, delivery, or payment is completed through this website.
-    </p>
+    <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-emerald-dim">{panel.kicker}</p>
+    <h2 class="section-title">{panel.title}</h2>
+    <p class="section-lead">{panel.lead}</p>
 
     <div class="space-y-3">
-      {checkpoints.map((item) => (
+      {panel.cards.map((item) => (
         <div class="card-surface p-5">
           <h3 class="text-lg font-bold text-text">{item.title}</h3>
           <p class="mt-1.5 text-base leading-relaxed text-text-muted">{item.body}</p>
@@ -51,10 +142,13 @@ const checkpoints = [
       rel="noopener noreferrer"
       class="mt-5 inline-flex w-full items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-base font-bold text-black"
       data-track="contact_whatsapp_click"
-      data-track-placement="inquiry_panel"
+      data-track-placement="product_card"
       data-track-detail="inquiry_panel:whatsapp"
+      data-wa-source="product_card"
+      data-whatsapp-ref="inquiry_panel"
+      data-utm-campaign="product_card"
     >
-      Request eligibility guidance
+      {panel.cta}
     </a>
   </div>
 </section>

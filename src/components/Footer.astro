@@ -15,22 +15,54 @@ const ui = t(locale);
 const seo = ui.footerSeo;
 const fallbackSeo = t("en").footerSeo;
 const year = new Date().getFullYear();
+const footerCopy: Record<Locale, { menu: string; hours: string; legal: string }> = {
+  en: {
+    menu: "Menu",
+    hours: "Check Google Maps for current hours.",
+    legal:
+      "Adults 20+ only. This website is an information and WhatsApp inquiry funnel; it does not provide public checkout, online payment, order forms, or public online cannabis sales.",
+  },
+  ru: {
+    menu: "Меню",
+    hours: "Актуальные часы смотрите в Google Maps.",
+    legal:
+      "Только 20+. Сайт работает как информационная витрина и WhatsApp inquiry funnel; здесь нет public checkout, онлайн-оплаты, order forms или публичной онлайн-продажи каннабиса.",
+  },
+  th: {
+    menu: "เมนู",
+    hours: "ตรวจสอบเวลาเปิดล่าสุดใน Google Maps",
+    legal:
+      "สำหรับผู้ใหญ่ 20+ เท่านั้น เว็บไซต์นี้เป็นข้อมูลและช่องทางสอบถามผ่าน WhatsApp ไม่มี public checkout การชำระเงินออนไลน์ order forms หรือการขายกัญชาออนไลน์สาธารณะ",
+  },
+  ar: {
+    menu: "القائمة",
+    hours: "تحقق من ساعات العمل الحالية على Google Maps.",
+    legal:
+      "للبالغين 20+ فقط. هذا الموقع واجهة معلومات واستفسار عبر WhatsApp؛ لا يوفر public checkout أو دفعاً إلكترونياً أو order forms أو بيعاً عاماً للقنب عبر الإنترنت.",
+  },
+  zh: {
+    menu: "菜单",
+    hours: "请在 Google Maps 查看最新营业时间。",
+    legal:
+      "仅限20岁以上成人。本网站是信息与 WhatsApp 咨询入口；不提供 public checkout、在线付款、order forms 或公开在线销售大麻。",
+  },
+  ko: {
+    menu: "메뉴",
+    hours: "현재 영업시간은 Google Maps에서 확인하세요.",
+    legal:
+      "성인 20+ 전용. 이 웹사이트는 정보와 WhatsApp 문의용이며 public checkout, 온라인 결제, order forms 또는 공개 온라인 대마초 판매를 제공하지 않습니다.",
+  },
+  ja: {
+    menu: "メニュー",
+    hours: "最新の営業時間は Google Maps でご確認ください。",
+    legal:
+      "20歳以上の成人のみ。このサイトは情報と WhatsApp 問い合わせ用であり、public checkout、オンライン決済、order forms、公開オンライン販売は提供しません。",
+  },
+};
+const copy = footerCopy[locale] ?? footerCopy.en;
 
 const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
-  const safeLabels: Partial<Record<keyof typeof fallbackSeo, string>> = {
-    buyTitle: "Inquiry",
-    w1g: "Documentation inquiry",
-    w10g: "Visit inquiry",
-    w30g: "Eligibility inquiry",
-    w100g: "Business verification",
-    w1kg: "Licensed business review",
-    wholesale: "Business inquiry",
-    delivery: "Visit guidance",
-    pattayaDelivery: "Pattaya visit guidance",
-    bestShop: "Visit information",
-    whiteWidow: "White Widow information",
-  };
-  return safeLabels[labelKey] ?? seo[labelKey] ?? fallbackSeo[labelKey] ?? labelKey;
+  return seo[labelKey] ?? fallbackSeo[labelKey] ?? labelKey;
 };
 ---
 
@@ -39,13 +71,13 @@ const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
     <nav class="flex flex-wrap gap-4 font-medium">
       <a href={localePath(locale)} class="hover:text-emerald-dim">{ui.nav.home}</a>
       <a
-        href={`${localePath(locale)}#inquiry`}
+        href={`${localePath(locale)}#menu`}
         class="hover:text-emerald-dim"
         data-track="menu_link_click"
         data-track-placement="footer"
-        data-track-detail="footer:inquiry"
+        data-track-detail="footer:menu"
       >
-        Inquiry
+        {copy.menu}
       </a>
       <a
         href={localePath(locale, "wholesale")}
@@ -92,20 +124,16 @@ const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
         data-track-placement="footer"
         data-track-detail="footer:locations"
       >
-        {seo.allPages} →
+        {seo.allPages} -&gt;
       </a>
     </p>
 
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
       <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
-      <p class="text-sm">Check Google Maps for current hours.</p>
+      <p class="text-sm">{copy.hours}</p>
     </div>
 
-    <p class="text-sm leading-relaxed">
-      This website is for general information and compliance inquiries only. It does not advertise,
-      sell, reserve, deliver, export, or accept payment for cannabis flower or controlled herbal
-      products. Cannabis flower in Thailand is restricted to lawful medical and licensed channels.
-    </p>
-    <p class="text-sm">© {year} Labs Cannabis. {ui.footer.rights}</p>
+    <p class="text-sm leading-relaxed">{copy.legal}</p>
+    <p class="text-sm">&copy; {year} Labs Cannabis. {ui.footer.rights}</p>
   </div>
 </footer>
