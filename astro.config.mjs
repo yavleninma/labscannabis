@@ -3,8 +3,18 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
+import { getIndexPolicyForPathname, localePathname } from "./src/lib/index-policy.mjs";
 
 const site = (process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique").replace(/\/+$/, "");
+const sitemapHreflangs = {
+  en: "en",
+  ru: "ru",
+  th: "th",
+  ar: "ar",
+  zh: "zh-CN",
+  ko: "ko",
+  ja: "ja",
+};
 
 export default defineConfig({
   site,
@@ -18,24 +28,27 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap({
-      filter: (page) => new URL(page).pathname !== "/",
+      filter: (page) => getIndexPolicyForPathname(new URL(page).pathname).indexable,
       serialize: (item) => {
-        const links = item.links ?? [];
-        const enLink = links.find((link) => link.lang === "en");
-        const pathname = new URL(item.url).pathname;
-        const isHome = /^\/[a-z]{2}\/$/.test(pathname);
-        const next = {
-          ...item,
-          lastmod: new Date().toISOString(),
-          changefreq: isHome ? "daily" : "weekly",
-          priority: isHome ? 1 : item.priority,
-        };
-        if (!enLink || links.some((link) => link.lang === "x-default")) {
-          return next;
-        }
+        const policy = getIndexPolicyForPathname(new URL(item.url).pathname);
+        if (!policy.indexable) return undefined;
+
+        const links = policy.locales.map((locale) => ({
+          lang: sitemapHreflangs[locale],
+          url: new URL(localePathname(locale, policy.suffix), site).href,
+        }));
+        links.push({
+          lang: "x-default",
+          url: new URL(localePathname("en", policy.suffix), site).href,
+        });
+
+        const { lastmod: _lastmod, links: _links, ...withoutFreshness } = item;
+        const isHome = policy.suffix === "";
         return {
-          ...next,
-          links: [...links, { lang: "x-default", url: enLink.url }],
+          ...withoutFreshness,
+          links,
+          changefreq: isHome ? "daily" : "weekly",
+          priority: isHome ? 1 : withoutFreshness.priority,
         };
       },
       i18n: {

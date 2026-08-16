@@ -13,23 +13,22 @@ interface Props {
 const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
 const homeHref = localePath(locale);
-const source = "hero";
+const source = "header";
 const whatsappHref = `${CONTACT.whatsappWithMsg(
-  "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, and pickup/delivery options.",
+  "Hi Labs Cannabis. I am in Pattaya and would like directions and help coordinating a visit to the shop.",
 )}&source=${encodeURIComponent(source)}`;
-const headerLabels: Record<Locale, { menu: string; fresh: string; visit: string; whatsapp: string; primary: string }> = {
-  en: { menu: "Menu", fresh: "Fresh", visit: "Visit", whatsapp: "WhatsApp", primary: "Primary" },
-  ru: { menu: "Меню", fresh: "Свежесть", visit: "Локация", whatsapp: "WhatsApp", primary: "Главная навигация" },
-  th: { menu: "เมนู", fresh: "ความสด", visit: "ที่ตั้ง", whatsapp: "WhatsApp", primary: "เมนูหลัก" },
-  ar: { menu: "القائمة", fresh: "الطزاجة", visit: "الموقع", whatsapp: "WhatsApp", primary: "التنقل الرئيسي" },
-  zh: { menu: "菜单", fresh: "新鲜度", visit: "位置", whatsapp: "WhatsApp", primary: "主导航" },
-  ko: { menu: "메뉴", fresh: "신선도", visit: "위치", whatsapp: "WhatsApp", primary: "기본 탐색" },
-  ja: { menu: "メニュー", fresh: "鮮度", visit: "場所", whatsapp: "WhatsApp", primary: "主要ナビゲーション" },
+const headerLabels: Record<Locale, { areas: string; visit: string; whatsapp: string; primary: string }> = {
+  en: { areas: "Areas", visit: "Visit", whatsapp: "WhatsApp", primary: "Primary" },
+  ru: { areas: "Районы", visit: "Локация", whatsapp: "WhatsApp", primary: "Главная навигация" },
+  th: { areas: "พื้นที่", visit: "ที่ตั้ง", whatsapp: "WhatsApp", primary: "เมนูหลัก" },
+  ar: { areas: "المناطق", visit: "الموقع", whatsapp: "WhatsApp", primary: "التنقل الرئيسي" },
+  zh: { areas: "区域", visit: "位置", whatsapp: "WhatsApp", primary: "主导航" },
+  ko: { areas: "지역", visit: "위치", whatsapp: "WhatsApp", primary: "기본 탐색" },
+  ja: { areas: "エリア", visit: "場所", whatsapp: "WhatsApp", primary: "主要ナビゲーション" },
 };
 const labels = headerLabels[locale] ?? headerLabels.en;
 const navItems = [
-  { href: `${homeHref}#menu`, label: labels.menu, key: "menu" },
-  { href: `${homeHref}#fresh`, label: labels.fresh, key: "fresh" },
+  { href: `${homeHref}#areas`, label: labels.areas, key: "areas" },
   { href: `${homeHref}#visit`, label: labels.visit, key: "visit" },
 ];
 ---
@@ -68,8 +67,8 @@ const navItems = [
         data-track-placement={source}
         data-track-detail="header:whatsapp"
         data-wa-source={source}
-        data-whatsapp-ref="header_menu"
-        data-utm-campaign="hero"
+        data-whatsapp-ref="header_directions"
+        data-utm-campaign="header"
       >
         {labels.whatsapp}
       </a>

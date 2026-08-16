@@ -1,11 +1,15 @@
 export const WHATSAPP_TRACKING_SOURCES = [
   "hero",
+  "header",
+  "contact",
   "sticky_cta",
   "product_card",
   "strain_page",
   "wholesale_quote",
   "delivery",
   "map",
+  "area_directions",
+  "visit_directions",
   "language",
   "seo_landing_page",
 ] as const;

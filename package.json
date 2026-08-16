@@ -3,15 +3,19 @@
   "version": "2.0.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "scripts": {
     "dev": "astro dev",
-    "build": "npm run gen:seo-fallback && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "media": "node scripts/transcode-media.mjs",
     "gen:seo": "node scripts/gen-seo-content.mjs",
     "gen:seo-fallback": "node scripts/gen-seo-fallback.mjs",
     "gen:reviews": "node scripts/gen-review-translations.mjs",
-    "check:seo": "node scripts/check-seo.mjs"
+    "check:seo": "node scripts/check-seo.mjs",
+    "check": "npm run build && npm run check:seo"
   },
   "dependencies": {
     "@astrojs/react": "^4.2.1",

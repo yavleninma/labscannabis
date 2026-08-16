@@ -1,8 +1,6 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { BRAND, ADDRESS, CONTACT, GOOGLE, HOURS } from "@/data/site";
-import { AREAS } from "@/data/seo-matrix";
-import { PRICE_LADDER } from "@/data/prices";
+import { BRAND, ADDRESS, CONTACT, GOOGLE } from "@/data/site";
 import { getSiteUrl, localePath, LOCALE_HREFLANG } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
 
@@ -52,21 +50,17 @@ const {
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const businessId = `${baseUrl}/#business`;
-const listedMin = PRICE_LADDER[0]?.total ?? 300;
-const listedMax = PRICE_LADDER[PRICE_LADDER.length - 1]?.total ?? 40000;
-const areaNames = [...new Set(AREAS.map((area) => area.name.en))];
 
 const localBusiness = {
   "@context": "https://schema.org",
   "@type": ["LocalBusiness", "Store"],
   "@id": businessId,
   name: BRAND.name,
-  alternateName: BRAND.formerName,
+  alternateName: GOOGLE.listingName,
   url: `${baseUrl}${localePath(locale)}`,
   telephone: CONTACT.phoneIntl,
   image: `${baseUrl}/media/IMG_20260517_175646.jpg`,
   sameAs: [GOOGLE.listingUrl],
-  priceRange: `฿${listedMin}-฿${listedMax}`,
   hasMap: GOOGLE.listingUrl,
   address: {
     "@type": "PostalAddress",
@@ -81,23 +75,6 @@ const localBusiness = {
     latitude: ADDRESS.lat,
     longitude: ADDRESS.lng,
   },
-  openingHoursSpecification: {
-    "@type": "OpeningHoursSpecification",
-    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    opens: HOURS.open,
-    closes: HOURS.close,
-  },
-  aggregateRating: {
-    "@type": "AggregateRating",
-    ratingValue: String(GOOGLE.rating),
-    reviewCount: String(GOOGLE.reviewCount),
-    bestRating: "5",
-    worstRating: "1",
-  },
-  areaServed: areaNames.map((name) => ({
-    "@type": "Place",
-    name,
-  })),
 };
 
 const breadcrumbItems =
@@ -131,19 +108,13 @@ const breadcrumbLd =
     : null;
 
 const serviceLd =
-  pageType === "area" || pageType === "delivery"
+  pageType === "area"
     ? {
         "@context": "https://schema.org",
         "@type": "Service",
         "@id": `${pageUrl}#service`,
-        name:
-          pageType === "delivery"
-            ? `Cannabis delivery inquiry - ${serviceAreaName ?? "Pattaya"}`
-            : `Cannabis shop near ${serviceAreaName ?? "Pattaya"}`,
-        serviceType:
-          pageType === "delivery"
-            ? "WhatsApp inquiry for pickup or delivery possibility"
-            : "Walk-in cannabis shop visit and WhatsApp menu inquiry",
+        name: `Directions to ${BRAND.name} from ${serviceAreaName ?? "Pattaya"}`,
+        serviceType: "Directions and visit coordination",
         provider: { "@id": businessId },
         areaServed: {
           "@type": "Place",
@@ -154,26 +125,26 @@ const serviceLd =
     : null;
 
 const articleLd =
-  pageType === "guide"
+  pageType === "guide" && article
     ? {
         "@context": "https://schema.org",
         "@type": "Article",
         "@id": `${pageUrl}#article`,
-        headline: article?.headline ?? title,
+        headline: article.headline,
         description,
         inLanguage: LOCALE_HREFLANG[locale],
         mainEntityOfPage: pageUrl,
         author: {
           "@type": "Organization",
-          name: article?.author ?? BRAND.name,
+          name: article.author ?? BRAND.name,
         },
         publisher: {
           "@type": "Organization",
           name: BRAND.name,
           url: baseUrl,
         },
-        datePublished: article?.datePublished ?? "2026-05-24",
-        dateModified: article?.dateModified ?? "2026-08-13",
+        datePublished: article.datePublished,
+        dateModified: article.dateModified,
       }
     : null;
 

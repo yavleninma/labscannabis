@@ -4,4 +4,3 @@ Disallow: /api/
 Disallow: /studio/
 
 Sitemap: https://labscannabis.boutique/sitemap-index.xml
-Host: https://labscannabis.boutique

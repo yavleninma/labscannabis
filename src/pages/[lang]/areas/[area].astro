@@ -1,23 +1,18 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
-import PriceLadder from "@/components/PriceLadder.astro";
-import Reels from "@/components/Reels.astro";
 import ReviewStrip from "@/components/ReviewStrip.astro";
 import MapBlock from "@/components/MapBlock.astro";
-import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
-import { AREA_DETAILS, getAreaNotes, renderCopy } from "@/data/area-copy";
-import { REELS_SLIDES } from "@/data/media";
+import { AREA_DETAILS, renderCopy } from "@/data/area-copy";
+import { ADDRESS, CONTACT, GOOGLE } from "@/data/site";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
   const paths: { params: { lang: string; area: string } }[] = [];
   for (const lang of LOCALES) {
-    for (const area of AREAS) {
-      paths.push({ params: { lang, area: area.slug } });
-    }
+    for (const area of AREAS) paths.push({ params: { lang, area: area.slug } });
   }
   return paths;
 }
@@ -26,149 +21,146 @@ const { lang, area: areaSlug } = Astro.params;
 const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
-const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
-const areaCopy: Record<
-  Locale,
-  {
-    title: string;
-    description: string;
-    h1: string;
-    intro: string;
-    whyTitle: string;
-    whyBody: string;
-    visitTitle: string;
-    visitBody: string;
-    landmarksTitle: string;
-    relatedLabel: string;
-    relatedDelivery: string;
-  }
-> = {
+const details = AREA_DETAILS[area.slug] ?? { landmarks: [] };
+
+type AreaCopy = {
+  title: string;
+  description: string;
+  h1: string;
+  intro: string;
+  listingTitle: string;
+  listingBody: string;
+  visitTitle: string;
+  visitBody: string;
+  landmarksTitle: string;
+  maps: string;
+  whatsapp: string;
+  relatedLabel: string;
+  contact: string;
+  whatsappPrefill: string;
+};
+
+const areaCopy: Record<Locale, AreaCopy> = {
   en: {
-    title: "Cannabis menu near {area} | Labs Cannabis Pattaya",
-    description:
-      "Fresh cannabis menu near {area}: strains, effects, best sellers, Soi Hollywood location, pickup, and delivery possibility by WhatsApp.",
-    h1: "Cannabis menu near {area}",
-    intro:
-      "Labs Cannabis on Soi Hollywood helps adult visitors from {area} check fresh flower, pre-rolls, effects, deals, and the fastest way to reach the shop.",
-    whyTitle: "Why ask from {area}",
-    whyBody:
-      "{area} visitors usually want quick proof before moving: real Google reviews, clear location, fresh menu notes, and direct WhatsApp answers.",
-    visitTitle: "Ask first or walk in",
-    visitBody:
-      "The shop is at 32 Pattaya 13 Alley (Soi Hollywood), close to Walking Street. Message on WhatsApp for today's menu, freshness, pickup timing, or delivery possibility.",
-    landmarksTitle: "Nearby landmarks",
-    relatedLabel: "Related pages",
-    relatedDelivery: "Delivery possibility for {area}",
+    title: "Directions from {area} to LABS DISPENSARY | Pattaya",
+    description: "Open the live Google Maps listing and directions from {area} to 32 Pattaya 13 Alley in Pattaya.",
+    h1: "Directions from {area} to LABS DISPENSARY",
+    intro: "This website uses the Labs Cannabis name. Google Maps currently lists the same contact address and phone as LABS DISPENSARY.",
+    listingTitle: "Use the live Maps listing",
+    listingBody: "Open Google Maps for the current pin, route and public listing details. Hours and review information can change, so they are not repeated here.",
+    visitTitle: "Destination address",
+    visitBody: "The published address is {address}. Use the live pin before travelling.",
+    landmarksTitle: "Area references",
+    maps: "Open Google Maps",
+    whatsapp: "Ask for directions",
+    relatedLabel: "Visit information",
+    contact: "Contact and address",
+    whatsappPrefill: "Hi Labs Cannabis. I need help finding the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ru: {
-    title: "Меню каннабиса рядом с {area} | Labs Cannabis Паттайя",
-    description:
-      "Свежее меню каннабиса рядом с {area}: сорта, эффекты, хиты, локация Soi Hollywood, самовывоз и возможность доставки через WhatsApp.",
-    h1: "Меню каннабиса рядом с {area}",
-    intro:
-      "Labs Cannabis на Soi Hollywood помогает взрослым гостям из {area} проверить свежие цветы, pre-rolls, эффекты, deals и самый быстрый маршрут до магазина.",
-    whyTitle: "Зачем спрашивать из {area}",
-    whyBody:
-      "Гостям из {area} обычно важно быстро проверить магазин: реальные Google-отзывы, понятная локация, заметки по свежему меню и прямой ответ в WhatsApp.",
-    visitTitle: "Спросите сначала или заходите",
-    visitBody:
-      "Магазин находится по адресу 32 Pattaya 13 Alley (Soi Hollywood), рядом с Walking Street. Напишите в WhatsApp про сегодняшнее меню, свежесть, самовывоз или возможность доставки.",
-    landmarksTitle: "Ориентиры рядом",
-    relatedLabel: "Связанные страницы",
-    relatedDelivery: "Возможность доставки для {area}",
+    title: "Маршрут из {area} к LABS DISPENSARY | Паттайя",
+    description: "Откройте актуальную карточку Google Maps и маршрут из {area} к адресу 32 Pattaya 13 Alley в Паттайе.",
+    h1: "Маршрут из {area} к LABS DISPENSARY",
+    intro: "Сайт использует название Labs Cannabis. В Google Maps тот же адрес и телефон сейчас указаны в карточке LABS DISPENSARY.",
+    listingTitle: "Проверяйте актуальную карточку Maps",
+    listingBody: "В Google Maps находятся текущий пин, маршрут и публичные данные карточки. Часы и отзывы могут меняться, поэтому мы не дублируем их здесь.",
+    visitTitle: "Адрес назначения",
+    visitBody: "Опубликованный адрес: {address}. Перед поездкой откройте актуальный пин.",
+    landmarksTitle: "Ориентиры района",
+    maps: "Открыть Google Maps",
+    whatsapp: "Спросить маршрут",
+    relatedLabel: "Информация о визите",
+    contact: "Контакты и адрес",
+    whatsappPrefill: "Здравствуйте. Помогите, пожалуйста, найти локацию в Google Maps по адресу 32 Pattaya 13 Alley.",
   },
   th: {
-    title: "เมนูกัญชาใกล้ {area} | Labs Cannabis พัทยา",
-    description:
-      "เมนูกัญชาสดใกล้ {area}: สายพันธุ์ เอฟเฟกต์ best sellers ที่ตั้ง Soi Hollywood pickup และ delivery possibility ผ่าน WhatsApp",
-    h1: "เมนูกัญชาใกล้ {area}",
-    intro:
-      "Labs Cannabis บน Soi Hollywood ช่วยผู้ใหญ่จาก {area} เช็คดอกสด pre-rolls เอฟเฟกต์ deals และเส้นทางที่เร็วที่สุดไปที่ร้าน",
-    whyTitle: "ทำไมต้องถามจาก {area}",
-    whyBody:
-      "ผู้มาเยือน {area} มักต้องการเช็คอย่างรวดเร็วก่อนเดินทาง: รีวิว Google จริง โลเคชันชัดเจน notes เมนูสด และคำตอบตรงใน WhatsApp",
-    visitTitle: "ถามก่อนหรือแวะร้าน",
-    visitBody:
-      "ร้านอยู่ที่ 32 Pattaya 13 Alley (Soi Hollywood) ใกล้ Walking Street ทัก WhatsApp เพื่อถามเมนูวันนี้ ความสด เวลา pickup หรือ delivery possibility",
-    landmarksTitle: "จุดใกล้เคียง",
-    relatedLabel: "หน้าที่เกี่ยวข้อง",
-    relatedDelivery: "delivery possibility สำหรับ {area}",
+    title: "เส้นทางจาก {area} ไป LABS DISPENSARY | พัทยา",
+    description: "เปิด Google Maps และเส้นทางปัจจุบันจาก {area} ไปยัง 32 Pattaya 13 Alley พัทยา",
+    h1: "เส้นทางจาก {area} ไป LABS DISPENSARY",
+    intro: "เว็บไซต์ใช้ชื่อ Labs Cannabis ส่วน Google Maps แสดงที่อยู่และโทรศัพท์เดียวกันในชื่อ LABS DISPENSARY",
+    listingTitle: "ใช้ข้อมูลล่าสุดจาก Maps",
+    listingBody: "เปิด Google Maps เพื่อดูหมุด เส้นทาง และข้อมูลสาธารณะล่าสุด เวลาเปิดและรีวิวอาจเปลี่ยนแปลง จึงไม่แสดงซ้ำที่นี่",
+    visitTitle: "ที่อยู่ปลายทาง",
+    visitBody: "ที่อยู่ที่เผยแพร่คือ {address} โปรดเปิดหมุดล่าสุดก่อนเดินทาง",
+    landmarksTitle: "จุดอ้างอิงในพื้นที่",
+    maps: "เปิด Google Maps",
+    whatsapp: "ถามเส้นทาง",
+    relatedLabel: "ข้อมูลการเดินทาง",
+    contact: "ติดต่อและที่อยู่",
+    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ar: {
-    title: "قائمة القنب قرب {area} | Labs Cannabis باتايا",
-    description:
-      "قائمة قنب طازجة قرب {area}: سلالات، تأثيرات، best sellers، موقع Soi Hollywood، استلام، وإمكانية التوصيل عبر WhatsApp.",
-    h1: "قائمة القنب قرب {area}",
-    intro:
-      "Labs Cannabis في Soi Hollywood يساعد البالغين من {area} على التحقق من الزهور الطازجة وpre-rolls والتأثيرات وdeals وأسرع طريق إلى المتجر.",
-    whyTitle: "لماذا تسأل من {area}",
-    whyBody:
-      "زوار {area} يحتاجون عادة إلى تحقق سريع قبل التحرك: مراجعات Google حقيقية، موقع واضح، ملاحظات قائمة طازجة، ورد مباشر عبر WhatsApp.",
-    visitTitle: "اسأل أولاً أو زر المتجر",
-    visitBody:
-      "المتجر في 32 Pattaya 13 Alley (Soi Hollywood)، قرب Walking Street. راسلنا عبر WhatsApp لقائمة اليوم والطزاجة ووقت الاستلام أو إمكانية التوصيل.",
-    landmarksTitle: "معالم قريبة",
-    relatedLabel: "صفحات ذات صلة",
-    relatedDelivery: "إمكانية التوصيل إلى {area}",
+    title: "الاتجاهات من {area} إلى LABS DISPENSARY | باتايا",
+    description: "افتح بطاقة Google Maps المباشرة والاتجاهات من {area} إلى 32 Pattaya 13 Alley في باتايا.",
+    h1: "الاتجاهات من {area} إلى LABS DISPENSARY",
+    intro: "يستخدم الموقع اسم Labs Cannabis، بينما تعرض Google Maps العنوان والهاتف نفسيهما باسم LABS DISPENSARY.",
+    listingTitle: "استخدم بطاقة Maps المباشرة",
+    listingBody: "افتح Google Maps للدبوس والمسار وبيانات البطاقة الحالية. قد تتغير الساعات والمراجعات، لذلك لا نكررها هنا.",
+    visitTitle: "عنوان الوجهة",
+    visitBody: "العنوان المنشور هو {address}. افتح الدبوس الحالي قبل السفر.",
+    landmarksTitle: "معالم المنطقة",
+    maps: "افتح Google Maps",
+    whatsapp: "اسأل عن الاتجاهات",
+    relatedLabel: "معلومات الزيارة",
+    contact: "الاتصال والعنوان",
+    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   zh: {
-    title: "{area}附近大麻菜单 | Labs Cannabis 芭提雅",
-    description:
-      "{area}附近新鲜大麻菜单：品种、效果、best sellers、Soi Hollywood 位置、取货和 WhatsApp 配送可能性。",
-    h1: "{area}附近大麻菜单",
-    intro:
-      "Soi Hollywood 的 Labs Cannabis 帮助来自 {area} 的成人访客查询新鲜 flower、pre-rolls、效果、deals 和最快到店路线。",
-    whyTitle: "为什么从 {area} 先询问",
-    whyBody:
-      "{area} 访客通常希望出发前快速确认：真实 Google 评价、清晰位置、新鲜菜单 notes，以及 WhatsApp 直接回复。",
-    visitTitle: "先询问或直接到店",
-    visitBody:
-      "门店位于 32 Pattaya 13 Alley (Soi Hollywood)，靠近 Walking Street。请在 WhatsApp 询问今日菜单、新鲜度、取货时间或配送可能性。",
-    landmarksTitle: "附近地标",
-    relatedLabel: "相关页面",
-    relatedDelivery: "{area} 配送可能性",
+    title: "从{area}前往 LABS DISPENSARY | 芭提雅",
+    description: "打开实时 Google Maps 商家页面，查看从{area}前往芭提雅 32 Pattaya 13 Alley 的路线。",
+    h1: "从{area}前往 LABS DISPENSARY",
+    intro: "本网站使用 Labs Cannabis 名称；Google Maps 目前以 LABS DISPENSARY 显示相同的地址和电话。",
+    listingTitle: "使用实时 Maps 页面",
+    listingBody: "请在 Google Maps 查看当前定位、路线和公开信息。营业时间与评价可能变化，因此这里不重复显示。",
+    visitTitle: "目的地地址",
+    visitBody: "公开地址为 {address}。出发前请打开最新定位。",
+    landmarksTitle: "区域参考",
+    maps: "打开 Google Maps",
+    whatsapp: "询问路线",
+    relatedLabel: "到店信息",
+    contact: "联系方式与地址",
+    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ko: {
-    title: "{area} 근처 대마 메뉴 | Labs Cannabis 파타야",
-    description:
-      "{area} 근처 신선한 대마 메뉴: 품종, 효과, best sellers, Soi Hollywood 위치, 픽업, WhatsApp 배송 가능성.",
-    h1: "{area} 근처 대마 메뉴",
-    intro:
-      "Soi Hollywood의 Labs Cannabis는 {area}에서 온 성인 방문자가 신선한 flower, pre-rolls, 효과, deals, 가장 빠른 매장 경로를 확인하도록 돕습니다.",
-    whyTitle: "{area}에서 먼저 묻는 이유",
-    whyBody:
-      "{area} 방문자는 이동 전 빠른 확인을 원합니다: 실제 Google 리뷰, 명확한 위치, 신선한 메뉴 notes, WhatsApp 직접 답변.",
-    visitTitle: "먼저 문의하거나 방문",
-    visitBody:
-      "매장은 Walking Street 근처 32 Pattaya 13 Alley (Soi Hollywood)에 있습니다. 오늘 메뉴, 신선도, 픽업 시간, 배송 가능성은 WhatsApp으로 문의하세요.",
-    landmarksTitle: "주변 랜드마크",
-    relatedLabel: "관련 페이지",
-    relatedDelivery: "{area} 배송 가능성",
+    title: "{area}에서 LABS DISPENSARY 가는 길 | 파타야",
+    description: "실시간 Google Maps 정보와 {area}에서 파타야 32 Pattaya 13 Alley까지의 경로를 확인하세요.",
+    h1: "{area}에서 LABS DISPENSARY 가는 길",
+    intro: "웹사이트는 Labs Cannabis 이름을 사용하며, Google Maps에는 같은 주소와 전화번호가 LABS DISPENSARY로 표시됩니다.",
+    listingTitle: "실시간 Maps 정보 사용",
+    listingBody: "현재 핀, 경로와 공개 정보는 Google Maps에서 확인하세요. 영업시간과 리뷰 정보는 변경될 수 있어 여기에 반복하지 않습니다.",
+    visitTitle: "목적지 주소",
+    visitBody: "공개 주소는 {address}입니다. 출발 전에 최신 핀을 여세요.",
+    landmarksTitle: "지역 참고 지점",
+    maps: "Google Maps 열기",
+    whatsapp: "길 안내 문의",
+    relatedLabel: "방문 정보",
+    contact: "연락처 및 주소",
+    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ja: {
-    title: "{area}近くの大麻メニュー | Labs Cannabis パタヤ",
-    description:
-      "{area}近くの新鮮な大麻メニュー: 品種、効果、best sellers、Soi Hollywood の場所、受け取り、WhatsApp 配送可能性。",
-    h1: "{area}近くの大麻メニュー",
-    intro:
-      "Soi Hollywood の Labs Cannabis は、{area} からの成人訪問者が新鮮な flower、pre-rolls、効果、deals、最短ルートを確認できるようにします。",
-    whyTitle: "{area} から先に確認する理由",
-    whyBody:
-      "{area} の訪問者は移動前にすばやく確認したいものです: 実際の Google レビュー、明確な場所、新鮮なメニュー notes、WhatsApp の直接返信。",
-    visitTitle: "先に確認、または来店",
-    visitBody:
-      "店舗は Walking Street 近くの 32 Pattaya 13 Alley (Soi Hollywood) です。今日のメニュー、鮮度、受け取り時間、配送可能性は WhatsApp で確認してください。",
-    landmarksTitle: "近くの目印",
-    relatedLabel: "関連ページ",
-    relatedDelivery: "{area} の配送可能性",
+    title: "{area}から LABS DISPENSARY への行き方 | パタヤ",
+    description: "Google Maps の最新リスティングと、{area}からパタヤの 32 Pattaya 13 Alley までの経路を確認できます。",
+    h1: "{area}から LABS DISPENSARY への行き方",
+    intro: "このサイトは Labs Cannabis の名称を使用し、Google Maps では同じ住所と電話番号が LABS DISPENSARY として表示されています。",
+    listingTitle: "最新の Maps リスティングを使用",
+    listingBody: "現在のピン、経路、公開情報は Google Maps で確認してください。営業時間やレビューは変わるため、ここでは掲載しません。",
+    visitTitle: "目的地住所",
+    visitBody: "公開住所は {address} です。移動前に最新のピンを開いてください。",
+    landmarksTitle: "エリアの目印",
+    maps: "Google Maps を開く",
+    whatsapp: "道順を確認",
+    relatedLabel: "訪問情報",
+    contact: "連絡先と住所",
+    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
 };
+
 const copy = areaCopy[locale] ?? areaCopy.en;
 const ui = t(locale);
-const vars = { area: areaName, eta: details.etaMinutes };
-const notes = getAreaNotes(area.slug, locale);
+const vars = { area: areaName, address: ADDRESS.street };
 const title = renderCopy(copy.title, vars);
 const description = renderCopy(copy.description, vars);
+const whatsappUrl = `${CONTACT.whatsappWithMsg(copy.whatsappPrefill)}&source=area_directions`;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.locations.areasGroup, pathSuffix: "locations" },
@@ -185,48 +177,47 @@ const breadcrumbs = [
   breadcrumbs={breadcrumbs}
   serviceAreaName={areaName}
 >
-  <section class="px-4 pt-8">
+  <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold leading-tight">{renderCopy(copy.h1, vars)}</h1>
-      <p class="mt-3 text-base leading-relaxed text-text-muted">
-        {renderCopy(copy.intro, vars)}
-      </p>
-      {notes?.shop && <p class="mt-3 text-base leading-relaxed text-text-muted">{notes.shop}</p>}
-    </div>
-  </section>
-  <section class="px-4 py-6">
-    <div class="mx-auto max-w-lg">
-      <h2 class="text-xl font-bold text-emerald-dim">{copy.whyTitle}</h2>
-      <p class="mt-2 text-base leading-relaxed text-text-muted">{renderCopy(copy.whyBody, vars)}</p>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.intro}</p>
 
-      <h2 class="mt-6 text-xl font-bold text-emerald-dim">{copy.visitTitle}</h2>
-      <p class="mt-2 text-base leading-relaxed text-text-muted">{renderCopy(copy.visitBody, vars)}</p>
+      <section class="mt-8">
+        <h2 class="text-xl font-bold text-emerald-dim">{copy.listingTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{copy.listingBody}</p>
+      </section>
+
+      <section class="mt-8">
+        <h2 class="text-xl font-bold text-emerald-dim">{copy.visitTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{renderCopy(copy.visitBody, vars)}</p>
+      </section>
 
       {details.landmarks.length > 0 && (
-        <div class="mt-6">
+        <section class="mt-8">
           <h2 class="text-xl font-bold text-emerald-dim">{copy.landmarksTitle}</h2>
           <ul class="mt-3 flex flex-wrap gap-2">
             {details.landmarks.map((landmark) => (
               <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-sm text-text-muted">{landmark}</li>
             ))}
           </ul>
-        </div>
+        </section>
       )}
 
-      <nav class="mt-6 grid gap-3" aria-label={copy.relatedLabel}>
-        <a href={localePath(locale, `delivery/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {renderCopy(copy.relatedDelivery, vars)}
+      <div class="mt-8 grid grid-cols-2 gap-3">
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="area_directions" data-track-detail={`area:${area.slug}:maps`}>
+          {copy.maps}
         </a>
-        <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.allPages}
+        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="contact_whatsapp_click" data-track-placement="area_directions" data-track-detail={`area:${area.slug}:whatsapp`} data-wa-source="area_directions" data-whatsapp-ref={`area:${area.slug}`}>
+          {copy.whatsapp}
         </a>
+      </div>
+
+      <nav class="mt-8" aria-label={copy.relatedLabel}>
+        <a href={localePath(locale, "contact")} class="card-surface block px-4 py-3 text-base font-medium hover:text-emerald-dim">{copy.contact}</a>
       </nav>
     </div>
-  </section>
-  <Reels locale={locale} slides={REELS_SLIDES.slice(0, 3)} mini />
-  <PriceLadder locale={locale} />
+  </article>
   <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
-  <MedicalCardNote locale={locale} />
   <Footer locale={locale} pathSuffix={`areas/${area.slug}`} />
 </PageLayout>
