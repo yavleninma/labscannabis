@@ -10,18 +10,18 @@ interface Props {
 const { locale } = Astro.props;
 const ui = t(locale);
 const labels: Record<Locale, string> = {
-  en: "Ask menu on WhatsApp",
-  ru: "Меню в WhatsApp",
-  th: "ถามเมนูใน WhatsApp",
-  ar: "اسأل عن القائمة في WhatsApp",
-  zh: "WhatsApp 问菜单",
-  ko: "WhatsApp 메뉴 문의",
-  ja: "WhatsAppでメニュー確認",
+  en: "Ask for directions",
+  ru: "Спросить маршрут",
+  th: "สอบถามเส้นทาง",
+  ar: "اسأل عن الاتجاهات",
+  zh: "询问路线",
+  ko: "길 안내 문의",
+  ja: "道順を確認",
 };
 const label = labels[locale] ?? labels.en;
 const source = "sticky_cta";
 const inquiryHref = CONTACT.whatsappWithMsg(
-  "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, location, and pickup/delivery options.",
+  "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley. I am not sending an order or payment.",
 );
 const sourcedHref = `${inquiryHref}&source=${encodeURIComponent(source)}`;
 ---
@@ -38,7 +38,7 @@ const sourcedHref = `${inquiryHref}&source=${encodeURIComponent(source)}`;
   data-track-placement={source}
   data-track-detail="sticky_cta:whatsapp"
   data-wa-source={source}
-  data-whatsapp-ref="sticky_menu"
+  data-whatsapp-ref="sticky_directions"
   data-utm-campaign={source}
 >
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">

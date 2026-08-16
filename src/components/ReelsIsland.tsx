@@ -12,8 +12,6 @@ const OFFER_SLIDE_ID = "offer-joints";
 
 const HERO_PHOTO_MS = 2000;
 const HERO_PHOTO_INDICES = new Set([0, 1, 3]);
-/** HTMLMediaElement.HAVE_FUTURE_DATA — numeric to avoid SSR ReferenceError */
-const VIDEO_READY = 3;
 
 function hasMediaVariants(src: string): boolean {
   return src.startsWith("/media/");
@@ -25,19 +23,13 @@ function thumbSrc(slide: MediaSlide): string {
   return slide.src;
 }
 
-function isVideoReady(video: HTMLVideoElement | null): boolean {
-  return !!video && video.readyState >= VIDEO_READY;
-}
-
 export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, offerSlidePromo }: Props) {
   const [index, setIndex] = useState(0);
   const [advancePaused, setAdvancePaused] = useState(false);
   const [playbackPaused, setPlaybackPaused] = useState(false);
   const touchStartY = useRef(0);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const videoReadyRef = useRef<Record<number, boolean>>({});
   const slideEnteredAt = useRef(Date.now());
-  const prevIndexRef = useRef(0);
 
   const goNext = useCallback(() => {
     setIndex((i) => (i + 1) % slides.length);
@@ -46,10 +38,6 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
   const goPrev = useCallback(() => {
     setIndex((i) => (i - 1 + slides.length) % slides.length);
   }, [slides.length]);
-
-  const markVideoReady = useCallback((i: number) => {
-    videoReadyRef.current[i] = true;
-  }, []);
 
   const selectSlide = useCallback((i: number) => {
     setIndex(i);
@@ -81,16 +69,10 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
 
     const isHeroPhoto = HERO_PHOTO_INDICES.has(index);
     const waitMs = isHeroPhoto ? HERO_PHOTO_MS : autoplayMs;
-    const nextSlide = slides[(index + 1) % slides.length];
-    const waitForVideo = isHeroPhoto && nextSlide?.type === "video";
-    const nextVideoIdx = (index + 1) % slides.length;
 
     const tick = () => {
       const elapsed = Date.now() - slideEnteredAt.current;
       if (elapsed < waitMs) return;
-      if (waitForVideo && !videoReadyRef.current[nextVideoIdx] && !isVideoReady(videoRefs.current[nextVideoIdx])) {
-        return;
-      }
       goNext();
     };
 
@@ -98,55 +80,13 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
     return () => clearInterval(t);
   }, [index, advancePaused, mini, autoplayMs, goNext, slides]);
 
-  const syncActiveVideo = useCallback(() => {
-    const activeVideo = videoRefs.current[index];
-    if (!activeVideo || slides[index]?.type !== "video") return;
-
-    if (prevIndexRef.current !== index) {
-      activeVideo.currentTime = 0;
-      prevIndexRef.current = index;
-    }
-
-    if (playbackPaused) {
-      activeVideo.pause();
-      return;
-    }
-
-    if (activeVideo.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-      void activeVideo.play().catch(() => {});
-    } else {
-      activeVideo.load();
-    }
-  }, [index, playbackPaused, slides]);
-
   useEffect(() => {
     videoRefs.current.forEach((video, i) => {
       if (!video || i === index) return;
       video.pause();
       video.currentTime = 0;
     });
-    syncActiveVideo();
-  }, [index, playbackPaused, slides, syncActiveVideo]);
-
-  useEffect(() => {
-    const cleanups: (() => void)[] = [];
-
-    slides.forEach((slide, i) => {
-      if (slide.type !== "video") return;
-      const video = videoRefs.current[i];
-      if (!video) return;
-
-      video.preload = "auto";
-      const onReady = () => markVideoReady(i);
-      video.addEventListener("canplaythrough", onReady);
-      cleanups.push(() => video.removeEventListener("canplaythrough", onReady));
-
-      if (isVideoReady(video)) markVideoReady(i);
-      video.load();
-    });
-
-    return () => cleanups.forEach((cleanup) => cleanup());
-  }, [slides, markVideoReady]);
+  }, [index]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -193,12 +133,13 @@ export default function ReelsIsland({ slides, autoplayMs = 5500, mini = false, o
                 poster={slide.poster}
                 muted
                 playsInline
-                preload="auto"
-                onCanPlay={() => {
-                  markVideoReady(i);
-                  if (i === index && !playbackPaused) void videoRefs.current[i]?.play().catch(() => {});
+                controls
+                preload="none"
+                onClick={(event) => event.stopPropagation()}
+                onPlay={() => {
+                  setAdvancePaused(true);
+                  setPlaybackPaused(false);
                 }}
-                onCanPlayThrough={() => markVideoReady(i)}
                 onEnded={() => {
                   if (i === index && !advancePaused) goNext();
                 }}

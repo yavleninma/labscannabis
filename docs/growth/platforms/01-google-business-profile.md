@@ -1,212 +1,169 @@
-# Platforms #01 — Google Business Profile Optimization
+# Google Business Profile — verified local entity checklist
 
-> **Перед стартом:** прочитай [`docs/growth/README.md`](../README.md) для shared context.
+> Read [docs/growth/README.md](../README.md) for shared context. Changes to the public profile are owner actions; this document does not authorize an agent to edit GBP.
 
-## TL;DR
+## Goal
 
-GBP (Google Business Profile, бывший Google My Business) — **самый высокоинтенсивный канал** для late-night impulse и для туристов. 70% всех «weed near me» поисков заканчиваются кликом на пункт в Map Pack, а не на website. Если мы не доминируем там — никакой SEO/TikTok не вытащит.
+Keep one consistent local entity across the website, Google Maps and relevant directories so people can find the shop, request directions and coordinate a visit. Do not add a field merely to make the profile look complete.
 
-Цель: к концу 30 дней Labs Cannabis = **#1 или #2** в Map Pack по запросам:
+## Truth rules
 
-- «cannabis pattaya», «weed pattaya»
-- «dispensary pattaya»
-- «cannabis delivery pattaya»
-- «weed near walking street»
-- «cannabis 24/7 pattaya»
+- Separate what is visible in the public listing from what the owner has confirmed.
+- Never infer opening hours, inventory, prices, delivery, service areas, payment methods, accessibility, languages, licences, legal eligibility, COAs or response times.
+- Do not copy a rating or review count into website copy or structured data. Both change and are already available in Google Maps.
+- Use the real-world business name shown on the storefront and customer-facing materials. Do not add search keywords to the GBP name.
+- Keep one profile for one real location. Do not create duplicate profiles for services or languages.
+- Owner approval is required before changing any external profile field.
 
-Это всё organic, ноль бюджета — только настройки и регулярные действия.
+## Public listing snapshot
 
-## Чек-лист настроек (one-time, ~2 часа Dima)
+Observed in the public Google Maps listing on 2026-08-16:
 
-### 1. Profile basics
+| Field | Public value |
+| --- | --- |
+| Listing name | LABS DISPENSARY |
+| Primary category | Cannabis store |
+| Address | 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150 |
+| Phone | +66 66 080 6784 |
+| Website | https://labscannabis.boutique/ |
+| Pin | 12.9233467, 100.8771557 |
+| Place ID | ChIJLTR5b56XAjERT7wBoWEw20M |
+| CID | 4889555016312011855 |
+| Direct listing URL | https://www.google.com/maps?cid=4889555016312011855 |
 
-- [ ] Business name: **Labs Cannabis** (не «Labs Cannabis Dispensary Best Pattaya 24/7» — keyword stuffing банится)
-- [ ] Primary category: **Cannabis store**
-- [ ] Secondary categories (до 9): `Alternative medicine practitioner`, `Wellness center`, `Convenience store` (избегай weed-shop spam)
-- [ ] Description (750 chars max — заполнить до 700):
+The website uses the brand name Labs Cannabis. Until the owner confirms a profile rename, show the bridge explicitly:
 
-  > Labs Cannabis is a licensed dispensary in Pattaya, 5 minutes from Walking Street. We serve fresh buds, pre-rolls, and concentrates with honest pricing. Walk-in welcome — Dima personally helps every guest pick the right strain. We also offer 24/7 cannabis delivery to hotels in Pattaya, Jomtien, Pratumnak, and Naklua, usually within 30 minutes. Free in-store sample so you can try before you buy. Medical card sorted on the spot in 2 minutes. Russian and English speaking staff. Located in Soi Hollywood (Pattaya 13 Alley).
+> Labs Cannabis — listed on Google Maps as LABS DISPENSARY
 
-- [ ] Address — verified
-- [ ] Service area — radius 15 km (Pattaya, Jomtien, Pratumnak, Naklua, Wong Amat)
-- [ ] Phone — same as on site
-- [ ] Website — `https://labscannabis.boutique/?utm_source=gbp&utm_medium=organic-local&utm_campaign=gbp-website-button` (использует UTM, см. site `#06`)
-- [ ] Hours: **Open 24 hours, every day**
-- [ ] Special hours для тайских праздников (Songkran, etc.) — заполнить заранее
+This snapshot is evidence of the public listing, not proof that every field is still correct.
 
-### 2. Services list
+## Owner confirmation required
 
-Заполнить 8–12 услуг (помогает в long-tail Map Pack):
+Before changing GBP, the owner must confirm:
 
-- 24/7 cannabis delivery
-- Walk-in dispensary
-- Pre-order pickup
-- Medical card assistance
-- Free in-store sample
-- Cannabis consultation
-- Pre-rolls
-- Fresh flower
-- Concentrates (если есть)
-- Russian-speaking staff
-- English-speaking staff
+- the exact storefront/signage name and whether the public name should remain LABS DISPENSARY;
+- the customer-facing opening hours and holiday exceptions;
+- whether any service area or off-site service is actually offered and permitted;
+- every service, product, attribute, payment method, language and accessibility feature;
+- any licence, medical, legal or regulatory statement.
 
-Каждая услуга — короткое описание 200 chars.
+If a fact cannot be confirmed, leave it out.
 
-### 3. Attributes
+## Safe owner checklist
 
-Включить все релевантные:
+### 1. Identity and NAP
 
-- LGBTQ+ friendly
-- Veteran-led / Women-led (если применимо)
-- Identifies as transgender-safe space (если применимо)
-- Wheelchair accessible entrance
-- Free Wi-Fi (если есть)
-- Cash payments
-- QR / mobile payments
+- [ ] Compare the storefront sign, phone, address and pin with the public listing.
+- [ ] Correct only confirmed discrepancies.
+- [ ] Keep Cannabis store as the primary category while it accurately describes the location.
+- [ ] Add a secondary category only when it describes a real, current operation.
+- [ ] Keep the same NAP on the website and in relevant citations.
 
-### 4. Photos (target: 50+ за месяц)
+### 2. Website attribution
 
-- Logo (1)
-- Cover photo (1) — фасад магазина в дневном свете
-- Profile photos (стандартные категории GBP):
-  - Interior — 10+
-  - Exterior — 5+
-  - Team (Dima!) — 3+
-  - Product (бутоны, pre-rolls, packaging) — 20+ — это **самая важная категория**, влияет на ranking
-  - At work — 5+
-  - Identity (logo на разных surfaces) — 3+
-- Видео (15–30 сек) — 2–3 штуки
+The public website button currently points to the untagged homepage. If the owner chooses to edit it, use:
 
-**Правило:** загружать 2–3 новых фото в неделю — алгоритм любит активные профили.
+https://labscannabis.boutique/?utm_source=gbp&utm_medium=organic-local&utm_campaign=gbp-website-button
 
-### 5. Q&A (proactive)
+After saving, open the public listing again and confirm that the button resolves to the canonical homepage and preserves the UTM parameters. A successful save alone does not prove the public field updated.
 
-GBP позволяет владельцу самому задавать вопросы и отвечать. Заполнить **15 типичных вопросов** до того, как клиенты спросят:
+### 3. Hours
 
-1. Q: Are you open 24 hours?
-   A: Yes — both walk-in (during shop hours) and delivery 24/7. WhatsApp us anytime.
+- [ ] Obtain the real customer-facing schedule from the owner.
+- [ ] Enter regular hours only after confirmation.
+- [ ] Add special hours when the owner confirms a holiday exception.
+- [ ] Re-check the public listing after any change.
 
-2. Q: Do you deliver to hotels?
-   A: Yes, 24/7 to Pattaya, Jomtien, Pratumnak, Naklua. Usually 30 minutes. Cash or QR on arrival.
+Do not use a website template, an old directory, a review or a previous GBP value as proof of current hours.
 
-3. Q: Do I need a medical card?
-   A: Yes, Thailand requires one. We sort it for you on the spot in 2 minutes — free, just digital form on your phone.
+### 4. Photos
 
-4. Q: Is it legal for tourists?
-   A: Yes, with the medical card we provide.
+Use recent, real photos that help a visitor recognise the location:
 
-5. Q: What payment methods?
-   A: Cash (THB) or QR bank transfer.
+- facade and street approach;
+- entrance and signage;
+- interior and counter area;
+- accessibility details, only if visibly accurate;
+- team photos, only with permission.
 
-6. Q: Can I smoke at the shop?
-   A: No, takeaway only. We do offer free sample to check quality before buying.
+Add useful captions where the platform permits them. Do not stage false proof, reuse third-party photos or attach unsupported product, price, availability, quality or legal claims.
 
-7. Q: How far from Walking Street?
-   A: 5 minutes walk. Soi Hollywood (Pattaya 13 Alley).
+### 5. Posts
 
-8. Q: Do you speak Russian?
-   A: Yes — Dima is Russian and English speaking.
+Because cannabis is a regulated product, keep GBP posts operational and non-promotional:
 
-9. Q: Do you speak Thai?
-   A: Yes, our staff speaks Thai too.
+- verified temporary access or location updates;
+- a new facade or entrance photo;
+- a confirmed holiday-hours update;
+- a neutral reminder to use the map pin before visiting.
 
-10. Q: What's the price range?
-    A: 350–600 THB per gram depending on strain. Pre-rolls from 200 THB.
+Do not post products, strains, stock, prices, discounts, offers, consumption effects, medical promises or delivery promotion. Check the current Google contribution and prohibited-content policies before publishing.
 
-11. Q: Do you have indica / sativa / hybrid?
-    A: All three, current stock visible on labscannabis.boutique.
+### 6. Reviews
 
-12. Q: Late-night delivery — how late?
-    A: 24 hours. Even at 4 AM. Just WhatsApp.
+- Ask all eligible customers neutrally for an honest review; do not offer an incentive.
+- Do not review-gate, pre-screen sentiment, buy reviews or ask staff/friends for non-customer reviews.
+- Respond in the reviewer's language when possible without exposing personal or transaction details.
+- Acknowledge criticism and offer a private contact path; do not invent a resolution.
+- Flag a review only when it violates a Google policy, not merely because it is negative.
 
-13. Q: First time, will you help me choose?
-    A: Yes — that's literally what we do. Tell us how you want to feel and we'll pick.
+Do not set a numerical review target that encourages pressure or manipulation. Track volume and themes as diagnostic signals.
 
-14. Q: What's the strongest THC you have?
-    A: Around 28% on top sativas. Stock changes — see catalog or ask.
+### 7. Q&A, services and attributes
 
-15. Q: Discreet packaging for hotel delivery?
-    A: Always. Reception won't know.
+Publish only owner-confirmed facts. If a public-contribution feature is unavailable or restricted, do not work around it. Avoid scripted questions whose answers depend on hours, stock, price, delivery, medical or legal claims.
 
-### 6. Posts (weekly cadence — критично)
+Useful factual topics, once confirmed, are:
 
-GBP ранжирует профили с **regular posts**. План: 2 поста в неделю, 8 в месяц.
+- how to recognise the entrance;
+- which listing name appears in Google Maps;
+- the exact phone number;
+- the exact map pin;
+- any verified accessibility detail.
 
-Типы постов и идеи:
+### 8. Citation consistency
 
-- **What's New** — новый стрейн в наличии (фото + 100 слов)
-- **Offer** — например «Free pre-roll on first visit, mention this post» (бессрочные не разрешены — ставить дату окончания через 30 дней)
-- **Event** — например «Strain tasting Tuesday 7 PM»
+Review existing mentions before creating new ones. Prioritise relevant, real local sources over mass directory submissions.
 
-Пример поста:
+- [ ] Check Weed.TH for name, address, phone and website drift.
+- [ ] Check Ganja.com for the same NAP fields.
+- [ ] Check Cybo for the same NAP fields.
+- [ ] Search Yandex Maps for an existing entity before requesting a new card.
+- [ ] Keep one canonical business identity; request corrections rather than creating duplicates.
 
-```
-NEW IN STOCK: Wedding Cake — premium hybrid, 24% THC.
-Sweet vanilla aroma, deep euphoric body high. Perfect for evening.
-Walk in or order delivery 24/7 — to your hotel in 30 min.
+Directory corrections must not add unconfirmed hours, stock, prices, delivery, legal status or review claims.
 
-Photo: close-up of strain
-CTA: WhatsApp link
-```
+## Measurement
 
-### 7. Reviews — proactive request
+Record a weekly snapshot, using the same weekday and date window:
 
-Цель: **+30 reviews за 90 дней** (текущие 91 → 121+).
+- GBP profile impressions/views, when available;
+- website clicks;
+- direction requests;
+- calls;
+- attributed site sessions with utm_source=gbp;
+- site map_open_click events;
+- WhatsApp direction/visit clicks, segmented by placement;
+- owner-tagged WhatsApp conversations that actually requested directions or a visit;
+- Yandex Maps actions after a confirmed card exists.
 
-Тактика:
-
-- Каждому walk-in клиенту в конце визита Dima даёт **тонкую карточку с QR-кодом на review form** (reviewly.app или прямой Google review link)
-- На карточке — благодарность + «leave us a review on Google, it helps a lot». Без bribe.
-- Карточка локализована EN / RU / TH (определять по языку клиента визуально или просто иметь все три варианта на карточке)
-- В WhatsApp после успешной доставки — automated thank-you + review link (manual или автоматизировать через WhatsApp Business)
-- **Не покупать reviews** — Google ловит и наказывает
-
-### 8. Replies to reviews
-
-- Отвечать на **100% reviews** (положительные и отрицательные) в течение 24 часов
-- Шаблоны на 3 языках:
-
-**EN positive:** «Thanks {Name}! So glad we could help — see you next time.»
-
-**RU positive:** «Спасибо, {Имя}! Рады, что всё прошло хорошо — заходи ещё.»
-
-**TH positive:** «ขอบคุณครับ {ชื่อ}! ดีใจที่เราได้ช่วยคุณ แวะมาอีกนะครับ»
-
-**Negative:** не дефолтить, не оправдываться. Признать проблему, предложить решение, попросить связаться лично:
-
-> «Hi {Name}, thanks for the honest feedback — really sorry your experience wasn't great. We'd like to make it right. Could you WhatsApp us at +66... so we can sort it personally? — Dima»
-
-## Что мерим (еженедельно)
-
-- **Direct searches** vs **Discovery searches** — рост Discovery = SEO работает
-- **Profile views**
-- **Direction requests**
-- **Calls**
-- **Website clicks** (UTM `gbp` в Plausible)
-- **Photo views**
-- **Total reviews + average rating**
-
-Баспланка: GBP Insights даёт всё. Записывать в spreadsheet раз в неделю.
+Keep clicks and leads separate. A WhatsApp click is not a confirmed conversation, and a direction request is not a completed visit.
 
 ## Acceptance criteria
 
-- [ ] Profile полностью заполнен (все поля)
-- [ ] 50+ photos загружено
-- [ ] 15 Q&A заполнено владельцем
-- [ ] Cadence 2 posts/week работает (запланировано в календаре)
-- [ ] QR-карточка на reviews печать готова
-- [ ] Шаблоны ответов на reviews — на 3 языках в Notion/Doc
-- [ ] Spreadsheet metrics tracking запущен
-
-## Definition of Done
-
-- Снимок GBP «Insights» с before/after через 30 дней
-- 30+ новых reviews
-- Map Pack screenshot для запросов «cannabis pattaya», «cannabis delivery pattaya»
+- [ ] Public name, address, phone, pin and website are captured with a dated screenshot or export.
+- [ ] Storefront identity and customer-facing hours are confirmed by the owner before edits.
+- [ ] Website link uses a dedicated GBP UTM only after the owner approves the change.
+- [ ] Website and public listings contain no copied rating, review count or invented schedule.
+- [ ] Photos show the actual approach, sign and entrance.
+- [ ] Review requests are neutral and incentive-free.
+- [ ] Weekly metrics distinguish impressions, actions and confirmed leads.
 
 ## Out of scope
 
-- Не покупать GBP Suite (платный) — бесплатной версии достаточно
-- Не делать second profile для delivery — Google не разрешает дублирующие listings
-- Не менять физический адрес магазина для GBP-trick — банится
-- Не делать LSAd (Local Service Ads) — для cannabis недоступно
+- paid placements;
+- fake, incentivised or gated reviews;
+- keyword stuffing in the business name;
+- duplicate or virtual profiles;
+- bulk directory spam;
+- unverified product, service, price, stock, hours, medical, licence or legal claims.

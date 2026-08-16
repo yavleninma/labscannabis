@@ -1,5 +1,6 @@
 ---
 import { LOCALES, LOCALE_NAMES, LOCALE_HREFLANG, localePath, type Locale } from "@/lib/i18n";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 
 interface Props {
@@ -9,6 +10,11 @@ interface Props {
 
 const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
+const policy = getIndexPolicy(locale, pathSuffix);
+const switcherLocales = policy.indexable
+  ? LOCALES.filter((lang) => policy.locales.includes(lang))
+  : LOCALES;
+const exposesAlternate = (lang: Locale) => policy.indexable && policy.locales.includes(lang);
 ---
 
 <div class="relative z-[90]">
@@ -30,7 +36,7 @@ const ui = t(locale);
       class="absolute end-0 top-full z-[120] mt-1 max-h-[min(70svh,28rem)] min-w-[11rem] overflow-y-auto rounded-lg border border-border bg-bg-card py-1 shadow-xl shadow-black/15"
       role="list"
     >
-      {LOCALES.map((lang) => (
+      {switcherLocales.map((lang) => (
         <li>
           {lang === locale ? (
             <span class="block px-3 py-2 text-sm font-semibold text-emerald-dim" aria-current="true">
@@ -39,8 +45,8 @@ const ui = t(locale);
           ) : (
             <a
               href={localePath(lang, pathSuffix)}
-              hreflang={LOCALE_HREFLANG[lang]}
-              rel="alternate"
+              hreflang={exposesAlternate(lang) ? LOCALE_HREFLANG[lang] : undefined}
+              rel={exposesAlternate(lang) ? "alternate" : undefined}
               class="block px-3 py-2 text-sm text-text hover:bg-bg-elevated hover:text-emerald-dim"
               data-track="language_switch_click"
               data-track-placement="language_switcher"

@@ -1,13 +1,11 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
-import PriceLadder from "@/components/PriceLadder.astro";
-import ReviewStrip from "@/components/ReviewStrip.astro";
 import MapBlock from "@/components/MapBlock.astro";
-import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
-import { AREA_DETAILS, getAreaNotes, renderCopy } from "@/data/area-copy";
+import { renderCopy } from "@/data/area-copy";
+import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
 import { CONTACT, getMapsSearchUrl } from "@/data/site";
 import { t } from "@/lib/ui";
 
@@ -25,7 +23,7 @@ const { lang, area: areaSlug } = Astro.params;
 const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
-const details = AREA_DETAILS[area.slug] ?? { etaMinutes: 25, landmarks: [] };
+const rulesCopy = LEGAL_GUIDE_COPY[locale];
 const deliveryCopy: Record<
   Locale,
   {
@@ -34,251 +32,276 @@ const deliveryCopy: Record<
     h1: string;
     intro: string;
     kicker: string;
-    cta: string;
-    maps: string;
-    statusTitle: string;
-    eta: string;
-    stock: string;
-    privateTerms: string;
+    mapsCta: string;
+    whatsappCta: string;
+    whatsappMessage: string;
+    scopeTitle: string;
+    scopeBody: string;
     faqTitle: string;
     relatedLabel: string;
-    relatedArea: string;
+    legalGuideLabel: string;
+    locationsLabel: string;
     faq: { q: string; a: string }[];
   }
 > = {
   en: {
-    title: "Cannabis delivery possibility for {area} | Labs Cannabis Pattaya",
+    title: "Cannabis delivery rules: {area}, Pattaya | Labs Cannabis",
     description:
-      "Ask Labs Cannabis on WhatsApp about today's menu, freshness, pickup timing, and whether delivery possibility can be discussed for {area}.",
-    h1: "Cannabis delivery possibility for {area}",
+      "Official-source explanation for cannabis delivery searches in {area}: Thailand prohibits electronic sales of cannabis flower. Use Maps for physical directions.",
+    h1: "Cannabis delivery in {area}: online-sale rules",
     intro:
-      "Message before travelling from {area}. We can share today's menu, effects, fresh flower notes, pickup timing, and whether delivery possibility can be discussed privately for your area.",
-    kicker: "WhatsApp delivery check",
-    cta: "Ask delivery possibility",
-    maps: "Open Maps",
-    statusTitle: "What to ask",
-    eta: "Typical reply and visit coordination: about {eta} min",
-    stock: "Current menu, effects, photos, and freshness are checked in WhatsApp",
-    privateTerms: "No public checkout, payment, order form, or confirmed delivery term appears on the website",
-    faqTitle: "Delivery FAQ",
-    relatedLabel: "Related pages",
-    relatedArea: "Cannabis menu near {area}",
+      "If you searched for cannabis delivery in {area}, the important current rule is that this page does not offer online ordering or delivery. Thai Government notices say cannabis flower is controlled and may not be sold through electronic channels or computer networks. Below are the official-source summary and directions to the physical location.",
+    kicker: "Official rules and directions",
+    mapsCta: "Get directions in Maps",
+    whatsappCta: "Ask about visit directions",
+    whatsappMessage:
+      "Hi Labs Cannabis. I am planning a physical visit from {area}. Please help with the location or directions only. I am not requesting an online order or delivery.",
+    scopeTitle: "Physical-visit information only",
+    scopeBody:
+      "Use Maps for the route. WhatsApp is available only to coordinate a physical visit or clarify directions. This page does not take online orders, payments, collection arrangements, or delivery requests and does not publish a menu, stock status, prices, or product photos.",
+    faqTitle: "Online-sale rules and directions FAQ",
+    relatedLabel: "Related official and location information",
+    legalGuideLabel: "Thailand cannabis rules for tourists",
+    locationsLabel: "Physical location and directions",
     faq: [
       {
-        q: "Can I ask from {area} before visiting?",
-        a: "Yes. Send your area, timing, preferred effect, and whether you want pickup or delivery possibility checked.",
+        q: "Does this page offer cannabis delivery to {area}?",
+        a: "No. This is an official-source rules explainer and directions page. It does not accept online orders, payments, collection arrangements, or delivery requests.",
       },
       {
-        q: "Is delivery guaranteed online?",
-        a: "No. Delivery possibility is discussed privately after area, timing, and required details are checked.",
+        q: "What do the official notices say about online sales?",
+        a: "The Thai Government notice says sales of cannabis flower through electronic channels or computer networks are prohibited, along with advertising through all channels. Check the linked official sources for the current wording.",
       },
       {
-        q: "Can I walk in instead?",
-        a: "Yes. The shop is on Soi Hollywood, a short walk from Walking Street.",
+        q: "What can WhatsApp be used for?",
+        a: "Only to confirm the physical location, ask for directions, or coordinate a visit. It is not an ordering, payment, collection, or delivery channel.",
       },
     ],
   },
   ru: {
-    title: "Возможность доставки каннабиса в {area} | Labs Cannabis Паттайя",
+    title: "Правила доставки: {area}, Паттайя | Labs Cannabis",
     description:
-      "Спросите Labs Cannabis в WhatsApp про сегодняшнее меню, свежесть, самовывоз и можно ли обсудить доставку для {area}.",
-    h1: "Возможность доставки каннабиса в {area}",
+      "Разъяснение по официальным источникам для запроса о доставке каннабиса в {areaLocative}: электронная продажа соцветий запрещена. В Maps — маршрут к физической точке.",
+    h1: "Доставка каннабиса в {areaLocative}: правила онлайн-продаж",
     intro:
-      "Напишите перед поездкой из {area}. Мы можем прислать сегодняшнее меню, эффекты, заметки по свежим цветам, время самовывоза и обсудить возможность доставки приватно.",
-    kicker: "Проверка доставки в WhatsApp",
-    cta: "Спросить доставку",
-    maps: "Открыть карту",
-    statusTitle: "Что спросить",
-    eta: "Обычный ответ и координация: около {eta} минут",
-    stock: "Актуальное меню, эффекты, фото и свежесть проверяются в WhatsApp",
-    privateTerms: "На сайте нет публичного checkout, оплаты, order form или подтвержденных условий доставки",
-    faqTitle: "FAQ по доставке",
-    relatedLabel: "Связанные страницы",
-    relatedArea: "Меню каннабиса рядом с {area}",
+      "Если вы искали доставку каннабиса в {areaLocative}, важно знать: эта страница не предлагает онлайн-заказ или доставку. В уведомлениях правительства Таиланда сказано, что соцветия каннабиса контролируются и не могут продаваться через электронные каналы или компьютерные сети. Ниже — сводка официальных правил и маршрут к физической точке.",
+    kicker: "Официальные правила и маршрут",
+    mapsCta: "Построить маршрут в Maps",
+    whatsappCta: "Уточнить маршрут для визита",
+    whatsappMessage:
+      "Здравствуйте, Labs Cannabis. Я планирую лично приехать из {areaFrom}. Подскажите, пожалуйста, только местоположение или маршрут. Я не запрашиваю онлайн-заказ или доставку.",
+    scopeTitle: "Только информация для личного визита",
+    scopeBody:
+      "Используйте Maps для маршрута. WhatsApp предназначен только для координации личного визита или уточнения дороги. Страница не принимает онлайн-заказы, оплату, запросы на выдачу или доставку и не публикует меню, наличие, цены или фотографии товаров.",
+    faqTitle: "FAQ о правилах онлайн-продаж и маршруте",
+    relatedLabel: "Официальные правила и информация о месте",
+    legalGuideLabel: "Правила каннабиса в Таиланде для туристов",
+    locationsLabel: "Физическое местоположение и маршрут",
     faq: [
       {
-        q: "Можно спросить из {area} перед визитом?",
-        a: "Да. Отправьте район, время, желаемый эффект и что нужно проверить: самовывоз или возможность доставки.",
+        q: "Эта страница предлагает доставку каннабиса в {areaDestination}?",
+        a: "Нет. Это разъяснение официальных правил и страница с маршрутом. Она не принимает онлайн-заказы, оплату, запросы на выдачу или доставку.",
       },
       {
-        q: "Доставка гарантируется онлайн?",
-        a: "Нет. Возможность доставки обсуждается приватно после проверки района, времени и нужных деталей.",
+        q: "Что официальные уведомления говорят об онлайн-продаже?",
+        a: "В уведомлении правительства Таиланда сказано, что продажа соцветий каннабиса через электронные каналы или компьютерные сети запрещена, как и реклама во всех каналах. Проверяйте актуальную формулировку по официальным ссылкам.",
       },
       {
-        q: "Можно просто прийти?",
-        a: "Да. Магазин находится на Soi Hollywood, недалеко от Walking Street.",
+        q: "Для чего можно использовать WhatsApp?",
+        a: "Только чтобы уточнить физическое местоположение, маршрут или скоординировать личный визит. Это не канал для заказа, оплаты, выдачи или доставки.",
       },
     ],
   },
   th: {
-    title: "ความเป็นไปได้ของ delivery กัญชาใน {area} | Labs Cannabis พัทยา",
+    title: "การจัดส่งกัญชาใน {area}: กฎการขายออนไลน์ | Labs Cannabis Pattaya",
     description:
-      "ถาม Labs Cannabis ทาง WhatsApp เรื่องเมนูวันนี้ ความสด เวลา pickup และว่าสามารถคุย delivery possibility สำหรับ {area} ได้ไหม",
-    h1: "ความเป็นไปได้ของ delivery กัญชาใน {area}",
+      "ข้อมูลจากแหล่งทางการสำหรับผู้ค้นหาการจัดส่งกัญชาใน {area}: ห้ามขายช่อดอกกัญชาทางอิเล็กทรอนิกส์ ใช้ Maps สำหรับเส้นทางไปสถานที่จริง",
+    h1: "การจัดส่งกัญชาใน {area}: กฎการขายออนไลน์",
     intro:
-      "ทักก่อนเดินทางจาก {area} เราส่งเมนูวันนี้ เอฟเฟกต์ notes ดอกสด เวลา pickup และคุย delivery possibility แบบส่วนตัวสำหรับพื้นที่คุณได้",
-    kicker: "เช็ค delivery ใน WhatsApp",
-    cta: "ถาม delivery possibility",
-    maps: "เปิดแผนที่",
-    statusTitle: "ควรถามอะไร",
-    eta: "เวลาตอบและประสานงานทั่วไปประมาณ {eta} นาที",
-    stock: "เมนูปัจจุบัน เอฟเฟกต์ รูปภาพ และความสด เช็คใน WhatsApp",
-    privateTerms: "เว็บไซต์ไม่มี public checkout การชำระเงิน order form หรือเงื่อนไข delivery ที่ยืนยันแล้ว",
-    faqTitle: "FAQ delivery",
-    relatedLabel: "หน้าที่เกี่ยวข้อง",
-    relatedArea: "เมนูกัญชาใกล้ {area}",
+      "หากคุณค้นหาการจัดส่งกัญชาใน {area} ข้อสำคัญคือหน้านี้ไม่รับคำสั่งซื้อออนไลน์หรือให้บริการจัดส่ง ประกาศรัฐบาลไทยระบุว่าช่อดอกกัญชาเป็นสมุนไพรควบคุมและห้ามจำหน่ายผ่านช่องทางอิเล็กทรอนิกส์หรือเครือข่ายคอมพิวเตอร์ ด้านล่างคือสรุปแหล่งข้อมูลทางการและเส้นทางไปสถานที่จริง",
+    kicker: "กฎทางการและเส้นทาง",
+    mapsCta: "เปิดเส้นทางใน Maps",
+    whatsappCta: "สอบถามเส้นทางก่อนมา",
+    whatsappMessage:
+      "สวัสดี Labs Cannabis ฉันวางแผนเดินทางมาที่สถานที่จริงจาก {area} กรุณาช่วยเฉพาะเรื่องที่ตั้งหรือเส้นทาง ฉันไม่ได้ขอสั่งซื้อออนไลน์หรือขอจัดส่ง",
+    scopeTitle: "ข้อมูลสำหรับการมาเยือนสถานที่จริงเท่านั้น",
+    scopeBody:
+      "ใช้ Maps สำหรับเส้นทาง WhatsApp ใช้เฉพาะการประสานงานการมาเยือนหรือสอบถามเส้นทาง หน้านี้ไม่รับคำสั่งซื้อออนไลน์ การชำระเงิน การนัดรับสินค้า หรือการจัดส่ง และไม่เผยแพร่เมนู สต็อก ราคา หรือรูปภาพสินค้า",
+    faqTitle: "คำถามเกี่ยวกับกฎการขายออนไลน์และเส้นทาง",
+    relatedLabel: "กฎทางการและข้อมูลสถานที่ที่เกี่ยวข้อง",
+    legalGuideLabel: "กฎกัญชาในไทยสำหรับนักท่องเที่ยว",
+    locationsLabel: "สถานที่จริงและเส้นทาง",
     faq: [
       {
-        q: "ถามจาก {area} ก่อนมาได้ไหม?",
-        a: "ได้ ส่งพื้นที่ เวลา เอฟเฟกต์ที่ต้องการ และต้องการให้เช็ค pickup หรือ delivery possibility",
+        q: "หน้านี้มีบริการจัดส่งกัญชาไป {area} หรือไม่?",
+        a: "ไม่มี หน้านี้เป็นคำอธิบายกฎจากแหล่งทางการและให้ข้อมูลเส้นทางเท่านั้น ไม่รับคำสั่งซื้อออนไลน์ การชำระเงิน การนัดรับสินค้า หรือการจัดส่ง",
       },
       {
-        q: "delivery ยืนยันออนไลน์ไหม?",
-        a: "ไม่ยืนยัน ความเป็นไปได้ของ delivery คุยส่วนตัวหลังเช็คพื้นที่ เวลา และรายละเอียดที่จำเป็น",
+        q: "ประกาศทางการกล่าวอย่างไรเกี่ยวกับการขายออนไลน์?",
+        a: "ประกาศรัฐบาลไทยระบุว่าห้ามขายช่อดอกกัญชาผ่านช่องทางอิเล็กทรอนิกส์หรือเครือข่ายคอมพิวเตอร์ และห้ามโฆษณาทุกช่องทาง โปรดตรวจสอบถ้อยคำล่าสุดจากลิงก์ทางการ",
       },
       {
-        q: "เดินเข้าร้านได้ไหม?",
-        a: "ได้ ร้านอยู่บน Soi Hollywood เดินไม่นานจาก Walking Street",
+        q: "ใช้ WhatsApp เรื่องอะไรได้บ้าง?",
+        a: "ใช้เฉพาะยืนยันที่ตั้ง สอบถามเส้นทาง หรือประสานงานการมาเยือน ไม่ใช่ช่องทางสั่งซื้อ ชำระเงิน นัดรับสินค้า หรือจัดส่ง",
       },
     ],
   },
   ar: {
-    title: "إمكانية توصيل القنب إلى {area} | Labs Cannabis باتايا",
+    title: "قواعد توصيل القنب: {area}، باتايا | Labs Cannabis",
     description:
-      "اسأل Labs Cannabis عبر WhatsApp عن قائمة اليوم والطزاجة ووقت الاستلام وما إذا كان يمكن مناقشة التوصيل إلى {area}.",
-    h1: "إمكانية توصيل القنب إلى {area}",
+      "شرح من مصادر رسمية لمن يبحث عن توصيل القنب في {area}: يحظر بيع زهور القنب إلكترونيا. استخدم Maps للاتجاهات إلى الموقع الفعلي.",
+    h1: "توصيل القنب في {area}: قواعد البيع الإلكتروني",
     intro:
-      "راسلنا قبل التحرك من {area}. يمكننا مشاركة قائمة اليوم والتأثيرات وملاحظات الزهور الطازجة ووقت الاستلام ومناقشة إمكانية التوصيل بشكل خاص.",
-    kicker: "فحص التوصيل عبر WhatsApp",
-    cta: "اسأل عن إمكانية التوصيل",
-    maps: "افتح الخريطة",
-    statusTitle: "ماذا تسأل",
-    eta: "الرد والتنسيق عادة حوالي {eta} دقيقة",
-    stock: "القائمة الحالية والتأثيرات والصور والطزاجة يتم فحصها في WhatsApp",
-    privateTerms: "لا يوجد public checkout أو دفع أو order form أو شرط توصيل مؤكد على الموقع",
-    faqTitle: "أسئلة التوصيل",
-    relatedLabel: "صفحات ذات صلة",
-    relatedArea: "قائمة القنب قرب {area}",
+      "إذا كنت تبحث عن توصيل القنب في {area}، فالمعلومة المهمة هي أن هذه الصفحة لا توفر الطلب عبر الإنترنت أو التوصيل. تقول إشعارات الحكومة التايلاندية إن زهور القنب خاضعة للرقابة ويحظر بيعها عبر القنوات الإلكترونية أو شبكات الحاسوب. في ما يلي ملخص للمصادر الرسمية واتجاهات الموقع الفعلي.",
+    kicker: "القواعد الرسمية والاتجاهات",
+    mapsCta: "افتح الاتجاهات في Maps",
+    whatsappCta: "اسأل عن اتجاهات الزيارة",
+    whatsappMessage:
+      "مرحبا Labs Cannabis. أخطط لزيارة الموقع الفعلي قادما من {area}. يرجى المساعدة في الموقع أو الاتجاهات فقط. لا أطلب شراء عبر الإنترنت أو توصيلا.",
+    scopeTitle: "معلومات الزيارة الفعلية فقط",
+    scopeBody:
+      "استخدم Maps لمعرفة الطريق. يخصص WhatsApp فقط لتنسيق زيارة فعلية أو توضيح الاتجاهات. لا تستقبل الصفحة طلبات أو مدفوعات عبر الإنترنت أو ترتيبات استلام أو توصيل، ولا تنشر قائمة منتجات أو مخزونا أو أسعارا أو صور منتجات.",
+    faqTitle: "أسئلة عن قواعد البيع الإلكتروني والاتجاهات",
+    relatedLabel: "القواعد الرسمية ومعلومات الموقع ذات الصلة",
+    legalGuideLabel: "قواعد القنب في تايلاند للسياح",
+    locationsLabel: "الموقع الفعلي والاتجاهات",
     faq: [
       {
-        q: "هل يمكنني السؤال من {area} قبل الزيارة؟",
-        a: "نعم. أرسل منطقتك والوقت والتأثير المفضل وما إذا كنت تريد الاستلام أو فحص إمكانية التوصيل.",
+        q: "هل تقدم هذه الصفحة توصيل القنب إلى {area}؟",
+        a: "لا. هذه صفحة لشرح القواعد من مصادر رسمية وللاتجاهات. لا تستقبل طلبات أو مدفوعات عبر الإنترنت أو ترتيبات استلام أو توصيل.",
       },
       {
-        q: "هل التوصيل مضمون عبر الإنترنت؟",
-        a: "لا. إمكانية التوصيل تناقش بشكل خاص بعد فحص المنطقة والوقت والتفاصيل المطلوبة.",
+        q: "ماذا تقول الإشعارات الرسمية عن البيع عبر الإنترنت؟",
+        a: "يقول إشعار الحكومة التايلاندية إن بيع زهور القنب عبر القنوات الإلكترونية أو شبكات الحاسوب محظور، وكذلك الإعلان عبر جميع القنوات. راجع الروابط الرسمية لمعرفة النص الحالي.",
       },
       {
-        q: "هل يمكنني زيارة المتجر مباشرة؟",
-        a: "نعم. المتجر في Soi Hollywood على مسافة قصيرة من Walking Street.",
+        q: "في ماذا يمكن استخدام WhatsApp؟",
+        a: "فقط لتأكيد الموقع الفعلي أو السؤال عن الاتجاهات أو تنسيق الزيارة. وليس قناة للطلب أو الدفع أو الاستلام أو التوصيل.",
       },
     ],
   },
   zh: {
-    title: "{area} 大麻配送可能性 | Labs Cannabis 芭提雅",
+    title: "{area} 大麻配送搜索：泰国网络销售规则 | Labs Cannabis Pattaya",
     description:
-      "通过 WhatsApp 向 Labs Cannabis 询问今日菜单、新鲜度、取货时间，以及是否可讨论 {area} 配送可能性。",
-    h1: "{area} 大麻配送可能性",
+      "面向 {area} 大麻配送搜索的官方来源说明：泰国禁止通过电子渠道销售大麻花。请使用地图查看前往实体地点的路线。",
+    h1: "{area} 大麻配送：网络销售规则",
     intro:
-      "从 {area} 出发前请先发消息。我们可以分享今日菜单、效果、新鲜 flower notes、取货时间，并私下讨论你的区域配送可能性。",
-    kicker: "WhatsApp 配送确认",
-    cta: "询问配送可能性",
-    maps: "打开地图",
-    statusTitle: "应该询问什么",
-    eta: "通常回复和协调约 {eta} 分钟",
-    stock: "当前菜单、效果、照片和新鲜度都在 WhatsApp 确认",
-    privateTerms: "网站没有 public checkout、付款、order form 或已确认的配送条款",
-    faqTitle: "配送常见问题",
-    relatedLabel: "相关页面",
-    relatedArea: "{area} 附近大麻菜单",
+      "如果您搜索 {area} 大麻配送，请注意：本页不提供在线订购或配送。泰国政府通知称，大麻花属于受管制草药，禁止通过电子渠道或计算机网络销售。以下内容为官方来源摘要及前往实体地点的路线。",
+    kicker: "官方规则与路线",
+    mapsCta: "在地图中查看路线",
+    whatsappCta: "咨询到店路线",
+    whatsappMessage:
+      "您好，Labs Cannabis。我计划从 {area} 前往实体地点。请仅协助确认位置或路线；我并非申请在线订单或配送。",
+    scopeTitle: "仅提供实体到访信息",
+    scopeBody:
+      "请使用地图查看路线。WhatsApp 仅用于协调实体到访或确认路线。本页不接受在线订单、付款、取货或配送安排，也不发布菜单、库存、价格或产品照片。",
+    faqTitle: "网络销售规则与路线常见问题",
+    relatedLabel: "相关官方规则与地点信息",
+    legalGuideLabel: "泰国游客大麻规则",
+    locationsLabel: "实体地点与路线",
     faq: [
       {
-        q: "可以从 {area} 出发前先问吗？",
-        a: "可以。发送你的区域、时间、偏好效果，以及想确认取货还是配送可能性。",
+        q: "本页是否提供前往 {area} 的大麻配送？",
+        a: "不提供。本页仅说明官方规则并提供路线，不接受在线订单、付款、取货或配送安排。",
       },
       {
-        q: "线上会保证配送吗？",
-        a: "不会。配送可能性需在确认区域、时间和必要信息后私下讨论。",
+        q: "官方通知如何规定网络销售？",
+        a: "泰国政府通知称，禁止通过电子渠道或计算机网络销售大麻花，并禁止通过任何渠道做广告。请通过官方链接查看最新原文。",
       },
       {
-        q: "可以直接到店吗？",
-        a: "可以。门店在 Soi Hollywood，距离 Walking Street 步行不远。",
+        q: "WhatsApp 可以用于什么？",
+        a: "仅用于确认实体地点、咨询路线或协调到访，不用于订购、付款、取货或配送。",
       },
     ],
   },
   ko: {
-    title: "{area} 대마 배송 가능성 | Labs Cannabis 파타야",
+    title: "{area} 대마 배송 검색: 태국 온라인 판매 규정 | Labs Cannabis Pattaya",
     description:
-      "Labs Cannabis에 WhatsApp으로 오늘 메뉴, 신선도, 픽업 시간, {area} 배송 가능성 논의 여부를 문의하세요.",
-    h1: "{area} 대마 배송 가능성",
+      "{area} 대마 배송 검색자를 위한 공식 출처 안내: 태국은 전자 수단을 통한 대마 꽃 판매를 금지합니다. 지도에서 실제 위치까지의 경로를 확인하세요.",
+    h1: "{area} 대마 배송: 온라인 판매 규정",
     intro:
-      "{area}에서 이동 전 메시지 주세요. 오늘 메뉴, 효과, 신선한 flower notes, 픽업 시간, 내 지역 배송 가능성을 비공개로 확인할 수 있습니다.",
-    kicker: "WhatsApp 배송 확인",
-    cta: "배송 가능성 문의",
-    maps: "지도 열기",
-    statusTitle: "무엇을 물어볼까요",
-    eta: "일반 답변 및 조율: 약 {eta}분",
-    stock: "현재 메뉴, 효과, 사진, 신선도는 WhatsApp에서 확인합니다",
-    privateTerms: "사이트에는 public checkout, 결제, order form 또는 확정된 배송 조건이 없습니다",
-    faqTitle: "배송 FAQ",
-    relatedLabel: "관련 페이지",
-    relatedArea: "{area} 근처 대마 메뉴",
+      "{area} 대마 배송을 검색하셨다면 이 페이지는 온라인 주문이나 배송을 제공하지 않는다는 점을 확인해 주세요. 태국 정부 공지에 따르면 대마 꽃은 관리 대상 약초이며 전자 수단이나 컴퓨터 네트워크를 통한 판매가 금지됩니다. 아래에는 공식 출처 요약과 실제 위치까지의 경로를 제공합니다.",
+    kicker: "공식 규정 및 길 안내",
+    mapsCta: "지도에서 경로 보기",
+    whatsappCta: "방문 길 안내 문의",
+    whatsappMessage:
+      "안녕하세요, Labs Cannabis. {area}에서 실제 위치로 방문할 예정입니다. 위치나 길 안내만 부탁드립니다. 온라인 주문이나 배송 요청이 아닙니다.",
+    scopeTitle: "실제 방문 정보만 제공",
+    scopeBody:
+      "경로는 지도에서 확인하세요. WhatsApp은 실제 방문 조율이나 길 안내에만 사용합니다. 이 페이지는 온라인 주문, 결제, 픽업 또는 배송 요청을 받지 않으며 메뉴, 재고, 가격 또는 제품 사진을 게시하지 않습니다.",
+    faqTitle: "온라인 판매 규정 및 길 안내 FAQ",
+    relatedLabel: "관련 공식 규정 및 위치 정보",
+    legalGuideLabel: "태국 관광객 대마 규정",
+    locationsLabel: "실제 위치 및 길 안내",
     faq: [
       {
-        q: "{area}에서 방문 전 문의할 수 있나요?",
-        a: "네. 지역, 시간, 원하는 효과, 픽업 또는 배송 가능성 확인 여부를 보내주세요.",
+        q: "이 페이지에서 {area} 대마 배송을 제공하나요?",
+        a: "아니요. 공식 출처 규정 설명과 길 안내 페이지이며 온라인 주문, 결제, 픽업 또는 배송 요청을 받지 않습니다.",
       },
       {
-        q: "온라인에서 배송이 보장되나요?",
-        a: "아니요. 배송 가능성은 지역, 시간, 필요한 세부 사항을 확인한 뒤 비공개로 논의합니다.",
+        q: "공식 공지는 온라인 판매를 어떻게 규정하나요?",
+        a: "태국 정부 공지는 전자 수단이나 컴퓨터 네트워크를 통한 대마 꽃 판매와 모든 채널의 광고를 금지한다고 밝힙니다. 최신 문구는 연결된 공식 출처에서 확인하세요.",
       },
       {
-        q: "그냥 방문해도 되나요?",
-        a: "네. 매장은 Walking Street에서 가까운 Soi Hollywood에 있습니다.",
+        q: "WhatsApp은 무엇에 사용할 수 있나요?",
+        a: "실제 위치 확인, 길 안내 문의 또는 방문 조율에만 사용합니다. 주문, 결제, 픽업 또는 배송 채널이 아닙니다.",
       },
     ],
   },
   ja: {
-    title: "{area} への大麻配送可能性 | Labs Cannabis パタヤ",
+    title: "{area} の大麻配送検索：タイのオンライン販売規則 | Labs Cannabis Pattaya",
     description:
-      "今日のメニュー、鮮度、受け取り時間、{area} への配送可能性を Labs Cannabis に WhatsApp で確認できます。",
-    h1: "{area} への大麻配送可能性",
+      "{area} の大麻配送検索向け公式情報。タイでは電子的手段による大麻花の販売が禁止されています。地図で実店舗への経路を確認できます。",
+    h1: "{area} の大麻配送：オンライン販売規則",
     intro:
-      "{area} から移動する前にメッセージしてください。今日のメニュー、効果、新鮮な flower notes、受け取り時間、エリア配送可能性を個別に確認できます。",
-    kicker: "WhatsApp配送確認",
-    cta: "配送可能性を確認",
-    maps: "地図を開く",
-    statusTitle: "確認する内容",
-    eta: "通常の返信と調整: 約{eta}分",
-    stock: "現在のメニュー、効果、写真、鮮度は WhatsApp で確認します",
-    privateTerms: "サイトには public checkout、支払い、order form、確定した配送条件はありません",
-    faqTitle: "配送FAQ",
-    relatedLabel: "関連ページ",
-    relatedArea: "{area}近くの大麻メニュー",
+      "{area} の大麻配送を検索した方へ：このページはオンライン注文や配送を提供していません。タイ政府通知では、大麻花は管理対象のハーブで、電子的手段またはコンピューターネットワーク経由の販売は禁止されています。以下は公式情報の要約と実店舗への経路です。",
+    kicker: "公式規則と道順",
+    mapsCta: "地図で経路を見る",
+    whatsappCta: "来店の道順を問い合わせる",
+    whatsappMessage:
+      "こんにちは、Labs Cannabis。{area} から実店舗を訪問する予定です。所在地または道順のみ教えてください。オンライン注文や配送の依頼ではありません。",
+    scopeTitle: "実店舗への来店情報のみ",
+    scopeBody:
+      "経路は地図で確認してください。WhatsAppは実店舗への来店調整または道順確認にのみ使用できます。このページではオンライン注文、支払い、受け取り、配送の依頼を受け付けず、メニュー、在庫、価格、製品写真も掲載しません。",
+    faqTitle: "オンライン販売規則・道順FAQ",
+    relatedLabel: "関連する公式規則と所在地情報",
+    legalGuideLabel: "タイ旅行者向け大麻ルール",
+    locationsLabel: "実店舗の所在地と道順",
     faq: [
       {
-        q: "{area} から来店前に相談できますか？",
-        a: "はい。エリア、時間、希望する効果、受け取りか配送可能性確認かを送ってください。",
+        q: "このページは {area} への大麻配送を提供しますか？",
+        a: "いいえ。公式情報に基づく規則説明と道順のページであり、オンライン注文、支払い、受け取り、配送の依頼は受け付けません。",
       },
       {
-        q: "オンラインで配送は保証されますか？",
-        a: "いいえ。配送可能性はエリア、時間、必要情報を確認した後に個別で相談します。",
+        q: "公式通知はオンライン販売をどう定めていますか？",
+        a: "タイ政府通知は、電子的手段またはコンピューターネットワーク経由の大麻花販売と、あらゆるチャネルでの広告を禁止しています。最新の文言はリンク先の公式情報で確認してください。",
       },
       {
-        q: "直接来店できますか？",
-        a: "はい。店舗は Walking Street から近い Soi Hollywood にあります。",
+        q: "WhatsAppは何に使えますか？",
+        a: "実店舗の所在地確認、道順の問い合わせ、来店調整のみです。注文、支払い、受け取り、配送のためのチャネルではありません。",
       },
     ],
   },
 };
-const copy = deliveryCopy[locale] ?? deliveryCopy.en;
+const copy = deliveryCopy[locale];
 const ui = t(locale);
-const vars = { area: areaName, eta: details.etaMinutes };
-const notes = getAreaNotes(area.slug, locale);
-const title = renderCopy(copy.title, vars);
+const isPattayaArea = area.slug === "pattaya";
+const vars = {
+  area: areaName,
+  areaLocative: locale === "ru" && isPattayaArea ? "Паттайе" : areaName,
+  areaFrom: locale === "ru" && isPattayaArea ? "Паттайи" : areaName,
+  areaDestination: locale === "ru" && isPattayaArea ? "Паттайю" : areaName,
+};
+const title =
+  isPattayaArea && locale === "en"
+    ? "Cannabis delivery rules in Pattaya | Labs Cannabis"
+    : isPattayaArea && locale === "ru"
+      ? "Правила доставки каннабиса в Паттайе | Labs Cannabis"
+      : renderCopy(copy.title, vars);
 const description = renderCopy(copy.description, vars);
 const h1 = renderCopy(copy.h1, vars);
 const intro = renderCopy(copy.intro, vars);
+const scopeBody = renderCopy(copy.scopeBody, vars);
 const faq = copy.faq.map((item) => ({
   q: renderCopy(item.q, vars),
   a: renderCopy(item.a, vars),
@@ -288,7 +311,14 @@ const breadcrumbs = [
   { name: copy.kicker, pathSuffix: "locations" },
   { name: areaName, pathSuffix: `delivery/${area.slug}` },
 ];
-const whatsappUrl = `${CONTACT.whatsappWithMsg(h1)}&source=delivery`;
+const whatsappMessage = renderCopy(copy.whatsappMessage, vars);
+const whatsappUrl = `${CONTACT.whatsappWithMsg(whatsappMessage)}&source=visit_directions`;
+const article = {
+  headline: h1,
+  datePublished: "2026-08-16",
+  dateModified: "2026-08-16",
+  author: "Labs Cannabis",
+};
 ---
 
 <PageLayout
@@ -297,63 +327,77 @@ const whatsappUrl = `${CONTACT.whatsappWithMsg(h1)}&source=delivery`;
   title={title}
   description={description}
   faq={faq}
-  pageType="delivery"
+  pageType="guide"
   breadcrumbs={breadcrumbs}
-  serviceAreaName={areaName}
+  article={article}
 >
   <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
       <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
       <h1 class="mt-1 text-3xl font-bold leading-tight">{h1}</h1>
       <p class="mt-4 text-base leading-relaxed text-text-muted">{intro}</p>
-      {notes?.delivery && <p class="mt-3 text-base leading-relaxed text-text-muted">{notes.delivery}</p>}
 
-      <div class="mt-6 grid grid-cols-2 gap-3">
-        <a
-          href={whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
-          data-track="contact_whatsapp_click"
-          data-track-placement="delivery"
-          data-track-detail={`delivery:${area.slug}:whatsapp`}
-          data-wa-source="delivery"
-          data-whatsapp-ref={`delivery:${area.slug}`}
-        >
-          {copy.cta}
-        </a>
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
         <a
           href={getMapsSearchUrl()}
           target="_blank"
           rel="noopener noreferrer"
-          class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
           data-track="map_open_click"
-          data-track-placement="delivery_area"
-          data-track-detail={`delivery:${area.slug}:maps`}
+          data-track-placement="delivery_rules"
+          data-track-detail={`delivery_rules:${area.slug}:maps`}
         >
-          {copy.maps}
+          {copy.mapsCta}
+        </a>
+        <a
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          data-track="contact_whatsapp_click"
+          data-track-placement="visit_directions"
+          data-track-detail={`delivery_rules:${area.slug}:whatsapp_directions`}
+          data-wa-source="visit_directions"
+          data-whatsapp-ref={`delivery_rules:${area.slug}`}
+        >
+          {copy.whatsappCta}
         </a>
       </div>
 
-      <section class="mt-8">
-        <h2 class="text-xl font-bold text-emerald-dim">{copy.statusTitle}</h2>
-        <div class="mt-3 grid gap-3">
-          {[renderCopy(copy.eta, vars), copy.stock, copy.privateTerms].map((item) => (
-            <p class="card-surface px-4 py-3 text-base text-text-muted">{item}</p>
+      <section class="mt-8" aria-labelledby="delivery-rules-facts-title">
+        <h2 id="delivery-rules-facts-title" class="text-xl font-bold text-emerald-dim">{rulesCopy.factsTitle}</h2>
+        <ul class="mt-3 grid gap-3">
+          {rulesCopy.facts.map((fact) => (
+            <li class="card-surface px-4 py-3 text-base leading-relaxed text-text-muted">{fact}</li>
           ))}
+        </ul>
+
+        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+          <a
+            href={LEGAL_GUIDE_SOURCES.thaiGovernment}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-surface px-4 py-3 text-center text-base font-semibold text-emerald-dim"
+          >
+            {rulesCopy.governmentSourceCta}
+          </a>
+          <a
+            href={LEGAL_GUIDE_SOURCES.touristNotice}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-surface px-4 py-3 text-center text-base font-semibold text-emerald-dim"
+          >
+            {rulesCopy.touristSourceCta}
+          </a>
         </div>
       </section>
 
-      {details.landmarks.length > 0 && (
-        <section class="mt-8">
-          <h2 class="text-xl font-bold text-emerald-dim">{areaName}</h2>
-          <ul class="mt-3 flex flex-wrap gap-2">
-            {details.landmarks.map((landmark) => (
-              <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-sm text-text-muted">{landmark}</li>
-            ))}
-          </ul>
-        </section>
-      )}
+      <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="delivery-rules-scope-title">
+        <h2 id="delivery-rules-scope-title" class="text-xl font-bold">{copy.scopeTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{scopeBody}</p>
+        <h3 class="mt-4 text-base font-bold text-emerald-dim">{rulesCopy.cautionTitle}</h3>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{rulesCopy.caution}</p>
+      </aside>
 
       <section class="mt-8">
         <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
@@ -366,18 +410,18 @@ const whatsappUrl = `${CONTACT.whatsappWithMsg(h1)}&source=delivery`;
       </section>
 
       <nav class="mt-8 grid gap-3" aria-label={copy.relatedLabel}>
-        <a href={localePath(locale, `areas/${area.slug}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {renderCopy(copy.relatedArea, vars)}
+        <a
+          href={localePath(locale, "guides/legal-cannabis-tourists")}
+          class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim"
+        >
+          {copy.legalGuideLabel}
         </a>
         <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.allPages}
+          {copy.locationsLabel}
         </a>
       </nav>
     </div>
   </article>
-  <PriceLadder locale={locale} />
-  <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
-  <MedicalCardNote locale={locale} />
   <Footer locale={locale} pathSuffix={`delivery/${area.slug}`} />
 </PageLayout>

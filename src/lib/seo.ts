@@ -1,20 +1,16 @@
 import type { Locale } from "@/lib/i18n";
 import { LOCALE_HREFLANG, getSiteUrl, localePath } from "@/lib/i18n";
-import { LOCALES } from "@/lib/i18n";
+import { normalizePathSuffix } from "@/lib/index-policy.mjs";
 
 export interface HreflangLink {
   hreflang: string;
   href: string;
 }
 
-function normalizePathSuffix(pathSuffix: string): string {
-  return pathSuffix.replace(/^\/+|\/+$/g, "");
-}
-
-export function getHreflangs(_locale: Locale, pathSuffix: string): HreflangLink[] {
+export function getHreflangs(pathSuffix: string, locales: readonly Locale[]): HreflangLink[] {
   const base = getSiteUrl();
   const suffix = normalizePathSuffix(pathSuffix);
-  return LOCALES.map((lang) => ({
+  return locales.map((lang) => ({
     hreflang: LOCALE_HREFLANG[lang],
     href: `${base}${localePath(lang, suffix)}`,
   }));

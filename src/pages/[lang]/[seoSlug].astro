@@ -1,788 +1,121 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
-import PriceLadder from "@/components/PriceLadder.astro";
-import Reels from "@/components/Reels.astro";
 import ReviewStrip from "@/components/ReviewStrip.astro";
 import MapBlock from "@/components/MapBlock.astro";
-import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
-import { SEO_PAGES, getAreaBySlug } from "@/data/seo-matrix";
-import { REELS_SLIDES } from "@/data/media";
-import { loadSeoContent, seoDescription, type SeoContent } from "@/lib/content";
+import { SEO_PAGES } from "@/data/seo-matrix";
+import { GOOGLE } from "@/data/site";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { loadSeoContent, seoDescription } from "@/lib/content";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
   const paths: { params: { lang: string; seoSlug: string } }[] = [];
   for (const lang of LOCALES) {
-    for (const page of SEO_PAGES) {
-      paths.push({ params: { lang, seoSlug: page.slug } });
-    }
+    for (const page of SEO_PAGES) paths.push({ params: { lang, seoSlug: page.slug } });
   }
   return paths;
 }
 
+type RetiredCopy = {
+  title: string;
+  description: string;
+  h1: string;
+  lead: string;
+  body: string;
+  maps: string;
+  contact: string;
+  legal: string;
+};
+
+const retiredCopy: Record<Locale, RetiredCopy> = {
+  en: {
+    title: "Page retired | Labs Cannabis Pattaya",
+    description: "This former search page is retired. Use the live Maps listing, contact details, and current official-source legal guide.",
+    h1: "This page has been retired",
+    lead: "It duplicated another search intent or depended on commercial details that are not maintained here.",
+    body: "Use the live Google Maps listing for the current pin and directions. The contact page is for visit coordination only, and the legal guide links to current Thai government sources.",
+    maps: "Open Google Maps",
+    contact: "Contact and address",
+    legal: "Current rules for tourists",
+  },
+  ru: {
+    title: "Страница закрыта | Labs Cannabis Паттайя",
+    description: "Эта старая поисковая страница закрыта. Используйте актуальную карточку Maps, контакты и legal guide с официальными источниками.",
+    h1: "Эта страница больше не используется",
+    lead: "Она дублировала другой интент или зависела от коммерческих данных, которые здесь не поддерживаются.",
+    body: "Актуальный пин и маршрут находятся в Google Maps. Контактная страница нужна только для координации визита, а legal guide ведёт на источники правительства Таиланда.",
+    maps: "Открыть Google Maps",
+    contact: "Контакты и адрес",
+    legal: "Актуальные правила для туристов",
+  },
+  th: {
+    title: "ยกเลิกหน้านี้แล้ว | Labs Cannabis พัทยา",
+    description: "หน้าค้นหาเดิมนี้ถูกยกเลิก ใช้ Google Maps ข้อมูลติดต่อ และคู่มือกฎที่มีแหล่งข้อมูลทางการล่าสุด",
+    h1: "หน้านี้ถูกยกเลิกแล้ว",
+    lead: "หน้าเดิมซ้ำกับคำค้นอื่นหรือพึ่งพาข้อมูลเชิงพาณิชย์ที่ไม่ได้ดูแลบนเว็บไซต์นี้",
+    body: "ใช้ Google Maps สำหรับหมุดและเส้นทางปัจจุบัน หน้าติดต่อใช้เพื่อประสานการมาเยือนเท่านั้น และคู่มือกฎหมายเชื่อมไปยังแหล่งรัฐบาลไทย",
+    maps: "เปิด Google Maps",
+    contact: "ติดต่อและที่อยู่",
+    legal: "กฎปัจจุบันสำหรับนักท่องเที่ยว",
+  },
+  ar: {
+    title: "تم إيقاف الصفحة | Labs Cannabis باتايا",
+    description: "تم إيقاف صفحة البحث السابقة. استخدم بطاقة Maps المباشرة ومعلومات الاتصال والدليل القانوني ذي المصادر الرسمية.",
+    h1: "تم إيقاف هذه الصفحة",
+    lead: "كانت تكرر نية بحث أخرى أو تعتمد على تفاصيل تجارية لا يتم تحديثها هنا.",
+    body: "استخدم Google Maps للدبوس والمسار الحاليين. صفحة الاتصال لتنسيق الزيارة فقط، ويرتبط الدليل القانوني بمصادر الحكومة التايلاندية.",
+    maps: "افتح Google Maps",
+    contact: "الاتصال والعنوان",
+    legal: "القواعد الحالية للسياح",
+  },
+  zh: {
+    title: "页面已停用 | Labs Cannabis 芭提雅",
+    description: "此旧搜索页面已停用。请使用实时 Maps 页面、联系方式和链接官方来源的现行法律指南。",
+    h1: "此页面已停用",
+    lead: "该页面与其他搜索意图重复，或依赖本站不再维护的商业信息。",
+    body: "请使用 Google Maps 查看当前定位和路线。联系页面仅用于协调到店；法律指南链接泰国政府来源。",
+    maps: "打开 Google Maps",
+    contact: "联系方式与地址",
+    legal: "游客当前规则",
+  },
+  ko: {
+    title: "사용 중지된 페이지 | Labs Cannabis 파타야",
+    description: "이전 검색 페이지는 사용 중지되었습니다. 실시간 Maps 정보, 연락처와 공식 출처가 연결된 법률 가이드를 이용하세요.",
+    h1: "이 페이지는 사용 중지되었습니다",
+    lead: "다른 검색 의도와 중복되거나 이 사이트에서 관리하지 않는 상업 정보에 의존했습니다.",
+    body: "현재 핀과 경로는 Google Maps를 이용하세요. 연락처 페이지는 방문 조율 전용이며 법률 가이드는 태국 정부 자료에 연결됩니다.",
+    maps: "Google Maps 열기",
+    contact: "연락처 및 주소",
+    legal: "관광객을 위한 현재 규정",
+  },
+  ja: {
+    title: "このページは終了しました | Labs Cannabis パタヤ",
+    description: "旧検索ページは終了しました。最新の Maps、連絡先、公式情報にリンクする法的ガイドをご利用ください。",
+    h1: "このページは終了しました",
+    lead: "別の検索意図と重複していたか、このサイトで維持しない商業情報に依存していました。",
+    body: "現在のピンと経路は Google Maps を利用してください。連絡先ページは来店調整専用で、法的ガイドはタイ政府情報にリンクしています。",
+    maps: "Google Maps を開く",
+    contact: "連絡先と住所",
+    legal: "旅行者向けの現在のルール",
+  },
+};
+
 const { lang, seoSlug } = Astro.params;
 const locale = lang as Locale;
 const slug = seoSlug!;
-const page = SEO_PAGES.find((p) => p.slug === slug)!;
-type SpecialSeoCopy = {
-  faqLabel: string;
-  parent: { cannathai: string; guide: string };
-  cannaTitles: Record<string, string>;
-  cannaH1s: Record<string, string>;
-  cannaKeywords: string[];
-  canna: Omit<SeoContent, "h1" | "source">;
-  guideTitle: string;
-  guideH1: string;
-  guideKeywords: string[];
-  guide: Omit<SeoContent, "h1" | "source">;
-};
-
-const SPECIAL_COPY: Record<Locale, SpecialSeoCopy> = {
-  en: {
-    faqLabel: "FAQ",
-    parent: { cannathai: "CannaThai wholesale", guide: "Guides" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai Wholesale Cannabis Thailand | Bulk Flower Inquiry",
-      "wholesale-cannabis-thailand": "Wholesale Cannabis Thailand | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "Bulk Cannabis Flower Thailand | Documented Batch Inquiry",
-      "cannabis-wholesale-pattaya-thailand": "Cannabis Wholesale Pattaya Thailand | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "COA Cannabis Wholesale Thailand | Batch Document Review",
-      "cannabis-farms-suppliers-thailand": "Cannabis Farms and Suppliers Thailand | CannaThai Wholesale",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai wholesale cannabis in Thailand",
-      "wholesale-cannabis-thailand": "Wholesale cannabis supply inquiries in Thailand",
-      "bulk-cannabis-flower-thailand": "Bulk cannabis flower inquiries for verified buyers",
-      "cannabis-wholesale-pattaya-thailand": "Cannabis wholesale inquiries from Pattaya to Thailand",
-      "coa-cannabis-wholesale-thailand": "COA and cannabis batch document review",
-      "cannabis-farms-suppliers-thailand": "Cannabis farm and supplier review for wholesale buyers",
-    },
-    cannaKeywords: ["wholesale cannabis thailand", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai is the wholesale inquiry track by Labs Cannabis for verified Thailand counterparties seeking bulk cannabis flower, batch lots, grades, and document availability where verified.",
-      sections: [
-        {
-          h2: "Built for bulk buyers",
-          body:
-            "Use WhatsApp to request the current batch list for 50g, 100g+, larger allocations, indoor, greenhouse, and outdoor flower. The public site does not publish live stock, reserve flower, quote shipment terms, or accept payment.",
-        },
-        {
-          h2: "Documents before claims",
-          body:
-            "Ask for batch IDs, source notes, farm or supplier records, photos, and COA documents where they are actually available. Lab-tested language is used only when the specific batch supports it.",
-        },
-        {
-          h2: "Pattaya and Thailand delivery review",
-          body:
-            "Pattaya handover and Thailand-wide bulk delivery possibilities can be reviewed privately after buyer context, destination, route, volume, and required documents are checked.",
-        },
-      ],
-      faq: [
-        {
-          q: "Can I get a public wholesale price list?",
-          a: "No. Request the current batch list and wholesale quote in WhatsApp with your buyer context and target volume.",
-        },
-        {
-          q: "Can I request COA or lab documents?",
-          a: "Yes. Verified buyers can ask which batches have COA or lab documents available before any lab-tested claim is used.",
-        },
-        {
-          q: "Can CannaThai supply outside Pattaya?",
-          a: "Thailand-wide bulk delivery possibilities can be reviewed privately, but no shipment or term is confirmed online.",
-        },
-      ],
-      closing:
-        "Request the batch list on WhatsApp with your entity type, location, approximate quantity range, preferred grade, grow type, and document needs.",
-    },
-    guideTitle: "How to Buy Cannabis in Pattaya | Visitor Guide | Labs Cannabis",
-    guideH1: "How to buy cannabis in Pattaya without guessing",
-    guideKeywords: ["how to buy cannabis pattaya", "pattaya cannabis guide", "cannabis shop pattaya"],
-    guide: {
-      intro:
-        "A practical adult visitor guide for checking the Labs Cannabis menu, effects, freshness, location, and WhatsApp contact before travelling across Pattaya.",
-      sections: [
-        {
-          h2: "Start with the menu",
-          body:
-            "Ask what flower is fresh today, which strains fit your preferred effect, and whether pre-rolls, deals, or best sellers are available before you visit.",
-        },
-        {
-          h2: "Use the real local route",
-          body:
-            "For near-me searches around Walking Street, Soi Hollywood, Jomtien, Naklua, Pratumnak, or Central Pattaya, confirm the address, Google listing, hours, and visit timing first.",
-        },
-        {
-          h2: "Keep everything in WhatsApp",
-          body:
-            "There is no public checkout, payment, reservation, or order form. Individual availability, delivery possibility, and terms are discussed privately in WhatsApp.",
-        },
-      ],
-      faq: [
-        {
-          q: "Can I buy cannabis directly on this website?",
-          a: "No. The site is a menu and contact funnel. Ask current details in WhatsApp.",
-        },
-        {
-          q: "Where is Labs Cannabis in Pattaya?",
-          a: "Labs Cannabis is on Pattaya 13 Alley, also known as Soi Hollywood, near Walking Street.",
-        },
-        {
-          q: "Is delivery confirmed from this page?",
-          a: "No. Delivery possibility is discussed privately after area, timing, and required details are checked.",
-        },
-      ],
-      closing: "Message before visiting if you want today's menu, effects, freshness, directions, or delivery possibility.",
-    },
-  },
-  ru: {
-    faqLabel: "Вопросы",
-    parent: { cannathai: "CannaThai опт", guide: "Гайды" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai опт каннабиса в Таиланде | Запрос bulk flower",
-      "wholesale-cannabis-thailand": "Оптовый каннабис Таиланд | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "Bulk cannabis flower Таиланд | Запрос партий с документами",
-      "cannabis-wholesale-pattaya-thailand": "Опт каннабиса Паттайя Таиланд | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "COA для опта каннабиса в Таиланде | Проверка batch документов",
-      "cannabis-farms-suppliers-thailand": "Фермы и поставщики каннабиса Таиланд | CannaThai опт",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai: оптовый каннабис в Таиланде",
-      "wholesale-cannabis-thailand": "Оптовые запросы на поставку каннабиса в Таиланде",
-      "bulk-cannabis-flower-thailand": "Bulk flower каннабиса для проверенных покупателей",
-      "cannabis-wholesale-pattaya-thailand": "Оптовые запросы каннабиса из Паттайи по Таиланду",
-      "coa-cannabis-wholesale-thailand": "COA и проверка документов по партиям каннабиса",
-      "cannabis-farms-suppliers-thailand": "Проверка ферм и поставщиков для оптовых покупателей",
-    },
-    cannaKeywords: ["опт каннабиса таиланд", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai - оптовое направление Labs Cannabis для проверенных контрагентов в Таиланде: bulk flower, партии, грейды и документы там, где они подтверждены.",
-      sections: [
-        {
-          h2: "Для bulk покупателей",
-          body:
-            "Запросите в WhatsApp актуальный batch list для 50г, 100г+, крупных аллокаций, indoor, greenhouse и outdoor flower. На сайте нет live stock, резерва, условий доставки или оплаты.",
-        },
-        {
-          h2: "Документы до заявлений",
-          body:
-            "Запрашивайте batch ID, source notes, записи фермы или поставщика, фото и COA там, где они реально доступны. Формулировка lab-tested используется только для конкретной партии с подтверждением.",
-        },
-        {
-          h2: "Паттайя и доставка по Таиланду",
-          body:
-            "Передача в Паттайе и возможность bulk delivery по Таиланду обсуждаются приватно после проверки контекста покупателя, точки назначения, маршрута, объема и нужных документов.",
-        },
-      ],
-      faq: [
-        {
-          q: "Можно получить публичный wholesale прайс?",
-          a: "Нет. Запросите актуальный batch list и wholesale quote в WhatsApp, указав контекст покупателя и целевой объем.",
-        },
-        {
-          q: "Можно запросить COA или lab документы?",
-          a: "Да. Проверенные покупатели могут уточнить, у каких партий есть COA или lab документы, до любых lab-tested заявлений.",
-        },
-        {
-          q: "CannaThai поставляет за пределы Паттайи?",
-          a: "Возможность bulk delivery по Таиланду обсуждается приватно, но сайт не подтверждает отправку или условия.",
-        },
-      ],
-      closing:
-        "Запросите batch list в WhatsApp: тип компании, локация, примерный объем, желаемый грейд, grow type и документы.",
-    },
-    guideTitle: "Как купить каннабис в Паттайе | Гайд для посетителей | Labs Cannabis",
-    guideH1: "Как купить каннабис в Паттайе без угадывания",
-    guideKeywords: ["как купить каннабис паттайя", "гайд каннабис паттайя", "cannabis shop pattaya"],
-    guide: {
-      intro:
-        "Практичный гайд для взрослых 20+: как проверить меню Labs Cannabis, эффекты, свежесть, локацию и WhatsApp-контакт до поездки по Паттайе.",
-      sections: [
-        {
-          h2: "Начните с меню",
-          body:
-            "Спросите, какие цветы свежие сегодня, какие сорта подходят под нужный эффект, есть ли pre-rolls, deals или best sellers перед визитом.",
-        },
-        {
-          h2: "Проверьте реальный маршрут",
-          body:
-            "Для запросов near me около Walking Street, Soi Hollywood, Jomtien, Naklua, Pratumnak или Central Pattaya сначала подтвердите адрес, Google listing, часы и удобное время визита.",
-        },
-        {
-          h2: "Все детали - в WhatsApp",
-          body:
-            "На сайте нет публичного checkout, оплаты, резерва или order form. Индивидуальная доступность, возможность доставки и условия обсуждаются приватно в WhatsApp.",
-        },
-      ],
-      faq: [
-        {
-          q: "Можно купить каннабис прямо на сайте?",
-          a: "Нет. Сайт работает как меню и контактный funnel. Актуальные детали уточняйте в WhatsApp.",
-        },
-        {
-          q: "Где находится Labs Cannabis в Паттайе?",
-          a: "Labs Cannabis находится на Pattaya 13 Alley, также известной как Soi Hollywood, рядом с Walking Street.",
-        },
-        {
-          q: "Доставка подтверждается на этой странице?",
-          a: "Нет. Возможность доставки обсуждается приватно после проверки района, времени и нужных деталей.",
-        },
-      ],
-      closing: "Напишите перед визитом, если нужны сегодняшнее меню, эффекты, свежесть, маршрут или возможность доставки.",
-    },
-  },
-  th: {
-    faqLabel: "คำถาม",
-    parent: { cannathai: "CannaThai ขายส่ง", guide: "คู่มือ" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai กัญชาขายส่งไทย | สอบถาม bulk flower",
-      "wholesale-cannabis-thailand": "กัญชาขายส่งไทย | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "Bulk Cannabis Flower ไทย | สอบถามล็อตพร้อมเอกสาร",
-      "cannabis-wholesale-pattaya-thailand": "กัญชาขายส่งพัทยาไทย | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "COA กัญชาขายส่งไทย | ตรวจเอกสารล็อต",
-      "cannabis-farms-suppliers-thailand": "ฟาร์มและซัพพลายเออร์กัญชาไทย | CannaThai ขายส่ง",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai กัญชาขายส่งในประเทศไทย",
-      "wholesale-cannabis-thailand": "สอบถามซัพพลายกัญชาขายส่งในประเทศไทย",
-      "bulk-cannabis-flower-thailand": "สอบถามดอกกัญชา bulk สำหรับผู้ซื้อที่ตรวจสอบแล้ว",
-      "cannabis-wholesale-pattaya-thailand": "สอบถามกัญชาขายส่งจากพัทยาไปทั่วไทย",
-      "coa-cannabis-wholesale-thailand": "ตรวจ COA และเอกสารล็อตกัญชา",
-      "cannabis-farms-suppliers-thailand": "ตรวจฟาร์มและซัพพลายเออร์สำหรับผู้ซื้อขายส่ง",
-    },
-    cannaKeywords: ["กัญชาขายส่งไทย", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai คือช่องทางขายส่งของ Labs Cannabis สำหรับคู่ค้าที่ตรวจสอบแล้วในไทย: bulk flower, ล็อต, เกรด และเอกสารเมื่อมีการยืนยัน.",
-      sections: [
-        {
-          h2: "สำหรับผู้ซื้อ bulk",
-          body:
-            "ขอ batch list ล่าสุดทาง WhatsApp สำหรับ 50g, 100g+, allocation ใหญ่, indoor, greenhouse และ outdoor flower. เว็บไซต์ไม่แสดงสต็อกสด ไม่จองสินค้า ไม่เสนอเงื่อนไขขนส่ง และไม่รับชำระเงิน.",
-        },
-        {
-          h2: "เอกสารก่อนการเคลม",
-          body:
-            "ขอ batch ID, source notes, ข้อมูลฟาร์มหรือซัพพลายเออร์, รูปภาพ และ COA เมื่อมีจริง คำว่า lab-tested ใช้เฉพาะล็อตที่มีเอกสารรองรับ.",
-        },
-        {
-          h2: "พัทยาและการจัดส่งทั่วไทย",
-          body:
-            "การรับส่งในพัทยาและความเป็นไปได้ของ bulk delivery ทั่วไทยจะคุยแบบส่วนตัวหลังตรวจบริบทผู้ซื้อ ปลายทาง เส้นทาง ปริมาณ และเอกสารที่ต้องใช้.",
-        },
-      ],
-      faq: [
-        {
-          q: "มี wholesale price list สาธารณะไหม?",
-          a: "ไม่มี ขอ batch list และ wholesale quote ล่าสุดทาง WhatsApp พร้อมบริบทผู้ซื้อและปริมาณที่ต้องการ.",
-        },
-        {
-          q: "ขอ COA หรือเอกสาร lab ได้ไหม?",
-          a: "ได้ ผู้ซื้อที่ตรวจสอบแล้วสามารถถามได้ว่าล็อตใดมี COA หรือเอกสาร lab ก่อนใช้คำว่า lab-tested.",
-        },
-        {
-          q: "CannaThai ส่งนอกพัทยาได้ไหม?",
-          a: "ความเป็นไปได้ของ bulk delivery ทั่วไทยคุยแบบส่วนตัว แต่เว็บไซต์ไม่ยืนยันการส่งหรือเงื่อนไข.",
-        },
-      ],
-      closing:
-        "ขอ batch list ทาง WhatsApp พร้อมประเภทองค์กร พื้นที่ ปริมาณโดยประมาณ เกรดที่ต้องการ grow type และเอกสารที่ต้องใช้.",
-    },
-    guideTitle: "วิธีซื้อกัญชาในพัทยา | คู่มือผู้มาเยือน | Labs Cannabis",
-    guideH1: "วิธีซื้อกัญชาในพัทยาโดยไม่ต้องเดา",
-    guideKeywords: ["วิธีซื้อกัญชาพัทยา", "คู่มือกัญชาพัทยา", "ร้านกัญชาพัทยา"],
-    guide: {
-      intro:
-        "คู่มือสำหรับผู้ใหญ่ 20+ เพื่อเช็คเมนู Labs Cannabis, เอฟเฟกต์, ความสด, ที่ตั้ง และ WhatsApp ก่อนเดินทางในพัทยา.",
-      sections: [
-        {
-          h2: "เริ่มจากเมนู",
-          body:
-            "ถามว่าดอกไหนสดวันนี้ สายพันธุ์ไหนเหมาะกับเอฟเฟกต์ที่ต้องการ และมี pre-rolls, deals หรือ best sellers ก่อนมาเยี่ยมร้าน.",
-        },
-        {
-          h2: "ใช้เส้นทางจริง",
-          body:
-            "สำหรับการค้นหา near me รอบ Walking Street, Soi Hollywood, Jomtien, Naklua, Pratumnak หรือ Central Pattaya ให้ยืนยันที่อยู่ Google listing เวลาเปิด และเวลาที่จะมาก่อน.",
-        },
-        {
-          h2: "คุยรายละเอียดใน WhatsApp",
-          body:
-            "ไม่มี public checkout การชำระเงิน การจอง หรือ order form บนเว็บไซต์ รายละเอียด availability, delivery possibility และเงื่อนไขคุยแบบส่วนตัวใน WhatsApp.",
-        },
-      ],
-      faq: [
-        {
-          q: "ซื้อกัญชาจากเว็บไซต์โดยตรงได้ไหม?",
-          a: "ไม่ได้ เว็บไซต์เป็นเมนูและช่องทางติดต่อ ให้ถามรายละเอียดล่าสุดใน WhatsApp.",
-        },
-        {
-          q: "Labs Cannabis อยู่ที่ไหนในพัทยา?",
-          a: "Labs Cannabis อยู่ที่ Pattaya 13 Alley หรือ Soi Hollywood ใกล้ Walking Street.",
-        },
-        {
-          q: "หน้านี้ยืนยันการส่งไหม?",
-          a: "ไม่ยืนยัน ความเป็นไปได้ของการส่งจะคุยส่วนตัวหลังตรวจพื้นที่ เวลา และรายละเอียดที่จำเป็น.",
-        },
-      ],
-      closing: "ทักมาก่อนมา หากต้องการเมนูวันนี้ เอฟเฟกต์ ความสด เส้นทาง หรือความเป็นไปได้ของการส่ง.",
-    },
-  },
-  ar: {
-    faqLabel: "الأسئلة",
-    parent: { cannathai: "CannaThai جملة", guide: "الأدلة" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai قنب بالجملة في تايلاند | استعلام bulk flower",
-      "wholesale-cannabis-thailand": "قنب بالجملة في تايلاند | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "Bulk Cannabis Flower تايلاند | استعلام دفعات موثقة",
-      "cannabis-wholesale-pattaya-thailand": "قنب بالجملة باتايا تايلاند | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "COA قنب بالجملة تايلاند | مراجعة مستندات الدفعات",
-      "cannabis-farms-suppliers-thailand": "مزارع وموردو القنب في تايلاند | CannaThai جملة",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai للقنب بالجملة في تايلاند",
-      "wholesale-cannabis-thailand": "استعلامات توريد القنب بالجملة في تايلاند",
-      "bulk-cannabis-flower-thailand": "استعلامات bulk flower للمشترين الموثقين",
-      "cannabis-wholesale-pattaya-thailand": "استعلامات قنب بالجملة من باتايا إلى تايلاند",
-      "coa-cannabis-wholesale-thailand": "مراجعة COA ومستندات دفعات القنب",
-      "cannabis-farms-suppliers-thailand": "مراجعة المزارع والموردين لمشتري الجملة",
-    },
-    cannaKeywords: ["قنب بالجملة تايلاند", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai هو مسار الجملة من Labs Cannabis للأطراف الموثقة في تايلاند: bulk flower، دفعات، درجات، وتوفر المستندات عندما تكون مؤكدة.",
-      sections: [
-        {
-          h2: "مصمم لمشتري الكميات",
-          body:
-            "اطلب batch list الحالي عبر WhatsApp لكميات 50g و100g+ وتخصيصات أكبر و indoor و greenhouse و outdoor flower. الموقع لا ينشر مخزوناً مباشراً ولا يحجز منتجاً ولا يعرض شروط شحن أو يقبل الدفع.",
-        },
-        {
-          h2: "المستندات قبل الادعاءات",
-          body:
-            "اطلب batch IDs وملاحظات المصدر وسجلات المزرعة أو المورد والصور ووثائق COA عندما تكون متاحة فعلاً. لا نستخدم وصف lab-tested إلا عندما تدعمه وثيقة الدفعة المحددة.",
-        },
-        {
-          h2: "باتايا ومراجعة التوصيل داخل تايلاند",
-          body:
-            "يمكن مراجعة التسليم في باتايا وإمكانية bulk delivery داخل تايلاند بشكل خاص بعد فحص سياق المشتري والوجهة والمسار والكمية والمستندات المطلوبة.",
-        },
-      ],
-      faq: [
-        {
-          q: "هل توجد قائمة أسعار جملة عامة؟",
-          a: "لا. اطلب batch list الحالي وwholesale quote عبر WhatsApp مع سياق المشتري والكمية المطلوبة.",
-        },
-        {
-          q: "هل يمكن طلب COA أو وثائق lab؟",
-          a: "نعم. يمكن للمشترين الموثقين السؤال عن الدفعات التي لديها COA أو وثائق lab قبل أي وصف lab-tested.",
-        },
-        {
-          q: "هل يمكن لـ CannaThai التوريد خارج باتايا؟",
-          a: "يمكن مراجعة إمكانية bulk delivery داخل تايلاند بشكل خاص، لكن الموقع لا يؤكد شحنة أو شروطاً.",
-        },
-      ],
-      closing:
-        "اطلب batch list عبر WhatsApp مع نوع الكيان والموقع ونطاق الكمية التقريبي والدرجة المفضلة ونوع الزراعة واحتياجات المستندات.",
-    },
-    guideTitle: "كيفية شراء القنب في باتايا | دليل الزائر | Labs Cannabis",
-    guideH1: "كيفية شراء القنب في باتايا بدون تخمين",
-    guideKeywords: ["كيفية شراء القنب باتايا", "دليل القنب باتايا", "متجر قنب باتايا"],
-    guide: {
-      intro:
-        "دليل عملي للبالغين 20+ للتحقق من قائمة Labs Cannabis والتأثيرات والطزاجة والموقع وWhatsApp قبل التنقل في باتايا.",
-      sections: [
-        {
-          h2: "ابدأ بالقائمة",
-          body:
-            "اسأل عن الزهور الطازجة اليوم، والسلالات المناسبة للتأثير المطلوب، وهل تتوفر pre-rolls أو deals أو best sellers قبل الزيارة.",
-        },
-        {
-          h2: "استخدم المسار المحلي الحقيقي",
-          body:
-            "لبحث near-me حول Walking Street وSoi Hollywood وJomtien وNaklua وPratumnak وCentral Pattaya، أكد العنوان وGoogle listing وساعات العمل ووقت الزيارة أولاً.",
-        },
-        {
-          h2: "كل التفاصيل عبر WhatsApp",
-          body:
-            "لا يوجد public checkout أو دفع أو حجز أو order form. التوفر الفردي وإمكانية التوصيل والشروط تناقش بشكل خاص في WhatsApp.",
-        },
-      ],
-      faq: [
-        {
-          q: "هل يمكن شراء القنب مباشرة من هذا الموقع؟",
-          a: "لا. الموقع يعمل كقائمة وقناة تواصل. اسأل عن التفاصيل الحالية في WhatsApp.",
-        },
-        {
-          q: "أين يقع Labs Cannabis في باتايا؟",
-          a: "يقع Labs Cannabis في Pattaya 13 Alley، المعروف أيضاً باسم Soi Hollywood، قرب Walking Street.",
-        },
-        {
-          q: "هل يؤكد هذا الصفحة التوصيل؟",
-          a: "لا. إمكانية التوصيل تناقش بشكل خاص بعد فحص المنطقة والوقت والتفاصيل المطلوبة.",
-        },
-      ],
-      closing: "راسلنا قبل الزيارة إذا أردت قائمة اليوم أو التأثيرات أو الطزاجة أو الاتجاهات أو إمكانية التوصيل.",
-    },
-  },
-  zh: {
-    faqLabel: "常见问题",
-    parent: { cannathai: "CannaThai 批发", guide: "指南" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai 泰国大麻批发 | Bulk Flower 咨询",
-      "wholesale-cannabis-thailand": "泰国大麻批发 | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "泰国 Bulk Cannabis Flower | 批次文件咨询",
-      "cannabis-wholesale-pattaya-thailand": "芭提雅泰国大麻批发 | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "泰国大麻批发 COA | 批次文件审核",
-      "cannabis-farms-suppliers-thailand": "泰国大麻农场与供应商 | CannaThai 批发",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai 泰国大麻批发",
-      "wholesale-cannabis-thailand": "泰国大麻批发供应咨询",
-      "bulk-cannabis-flower-thailand": "面向已验证买家的 bulk flower 咨询",
-      "cannabis-wholesale-pattaya-thailand": "从芭提雅到泰国的大麻批发咨询",
-      "coa-cannabis-wholesale-thailand": "COA 与大麻批次文件审核",
-      "cannabis-farms-suppliers-thailand": "面向批发买家的农场与供应商审核",
-    },
-    cannaKeywords: ["泰国大麻批发", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai 是 Labs Cannabis 的批发咨询通道，面向泰国已验证合作方：bulk flower、批次、等级，以及经确认的文件可用性。",
-      sections: [
-        {
-          h2: "为 bulk 买家设计",
-          body:
-            "通过 WhatsApp 索取当前 batch list，适用于 50g、100g+、更大 allocation、indoor、greenhouse 和 outdoor flower。公开网站不发布实时库存、不预留产品、不报价运输条款，也不收款。",
-        },
-        {
-          h2: "先看文件再做声明",
-          body:
-            "可索取 batch ID、source notes、农场或供应商记录、照片，以及实际可用的 COA 文件。只有具体批次文件支持时才使用 lab-tested 描述。",
-        },
-        {
-          h2: "芭提雅与泰国范围配送评估",
-          body:
-            "芭提雅交接及泰国范围 bulk delivery 可能性，会在核对买家背景、目的地、路线、数量和所需文件后私下评估。",
-        },
-      ],
-      faq: [
-        {
-          q: "可以获取公开批发价格表吗？",
-          a: "不可以。请在 WhatsApp 提供买家背景和目标数量，索取当前 batch list 与 wholesale quote。",
-        },
-        {
-          q: "可以索取 COA 或 lab 文件吗？",
-          a: "可以。已验证买家可询问哪些批次有 COA 或 lab 文件，然后再使用任何 lab-tested 表述。",
-        },
-        {
-          q: "CannaThai 可以供应芭提雅以外地区吗？",
-          a: "泰国范围 bulk delivery 可能性可私下评估，但网站不会确认发货或条款。",
-        },
-      ],
-      closing: "请通过 WhatsApp 提供实体类型、位置、预计数量、偏好等级、grow type 和文件需求，以索取 batch list。",
-    },
-    guideTitle: "如何在芭提雅购买大麻 | 访客指南 | Labs Cannabis",
-    guideH1: "如何在芭提雅购买大麻，不靠猜",
-    guideKeywords: ["芭提雅如何购买大麻", "芭提雅大麻指南", "芭提雅大麻店"],
-    guide: {
-      intro:
-        "面向 20+ 成人的实用指南：出发前先确认 Labs Cannabis 菜单、效果、新鲜度、位置和 WhatsApp 联系。",
-      sections: [
-        {
-          h2: "先从菜单开始",
-          body:
-            "到店前询问今天哪些花更新鲜、哪些品种适合你的效果偏好，以及是否有 pre-rolls、deals 或 best sellers。",
-        },
-        {
-          h2: "确认真实本地路线",
-          body:
-            "在 Walking Street、Soi Hollywood、Jomtien、Naklua、Pratumnak 或 Central Pattaya 附近搜索 near-me 时，先确认地址、Google listing、营业时间和到访时间。",
-        },
-        {
-          h2: "所有细节都在 WhatsApp",
-          body:
-            "网站没有 public checkout、付款、预订或 order form。个人可用性、配送可能性和条款都在 WhatsApp 私下沟通。",
-        },
-      ],
-      faq: [
-        {
-          q: "可以直接在网站购买大麻吗？",
-          a: "不可以。网站是菜单和联系入口。请在 WhatsApp 询问当前详情。",
-        },
-        {
-          q: "Labs Cannabis 在芭提雅哪里？",
-          a: "Labs Cannabis 位于 Pattaya 13 Alley，也叫 Soi Hollywood，靠近 Walking Street。",
-        },
-        {
-          q: "此页面会确认配送吗？",
-          a: "不会。配送可能性需在确认区域、时间和必要信息后私下讨论。",
-        },
-      ],
-      closing: "到访前如需今天菜单、效果、新鲜度、路线或配送可能性，请先发 WhatsApp。",
-    },
-  },
-  ko: {
-    faqLabel: "자주 묻는 질문",
-    parent: { cannathai: "CannaThai 도매", guide: "가이드" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai 태국 대마 도매 | Bulk Flower 문의",
-      "wholesale-cannabis-thailand": "태국 대마 도매 | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "태국 Bulk Cannabis Flower | 문서화된 배치 문의",
-      "cannabis-wholesale-pattaya-thailand": "파타야 태국 대마 도매 | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "태국 대마 도매 COA | 배치 문서 검토",
-      "cannabis-farms-suppliers-thailand": "태국 대마 농장 및 공급업체 | CannaThai 도매",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai 태국 대마 도매",
-      "wholesale-cannabis-thailand": "태국 대마 도매 공급 문의",
-      "bulk-cannabis-flower-thailand": "검증된 구매자를 위한 bulk flower 문의",
-      "cannabis-wholesale-pattaya-thailand": "파타야에서 태국 전역으로 이어지는 대마 도매 문의",
-      "coa-cannabis-wholesale-thailand": "COA 및 대마 배치 문서 검토",
-      "cannabis-farms-suppliers-thailand": "도매 구매자를 위한 농장 및 공급업체 검토",
-    },
-    cannaKeywords: ["태국 대마 도매", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai는 Labs Cannabis의 도매 문의 트랙으로, 태국의 검증된 거래처를 위해 bulk flower, 배치, 등급, 확인된 문서 가용성을 다룹니다.",
-      sections: [
-        {
-          h2: "bulk 구매자를 위한 흐름",
-          body:
-            "WhatsApp에서 50g, 100g+, 더 큰 allocation, indoor, greenhouse, outdoor flower의 현재 batch list를 요청하세요. 공개 사이트는 실시간 재고, 예약, 배송 조건, 결제를 제공하지 않습니다.",
-        },
-        {
-          h2: "주장보다 문서 먼저",
-          body:
-            "실제로 가능한 batch ID, source notes, 농장 또는 공급업체 기록, 사진, COA 문서를 요청하세요. lab-tested 표현은 해당 배치 문서가 뒷받침될 때만 사용합니다.",
-        },
-        {
-          h2: "파타야와 태국 전역 배송 검토",
-          body:
-            "파타야 인계와 태국 전역 bulk delivery 가능성은 구매자 정보, 목적지, 경로, 수량, 필요한 문서를 확인한 뒤 비공개로 검토합니다.",
-        },
-      ],
-      faq: [
-        {
-          q: "공개 도매 가격표가 있나요?",
-          a: "없습니다. WhatsApp에서 구매자 정보와 목표 수량을 보내 현재 batch list와 wholesale quote를 요청하세요.",
-        },
-        {
-          q: "COA 또는 lab 문서를 요청할 수 있나요?",
-          a: "네. 검증된 구매자는 어떤 배치에 COA 또는 lab 문서가 있는지 확인한 뒤 lab-tested 표현을 사용할 수 있습니다.",
-        },
-        {
-          q: "CannaThai는 파타야 밖으로도 공급하나요?",
-          a: "태국 전역 bulk delivery 가능성은 비공개로 검토할 수 있지만, 사이트에서 배송이나 조건을 확정하지 않습니다.",
-        },
-      ],
-      closing:
-        "WhatsApp으로 업체 유형, 위치, 예상 수량, 선호 등급, grow type, 필요한 문서를 보내 batch list를 요청하세요.",
-    },
-    guideTitle: "파타야에서 대마 구매하는 법 | 방문자 가이드 | Labs Cannabis",
-    guideH1: "추측 없이 파타야에서 대마를 구매하는 방법",
-    guideKeywords: ["파타야 대마 구매 방법", "파타야 대마 가이드", "파타야 대마 매장"],
-    guide: {
-      intro:
-        "20+ 성인을 위한 실용 가이드입니다. 이동 전 Labs Cannabis 메뉴, 효과, 신선도, 위치, WhatsApp 연락을 확인하세요.",
-      sections: [
-        {
-          h2: "메뉴부터 확인",
-          body:
-            "방문 전 오늘 신선한 flower, 원하는 효과에 맞는 품종, pre-rolls, deals, best sellers 여부를 물어보세요.",
-        },
-        {
-          h2: "실제 로컬 경로 확인",
-          body:
-            "Walking Street, Soi Hollywood, Jomtien, Naklua, Pratumnak, Central Pattaya 주변 near-me 검색은 주소, Google listing, 영업시간, 방문 시간을 먼저 확인하세요.",
-        },
-        {
-          h2: "모든 세부 사항은 WhatsApp에서",
-          body:
-            "사이트에는 public checkout, 결제, 예약, order form이 없습니다. 개별 availability, delivery possibility, 조건은 WhatsApp에서 비공개로 논의합니다.",
-        },
-      ],
-      faq: [
-        {
-          q: "이 웹사이트에서 바로 구매할 수 있나요?",
-          a: "아니요. 사이트는 메뉴와 연락 funnel입니다. 현재 세부 정보는 WhatsApp에서 문의하세요.",
-        },
-        {
-          q: "Labs Cannabis는 파타야 어디에 있나요?",
-          a: "Labs Cannabis는 Walking Street 근처 Pattaya 13 Alley, 즉 Soi Hollywood에 있습니다.",
-        },
-        {
-          q: "이 페이지에서 배송이 확정되나요?",
-          a: "아니요. 배송 가능성은 지역, 시간, 필요한 세부 사항을 확인한 뒤 비공개로 논의합니다.",
-        },
-      ],
-      closing: "오늘 메뉴, 효과, 신선도, 길 안내, 배송 가능성이 필요하면 방문 전 WhatsApp으로 문의하세요.",
-    },
-  },
-  ja: {
-    faqLabel: "よくある質問",
-    parent: { cannathai: "CannaThai 卸売", guide: "ガイド" },
-    cannaTitles: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai タイ大麻卸売 | Bulk Flower問い合わせ",
-      "wholesale-cannabis-thailand": "タイ大麻卸売 | CannaThai by Labs Cannabis",
-      "bulk-cannabis-flower-thailand": "タイ Bulk Cannabis Flower | 文書付きバッチ問い合わせ",
-      "cannabis-wholesale-pattaya-thailand": "パタヤ タイ大麻卸売 | CannaThai Supply",
-      "coa-cannabis-wholesale-thailand": "タイ大麻卸売 COA | バッチ文書確認",
-      "cannabis-farms-suppliers-thailand": "タイ大麻ファームとサプライヤー | CannaThai 卸売",
-    },
-    cannaH1s: {
-      "cannathai-wholesale-cannabis-thailand": "CannaThai タイの大麻卸売",
-      "wholesale-cannabis-thailand": "タイ国内の大麻卸売供給問い合わせ",
-      "bulk-cannabis-flower-thailand": "確認済みバイヤー向け bulk flower 問い合わせ",
-      "cannabis-wholesale-pattaya-thailand": "パタヤからタイ国内への大麻卸売問い合わせ",
-      "coa-cannabis-wholesale-thailand": "COA と大麻バッチ文書の確認",
-      "cannabis-farms-suppliers-thailand": "卸売バイヤー向けファームとサプライヤー確認",
-    },
-    cannaKeywords: ["タイ 大麻 卸売", "bulk cannabis flower", "cannathai batch list"],
-    canna: {
-      intro:
-        "CannaThai は Labs Cannabis の卸売問い合わせラインです。タイ国内の確認済み取引先向けに bulk flower、バッチ、グレード、確認済み文書の有無を扱います。",
-      sections: [
-        {
-          h2: "bulk バイヤー向け",
-          body:
-            "50g、100g+、大きな allocation、indoor、greenhouse、outdoor flower の現在の batch list を WhatsApp でリクエストしてください。公開サイトでは在庫、予約、配送条件、支払いを確定しません。",
-        },
-        {
-          h2: "主張の前に文書",
-          body:
-            "batch ID、source notes、ファームまたはサプライヤー記録、写真、COA 文書が実際にある場合は確認できます。lab-tested 表現は特定バッチの文書がある場合のみ使います。",
-        },
-        {
-          h2: "パタヤとタイ国内配送の確認",
-          body:
-            "パタヤでの受け渡しやタイ国内 bulk delivery の可能性は、バイヤー情報、目的地、ルート、数量、必要文書を確認した後に個別で検討します。",
-        },
-      ],
-      faq: [
-        {
-          q: "公開の卸売価格表はありますか？",
-          a: "ありません。WhatsAppでバイヤー情報と希望数量を送り、現在の batch list と wholesale quote をリクエストしてください。",
-        },
-        {
-          q: "COA や lab 文書を依頼できますか？",
-          a: "はい。確認済みバイヤーは、どのバッチに COA または lab 文書があるか確認できます。lab-tested 表現は文書がある場合のみ使います。",
-        },
-        {
-          q: "CannaThai はパタヤ以外にも供給できますか？",
-          a: "タイ国内 bulk delivery の可能性は個別に確認できますが、サイト上で配送や条件は確定しません。",
-        },
-      ],
-      closing:
-        "WhatsAppで法人/事業タイプ、所在地、おおよその数量、希望グレード、grow type、必要文書を送り batch list をリクエストしてください。",
-    },
-    guideTitle: "パタヤで大麻を買う方法 | 訪問者ガイド | Labs Cannabis",
-    guideH1: "迷わずパタヤで大麻を買う方法",
-    guideKeywords: ["パタヤ 大麻 買い方", "パタヤ 大麻 ガイド", "パタヤ 大麻 店"],
-    guide: {
-      intro:
-        "20+ 成人向けの実用ガイドです。移動前に Labs Cannabis のメニュー、効果、鮮度、場所、WhatsApp 連絡を確認できます。",
-      sections: [
-        {
-          h2: "まずメニューを確認",
-          body:
-            "来店前に、今日新鮮な flower、希望する効果に合う品種、pre-rolls、deals、best sellers の有無を聞いてください。",
-        },
-        {
-          h2: "実際のローカルルートを確認",
-          body:
-            "Walking Street、Soi Hollywood、Jomtien、Naklua、Pratumnak、Central Pattaya 周辺の near-me 検索では、住所、Google listing、営業時間、来店時間を先に確認してください。",
-        },
-        {
-          h2: "詳細は WhatsApp で",
-          body:
-            "サイトには public checkout、支払い、予約、order form はありません。個別の availability、delivery possibility、条件は WhatsApp で非公開に相談します。",
-        },
-      ],
-      faq: [
-        {
-          q: "このサイトで直接購入できますか？",
-          a: "できません。サイトはメニューと連絡の入口です。現在の詳細は WhatsApp で確認してください。",
-        },
-        {
-          q: "Labs Cannabis はパタヤのどこですか？",
-          a: "Labs Cannabis は Walking Street 近くの Pattaya 13 Alley、別名 Soi Hollywood にあります。",
-        },
-        {
-          q: "このページで配送は確定しますか？",
-          a: "いいえ。配送可能性はエリア、時間、必要情報を確認した後に個別で相談します。",
-        },
-      ],
-      closing: "今日のメニュー、効果、鮮度、道順、配送可能性が必要なら来店前に WhatsApp してください。",
-    },
-  },
-};
-
-const special = SPECIAL_COPY[locale] ?? SPECIAL_COPY.en;
-const buildCannaThaiContent = (slug: string, h1: string): SeoContent => ({
-  h1: special.cannaH1s[slug] ?? h1,
-  ...special.canna,
-  source: "fallback",
-});
-
-const buildBuyingGuideContent = (): SeoContent => ({
-  h1: special.guideH1,
-  ...special.guide,
-  source: "fallback",
-});
-
-const content =
-  page.brand === "cannathai"
-    ? buildCannaThaiContent(slug, page.h1Template[locale])
-    : page.intent === "guide"
-      ? buildBuyingGuideContent()
-      : loadSeoContent(locale, slug);
-const title =
-  page.brand === "cannathai"
-    ? special.cannaTitles[slug] ?? page.titleTemplate[locale]
-    : page.intent === "guide"
-      ? special.guideTitle
-      : page.titleTemplate[locale];
-const keywords: string[] =
-  page.brand === "cannathai"
-    ? special.cannaKeywords
-    : page.intent === "guide"
-      ? special.guideKeywords
-      : page.keywords[locale] ?? page.keywords.en;
-const description = seoDescription(content);
+const page = SEO_PAGES.find((candidate) => candidate.slug === slug)!;
+const policy = getIndexPolicy(locale, slug);
 const ui = t(locale);
-const areaName =
-  page.brand === "cannathai" ? "Thailand" : page.area ? getAreaBySlug(page.area)?.name[locale] : undefined;
-const pageType =
-  page.intent === "delivery"
-    ? "delivery"
-    : page.intent === "wholesale"
-      ? "wholesale"
-      : page.intent === "guide"
-        ? "guide"
-        : "seo";
-const parentBreadcrumb =
-  page.brand === "cannathai"
-    ? { name: special.parent.cannathai, pathSuffix: "wholesale" }
-    : page.intent === "guide"
-      ? { name: special.parent.guide, pathSuffix: "guides/legal-cannabis-tourists" }
-      : { name: ui.locations.title, pathSuffix: "locations" };
+const retired = retiredCopy[locale] ?? retiredCopy.en;
+const content = policy.indexable ? loadSeoContent(locale, slug) : null;
+const title = content ? page.titleTemplate[locale] : retired.title;
+const description = content ? seoDescription(content) : retired.description;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  parentBreadcrumb,
-  { name: content.h1 || page.h1Template[locale], pathSuffix: slug },
+  { name: policy.indexable ? content!.h1 : retired.h1, pathSuffix: slug },
 ];
-const article =
-  page.intent === "guide"
-    ? {
-        headline: content.h1,
-        datePublished: "2026-06-07",
-        dateModified: "2026-08-13",
-        author: "Labs Cannabis",
-      }
-    : undefined;
 ---
 
 <PageLayout
@@ -790,60 +123,51 @@ const article =
   pathSuffix={slug}
   title={title}
   description={description}
-  keywords={keywords}
-  faq={content.faq}
-  pageType={pageType}
+  keywords={policy.indexable ? page.keywords[locale] ?? page.keywords.en : []}
+  faq={content?.faq ?? []}
+  pageType="seo"
   breadcrumbs={breadcrumbs}
-  serviceAreaName={areaName}
-  article={article}
 >
-  <article class="px-4 pt-8 pb-4">
-    <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold leading-tight">{content.h1 || page.h1Template[locale]}</h1>
-      <p class="mt-4 text-base leading-relaxed text-text-muted">{content.intro}</p>
-      {content.sections.map((sec) => (
-        <section class="mt-6">
-          <h2 class="text-xl font-bold text-emerald-dim">{sec.h2}</h2>
-          <p class="mt-2 text-base leading-relaxed text-text-muted">{sec.body}</p>
-        </section>
-      ))}
-      {content.faq.length > 0 && (
-        <section class="mt-8">
-          <h2 class="mb-3 text-xl font-bold">{special.faqLabel}</h2>
-          {content.faq.map((item) => (
-            <details class="card-surface mb-3 p-4">
-              <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
-              <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
-            </details>
-          ))}
-        </section>
-      )}
-      <p class="mt-6 text-base leading-relaxed text-text-muted">{content.closing}</p>
-      <nav class="mt-8 grid gap-3" aria-label={ui.footerSeo.moreTitle}>
-        {page.area && page.area !== "pattaya" && (
-          <a href={localePath(locale, `areas/${page.area}`)} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-            {getAreaBySlug(page.area)?.name[locale]}
-          </a>
+  {content ? (
+    <article class="px-4 pt-8 pb-4">
+      <div class="mx-auto max-w-lg">
+        <h1 class="text-3xl font-bold leading-tight">{content.h1 || page.h1Template[locale]}</h1>
+        <p class="mt-4 text-base leading-relaxed text-text-muted">{content.intro}</p>
+        {content.sections.map((section) => (
+          <section class="mt-6">
+            <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{section.body}</p>
+          </section>
+        ))}
+        {content.faq.length > 0 && (
+          <section class="mt-8">
+            <h2 class="mb-3 text-xl font-bold">FAQ</h2>
+            {content.faq.map((item) => (
+              <details class="card-surface mb-3 p-4">
+                <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+                <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+              </details>
+            ))}
+          </section>
         )}
-        <a href={localePath(locale, "cannabis-near-me-pattaya")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.nearMe}
-        </a>
-        <a href={localePath(locale, "delivery/pattaya")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.pattayaDelivery}
-        </a>
-        <a href={localePath(locale, "how-to-buy-cannabis-pattaya")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.howToBuy}
-        </a>
-        <a href={localePath(locale, "locations")} class="card-surface px-4 py-3 text-base font-medium hover:text-emerald-dim">
-          {ui.footerSeo.allPages}
-        </a>
-      </nav>
-    </div>
-  </article>
-  <Reels locale={locale} slides={REELS_SLIDES.slice(0, 3)} mini />
-  <PriceLadder locale={locale} />
-  <ReviewStrip locale={locale} />
-  <MapBlock locale={locale} />
-  <MedicalCardNote locale={locale} />
+        <p class="mt-6 text-base leading-relaxed text-text-muted">{content.closing}</p>
+      </div>
+    </article>
+  ) : (
+    <article class="px-4 py-12">
+      <div class="mx-auto max-w-lg">
+        <h1 class="text-3xl font-bold leading-tight">{retired.h1}</h1>
+        <p class="mt-4 text-lg leading-relaxed text-text-muted">{retired.lead}</p>
+        <p class="mt-4 text-base leading-relaxed text-text-muted">{retired.body}</p>
+        <nav class="mt-8 grid gap-3" aria-label={retired.h1}>
+          <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="retired_page" data-track-detail={`retired:${slug}:maps`}>{retired.maps}</a>
+          <a href={localePath(locale, "contact")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{retired.contact}</a>
+          <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{retired.legal}</a>
+        </nav>
+      </div>
+    </article>
+  )}
+  {content && <ReviewStrip locale={locale} />}
+  {content && <MapBlock locale={locale} />}
   <Footer locale={locale} pathSuffix={slug} />
 </PageLayout>

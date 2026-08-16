@@ -180,7 +180,7 @@ import {
         const url = new URL(href, window.location.href);
         const existing =
           url.searchParams.get("text") ||
-          "Hi Labs Cannabis, I am 20+ and would like to ask today's menu, effects, freshness, and pickup/delivery possibilities.";
+          "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley. I am not sending an order or payment.";
         const tag = buildWhatsAppTag(link);
         if (!/\[(source|wa_source):/i.test(existing)) {
           url.searchParams.set("text", `${existing}\n\n${tag}`);

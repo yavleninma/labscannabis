@@ -1,10 +1,9 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import MapBlock from "@/components/MapBlock.astro";
-import MedicalCardNote from "@/components/MedicalCardNote.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
-import { CONTACT } from "@/data/site";
+import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
@@ -14,59 +13,67 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
-const copy: Record<Locale, { description: string; lead: string; prefill: string }> = {
+const copy: Record<Locale, { description: string; lead: string; prefill: string; maps: string }> = {
   en: {
-    description: "Contact Labs Cannabis for today's Pattaya cannabis menu, effects, freshness, directions, pickup, and delivery possibility.",
+    description: "Contact Labs Cannabis for directions and visit coordination at Pattaya 13 Alley.",
     lead:
-      "Ask today's menu, effects, freshness, directions, pickup timing, or whether delivery possibility can be discussed for your area. No public checkout, payment, or order form is used.",
+      "Use WhatsApp for directions and visit coordination. Open the public Google Maps listing before travelling to the shop.",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "Hi Labs Cannabis. I am in Pattaya and would like directions and help coordinating a visit to the shop.",
+    maps: "Open Google Maps",
   },
   ru: {
-    description: "Связь с Labs Cannabis: сегодняшнее меню каннабиса в Паттайе, эффекты, свежесть, маршрут, самовывоз и возможность доставки.",
+    description: "Связь с Labs Cannabis для маршрута и согласования визита на Pattaya 13 Alley.",
     lead:
-      "Спросите сегодняшнее меню, эффекты, свежесть, маршрут, время самовывоза или возможность доставки для вашего района. На сайте нет публичного checkout, оплаты или order form.",
+      "Используйте WhatsApp для маршрута и согласования визита. Перед поездкой откройте публичную карточку в Google Maps.",
     prefill:
-      "Привет, Labs Cannabis. Мне 20+, я в Паттайе. Пришлите сегодняшнее меню каннабиса, эффекты, свежесть, маршрут и варианты самовывоза/доставки.",
+      "Привет, Labs Cannabis. Я в Паттайе. Подскажите маршрут и помогите согласовать визит в магазин.",
+    maps: "Открыть Google Maps",
   },
   th: {
-    description: "ติดต่อ Labs Cannabis เพื่อถามเมนูกัญชาวันนี้ เอฟเฟกต์ ความสด เส้นทาง pickup และ delivery possibility ในพัทยา",
+    description: "ติดต่อ Labs Cannabis เพื่อขอเส้นทางและประสานงานการเยี่ยมชมที่ Pattaya 13 Alley",
     lead:
-      "ถามเมนูวันนี้ เอฟเฟกต์ ความสด เส้นทาง เวลา pickup หรือความเป็นไปได้ของ delivery สำหรับพื้นที่คุณ เว็บไซต์ไม่มี public checkout การชำระเงิน หรือ order form",
+      "ใช้ WhatsApp เพื่อขอเส้นทางและประสานงานการเยี่ยมชม โปรดเปิดข้อมูลสาธารณะใน Google Maps ก่อนเดินทาง",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "สวัสดี Labs Cannabis ฉันอยู่ในพัทยาและต้องการเส้นทางพร้อมความช่วยเหลือในการประสานงานการเยี่ยมชมร้าน",
+    maps: "เปิด Google Maps",
   },
   ar: {
-    description: "تواصل مع Labs Cannabis لقائمة قنب باتايا اليوم والتأثيرات والطزاجة والاتجاهات والاستلام وإمكانية التوصيل.",
+    description: "تواصل مع Labs Cannabis للحصول على الاتجاهات وتنسيق الزيارة إلى Pattaya 13 Alley.",
     lead:
-      "اسأل عن قائمة اليوم والتأثيرات والطزاجة والاتجاهات ووقت الاستلام أو إمكانية التوصيل لمنطقتك. لا يوجد public checkout أو دفع أو order form.",
+      "استخدم WhatsApp للحصول على الاتجاهات وتنسيق الزيارة. افتح بطاقة Google Maps العامة قبل التوجه إلى المتجر.",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "مرحباً Labs Cannabis. أنا في باتايا وأرغب في الاتجاهات والمساعدة في تنسيق زيارة المتجر.",
+    maps: "فتح Google Maps",
   },
   zh: {
-    description: "联系 Labs Cannabis 查询芭提雅今日大麻菜单、效果、新鲜度、路线、取货和配送可能性。",
+    description: "联系 Labs Cannabis，获取前往 Pattaya 13 Alley 的路线并协调到店。",
     lead:
-      "询问今日菜单、效果、新鲜度、路线、取货时间，或你的区域是否可讨论配送。网站没有 public checkout、付款或 order form。",
+      "使用 WhatsApp 获取路线并协调到店。出发前请打开公开的 Google Maps 商家信息。",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "你好，Labs Cannabis。我在芭提雅，希望获取路线并协调到店。",
+    maps: "打开 Google Maps",
   },
   ko: {
-    description: "Labs Cannabis에 파타야 오늘 대마 메뉴, 효과, 신선도, 길 안내, 픽업, 배송 가능성을 문의하세요.",
+    description: "Labs Cannabis에 Pattaya 13 Alley 길 안내와 방문 조율을 문의하세요.",
     lead:
-      "오늘 메뉴, 효과, 신선도, 길 안내, 픽업 시간 또는 내 지역 배송 가능성을 문의하세요. 사이트에는 public checkout, 결제, order form이 없습니다.",
+      "WhatsApp으로 길 안내와 방문 조율을 문의하세요. 출발 전에 공개 Google Maps 정보를 확인하세요.",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "안녕하세요, Labs Cannabis. 파타야에 있으며 매장 길 안내와 방문 조율을 부탁드립니다.",
+    maps: "Google Maps 열기",
   },
   ja: {
-    description: "Labs Cannabis へ、パタヤの今日の大麻メニュー、効果、鮮度、道順、受け取り、配送可能性を確認。",
+    description: "Labs Cannabisへ、Pattaya 13 Alleyまでの道順と来店調整を問い合わせ。",
     lead:
-      "今日のメニュー、効果、鮮度、道順、受け取り時間、またはエリア配送の相談可否を確認できます。サイトには public checkout、支払い、order form はありません。",
+      "WhatsAppで道順と来店調整を確認できます。出発前に公開Google Maps情報を開いてください。",
     prefill:
-      "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today's cannabis menu, effects, freshness, directions, and pickup/delivery possibilities.",
+      "こんにちは、Labs Cannabis。パタヤにいます。店舗までの道順と来店調整をお願いします。",
+    maps: "Google Mapsを開く",
   },
 };
 const contactCopy = copy[locale] ?? copy.en;
-const inquiryHref = `${CONTACT.whatsappWithMsg(contactCopy.prefill)}&source=seo_landing_page`;
+const inquiryHref = `${CONTACT.whatsappWithMsg(contactCopy.prefill)}&source=contact`;
+const addressLine = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.contact.title, pathSuffix: "contact" },
@@ -87,9 +94,14 @@ const breadcrumbs = [
       <p class="mt-2 text-base text-text-muted">
         {contactCopy.lead}
       </p>
-      <p class="mt-4 text-xl font-bold text-text">{CONTACT.phoneDisplay}</p>
+      <div class="mt-5 rounded-xl border border-border bg-bg-card p-4">
+        <p class="font-bold text-text">{BRAND.name} — listed on Google Maps as {GOOGLE.listingName}</p>
+        <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
+        <a href={CONTACT.tel} class="mt-2 inline-flex font-bold text-text hover:text-emerald-dim" data-track="contact_call_click" data-track-placement="contact" data-track-detail="contact:nap_phone">{CONTACT.phoneDisplay}</a>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="mt-3 block font-bold text-emerald-dim hover:underline" data-track="map_open_click" data-track-placement="contact" data-track-detail="contact:nap_maps">{contactCopy.maps}</a>
+      </div>
       <div class="mt-6 grid grid-cols-2 gap-3">
-        <a href={inquiryHref} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black" data-track="contact_whatsapp_click" data-track-placement="contact_page" data-track-detail="contact:whatsapp" data-wa-source="seo_landing_page" data-whatsapp-ref="contact_page">{ui.contact.whatsapp}</a>
+        <a href={inquiryHref} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald py-3.5 text-center text-base font-bold text-black" data-track="contact_whatsapp_click" data-track-placement="contact" data-track-detail="contact:whatsapp" data-wa-source="contact" data-whatsapp-ref="visit_coordination" data-utm-campaign="contact">{ui.contact.whatsapp}</a>
         <a href={CONTACT.telegram} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:telegram">{ui.contact.telegram}</a>
         <a href={CONTACT.line} target="_blank" rel="noopener noreferrer" class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_messenger_click" data-track-placement="contact_page" data-track-detail="contact:line">{ui.contact.line}</a>
         <a href={CONTACT.tel} class="card-surface py-3.5 text-center text-base font-medium" data-track="contact_call_click" data-track-placement="contact_page" data-track-detail="contact:call">{ui.contact.call}</a>
@@ -97,6 +109,5 @@ const breadcrumbs = [
     </div>
   </section>
   <MapBlock locale={locale} />
-  <MedicalCardNote locale={locale} />
   <Footer locale={locale} pathSuffix="contact" />
 </PageLayout>

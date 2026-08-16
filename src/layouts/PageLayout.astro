@@ -3,9 +3,9 @@ import "@/styles/global.css";
 import type { Locale } from "@/lib/i18n";
 import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 import { ADDRESS } from "@/data/site";
-import AgeGate from "@/components/AgeGate.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
 import JsonLd from "@/components/JsonLd.astro";
@@ -45,8 +45,11 @@ const ui = t(locale);
 const pageTitle = title ?? ui.meta.title;
 const pageDesc = description ?? ui.meta.description;
 const canonical = getCanonical(locale, pathSuffix);
-const hreflangs = getHreflangs(locale, pathSuffix);
-const xDefault = getCanonical("en", pathSuffix);
+const indexPolicy = getIndexPolicy(locale, pathSuffix);
+const hreflangs = indexPolicy.indexable
+  ? getHreflangs(pathSuffix, indexPolicy.locales as readonly Locale[])
+  : [];
+const xDefault = indexPolicy.indexable ? getCanonical("en", pathSuffix) : null;
 const dir = isRtl(locale) ? "rtl" : "ltr";
 const ogLocale = LOCALE_HREFLANG[locale].replace("-", "_");
 const siteUrl = getSiteUrl();
@@ -68,9 +71,12 @@ const siteUrl = getSiteUrl();
     {hreflangs.map((h) => (
       <link rel="alternate" hreflang={h.hreflang} href={h.href} />
     ))}
-    <link rel="alternate" hreflang="x-default" href={xDefault} />
+    {xDefault && <link rel="alternate" hreflang="x-default" href={xDefault} />}
     <title>{pageTitle}</title>
-    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta
+      name="robots"
+      content={indexPolicy.indexable ? "index, follow, max-image-preview:large" : "noindex, follow"}
+    />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -91,21 +97,22 @@ const siteUrl = getSiteUrl();
     <meta name="twitter:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
   </head>
   <body>
-    <AgeGate locale={locale} />
     <SiteHeader locale={locale} pathSuffix={pathSuffix} />
     <slot />
     <StickyCTA locale={locale} />
-    <JsonLd
-      locale={locale}
-      pathSuffix={pathSuffix}
-      title={pageTitle}
-      description={pageDesc}
-      faq={faq}
-      pageType={pageType}
-      breadcrumbs={breadcrumbs}
-      serviceAreaName={serviceAreaName}
-      article={article}
-    />
+    {indexPolicy.indexable && (
+      <JsonLd
+        locale={locale}
+        pathSuffix={pathSuffix}
+        title={pageTitle}
+        description={pageDesc}
+        faq={faq}
+        pageType={pageType}
+        breadcrumbs={breadcrumbs}
+        serviceAreaName={serviceAreaName}
+        article={article}
+      />
+    )}
     <TrackingScript />
   </body>
 </html>

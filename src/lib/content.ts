@@ -13,99 +13,99 @@ const COMPLIANCE_FAQ: Record<Locale, { q: string; a: string }[]> = {
   en: [
     {
       q: "Can I order or pay through this website?",
-      a: "No. There is no public checkout, payment, reservation, or order form. Ask current menu details in WhatsApp.",
+      a: "No. This website does not accept orders or payments. Use it for the public address, directions, and the current official-rules guide.",
     },
     {
-      q: "What should I ask on WhatsApp?",
-      a: "Ask for today's menu, current freshness, strain effects, location details, and whether pickup or delivery possibility fits your area.",
+      q: "What can I ask on WhatsApp?",
+      a: "Use WhatsApp only if you need help finding the published address or coordinating a visit. Do not send an order or payment.",
     },
     {
-      q: "Is delivery guaranteed?",
-      a: "No. Delivery is only discussed privately after area, timing, and required details are checked.",
+      q: "Where can I check the current rules?",
+      a: "Read the legal guide on this site and follow the linked Thai government sources. Rules can change.",
     },
   ],
   ru: [
     {
       q: "Можно заказать или оплатить на сайте?",
-      a: "Нет. Здесь нет checkout, оплаты, брони или формы заказа. Актуальные детали меню — в WhatsApp.",
+      a: "Нет. Сайт не принимает заказы и оплату. Здесь опубликованы адрес, маршрут и гайд с актуальными официальными источниками.",
     },
     {
-      q: "Что писать в WhatsApp?",
-      a: "Спросите сегодняшнее меню, свежесть, эффекты сортов, как дойти и можно ли обсудить самовывоз или доставку для вашего района.",
+      q: "Для чего можно использовать WhatsApp?",
+      a: "Только чтобы уточнить, как найти опубликованный адрес, или скоординировать визит. Не отправляйте заказ или оплату.",
     },
     {
-      q: "Доставка гарантирована?",
-      a: "Нет. Возможность доставки обсуждается приватно после проверки района, времени и деталей.",
+      q: "Где проверить актуальные правила?",
+      a: "Читайте legal guide на сайте и переходите к указанным там источникам правительства Таиланда. Правила могут меняться.",
     },
   ],
   th: [
     {
       q: "สั่งหรือจ่ายเงินบนเว็บได้ไหม?",
-      a: "ไม่ได้ ไม่มี checkout การชำระเงิน การจอง หรือแบบฟอร์มสั่งซื้อ สอบถามเมนูล่าสุดใน WhatsApp",
+      a: "ไม่ได้ เว็บไซต์นี้ไม่รับคำสั่งซื้อหรือการชำระเงิน ใช้สำหรับที่อยู่ เส้นทาง และคู่มือกฎปัจจุบัน",
     },
     {
-      q: "ควรถามอะไรใน WhatsApp?",
-      a: "ถามเมนูวันนี้ ความสด เอฟเฟกต์ ที่ตั้ง และว่า pickup หรือ delivery possibility เข้ากับพื้นที่คุณหรือไม่",
+      q: "ใช้ WhatsApp เพื่ออะไรได้บ้าง?",
+      a: "ใช้เพื่อขอความช่วยเหลือในการหาที่อยู่หรือประสานการเยี่ยมชมเท่านั้น ไม่ส่งคำสั่งซื้อหรือการชำระเงิน",
     },
     {
-      q: "รับประกันการจัดส่งไหม?",
-      a: "ไม่รับประกัน การจัดส่งคุยแบบส่วนตัวหลังเช็กพื้นที่ เวลา และรายละเอียด",
+      q: "ตรวจสอบกฎปัจจุบันได้ที่ไหน?",
+      a: "อ่านคู่มือกฎหมายบนเว็บไซต์และแหล่งข้อมูลรัฐบาลไทยที่เชื่อมโยงไว้ กฎอาจเปลี่ยนแปลงได้",
     },
   ],
   ar: [
     {
       q: "هل يمكن الطلب أو الدفع عبر الموقع؟",
-      a: "لا. لا يوجد checkout أو دفع أو حجز أو نموذج طلب. اسأل عن القائمة الحالية في WhatsApp.",
+      a: "لا. هذا الموقع لا يقبل الطلبات أو المدفوعات. استخدمه للعنوان والاتجاهات ودليل القواعد الرسمية.",
     },
     {
-      q: "ماذا أسأل في WhatsApp؟",
-      a: "اسأل عن قائمة اليوم والطزاجة والتأثيرات والموقع وما إذا كان الاستلام أو التوصيل يناسب منطقتك.",
+      q: "لماذا أستخدم WhatsApp؟",
+      a: "استخدمه فقط للمساعدة في العثور على العنوان المنشور أو تنسيق الزيارة. لا ترسل طلباً أو دفعة.",
     },
     {
-      q: "هل التوصيل مضمون؟",
-      a: "لا. إمكانية التوصيل تناقش بشكل خاص بعد فحص المنطقة والوقت والتفاصيل.",
+      q: "أين أراجع القواعد الحالية؟",
+      a: "اقرأ الدليل القانوني في الموقع واتبع روابط المصادر الحكومية التايلاندية. قد تتغير القواعد.",
     },
   ],
   zh: [
     {
       q: "可以在网站下单或付款吗？",
-      a: "不可以。没有公开 checkout、付款、预订或订单表。当前菜单请在 WhatsApp 询问。",
+      a: "不可以。本网站不接受订单或付款，仅提供公开地址、路线和当前官方规则指南。",
     },
     {
-      q: "WhatsApp 该问什么？",
-      a: "询问今日菜单、新鲜度、效果、位置，以及取货或配送是否适合你的区域。",
+      q: "WhatsApp 可以用于什么？",
+      a: "仅用于协助查找公开地址或协调到店。请勿发送订单或付款。",
     },
     {
-      q: "配送保证吗？",
-      a: "不保证。配送可能性需在确认区域、时间和细节后私下讨论。",
+      q: "在哪里查看当前规则？",
+      a: "请阅读本站法律指南并访问其中链接的泰国政府来源。规则可能变化。",
     },
   ],
   ko: [
     {
       q: "웹사이트에서 주문하거나 결제할 수 있나요?",
-      a: "아니요. 공개 checkout, 결제, 예약, 주문 양식은 없습니다. 현재 메뉴는 WhatsApp으로 문의하세요.",
+      a: "아니요. 이 웹사이트는 주문이나 결제를 받지 않으며 공개 주소, 길 안내와 최신 공식 규정 가이드를 제공합니다.",
     },
     {
-      q: "WhatsApp에서 무엇을 물어봐야 하나요?",
-      a: "오늘 메뉴, 신선도, 효과, 위치, 픽업 또는 배달 가능성이 지역에 맞는지 물어보세요.",
+      q: "WhatsApp은 어디에 사용할 수 있나요?",
+      a: "공개 주소를 찾거나 방문을 조율하는 도움에만 사용하세요. 주문이나 결제를 보내지 마세요.",
     },
     {
-      q: "배달이 보장되나요?",
-      a: "아니요. 배달 가능성은 지역, 시간, 세부 사항 확인 후 비공개로 논의합니다.",
+      q: "현재 규정은 어디서 확인하나요?",
+      a: "사이트의 법률 가이드와 연결된 태국 정부 자료를 확인하세요. 규정은 변경될 수 있습니다.",
     },
   ],
   ja: [
     {
       q: "サイトで注文や支払いはできますか？",
-      a: "できません。公開checkout、支払い、予約、注文フォームはありません。現在のメニューはWhatsAppで確認してください。",
+      a: "できません。このサイトは注文や支払いを受け付けず、公開住所、道順、最新の公式ルールガイドを提供します。",
     },
     {
-      q: "WhatsAppでは何を聞けばいいですか？",
-      a: "本日のメニュー、鮮度、効果、場所、受け取りまたは配達がエリアに合うかを聞いてください。",
+      q: "WhatsAppは何に使えますか？",
+      a: "公開住所を見つける支援や来店調整のみに使用してください。注文や支払いは送らないでください。",
     },
     {
-      q: "配達は保証されますか？",
-      a: "いいえ。配達可能性はエリア、時間、詳細を確認した後に個別で相談します。",
+      q: "現在のルールはどこで確認できますか？",
+      a: "サイトの法的ガイドと、リンクされたタイ政府情報を確認してください。ルールは変更される場合があります。",
     },
   ],
 };
@@ -230,103 +230,103 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     en: {
       h1: "Cannabis shop near you in Pattaya",
       intro:
-        "If you searched cannabis near me in Pattaya, the Labs Cannabis shop is on Soi Hollywood, also called Pattaya 13 Alley, close to Walking Street, Beach Road, and Central Pattaya. Use Google Maps for the live pin, then WhatsApp if you want today's menu before you move.",
+        "If you searched for the Labs location in Pattaya, use the live LABS DISPENSARY Google Maps listing for the current pin and route to 32 Pattaya 13 Alley.",
       sections: [
         {
-          h2: "Near Walking Street, not a random pin",
+          h2: "Verify the public listing",
           body:
-            "The useful near-me result is a shop you can verify: address, Google rating 4.8 from 91 reviews on the current listing, and a phone/WhatsApp number. Labs Cannabis is that walk-in point for guests in Central Pattaya, Walking Street hotels, and nearby sois.",
+            "The Maps listing and this website publish the same address and phone. The website uses Labs Cannabis; Google Maps currently shows LABS DISPENSARY.",
         },
         {
-          h2: "If you are not next to the alley yet",
+          h2: "Plan the route before travelling",
           body:
-            "Guests in Jomtien, Naklua, Pratumnak, or Soi Buakhao can still message first. Ask whether pickup timing or delivery possibility can be discussed for your area. Do not treat this page as a confirmed dispatch ticket.",
+            "Open Maps from your current location for walking or driving directions. Use WhatsApp only if you need help finding the published address.",
         },
       ],
       faq: [
         ...COMPLIANCE_FAQ.en,
         {
-          q: "Is this the closest shop to Walking Street?",
-          a: "The shop is on Soi Hollywood / Pattaya 13 Alley, a short walk from Walking Street. Maps shows the live walking or taxi route from your hotel.",
+          q: "How do I find the current route?",
+          a: "Open the live Google Maps listing from your current location. It provides the current walking or driving route.",
         },
       ],
-      closing: "Open Maps for the Soi Hollywood pin, then WhatsApp if you want today's menu before you walk.",
+      closing: "Open the live Maps listing for the pin and route. Use WhatsApp only if you need directions help.",
     },
     ru: {
       h1: "Каннабис-шоп рядом с вами в Паттайе",
       intro:
-        "Если вы искали каннабис рядом в Паттайе: Labs Cannabis находится на Soi Hollywood (Pattaya 13 Alley), рядом с Walking Street, Beach Road и центром. Живую точку смотрите в Google Maps, меню дня — в WhatsApp до выхода.",
+        "Если вы ищете локацию Labs в Паттайе, откройте актуальную карточку LABS DISPENSARY в Google Maps и маршрут к адресу 32 Pattaya 13 Alley.",
       sections: [
         {
-          h2: "Рядом с Walking Street, не случайная точка",
+          h2: "Проверьте публичную карточку",
           body:
-            "Для near me важен магазин, который можно проверить: адрес, оценка 4.8 и 91 отзыв в текущем Google listing, телефон/WhatsApp. Labs Cannabis — точка для гостей центра, отелей у Walking Street и соседних соев.",
+            "В карточке Maps и на сайте опубликованы одинаковые адрес и телефон. Сайт использует Labs Cannabis, а Google Maps сейчас показывает LABS DISPENSARY.",
         },
         {
-          h2: "Если вы ещё не у переулка",
+          h2: "Постройте маршрут до поездки",
           body:
-            "Гости из Джомтьена, Наклуа, Пратамнака или Soi Buakhao могут сначала написать. Спросите, можно ли обсудить самовывоз или доставку. Эта страница не подтверждает отправку.",
+            "Откройте Maps из текущей точки для пешего или автомобильного маршрута. WhatsApp используйте только если нужна помощь с адресом.",
         },
       ],
       faq: [
         ...COMPLIANCE_FAQ.ru,
         {
-          q: "Это ближайший шоп к Walking Street?",
-          a: "Магазин на Soi Hollywood / Pattaya 13 Alley, короткая прогулка от Walking Street. Маршрут от отеля — в Maps.",
+          q: "Где посмотреть актуальный маршрут?",
+          a: "Откройте живую карточку Google Maps из текущей точки: там будет пеший или автомобильный маршрут.",
         },
       ],
-      closing: "Откройте Maps с пином Soi Hollywood и напишите в WhatsApp, если нужно меню до выхода.",
+      closing: "Откройте Maps с актуальным пином и маршрутом. WhatsApp нужен только для помощи с адресом.",
     },
     th: {
       h1: "ร้านกัญชาใกล้คุณ พัทยา",
       intro:
-        "ถ้าค้นกัญชาใกล้ฉันในพัทยา Labs Cannabis อยู่บน Soi Hollywood หรือ Pattaya 13 Alley ใกล้ Walking Street, Beach Road และพัทยากลาง ดูพินใน Google Maps แล้วทัก WhatsApp ถ้าต้องการเมนูวันนี้ก่อนเดิน",
+        "หากกำลังค้นหาที่ตั้ง Labs ในพัทยา ให้ใช้ Google Maps รายการ LABS DISPENSARY และเส้นทางไป 32 Pattaya 13 Alley",
       sections: [
-        { h2: "ใกล้ Walking Street จริง", body: "ร้านตรวจได้: ที่อยู่ คะแนน Google 4.8 จาก 91 รีวิว และ WhatsApp สำหรับคนพัทยากลางและโรงแรมแถว Walking Street" },
-        { h2: "ถ้ายังไม่ได้อยู่ซอยนี้", body: "คนจอมเทียน นาเกลือ Pratumnak หรือ Soi Buakhao ทักก่อนได้ ถาม pickup หรือ delivery possibility หน้านี้ไม่ใช่ตั๋วจัดส่ง" },
+        { h2: "ตรวจสอบรายการสาธารณะ", body: "Maps และเว็บไซต์แสดงที่อยู่และโทรศัพท์เดียวกัน เว็บไซต์ใช้ Labs Cannabis ส่วน Maps แสดง LABS DISPENSARY" },
+        { h2: "วางแผนเส้นทาง", body: "เปิด Maps จากตำแหน่งปัจจุบัน ใช้ WhatsApp เฉพาะเมื่อต้องการความช่วยเหลือในการหาที่อยู่" },
       ],
       faq: COMPLIANCE_FAQ.th,
-      closing: "เปิด Maps ที่ Soi Hollywood แล้วทัก WhatsApp ถ้าต้องการเมนูก่อนเดิน",
+      closing: "เปิด Maps เพื่อดูหมุดและเส้นทางล่าสุด ใช้ WhatsApp เฉพาะเพื่อขอความช่วยเหลือด้านเส้นทาง",
     },
     ar: {
       h1: "متجر قنب قريب منك في باتايا",
-      intro: "إذا بحثت عن قنب قريب في باتايا، يقع Labs Cannabis في Soi Hollywood قرب Walking Street. استخدم Maps للدبوس ثم WhatsApp لقائمة اليوم.",
+      intro: "إذا كنت تبحث عن موقع Labs في باتايا، استخدم بطاقة LABS DISPENSARY المباشرة على Google Maps للوصول إلى 32 Pattaya 13 Alley.",
       sections: [
-        { h2: "قرب Walking Street", body: "متجر يمكن التحقق منه: عنوان، تقييم Google 4.8 من 91 مراجعة، وWhatsApp." },
-        { h2: "إذا لم تكن بجانب الزقاق بعد", body: "يمكن لضيوف Jomtien وNaklua وPratumnak وSoi Buakhao المراسلة أولاً حول الاستلام أو التوصيل." },
+        { h2: "تحقق من البطاقة العامة", body: "تعرض Maps والموقع العنوان والهاتف نفسيهما. يستخدم الموقع Labs Cannabis وتعرض Maps اسم LABS DISPENSARY." },
+        { h2: "خطط للمسار", body: "افتح Maps من موقعك الحالي. استخدم WhatsApp فقط للمساعدة في العثور على العنوان." },
       ],
       faq: COMPLIANCE_FAQ.ar,
-      closing: "افتح Maps ثم WhatsApp إذا أردت قائمة اليوم قبل التحرك.",
+      closing: "افتح Maps للدبوس والمسار الحاليين. استخدم WhatsApp فقط للمساعدة في الاتجاهات.",
     },
     zh: {
       h1: "芭提雅附近的大麻店",
-      intro: "搜索芭提雅附近大麻时，Labs Cannabis 在靠近 Walking Street 的 Soi Hollywood。用地图看定位，出发前用 WhatsApp 要今日菜单。",
+      intro: "如需查找 Labs 在芭提雅的位置，请使用 Google Maps 上实时的 LABS DISPENSARY 页面前往 32 Pattaya 13 Alley。",
       sections: [
-        { h2: "就在 Walking Street 附近", body: "可核验的店：地址、Google 4.8（91 条评价）、WhatsApp。" },
-        { h2: "如果不在这条巷", body: "Jomtien、Naklua、Pratumnak、Soi Buakhao 的客人可先问取货或配送可能性。" },
+        { h2: "核对公开页面", body: "Maps 与本网站显示相同地址和电话。本网站使用 Labs Cannabis，Maps 当前显示 LABS DISPENSARY。" },
+        { h2: "规划路线", body: "从当前位置打开 Maps。仅在需要查找地址帮助时使用 WhatsApp。" },
       ],
       faq: COMPLIANCE_FAQ.zh,
-      closing: "打开 Soi Hollywood 的地图，出发前如需菜单请发 WhatsApp。",
+      closing: "打开 Maps 查看当前定位与路线。WhatsApp 仅用于路线帮助。",
     },
     ko: {
       h1: "파타야 근처 대마초 매장",
-      intro: "파타야 근처 대마초를 검색했다면 Labs Cannabis는 Walking Street 근처 Soi Hollywood에 있습니다. Maps에서 핀을 확인하고 이동 전 WhatsApp으로 오늘 메뉴를 받으세요.",
+      intro: "파타야의 Labs 위치를 찾는다면 Google Maps의 실시간 LABS DISPENSARY 정보에서 32 Pattaya 13 Alley 경로를 확인하세요.",
       sections: [
-        { h2: "Walking Street 근처 실매장", body: "주소, Google 4.8점(91리뷰), WhatsApp으로 확인할 수 있습니다." },
-        { h2: "골목에 아직 없다면", body: "Jomtien, Naklua, Pratumnak, Soi Buakhao 방문자는 픽업 또는 배달 가능성을 먼저 문의할 수 있습니다." },
+        { h2: "공개 정보 확인", body: "Maps와 웹사이트는 같은 주소와 전화번호를 표시합니다. 웹사이트는 Labs Cannabis, Maps는 LABS DISPENSARY를 사용합니다." },
+        { h2: "경로 계획", body: "현재 위치에서 Maps를 여세요. WhatsApp은 주소를 찾는 도움이 필요할 때만 사용하세요." },
       ],
       faq: COMPLIANCE_FAQ.ko,
-      closing: "Soi Hollywood Maps를 연 뒤, 이동 전 메뉴가 필요하면 WhatsApp하세요.",
+      closing: "Maps에서 현재 핀과 경로를 여세요. WhatsApp은 길 안내 도움에만 사용하세요.",
     },
     ja: {
       h1: "パタヤ近くの大麻店",
-      intro: "パタヤの近くの大麻を検索した場合、Labs Cannabisは Walking Street 近くの Soi Hollywood にあります。Mapsでピンを確認し、移動前にWhatsAppで本日のメニューをどうぞ。",
+      intro: "パタヤの Labs の場所を探す場合は、Google Maps の最新 LABS DISPENSARY リスティングから 32 Pattaya 13 Alley への経路を確認してください。",
       sections: [
-        { h2: "Walking Street近くの実店舗", body: "住所、Google 4.8（91件）、WhatsAppで確認できます。" },
-        { h2: "路地の近くにいない場合", body: "Jomtien、Naklua、Pratumnak、Soi Buakhao からも受け取りや配達の可能性を先に聞けます。" },
+        { h2: "公開リスティングを確認", body: "Maps とサイトは同じ住所と電話番号を掲載しています。サイト名は Labs Cannabis、Maps は LABS DISPENSARY です。" },
+        { h2: "経路を確認", body: "現在地から Maps を開いてください。WhatsApp は住所を探す支援が必要な場合のみ使用します。" },
       ],
       faq: COMPLIANCE_FAQ.ja,
-      closing: "Soi HollywoodのMapsを開き、移動前にメニューが必要ならWhatsAppしてください。",
+      closing: "Mapsで現在のピンと経路を開いてください。WhatsAppは道順の支援にのみ使用します。",
     },
   },
   "cheap-weed-pattaya": {
@@ -512,92 +512,92 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
   },
   "labs-dispensary-pattaya": {
     en: {
-      h1: "Labs Dispensary Pattaya — same Soi Hollywood shop, now Labs Cannabis",
+      h1: "LABS DISPENSARY Pattaya — Google Maps listing and directions",
       intro:
-        "If Google Maps, old links, or word of mouth still say Labs Dispensary, it is the same walk-in shop on Pattaya 13 Alley / Soi Hollywood. The current public name is Labs Cannabis. Use the live Google listing for the pin, hours, and reviews.",
+        "Google Maps currently lists the place at 32 Pattaya 13 Alley as LABS DISPENSARY. This website uses the Labs Cannabis name and links to that live listing for the current pin and route.",
       sections: [
         {
-          h2: "Same alley, updated name",
+          h2: "One verified public listing",
           body:
-            "Guests looking for Labs Dispensary Pattaya should navigate to 32 Pattaya 13 Alley (Soi Hollywood). Signage and search results may still show the former name. WhatsApp and Maps are the reliable contact and direction paths.",
+            "The website and Maps listing publish the same address and phone. Listing details may change, so open the live Maps card before travelling.",
         },
         {
-          h2: "What to do when you arrive",
+          h2: "Plan a visit",
           body:
-            "Ask today's menu, effects, and listed weight tiers in chat or in person. The website does not complete a sale. If you came from a saved Labs Dispensary card, you are in the right alley.",
+            "Use Maps for the current route. WhatsApp is available only if you need help finding the published address; this website does not accept orders or payments.",
         },
       ],
       faq: COMPLIANCE_FAQ.en,
-      closing: "Search Labs Cannabis or Labs Dispensary on Maps, then WhatsApp if you want the menu before you walk in.",
+      closing: "Open the LABS DISPENSARY Maps listing for the current pin and directions.",
     },
     ru: {
-      h1: "Labs Dispensary — тот же магазин на Soi Hollywood, теперь Labs Cannabis",
+      h1: "LABS DISPENSARY Паттайя — карточка Google Maps и маршрут",
       intro:
-        "Если в Google Maps, старых ссылках или сарафане ещё Labs Dispensary — это тот же walk-in на Pattaya 13 Alley / Soi Hollywood. Публичное имя сейчас Labs Cannabis. Пин, часы и отзывы — в живом Google listing.",
+        "Google Maps сейчас показывает точку по адресу 32 Pattaya 13 Alley как LABS DISPENSARY. Сайт использует название Labs Cannabis и ведёт на эту живую карточку с пином и маршрутом.",
       sections: [
         {
-          h2: "Тот же переулок, обновлённое имя",
+          h2: "Одна проверяемая публичная карточка",
           body:
-            "Ищете Labs Dispensary Pattaya — адрес 32 Pattaya 13 Alley (Soi Hollywood). Вывеска и выдача могут показывать старое имя. WhatsApp и Maps — рабочие контакт и маршрут.",
+            "На сайте и в карточке Maps совпадают адрес и телефон. Данные карточки могут меняться — откройте её перед поездкой.",
         },
         {
-          h2: "Что делать на месте",
+          h2: "Планирование визита",
           body:
-            "Спросите меню дня, эффекты и указанные веса в чате или в магазине. Сайт продажу не завершает. Если открыли сохранённую карточку Labs Dispensary — вы в том же переулке.",
+            "Маршрут смотрите в Maps. WhatsApp используйте только если нужна помощь с опубликованным адресом; сайт не принимает заказы или оплату.",
         },
       ],
       faq: COMPLIANCE_FAQ.ru,
-      closing: "Ищите Labs Cannabis или Labs Dispensary в Maps и напишите в WhatsApp, если нужно меню до входа.",
+      closing: "Откройте карточку LABS DISPENSARY в Maps для актуального пина и маршрута.",
     },
     th: {
-      h1: "Labs Dispensary — ร้านเดิมบน Soi Hollywood ตอนนี้ Labs Cannabis",
-      intro: "ถ้า Maps หรือลิงก์เก่ายังเขียน Labs Dispensary คือร้านเดิมที่ Pattaya 13 Alley ชื่อสาธารณะตอนนี้ Labs Cannabis",
+      h1: "LABS DISPENSARY พัทยา — Google Maps และเส้นทาง",
+      intro: "Google Maps แสดงสถานที่ที่ 32 Pattaya 13 Alley ในชื่อ LABS DISPENSARY เว็บไซต์นี้ใช้ชื่อ Labs Cannabis และเชื่อมไปยังรายการนั้น",
       sections: [
-        { h2: "ซอยเดิม ชื่อใหม่", body: "ที่อยู่ 32 Pattaya 13 Alley (Soi Hollywood) ป้ายหรือผลการค้นหาอาจยังเป็นชื่อเดิม" },
-        { h2: "เมื่อถึงร้าน", body: "ถามเมนูวันนี้ในแชตหรือที่ร้าน เว็บไม่ปิดการขาย" },
+        { h2: "รายการสาธารณะที่ตรวจสอบได้", body: "เว็บไซต์และ Maps แสดงที่อยู่และโทรศัพท์เดียวกัน โปรดเปิดรายการสดก่อนเดินทาง" },
+        { h2: "วางแผนการเยี่ยมชม", body: "ใช้ Maps สำหรับเส้นทาง และ WhatsApp เฉพาะเมื่อต้องการความช่วยเหลือในการหาที่อยู่ เว็บไซต์ไม่รับคำสั่งซื้อหรือชำระเงิน" },
       ],
       faq: COMPLIANCE_FAQ.th,
-      closing: "ค้น Labs Cannabis หรือ Labs Dispensary ใน Maps แล้วทัก WhatsApp ถ้าต้องการเมนูก่อนเข้า",
+      closing: "เปิดรายการ LABS DISPENSARY ใน Maps เพื่อดูหมุดและเส้นทางล่าสุด",
     },
     ar: {
-      h1: "Labs Dispensary — نفس المتجر، الآن Labs Cannabis",
-      intro: "إذا قالت الخرائط Labs Dispensary فهو نفس المتجر في Pattaya 13 Alley. الاسم الحالي Labs Cannabis.",
+      h1: "LABS DISPENSARY باتايا — بطاقة Google Maps والاتجاهات",
+      intro: "تعرض Google Maps المكان في 32 Pattaya 13 Alley باسم LABS DISPENSARY. يستخدم الموقع اسم Labs Cannabis ويرتبط بهذه البطاقة.",
       sections: [
-        { h2: "نفس الزقاق، اسم محدث", body: "العنوان 32 Pattaya 13 Alley (Soi Hollywood). قد تظهر اللافتات الاسم السابق." },
-        { h2: "عند الوصول", body: "اسأل عن قائمة اليوم في الدردشة أو في المتجر. الموقع لا يُتم عملية بيع." },
+        { h2: "بطاقة عامة قابلة للتحقق", body: "يعرض الموقع وMaps العنوان والهاتف نفسيهما. افتح البطاقة المباشرة قبل السفر." },
+        { h2: "خطط للزيارة", body: "استخدم Maps للمسار وWhatsApp فقط للمساعدة في العثور على العنوان. الموقع لا يقبل الطلبات أو المدفوعات." },
       ],
       faq: COMPLIANCE_FAQ.ar,
-      closing: "ابحث عن Labs Cannabis أو Labs Dispensary على Maps ثم WhatsApp.",
+      closing: "افتح بطاقة LABS DISPENSARY على Maps للدبوس والمسار الحاليين.",
     },
     zh: {
-      h1: "Labs Dispensary — 同一家店，现名 Labs Cannabis",
-      intro: "若地图仍显示 Labs Dispensary，就是 Pattaya 13 Alley 的同一家店，现用名 Labs Cannabis。",
+      h1: "LABS DISPENSARY 芭提雅 — Google Maps 页面与路线",
+      intro: "Google Maps 目前将 32 Pattaya 13 Alley 的地点显示为 LABS DISPENSARY。本网站使用 Labs Cannabis 名称并链接到该页面。",
       sections: [
-        { h2: "同一条巷，更新店名", body: "地址 32 Pattaya 13 Alley (Soi Hollywood)。招牌或搜索结果可能仍是旧名。" },
-        { h2: "到店后", body: "在聊天或店内询问今日菜单。网站不完成销售。" },
+        { h2: "可核验的公开页面", body: "本网站与 Maps 显示相同地址和电话。出发前请打开实时页面。" },
+        { h2: "规划到店", body: "使用 Maps 查看路线，WhatsApp 仅用于协助查找地址。本网站不接受订单或付款。" },
       ],
       faq: COMPLIANCE_FAQ.zh,
-      closing: "在地图搜索 Labs Cannabis 或 Labs Dispensary，进店前可用 WhatsApp 要菜单。",
+      closing: "打开 Maps 上的 LABS DISPENSARY 页面查看当前定位与路线。",
     },
     ko: {
-      h1: "Labs Dispensary — 같은 매장, 현재 Labs Cannabis",
-      intro: "지도에 Labs Dispensary가 남아 있어도 Pattaya 13 Alley의 같은 매장입니다. 현재 공개 이름은 Labs Cannabis입니다.",
+      h1: "LABS DISPENSARY 파타야 — Google Maps 정보와 경로",
+      intro: "Google Maps는 32 Pattaya 13 Alley의 장소를 LABS DISPENSARY로 표시합니다. 웹사이트는 Labs Cannabis 이름을 사용하며 해당 정보에 연결합니다.",
       sections: [
-        { h2: "같은 골목, 업데이트된 이름", body: "주소는 32 Pattaya 13 Alley (Soi Hollywood). 간판이나 검색에 이전 이름이 남을 수 있습니다." },
-        { h2: "도착하면", body: "채팅 또는 매장에서 오늘 메뉴를 문의하세요. 웹사이트는 판매를 완료하지 않습니다." },
+        { h2: "확인 가능한 공개 정보", body: "웹사이트와 Maps는 같은 주소와 전화번호를 표시합니다. 출발 전 실시간 정보를 여세요." },
+        { h2: "방문 계획", body: "Maps에서 경로를 확인하고 주소 찾기 도움이 필요할 때만 WhatsApp을 사용하세요. 사이트는 주문이나 결제를 받지 않습니다." },
       ],
       faq: COMPLIANCE_FAQ.ko,
-      closing: "Maps에서 Labs Cannabis 또는 Labs Dispensary를 검색한 뒤, 메뉴가 필요하면 WhatsApp하세요.",
+      closing: "Maps의 LABS DISPENSARY 정보에서 현재 핀과 경로를 확인하세요.",
     },
     ja: {
-      h1: "Labs Dispensary — 同じ店、現在はLabs Cannabis",
-      intro: "地図に Labs Dispensary と残っていても、Pattaya 13 Alley の同じ店舗です。現在の公開名は Labs Cannabis です。",
+      h1: "LABS DISPENSARY パタヤ — Google Maps と経路",
+      intro: "Google Maps は 32 Pattaya 13 Alley の場所を LABS DISPENSARY と表示しています。このサイトは Labs Cannabis 名を使用し、そのリスティングへリンクします。",
       sections: [
-        { h2: "同じ路地、更新された名前", body: "住所は 32 Pattaya 13 Alley (Soi Hollywood)。看板や検索に旧名が残ることがあります。" },
-        { h2: "到着したら", body: "チャットまたは店内で本日のメニューを確認。サイトでは販売を完了しません。" },
+        { h2: "確認可能な公開リスティング", body: "サイトと Maps は同じ住所と電話番号を掲載しています。移動前に最新情報を開いてください。" },
+        { h2: "訪問を計画", body: "Maps で経路を確認し、住所を探す支援が必要な場合のみ WhatsApp を使用してください。サイトは注文や支払いを受けません。" },
       ],
       faq: COMPLIANCE_FAQ.ja,
-      closing: "Mapsで Labs Cannabis または Labs Dispensary を検索し、メニューが必要ならWhatsAppしてください。",
+      closing: "Maps の LABS DISPENSARY リスティングで現在のピンと経路を確認してください。",
     },
   },
   "cannabis-wholesale-pattaya": {

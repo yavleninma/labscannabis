@@ -1,9 +1,9 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { FOOTER_SEO_SECTIONS } from "@/data/footer-seo-links";
 import { t } from "@/lib/ui";
 import { localePath } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
+import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
 
 interface Props {
   locale: Locale;
@@ -12,58 +12,61 @@ interface Props {
 
 const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
-const seo = ui.footerSeo;
-const fallbackSeo = t("en").footerSeo;
 const year = new Date().getFullYear();
-const footerCopy: Record<Locale, { menu: string; hours: string; legal: string }> = {
+const footerCopy: Record<Locale, { visit: string; hours: string; maps: string; legal: string }> = {
   en: {
-    menu: "Menu",
-    hours: "Check Google Maps for current hours.",
+    visit: "Visit",
+    hours: "Check Google Maps before visiting.",
+    maps: "Open Google Maps",
     legal:
-      "Adults 20+ only. This website is an information and WhatsApp inquiry funnel; it does not provide public checkout, online payment, order forms, or public online cannabis sales.",
+      "Cannabis flower is a controlled herb. The official tourist notice requires a valid prescription issued in Thailand and prohibits online sales and advertising. This site accepts no orders or payments; read the current legal guide.",
   },
   ru: {
-    menu: "Меню",
-    hours: "Актуальные часы смотрите в Google Maps.",
+    visit: "Локация",
+    hours: "Перед визитом проверьте Google Maps.",
+    maps: "Открыть Google Maps",
     legal:
-      "Только 20+. Сайт работает как информационная витрина и WhatsApp inquiry funnel; здесь нет public checkout, онлайн-оплаты, order forms или публичной онлайн-продажи каннабиса.",
+      "Соцветия каннабиса — контролируемая трава. Официальное уведомление требует от туристов действующий рецепт, выданный в Таиланде, и запрещает онлайн-продажи и рекламу. Сайт не принимает заказы или оплату; читайте актуальный legal guide.",
   },
   th: {
-    menu: "เมนู",
-    hours: "ตรวจสอบเวลาเปิดล่าสุดใน Google Maps",
+    visit: "ที่ตั้ง",
+    hours: "ตรวจสอบ Google Maps ก่อนเดินทาง",
+    maps: "เปิด Google Maps",
     legal:
-      "สำหรับผู้ใหญ่ 20+ เท่านั้น เว็บไซต์นี้เป็นข้อมูลและช่องทางสอบถามผ่าน WhatsApp ไม่มี public checkout การชำระเงินออนไลน์ order forms หรือการขายกัญชาออนไลน์สาธารณะ",
+      "ช่อดอกกัญชาเป็นสมุนไพรควบคุม ประกาศสำหรับนักท่องเที่ยวกำหนดให้มีใบสั่งจ่ายยาที่ออกในไทยและห้ามขายออนไลน์หรือโฆษณา เว็บไซต์ไม่รับคำสั่งซื้อหรือชำระเงิน โปรดอ่านคู่มือกฎหมายปัจจุบัน",
   },
   ar: {
-    menu: "القائمة",
-    hours: "تحقق من ساعات العمل الحالية على Google Maps.",
+    visit: "الموقع",
+    hours: "تحقق من Google Maps قبل الزيارة.",
+    maps: "فتح Google Maps",
     legal:
-      "للبالغين 20+ فقط. هذا الموقع واجهة معلومات واستفسار عبر WhatsApp؛ لا يوفر public checkout أو دفعاً إلكترونياً أو order forms أو بيعاً عاماً للقنب عبر الإنترنت.",
+      "زهور القنب عشبة خاضعة للرقابة. يشترط الإشعار الرسمي للسياح وصفة سارية صادرة في تايلاند ويحظر البيع الإلكتروني والإعلان. لا يقبل الموقع طلبات أو مدفوعات؛ اقرأ الدليل القانوني الحالي.",
   },
   zh: {
-    menu: "菜单",
-    hours: "请在 Google Maps 查看最新营业时间。",
+    visit: "位置",
+    hours: "到访前请查看 Google Maps。",
+    maps: "打开 Google Maps",
     legal:
-      "仅限20岁以上成人。本网站是信息与 WhatsApp 咨询入口；不提供 public checkout、在线付款、order forms 或公开在线销售大麻。",
+      "大麻花属于受控草药。官方游客通知要求持有在泰国签发的有效处方，并禁止在线销售与广告。本网站不接受订单或付款；请阅读现行法律指南。",
   },
   ko: {
-    menu: "메뉴",
-    hours: "현재 영업시간은 Google Maps에서 확인하세요.",
+    visit: "위치",
+    hours: "방문 전에 Google Maps를 확인하세요.",
+    maps: "Google Maps 열기",
     legal:
-      "성인 20+ 전용. 이 웹사이트는 정보와 WhatsApp 문의용이며 public checkout, 온라인 결제, order forms 또는 공개 온라인 대마초 판매를 제공하지 않습니다.",
+      "대마 꽃은 관리 대상 약초입니다. 공식 관광객 공지는 태국에서 발급된 유효한 처방전을 요구하고 온라인 판매와 광고를 금지합니다. 이 사이트는 주문이나 결제를 받지 않으며 최신 법률 가이드를 확인하세요.",
   },
   ja: {
-    menu: "メニュー",
-    hours: "最新の営業時間は Google Maps でご確認ください。",
+    visit: "場所",
+    hours: "来店前にGoogle Mapsをご確認ください。",
+    maps: "Google Mapsを開く",
     legal:
-      "20歳以上の成人のみ。このサイトは情報と WhatsApp 問い合わせ用であり、public checkout、オンライン決済、order forms、公開オンライン販売は提供しません。",
+      "大麻の花は管理対象のハーブです。旅行者向け公式通知はタイ国内発行の有効な処方箋を求め、オンライン販売と広告を禁止しています。このサイトは注文や支払いを受け付けません。最新の法的ガイドをご確認ください。",
   },
 };
 const copy = footerCopy[locale] ?? footerCopy.en;
+const addressLine = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
 
-const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
-  return seo[labelKey] ?? fallbackSeo[labelKey] ?? labelKey;
-};
 ---
 
 <footer class="border-t border-border bg-bg-elevated py-10 pb-24">
@@ -71,23 +74,16 @@ const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
     <nav class="flex flex-wrap gap-4 font-medium">
       <a href={localePath(locale)} class="hover:text-emerald-dim">{ui.nav.home}</a>
       <a
-        href={`${localePath(locale)}#menu`}
+        href={`${localePath(locale)}#visit`}
         class="hover:text-emerald-dim"
         data-track="menu_link_click"
         data-track-placement="footer"
-        data-track-detail="footer:menu"
+        data-track-detail="footer:visit"
       >
-        {copy.menu}
+        {copy.visit}
       </a>
-      <a
-        href={localePath(locale, "wholesale")}
-        class="hover:text-emerald-dim"
-        data-track="menu_link_click"
-        data-track-placement="footer"
-        data-track-detail="footer:wholesale"
-      >
-        {ui.nav.wholesale}
-      </a>
+      <a href={localePath(locale, "locations")} class="hover:text-emerald-dim">{ui.locations.title}</a>
+      <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="hover:text-emerald-dim">{ui.footerSeo.legalGuide}</a>
       <a
         href={localePath(locale, "contact")}
         class="hover:text-emerald-dim"
@@ -99,34 +95,14 @@ const safeFooterLabel = (labelKey: keyof typeof fallbackSeo) => {
       </a>
     </nav>
 
-    <div class="grid gap-6 sm:grid-cols-3">
-      {FOOTER_SEO_SECTIONS.map((section) => (
-        <div>
-          <h2 class="mb-2 text-sm font-bold uppercase tracking-wide text-text">{safeFooterLabel(section.titleKey)}</h2>
-          <ul class="space-y-1.5 text-sm">
-            {section.links.map((link) => (
-              <li>
-                <a href={localePath(locale, link.slug)} class="hover:text-emerald-dim">
-                  {safeFooterLabel(link.labelKey)}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+    <div class="rounded-xl border border-border bg-bg-card p-4 text-sm leading-relaxed">
+      <p class="font-bold text-text">{BRAND.name} — listed on Google Maps as {GOOGLE.listingName}</p>
+      <address class="mt-2 not-italic">{addressLine}</address>
+      <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2">
+        <a href={CONTACT.tel} class="font-bold text-text hover:text-emerald-dim" data-track="contact_call_click" data-track-placement="footer" data-track-detail="footer:nap_phone">{CONTACT.phoneDisplay}</a>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-dim hover:underline" data-track="map_open_click" data-track-placement="footer" data-track-detail="footer:nap_maps">{copy.maps}</a>
+      </div>
     </div>
-
-    <p>
-      <a
-        href={localePath(locale, "locations")}
-        class="font-medium text-emerald-dim hover:underline"
-        data-track="menu_link_click"
-        data-track-placement="footer"
-        data-track-detail="footer:locations"
-      >
-        {seo.allPages} -&gt;
-      </a>
-    </p>
 
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
       <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />

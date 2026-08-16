@@ -1,270 +1,155 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import MapBlock from "@/components/MapBlock.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
-import { AREAS, SEO_PAGES } from "@/data/seo-matrix";
-import { t } from "@/lib/ui";
+import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
 }
 
-const { lang } = Astro.params;
-const locale = lang as Locale;
-const ui = t(locale);
-const copy: Record<
-  Locale,
-  {
-    title: string;
-    description: string;
-    deliveryGroup: string;
-    breadcrumb: string;
-    deliveryAreaLabel: string;
-    labels: {
-      wholesale: string;
-      delivery: string;
-      whiteWidow: string;
-      best: string;
-      cheap: string;
-      weight: string;
-      guide: string;
-      info: string;
-    };
-  }
-> = {
+const locale = Astro.params.lang as Locale;
+type Copy = { title: string; description: string; h1: string; bridge: string; lead: string; maps: string; address: string; phone: string; contact: string; legal: string; walking: string };
+const copy: Record<Locale, Copy> = {
   en: {
-    title: "Cannabis menu pages in Pattaya",
-    description:
-      "Browse Labs Cannabis Pattaya pages by area, delivery possibility, strain, weight, and buying guide. Ask current details on WhatsApp.",
-    deliveryGroup: "Delivery possibility",
-    breadcrumb: "Menu pages",
-    deliveryAreaLabel: "Delivery possibility for {area}",
-    labels: {
-      wholesale: "Wholesale and bulk inquiry",
-      delivery: "Delivery possibility before travelling",
-      whiteWidow: "White Widow strain information",
-      best: "Best sellers and trust signals",
-      cheap: "Affordable menu options",
-      weight: "Weight and menu inquiry",
-      guide: "Buying guide",
-      info: "Cannabis menu information",
-    },
+    title: "Labs Cannabis location in Pattaya | Maps and address",
+    description: "Find the live LABS DISPENSARY Google Maps listing, published address and phone for Labs Cannabis in Pattaya.",
+    h1: "Labs Cannabis location in Pattaya",
+    bridge: "Listed on Google Maps as LABS DISPENSARY",
+    lead: "Use the live Maps listing for the current pin and route. Hours and review information can change, so they are not duplicated here.",
+    maps: "Open Google Maps",
+    address: "Published address",
+    phone: "Phone",
+    contact: "Contact and visit coordination",
+    legal: "Current rules for tourists",
+    walking: "Directions from Walking Street",
   },
   ru: {
-    title: "Страницы меню каннабиса в Паттайе",
-    description:
-      "Разделы Labs Cannabis Pattaya по районам, возможности доставки, сортам, весам и buying guide. Актуальные детали - в WhatsApp.",
-    deliveryGroup: "Возможность доставки",
-    breadcrumb: "Страницы меню",
-    deliveryAreaLabel: "Возможность доставки для {area}",
-    labels: {
-      wholesale: "Опт и bulk inquiry",
-      delivery: "Возможность доставки перед поездкой",
-      whiteWidow: "Информация о сорте White Widow",
-      best: "Хиты и сигналы доверия",
-      cheap: "Доступные варианты меню",
-      weight: "Запрос веса и меню",
-      guide: "Гайд по покупке",
-      info: "Информация о меню каннабиса",
-    },
+    title: "Локация Labs Cannabis в Паттайе | Maps и адрес",
+    description: "Актуальная карточка LABS DISPENSARY в Google Maps, опубликованный адрес и телефон Labs Cannabis в Паттайе.",
+    h1: "Локация Labs Cannabis в Паттайе",
+    bridge: "В Google Maps указано название LABS DISPENSARY",
+    lead: "Текущий пин и маршрут смотрите в живой карточке Maps. Часы и отзывы могут меняться, поэтому мы не дублируем их здесь.",
+    maps: "Открыть Google Maps",
+    address: "Опубликованный адрес",
+    phone: "Телефон",
+    contact: "Контакты и координация визита",
+    legal: "Актуальные правила для туристов",
+    walking: "Маршрут от Walking Street",
   },
   th: {
-    title: "หน้าเมนูกัญชาในพัทยา",
-    description:
-      "ดูหน้า Labs Cannabis Pattaya ตามพื้นที่ ความเป็นไปได้ของ delivery สายพันธุ์ น้ำหนัก และ buying guide รายละเอียดล่าสุดถามใน WhatsApp",
-    deliveryGroup: "ความเป็นไปได้ของ delivery",
-    breadcrumb: "หน้าเมนู",
-    deliveryAreaLabel: "ความเป็นไปได้ของ delivery สำหรับ {area}",
-    labels: {
-      wholesale: "สอบถาม wholesale และ bulk",
-      delivery: "เช็ค delivery possibility ก่อนเดินทาง",
-      whiteWidow: "ข้อมูลสายพันธุ์ White Widow",
-      best: "Best sellers และ trust signals",
-      cheap: "ตัวเลือกเมนูราคาดี",
-      weight: "สอบถามน้ำหนักและเมนู",
-      guide: "คู่มือการซื้อ",
-      info: "ข้อมูลเมนูกัญชา",
-    },
+    title: "ที่ตั้ง Labs Cannabis ในพัทยา | Maps และที่อยู่",
+    description: "ดูรายการ LABS DISPENSARY ใน Google Maps ที่อยู่และโทรศัพท์ที่เผยแพร่ของ Labs Cannabis ในพัทยา",
+    h1: "ที่ตั้ง Labs Cannabis ในพัทยา",
+    bridge: "แสดงใน Google Maps ในชื่อ LABS DISPENSARY",
+    lead: "ใช้ Maps สำหรับหมุดและเส้นทางปัจจุบัน เวลาเปิดและรีวิวอาจเปลี่ยนแปลง จึงไม่แสดงซ้ำที่นี่",
+    maps: "เปิด Google Maps",
+    address: "ที่อยู่ที่เผยแพร่",
+    phone: "โทรศัพท์",
+    contact: "ติดต่อและประสานการมาเยือน",
+    legal: "กฎปัจจุบันสำหรับนักท่องเที่ยว",
+    walking: "เส้นทางจาก Walking Street",
   },
   ar: {
-    title: "صفحات قائمة القنب في باتايا",
-    description:
-      "تصفح صفحات Labs Cannabis Pattaya حسب المنطقة وإمكانية التوصيل والسلالة والوزن ودليل الشراء. التفاصيل الحالية عبر WhatsApp.",
-    deliveryGroup: "إمكانية التوصيل",
-    breadcrumb: "صفحات القائمة",
-    deliveryAreaLabel: "إمكانية التوصيل إلى {area}",
-    labels: {
-      wholesale: "استعلام جملة و bulk",
-      delivery: "إمكانية التوصيل قبل التحرك",
-      whiteWidow: "معلومات سلالة White Widow",
-      best: "الأكثر طلباً وإشارات الثقة",
-      cheap: "خيارات قائمة بسعر مناسب",
-      weight: "استعلام الوزن والقائمة",
-      guide: "دليل الشراء",
-      info: "معلومات قائمة القنب",
-    },
+    title: "موقع Labs Cannabis في باتايا | Maps والعنوان",
+    description: "بطاقة LABS DISPENSARY المباشرة على Google Maps والعنوان والهاتف المنشوران لـ Labs Cannabis في باتايا.",
+    h1: "موقع Labs Cannabis في باتايا",
+    bridge: "مدرج على Google Maps باسم LABS DISPENSARY",
+    lead: "استخدم بطاقة Maps للدبوس والمسار الحاليين. قد تتغير الساعات والمراجعات لذلك لا نكررها هنا.",
+    maps: "افتح Google Maps",
+    address: "العنوان المنشور",
+    phone: "الهاتف",
+    contact: "الاتصال وتنسيق الزيارة",
+    legal: "القواعد الحالية للسياح",
+    walking: "الاتجاهات من Walking Street",
   },
   zh: {
-    title: "芭提雅大麻菜单页面",
-    description:
-      "按区域、配送可能性、品种、重量和购买指南浏览 Labs Cannabis Pattaya 页面。当前详情请在 WhatsApp 询问。",
-    deliveryGroup: "配送可能性",
-    breadcrumb: "菜单页面",
-    deliveryAreaLabel: "{area} 配送可能性",
-    labels: {
-      wholesale: "批发和 bulk 咨询",
-      delivery: "出发前确认配送可能性",
-      whiteWidow: "White Widow 品种信息",
-      best: "热卖与信任信号",
-      cheap: "高性价比菜单选项",
-      weight: "重量和菜单咨询",
-      guide: "购买指南",
-      info: "大麻菜单信息",
-    },
+    title: "Labs Cannabis 芭提雅位置 | Maps 与地址",
+    description: "查看 Google Maps 上实时的 LABS DISPENSARY 页面，以及 Labs Cannabis 在芭提雅公开的地址和电话。",
+    h1: "Labs Cannabis 在芭提雅的位置",
+    bridge: "Google Maps 当前显示为 LABS DISPENSARY",
+    lead: "请使用实时 Maps 页面查看当前定位和路线。营业时间与评价可能变化，因此这里不重复显示。",
+    maps: "打开 Google Maps",
+    address: "公开地址",
+    phone: "电话",
+    contact: "联系与到店协调",
+    legal: "游客当前规则",
+    walking: "从 Walking Street 前往",
   },
   ko: {
-    title: "파타야 대마 메뉴 페이지",
-    description:
-      "지역, 배송 가능성, 품종, 중량, 구매 가이드별 Labs Cannabis Pattaya 페이지를 확인하세요. 최신 정보는 WhatsApp에서 문의하세요.",
-    deliveryGroup: "배송 가능성",
-    breadcrumb: "메뉴 페이지",
-    deliveryAreaLabel: "{area} 배송 가능성",
-    labels: {
-      wholesale: "도매 및 bulk 문의",
-      delivery: "이동 전 배송 가능성 확인",
-      whiteWidow: "White Widow 품종 정보",
-      best: "best sellers와 신뢰 정보",
-      cheap: "합리적인 메뉴 옵션",
-      weight: "중량 및 메뉴 문의",
-      guide: "구매 가이드",
-      info: "대마 메뉴 정보",
-    },
+    title: "파타야 Labs Cannabis 위치 | Maps와 주소",
+    description: "Google Maps의 실시간 LABS DISPENSARY 정보와 파타야 Labs Cannabis의 공개 주소 및 전화번호를 확인하세요.",
+    h1: "파타야 Labs Cannabis 위치",
+    bridge: "Google Maps에는 LABS DISPENSARY로 표시됩니다",
+    lead: "현재 핀과 경로는 실시간 Maps 정보를 사용하세요. 영업시간과 리뷰는 변경될 수 있어 여기에 반복하지 않습니다.",
+    maps: "Google Maps 열기",
+    address: "공개 주소",
+    phone: "전화",
+    contact: "연락 및 방문 조율",
+    legal: "관광객을 위한 현재 규정",
+    walking: "Walking Street에서 오는 길",
   },
   ja: {
-    title: "パタヤ大麻メニューページ",
-    description:
-      "エリア、配送可能性、品種、重量、購入ガイド別に Labs Cannabis Pattaya のページを確認できます。最新情報は WhatsApp で確認してください。",
-    deliveryGroup: "配送可能性",
-    breadcrumb: "メニューページ",
-    deliveryAreaLabel: "{area} の配送可能性",
-    labels: {
-      wholesale: "卸売と bulk 問い合わせ",
-      delivery: "移動前の配送可能性確認",
-      whiteWidow: "White Widow 品種情報",
-      best: "best sellers と信頼情報",
-      cheap: "手頃なメニュー選択肢",
-      weight: "重量とメニュー問い合わせ",
-      guide: "購入ガイド",
-      info: "大麻メニュー情報",
-    },
+    title: "パタヤの Labs Cannabis 所在地 | Maps と住所",
+    description: "Google Maps の最新 LABS DISPENSARY リスティングと、パタヤの Labs Cannabis の公開住所・電話番号。",
+    h1: "パタヤの Labs Cannabis 所在地",
+    bridge: "Google Maps では LABS DISPENSARY と表示されています",
+    lead: "現在のピンと経路は Maps の最新情報をご利用ください。営業時間やレビューは変わるため、ここでは掲載しません。",
+    maps: "Google Maps を開く",
+    address: "公開住所",
+    phone: "電話",
+    contact: "連絡先と来店調整",
+    legal: "旅行者向けの現在のルール",
+    walking: "Walking Street からの経路",
   },
 };
-const pageCopy = copy[locale] ?? copy.en;
-
-const areaPages = SEO_PAGES.filter((p) => ["near-me", "buy", "best"].includes(p.intent) && !p.weight);
-const weightPages = SEO_PAGES.filter((p) => p.weight);
-const otherPages = SEO_PAGES.filter((p) => p.intent === "wholesale" || p.intent === "guide");
-const generatedAreaPages = AREAS.map((area) => ({
-  href: localePath(locale, `areas/${area.slug}`),
-  label: area.name[locale],
-}));
-const deliveryPages = AREAS.map((area) => ({
-  href: localePath(locale, `delivery/${area.slug}`),
-  label: pageCopy.deliveryAreaLabel.replace("{area}", area.name[locale]),
-}));
-const guidePages = [
-  {
-    href: localePath(locale, "guides/legal-cannabis-tourists"),
-    label: ui.footerSeo.legalGuide ?? "Tourist legal guide",
-  },
-  {
-    href: localePath(locale, "strains/white-widow"),
-    label: ui.footerSeo.strainPage ?? "White Widow strain",
-  },
-];
-
-const safeSeoLabel = (slug: string) => {
-  if (slug.includes("wholesale") || slug.includes("100g") || slug.includes("1kg")) {
-    return pageCopy.labels.wholesale;
-  }
-  if (slug.includes("delivery")) return pageCopy.labels.delivery;
-  if (slug.includes("white-widow")) return pageCopy.labels.whiteWidow;
-  if (slug.includes("best")) return pageCopy.labels.best;
-  if (slug.includes("cheap")) return pageCopy.labels.cheap;
-  if (slug.includes("1g") || slug.includes("10g") || slug.includes("30g")) {
-    return pageCopy.labels.weight;
-  }
-  if (slug.includes("how-to-buy") || slug.includes("near-me")) return pageCopy.labels.guide;
-  return pageCopy.labels.info;
-};
-
-const groups = [
-  {
-    title: ui.locations.areasGroup,
-    links: [
-      ...areaPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
-      ...generatedAreaPages,
-    ],
-  },
-  {
-    title: pageCopy.deliveryGroup,
-    links: [
-      ...SEO_PAGES.filter((p) => p.intent === "delivery").map((page) => ({
-        href: localePath(locale, page.slug),
-        label: safeSeoLabel(page.slug),
-      })),
-      ...deliveryPages,
-    ],
-  },
-  {
-    title: ui.locations.weightsGroup,
-    links: weightPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
-  },
-  {
-    title: ui.locations.otherGroup,
-    links: [
-      ...otherPages.map((page) => ({ href: localePath(locale, page.slug), label: safeSeoLabel(page.slug) })),
-      ...guidePages,
-    ],
-  },
-].filter((g) => g.links.length > 0);
-const breadcrumbs = [
-  { name: ui.nav.home, pathSuffix: "" },
-  { name: pageCopy.breadcrumb, pathSuffix: "locations" },
-];
+const text = copy[locale] ?? copy.en;
+const formattedAddress = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
 ---
 
-<PageLayout
-  locale={locale}
-  pathSuffix="locations"
-  title={`${pageCopy.title} | Labs Cannabis`}
-  description={pageCopy.description}
-  pageType="locations"
-  breadcrumbs={breadcrumbs}
->
-  <section class="px-4 pt-8 pb-6">
+<PageLayout locale={locale} pathSuffix="locations" title={text.title} description={text.description} pageType="locations">
+  <main class="px-4 py-10">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold leading-tight">{pageCopy.title}</h1>
-      <p class="mt-3 text-base leading-relaxed text-text-muted">{pageCopy.description}</p>
+      <h1 class="text-3xl font-bold leading-tight">{text.h1}</h1>
+      <p class="mt-3 text-sm font-bold uppercase tracking-wide text-emerald-dim">{text.bridge}</p>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{text.lead}</p>
 
-      {groups.map((group) => (
-        <div class="mt-8">
-          <h2 class="mb-3 text-lg font-bold text-emerald-dim">{group.title}</h2>
-          <ul class="space-y-2">
-            {group.links.map((page) => (
-              <li>
-                <a
-                  href={page.href}
-                  class="block rounded-xl border border-border bg-bg-card px-4 py-3 text-base font-medium hover:border-emerald/40 hover:text-emerald-dim"
-                >
-                  {page.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+      <dl class="card-surface mt-7 space-y-4 p-5">
+        <div>
+          <dt class="text-sm font-semibold text-emerald-dim">{text.address}</dt>
+          <dd class="mt-1 text-base text-text">{formattedAddress}</dd>
         </div>
-      ))}
+        <div>
+          <dt class="text-sm font-semibold text-emerald-dim">{text.phone}</dt>
+          <dd class="mt-1 text-base text-text"><a
+            href={CONTACT.tel}
+            data-track="contact_call_click"
+            data-track-placement="locations_page"
+            data-track-detail="locations:phone"
+          >{CONTACT.phoneDisplay}</a></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-semibold text-emerald-dim">Website</dt>
+          <dd class="mt-1 text-base text-text">{BRAND.domain}</dd>
+        </div>
+      </dl>
+
+      <nav class="mt-7 grid gap-3" aria-label={text.h1}>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="locations_page" data-track-detail="locations:maps">{text.maps}</a>
+        <a href={localePath(locale, "labs-dispensary-pattaya")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="local_intent_click" data-track-placement="locations_page" data-track-detail="locations:labs-dispensary" data-seo-context-link>{text.bridge}</a>
+        <a href={localePath(locale, "contact")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{text.contact}</a>
+        <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{text.legal}</a>
+        {(locale === "en" || locale === "ru") && (
+          <>
+            <a href={localePath(locale, "cannabis-near-me-pattaya")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="local_intent_click" data-track-placement="locations_page" data-track-detail="locations:near-me" data-seo-context-link>{locale === "ru" ? "Магазин каннабиса рядом в Паттайе" : "Cannabis shop near me in Pattaya"}</a>
+            <a href={localePath(locale, "areas/walking-street")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="local_intent_click" data-track-placement="locations_page" data-track-detail="locations:walking-street" data-seo-context-link>{text.walking}</a>
+            <a href={localePath(locale, "delivery/pattaya")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="local_intent_click" data-track-placement="locations_page" data-track-detail="locations:delivery-rules" data-seo-context-link>{locale === "ru" ? "Актуальные правила доставки в Паттайе" : "Current delivery rules in Pattaya"}</a>
+          </>
+        )}
+      </nav>
     </div>
-  </section>
+  </main>
+  <MapBlock locale={locale} />
   <Footer locale={locale} pathSuffix="locations" />
 </PageLayout>

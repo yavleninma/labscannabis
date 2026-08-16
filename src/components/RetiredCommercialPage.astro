@@ -1,0 +1,95 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { localePath } from "@/lib/i18n";
+import { GOOGLE } from "@/data/site";
+import PageLayout from "@/layouts/PageLayout.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  locale: Locale;
+  pathSuffix: string;
+}
+
+const { locale, pathSuffix } = Astro.props;
+const copy: Record<Locale, { title: string; description: string; h1: string; lead: string; body: string; maps: string; legal: string }> = {
+  en: {
+    title: "No current public offer | Labs Cannabis Pattaya",
+    description: "This former commercial page is retained only as a retired URL. No current stock, price, COA, wholesale term, order, or delivery offer is published here.",
+    h1: "No current public offer is published here",
+    lead: "This URL is no longer an active product or wholesale page.",
+    body: "It remains reachable so old links do not break, but it is excluded from search indexing. Use Maps for the public location and the official-source guide for current Thai rules.",
+    maps: "Open Google Maps",
+    legal: "Current rules for tourists",
+  },
+  ru: {
+    title: "Актуальное предложение не опубликовано | Labs Cannabis",
+    description: "Эта бывшая коммерческая страница сохранена только как старый URL. Здесь нет актуальных данных о наличии, цене, COA, опте, заказе или доставке.",
+    h1: "Здесь нет опубликованного актуального предложения",
+    lead: "Этот URL больше не является страницей товара или оптового предложения.",
+    body: "Он сохранён, чтобы старые ссылки не обрывались, но исключён из индекса. Адрес находится в Maps, а актуальные правила — в гайде с официальными источниками.",
+    maps: "Открыть Google Maps",
+    legal: "Актуальные правила для туристов",
+  },
+  th: {
+    title: "ไม่มีข้อเสนอสาธารณะปัจจุบัน | Labs Cannabis พัทยา",
+    description: "หน้าเชิงพาณิชย์เดิมนี้เก็บไว้เป็น URL เก่าเท่านั้น ไม่มีข้อมูลสต็อก ราคา COA ขายส่ง คำสั่งซื้อ หรือการจัดส่งปัจจุบัน",
+    h1: "ไม่มีข้อเสนอสาธารณะปัจจุบันในหน้านี้",
+    lead: "URL นี้ไม่ใช่หน้าสินค้าหรือข้อเสนอขายส่งแล้ว",
+    body: "หน้ายังคงเข้าถึงได้เพื่อไม่ให้ลิงก์เก่าขาด แต่ถูกนำออกจากดัชนี ใช้ Maps สำหรับที่ตั้งและคู่มือแหล่งข้อมูลทางการสำหรับกฎปัจจุบัน",
+    maps: "เปิด Google Maps",
+    legal: "กฎปัจจุบันสำหรับนักท่องเที่ยว",
+  },
+  ar: {
+    title: "لا يوجد عرض عام حالي | Labs Cannabis باتايا",
+    description: "تم الاحتفاظ بهذه الصفحة التجارية السابقة كرابط قديم فقط. لا تنشر مخزونا أو سعرا أو COA أو شروط جملة أو طلبا أو توصيلا حاليا.",
+    h1: "لا يوجد عرض عام حالي منشور هنا",
+    lead: "لم يعد هذا الرابط صفحة منتج أو عرض جملة.",
+    body: "يبقى متاحا حتى لا تنقطع الروابط القديمة، لكنه مستبعد من الفهرسة. استخدم Maps للموقع والدليل ذي المصادر الرسمية للقواعد الحالية.",
+    maps: "افتح Google Maps",
+    legal: "القواعد الحالية للسياح",
+  },
+  zh: {
+    title: "暂无公开现行优惠 | Labs Cannabis 芭提雅",
+    description: "此旧商业页面仅作为历史 URL 保留，不发布当前库存、价格、COA、批发条款、订单或配送信息。",
+    h1: "此处未发布当前公开优惠",
+    lead: "此 URL 已不再是产品或批发页面。",
+    body: "页面保留是为了避免旧链接失效，但已排除在搜索索引之外。地点请使用 Maps，现行规则请查看链接官方来源的指南。",
+    maps: "打开 Google Maps",
+    legal: "游客当前规则",
+  },
+  ko: {
+    title: "현재 공개 제안 없음 | Labs Cannabis 파타야",
+    description: "이전 상업 페이지는 과거 URL로만 유지됩니다. 현재 재고, 가격, COA, 도매 조건, 주문 또는 배달 정보를 게시하지 않습니다.",
+    h1: "현재 공개 제안이 게시되지 않았습니다",
+    lead: "이 URL은 더 이상 제품이나 도매 페이지가 아닙니다.",
+    body: "이전 링크를 유지하기 위해 접근 가능하지만 검색 색인에서는 제외됩니다. 위치는 Maps, 현재 규정은 공식 출처 가이드를 이용하세요.",
+    maps: "Google Maps 열기",
+    legal: "관광객을 위한 현재 규정",
+  },
+  ja: {
+    title: "現在の公開オファーはありません | Labs Cannabis パタヤ",
+    description: "旧商用ページは過去の URL としてのみ保持されています。現在の在庫、価格、COA、卸条件、注文、配送情報は掲載しません。",
+    h1: "現在の公開オファーは掲載されていません",
+    lead: "この URL は製品または卸売ページではありません。",
+    body: "旧リンクを切らないためにアクセス可能ですが、検索インデックスからは除外されています。場所は Maps、現在のルールは公式情報ガイドをご利用ください。",
+    maps: "Google Maps を開く",
+    legal: "旅行者向けの現在のルール",
+  },
+};
+const text = copy[locale] ?? copy.en;
+---
+
+<PageLayout locale={locale} pathSuffix={pathSuffix} title={text.title} description={text.description}>
+  <article class="px-4 py-12">
+    <div class="mx-auto max-w-lg">
+      <h1 class="text-3xl font-bold leading-tight">{text.h1}</h1>
+      <p class="mt-4 text-lg leading-relaxed text-text-muted">{text.lead}</p>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{text.body}</p>
+      <nav class="mt-8 grid gap-3" aria-label={text.h1}>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="retired_commercial" data-track-detail={`${pathSuffix}:maps`}>{text.maps}</a>
+        <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{text.legal}</a>
+      </nav>
+    </div>
+  </article>
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

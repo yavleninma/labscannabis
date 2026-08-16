@@ -1,14 +1,15 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import Footer from "@/components/Footer.astro";
-import { LOCALES, LOCALE_HREFLANG, localePath, type Locale } from "@/lib/i18n";
-import { CONTACT, GOOGLE, ADDRESS, HOURS, getMapsSearchUrl } from "@/data/site";
-import { HOME_MEDIA } from "@/data/media";
-import { ALL_STRAINS, type Strain } from "@/data/strains";
-import { PRICE_LADDER } from "@/data/prices";
-import { AREAS } from "@/data/seo-matrix";
-import { HOME_LOCAL } from "@/data/home-local";
-import { renderCopy } from "@/data/area-copy";
+import { LOCALES, localePath, type Locale } from "@/lib/i18n";
+import {
+  ADDRESS,
+  BRAND,
+  CONTACT,
+  GOOGLE,
+  getMapsEmbedUrl,
+  getMapsSearchUrl,
+} from "@/data/site";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -23,627 +24,389 @@ type HomeCopy = {
   primaryCta: string;
   mapCta: string;
   proof: string[];
-  menuEyebrow: string;
-  menuTitle: string;
-  menuLead: string;
-  askStrain: string;
-  potency: string;
-  confirmBatch: string;
-  typeLabels: Record<Strain["type"], string>;
-  strainProfiles: Record<string, { effects: string[]; mood: string; useCase: string }>;
-  effectsEyebrow: string;
-  effectsTitle: string;
-  effectsLead: string;
-  effectsCta: string;
-  effectCards: { title: string; body: string }[];
-  freshnessEyebrow: string;
-  freshnessTitle: string;
-  freshnessBody: string;
-  dealsEyebrow: string;
-  dealsTitle: string;
-  dealsLead: string;
-  dealCta: string;
-  trustEyebrow: string;
+  identityTitle: string;
+  identityBody: string;
   trustTitle: string;
   trustItems: string[];
-  deliveryEyebrow: string;
-  deliveryTitle: string;
-  deliveryBody: string;
-  deliveryCta: string;
+  areasEyebrow: string;
+  areasTitle: string;
+  areasLead: string;
+  areaCta: string;
+  allAreas: string;
   locationEyebrow: string;
   locationTitle: string;
   locationBody: string;
-  openMaps: string;
+  phoneLabel: string;
   faqTitle: string;
   faq: { q: string; a: string }[];
-  whatsapp: {
-    menu: string;
-    effect: string;
-    deal: string;
-    delivery: string;
-    location: string;
-    strainPrefix: string;
-  };
+  whatsappVisit: string;
 };
 
-const HOME_COPY = {
+const HOME_COPY: Record<Locale, HomeCopy> = {
   en: {
-    title: "Cannabis in Pattaya | Fresh menu, strains, effects | Labs Cannabis",
+    title: "Cannabis shop in Pattaya | Map and directions | Labs Cannabis",
     description:
-      "Browse a fresh cannabis menu in Pattaya: popular flower, pre-roll deals, effects, prices where listed, Soi Hollywood location, delivery possibility, and fast WhatsApp contact.",
-    eyebrow: "Pattaya cannabis menu",
-    h1: "Cannabis in Pattaya. Fresh menu today.",
+      "Find Labs Cannabis on Pattaya 13 Alley. Open the verified Google Maps listing, see the address and phone, or ask for directions and visit coordination on WhatsApp.",
+    eyebrow: "Cannabis shop in Pattaya",
+    h1: "Find Labs Cannabis in Pattaya.",
     lead:
-      "Indoor flower, popular strains, clear effects, pre-roll deals, a real Soi Hollywood location, and fast WhatsApp answers for adults 20+.",
-    primaryCta: "Send today’s menu on WhatsApp",
+      "Use the exact map pin, address and phone below. On Google Maps, the shop is currently listed as LABS DISPENSARY.",
+    primaryCta: "Ask for directions",
     mapCta: "Open Google Maps",
-    proof: ["20+ only", "Fresh flower", "Effects matched", "Soi Hollywood", "Delivery possible"],
-    menuEyebrow: "Strains and effects",
-    menuTitle: "Pick a direction, then ask what is fresh",
-    menuLead:
-      "Cards show the useful buying signals first: type, effect, mood, use-case, and potency notes where current batch data exists. Availability is confirmed in WhatsApp.",
-    askStrain: "Ask on WhatsApp",
-    potency: "Potency",
-    confirmBatch: "confirm current batch",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": {
-        effects: ["uplift", "relax", "balanced"],
-        mood: "Clear lift with an easy finish",
-        useCase: "Flagship indoor flower for a first menu ask.",
-      },
-      "blue-dream": {
-        effects: ["smooth", "social", "balanced"],
-        mood: "Easygoing and berry-sweet",
-        useCase: "Ask when you want a softer hybrid direction.",
-      },
-      "og-kush": {
-        effects: ["classic", "mellow", "earthy"],
-        mood: "Pine-heavy and calm",
-        useCase: "Ask for a familiar Kush profile.",
-      },
-      "northern-lights": {
-        effects: ["deep relax", "quiet", "body-led"],
-        mood: "Slow and settled",
-        useCase: "Ask when relaxation is the main goal.",
-      },
-      "green-crack": {
-        effects: ["focus", "energy", "bright"],
-        mood: "Alert and sharp",
-        useCase: "Ask for a sativa-style daytime direction.",
-      },
-      "jack-herer": {
-        effects: ["creative", "clear", "uplift"],
-        mood: "Crisp and active",
-        useCase: "Ask for a clear-headed creative profile.",
-      },
-    },
-    effectsEyebrow: "Choose by effect",
-    effectsTitle: "Tell us the mood, not just the strain name",
-    effectsLead:
-      "The fastest WhatsApp flow is simple: say where you are in Pattaya, what effect you want, and whether pickup or delivery possibility matters.",
-    effectsCta: "Match me by effect",
-    effectCards: [
-      { title: "Relax", body: "Indica-leaning or calmer hybrid suggestions." },
-      { title: "Social", body: "Balanced flower for a lighter evening." },
-      { title: "Focus", body: "Sativa direction with a cleaner head feel." },
-      { title: "Strong", body: "Ask for current high-potency batches only when verified." },
-    ],
-    freshnessEyebrow: "Freshness first",
-    freshnessTitle: "Real flower, real shop, current stock by chat",
-    freshnessBody:
-      "The site is a storefront, not a cart. Ask for today’s photos, freshness, effects, and current availability before you move.",
-    dealsEyebrow: "Popular asks",
-    dealsTitle: "Deals without a public checkout",
-    dealsLead:
-      "Use these as conversation starters. Exact availability, delivery details, and any deal terms are handled only in WhatsApp.",
-    dealCta: "Ask current deal",
-    trustEyebrow: "Trust signals",
-    trustTitle: "A real Pattaya shop, not an anonymous menu",
+    proof: ["Exact map pin", "Public listing link", "Pattaya 13 Alley"],
+    identityTitle: "One shop, two names to recognise",
+    identityBody:
+      "Labs Cannabis is the website name. The same Pattaya location is listed on Google Maps as LABS DISPENSARY.",
+    trustTitle: "Plan a visit with public facts",
     trustItems: [
-      "Google listing and map before you visit",
-      "Adult 20+ gate before content",
-      "No public checkout, payment, or order form",
-      "Current menu, documents, and delivery details handled privately",
+      "The map button opens the current Google Maps listing directly.",
+      "The address and phone match the local contact details published on this website.",
+      "WhatsApp is provided for directions and coordinating a visit.",
     ],
-    deliveryEyebrow: "Delivery possibility",
-    deliveryTitle: "In Pattaya, delivery may be possible after chat",
-    deliveryBody:
-      "Message your area first: Jomtien, Walking Street, Naklua, Pratumnak, Central Pattaya, or Soi Hollywood. We confirm what is possible in WhatsApp.",
-    deliveryCta: "Check delivery possibility",
-    locationEyebrow: "Location",
-    locationTitle: "Soi Hollywood, close to Walking Street",
+    areasEyebrow: "Pattaya area guides",
+    areasTitle: "Plan your route from around Pattaya",
+    areasLead:
+      "Choose an area for local orientation, then use the exact Google Maps pin for the final route.",
+    areaCta: "View route guide",
+    allAreas: "View all location guides",
+    locationEyebrow: "Visit",
+    locationTitle: "Pattaya 13 Alley location",
     locationBody:
-      "Use Maps for the latest listing details and directions. Message before visiting if you want today’s menu and freshness notes.",
-    openMaps: "Open map",
-    faqTitle: "FAQ",
+      "Open the public listing before travelling. If you need help finding the entrance, ask on WhatsApp.",
+    phoneLabel: "Phone",
+    faqTitle: "Location questions",
     faq: [
       {
-        q: "Can I order or pay on the website?",
-        a: "No. There is no public checkout, payment, reservation, or order form. Ask details in WhatsApp.",
+        q: "What name should I look for on Google Maps?",
+        a: "Labs Cannabis is listed on Google Maps as LABS DISPENSARY.",
       },
       {
-        q: "Can I see today’s menu?",
-        a: "Yes. Use WhatsApp to ask for current strains, effects, freshness, and availability.",
+        q: "Where is the shop?",
+        a: "The published address is 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
       },
       {
-        q: "Is delivery guaranteed?",
-        a: "No. Delivery is only a possibility discussed privately after your area and details are checked.",
+        q: "How can I ask for directions?",
+        a: "Open the Google Maps listing for the route, or use WhatsApp for directions and visit coordination.",
       },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect:
-        "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery:
-        "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location:
-        "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "Hi Labs Cannabis. I am in Pattaya and would like directions and help coordinating a visit to the shop.",
   },
   ru: {
-    title: "Каннабис в Паттайе | Меню, сорта и эффекты | Labs Cannabis",
+    title: "Магазин каннабиса в Паттайе | Карта и маршрут | Labs Cannabis",
     description:
-      "Свежая витрина каннабиса в Паттайе: популярные сорта, pre-roll deals, эффекты, цены где указаны, локация Soi Hollywood, возможность доставки и быстрый WhatsApp.",
-    eyebrow: "Меню каннабиса в Паттайе",
-    h1: "Каннабис в Паттайе. Свежее меню сегодня.",
+      "Найдите Labs Cannabis на Pattaya 13 Alley: точная карточка Google Maps, адрес, телефон и WhatsApp для маршрута и согласования визита.",
+    eyebrow: "Магазин каннабиса в Паттайе",
+    h1: "Как найти Labs Cannabis в Паттайе.",
     lead:
-      "Indoor flower, популярные сорта, понятные эффекты, pre-roll deals, реальная локация на Soi Hollywood и быстрый WhatsApp для взрослых 20+.",
-    primaryCta: "Получить меню дня в WhatsApp",
+      "Ниже — точная точка на карте, адрес и телефон. В Google Maps магазин сейчас указан как LABS DISPENSARY.",
+    primaryCta: "Спросить маршрут",
     mapCta: "Открыть Google Maps",
-    proof: ["Только 20+", "Свежие шишки", "Подбор по эффекту", "Soi Hollywood", "Доставка возможна"],
-    menuEyebrow: "Сорта и эффекты",
-    menuTitle: "Выберите направление, потом уточните свежий сток",
-    menuLead:
-      "Карточки показывают главное для выбора: тип, эффект, настроение, сценарий и potency notes, если по партии есть данные. Наличие подтверждается в WhatsApp.",
-    askStrain: "Спросить в WhatsApp",
-    potency: "Потентность",
-    confirmBatch: "уточнить текущую партию",
-    typeLabels: { indica: "Индика", sativa: "Сатива", hybrid: "Гибрид" },
-    strainProfiles: {
-      "white-widow": {
-        effects: ["бодрит", "расслабляет", "баланс"],
-        mood: "Чистый подъём и мягкое завершение",
-        useCase: "Флагманский indoor для первого запроса меню.",
-      },
-      "blue-dream": {
-        effects: ["мягко", "социально", "баланс"],
-        mood: "Лёгкий ягодный гибрид",
-        useCase: "Спросите, если нужен более мягкий hybrid-профиль.",
-      },
-      "og-kush": {
-        effects: ["классика", "спокойно", "землисто"],
-        mood: "Сосновый и спокойный",
-        useCase: "Для знакомого Kush-направления.",
-      },
-      "northern-lights": {
-        effects: ["глубокий релакс", "тихо", "body-led"],
-        mood: "Медленно и спокойно",
-        useCase: "Когда главный запрос — расслабление.",
-      },
-      "green-crack": {
-        effects: ["фокус", "энергия", "ярко"],
-        mood: "Бодро и собранно",
-        useCase: "Для дневного sativa-направления.",
-      },
-      "jack-herer": {
-        effects: ["креатив", "ясность", "подъём"],
-        mood: "Чётко и активно",
-        useCase: "Для ясного и креативного профиля.",
-      },
-    },
-    effectsEyebrow: "Выбор по эффекту",
-    effectsTitle: "Скажите настроение, а не только название сорта",
-    effectsLead:
-      "Самый быстрый WhatsApp-сценарий: где вы в Паттайе, какой эффект нужен и важен ли pickup или возможность доставки.",
-    effectsCta: "Подобрать по эффекту",
-    effectCards: [
-      { title: "Relax", body: "Indica или спокойный hybrid." },
-      { title: "Social", body: "Баланс для лёгкого вечера." },
-      { title: "Focus", body: "Sativa-направление с ясной головой." },
-      { title: "Strong", body: "Только текущие сильные партии, где данные подтверждены." },
-    ],
-    freshnessEyebrow: "Свежесть прежде всего",
-    freshnessTitle: "Реальные шишки, реальный магазин, текущий сток в чате",
-    freshnessBody:
-      "Сайт — витрина, не корзина. Запросите сегодняшние фото, свежесть, эффекты и наличие перед поездкой.",
-    dealsEyebrow: "Популярные запросы",
-    dealsTitle: "Deals без публичного checkout",
-    dealsLead:
-      "Это старт разговора. Наличие, детали доставки и условия любых deals обсуждаются только в WhatsApp.",
-    dealCta: "Спросить текущий deal",
-    trustEyebrow: "Доверие",
-    trustTitle: "Реальный shop в Паттайе, не анонимное меню",
+    proof: ["Точная точка на карте", "Прямая ссылка на карточку", "Pattaya 13 Alley"],
+    identityTitle: "Один магазин, два узнаваемых названия",
+    identityBody:
+      "Labs Cannabis — название сайта. Эта же локация в Паттайе указана в Google Maps как LABS DISPENSARY.",
+    trustTitle: "Планируйте визит по проверяемым данным",
     trustItems: [
-      "Google listing и карта перед визитом",
-      "Age gate 20+ до контента",
-      "Без публичного checkout, оплаты или order form",
-      "Меню, документы и delivery details — только приватно",
+      "Кнопка карты открывает актуальную карточку Google Maps напрямую.",
+      "Адрес и телефон совпадают с локальными контактами, опубликованными на сайте.",
+      "WhatsApp используется для маршрута и согласования визита.",
     ],
-    deliveryEyebrow: "Возможность доставки",
-    deliveryTitle: "В Паттайе доставка может быть возможна после чата",
-    deliveryBody:
-      "Напишите район: Jomtien, Walking Street, Naklua, Pratumnak, Central Pattaya или Soi Hollywood. В WhatsApp подтвердим, что возможно.",
-    deliveryCta: "Проверить доставку",
-    locationEyebrow: "Локация",
-    locationTitle: "Soi Hollywood, рядом с Walking Street",
+    areasEyebrow: "Районы Паттайи",
+    areasTitle: "Спланируйте маршрут из своего района",
+    areasLead:
+      "Выберите район для ориентира, а для финального маршрута используйте точную точку Google Maps.",
+    areaCta: "Посмотреть маршрут",
+    allAreas: "Все районные маршруты",
+    locationEyebrow: "Визит",
+    locationTitle: "Локация на Pattaya 13 Alley",
     locationBody:
-      "Актуальные данные и маршрут смотрите в Maps. Перед визитом напишите, если нужно меню дня и свежесть.",
-    openMaps: "Открыть карту",
-    faqTitle: "FAQ",
+      "Перед поездкой откройте публичную карточку. Если нужна помощь с поиском входа, напишите в WhatsApp.",
+    phoneLabel: "Телефон",
+    faqTitle: "Вопросы о локации",
     faq: [
-      { q: "Можно заказать или оплатить на сайте?", a: "Нет. Здесь нет checkout, оплаты, резерва или order form. Детали — в WhatsApp." },
-      { q: "Можно увидеть сегодняшнее меню?", a: "Да. Напишите в WhatsApp за текущими сортами, эффектами, свежестью и наличием." },
-      { q: "Доставка гарантирована?", a: "Нет. Доставка — возможность, которую обсуждаем приватно после проверки района и деталей." },
+      {
+        q: "Какое название искать в Google Maps?",
+        a: "Labs Cannabis указан в Google Maps как LABS DISPENSARY.",
+      },
+      {
+        q: "Где находится магазин?",
+        a: "Опубликованный адрес: 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
+      },
+      {
+        q: "Как уточнить маршрут?",
+        a: "Откройте карточку Google Maps для маршрута или напишите в WhatsApp для навигации и согласования визита.",
+      },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "Привет, Labs Cannabis. Я в Паттайе. Подскажите маршрут и помогите согласовать визит в магазин.",
   },
   th: {
-    title: "กัญชาในพัทยา | เมนูสด สายพันธุ์ และเอฟเฟกต์ | Labs Cannabis",
+    title: "ร้านกัญชาในพัทยา | แผนที่และเส้นทาง | Labs Cannabis",
     description:
-      "ดูเมนูกัญชาสดในพัทยา: ดอกยอดนิยม ดีลพรีโรล เอฟเฟกต์ ราคาเท่าที่ระบุไว้ ที่ตั้ง Soi Hollywood ความเป็นไปได้ในการจัดส่ง และ WhatsApp ที่ตอบเร็ว",
-    eyebrow: "เมนูกัญชาพัทยา",
-    h1: "กัญชาในพัทยา เมนูสดวันนี้",
+      "ค้นหา Labs Cannabis ที่ Pattaya 13 Alley เปิดข้อมูล Google Maps ที่ตรงกัน ดูที่อยู่และโทรศัพท์ หรือขอเส้นทางผ่าน WhatsApp",
+    eyebrow: "ร้านกัญชาในพัทยา",
+    h1: "ค้นหา Labs Cannabis ในพัทยา",
     lead:
-      "ดอก indoor สายพันธุ์ยอดนิยม เอฟเฟกต์ชัดเจน ดีลพรีโรล ร้านจริงบน Soi Hollywood และ WhatsApp สำหรับผู้ใหญ่ 20+",
-    primaryCta: "ขอเมนูวันนี้ทาง WhatsApp",
+      "ใช้หมุดแผนที่ ที่อยู่ และหมายเลขโทรศัพท์ด้านล่าง ใน Google Maps ร้านนี้แสดงชื่อว่า LABS DISPENSARY",
+    primaryCta: "ขอเส้นทาง",
     mapCta: "เปิด Google Maps",
-    proof: ["20+ เท่านั้น", "ดอกสด", "เลือกตามเอฟเฟกต์", "Soi Hollywood", "อาจจัดส่งได้"],
-    menuEyebrow: "สายพันธุ์และเอฟเฟกต์",
-    menuTitle: "เลือกแนวที่ต้องการ แล้วถามสต็อกสด",
-    menuLead:
-      "การ์ดแสดงข้อมูลสำคัญ: ประเภท เอฟเฟกต์ อารมณ์ การใช้งาน และ potency notes เมื่อมีข้อมูลล็อตปัจจุบัน ยืนยันสต็อกใน WhatsApp",
-    askStrain: "ถามใน WhatsApp",
-    potency: "ความแรง",
-    confirmBatch: "ยืนยันล็อตปัจจุบัน",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": { effects: ["สดชื่น", "ผ่อนคลาย", "สมดุล"], mood: "ยกอารมณ์ใส ๆ จบง่าย", useCase: "ดอก indoor ตัวหลักสำหรับเริ่มถามเมนู" },
-      "blue-dream": { effects: ["นุ่ม", "เข้าสังคม", "สมดุล"], mood: "สบาย ๆ กลิ่นเบอร์รี", useCase: "ถามเมื่ออยากได้ hybrid ที่นุ่มกว่า" },
-      "og-kush": { effects: ["คลาสสิก", "นิ่ง", "เอิร์ธโทน"], mood: "สนชัดและสงบ", useCase: "สำหรับโปรไฟล์ Kush ที่คุ้นเคย" },
-      "northern-lights": { effects: ["ผ่อนคลายลึก", "เงียบ", "เน้นกาย"], mood: "ช้าและนิ่ง", useCase: "เมื่อเป้าหมายหลักคือพักผ่อน" },
-      "green-crack": { effects: ["โฟกัส", "พลังงาน", "สดใส"], mood: "ตื่นตัวและคม", useCase: "สำหรับแนว sativa กลางวัน" },
-      "jack-herer": { effects: ["สร้างสรรค์", "ชัดเจน", "ยกอารมณ์"], mood: "ใสและแอคทีฟ", useCase: "สำหรับโปรไฟล์คิดชัดและสร้างสรรค์" },
-    },
-    effectsEyebrow: "เลือกตามเอฟเฟกต์",
-    effectsTitle: "บอกอารมณ์ที่ต้องการ ไม่ใช่แค่ชื่อสายพันธุ์",
-    effectsLead:
-      "ทางลัดใน WhatsApp: บอกว่าคุณอยู่ส่วนไหนของพัทยา ต้องการเอฟเฟกต์อะไร และต้องการ pickup หรือเช็กความเป็นไปได้ในการจัดส่งหรือไม่",
-    effectsCta: "ช่วยเลือกตามเอฟเฟกต์",
-    effectCards: [
-      { title: "Relax", body: "แนว indica หรือ hybrid ที่นิ่งกว่า" },
-      { title: "Social", body: "ดอกสมดุลสำหรับค่ำคืนเบา ๆ" },
-      { title: "Focus", body: "แนว sativa ที่หัวโล่งกว่า" },
-      { title: "Strong", body: "ถามเฉพาะล็อตแรงที่มีข้อมูลยืนยัน" },
+    proof: ["หมุดแผนที่ตรงจุด", "ลิงก์ข้อมูลสาธารณะ", "Pattaya 13 Alley"],
+    identityTitle: "สถานที่เดียว สองชื่อที่ควรรู้",
+    identityBody:
+      "Labs Cannabis คือชื่อบนเว็บไซต์ และสถานที่เดียวกันในพัทยาแสดงบน Google Maps ในชื่อ LABS DISPENSARY",
+    trustTitle: "วางแผนการเยี่ยมชมด้วยข้อมูลสาธารณะ",
+    trustItems: [
+      "ปุ่มแผนที่จะเปิดข้อมูล Google Maps ปัจจุบันโดยตรง",
+      "ที่อยู่และโทรศัพท์ตรงกับข้อมูลติดต่อที่เผยแพร่บนเว็บไซต์นี้",
+      "ใช้ WhatsApp เพื่อขอเส้นทางและประสานงานการเยี่ยมชม",
     ],
-    freshnessEyebrow: "สดเป็นอันดับแรก",
-    freshnessTitle: "ดอกจริง ร้านจริง สต็อกปัจจุบันในแชต",
-    freshnessBody:
-      "เว็บไซต์เป็นหน้าร้าน ไม่ใช่ตะกร้าสินค้า ขอรูปวันนี้ ความสด เอฟเฟกต์ และสต็อกก่อนเดินทาง",
-    dealsEyebrow: "คำถามยอดนิยม",
-    dealsTitle: "Deals โดยไม่มี checkout สาธารณะ",
-    dealsLead: "ใช้เป็นจุดเริ่มคุย รายละเอียดสต็อก การจัดส่ง และเงื่อนไขดีลจะคุยใน WhatsApp เท่านั้น",
-    dealCta: "ถาม deal ล่าสุด",
-    trustEyebrow: "สัญญาณความน่าเชื่อถือ",
-    trustTitle: "ร้านจริงในพัทยา ไม่ใช่เมนูนิรนาม",
-    trustItems: ["Google listing และแผนที่", "เกตอายุ 20+ ก่อนดูเนื้อหา", "ไม่มี checkout/payment/order form สาธารณะ", "เมนู เอกสาร และ delivery details คุยแบบส่วนตัว"],
-    deliveryEyebrow: "ความเป็นไปได้ในการจัดส่ง",
-    deliveryTitle: "ในพัทยาอาจจัดส่งได้หลังคุยแชต",
-    deliveryBody: "ส่งพื้นที่ของคุณ: Jomtien, Walking Street, Naklua, Pratumnak, Central Pattaya หรือ Soi Hollywood แล้วเราจะยืนยันใน WhatsApp",
-    deliveryCta: "เช็กการจัดส่ง",
-    locationEyebrow: "ที่ตั้ง",
-    locationTitle: "Soi Hollywood ใกล้ Walking Street",
-    locationBody: "ใช้ Maps สำหรับข้อมูลล่าสุดและเส้นทาง ส่งข้อความก่อนมา หากต้องการเมนูวันนี้และโน้ตความสด",
-    openMaps: "เปิดแผนที่",
-    faqTitle: "คำถามที่พบบ่อย",
+    areasEyebrow: "คู่มือพื้นที่พัทยา",
+    areasTitle: "วางแผนเส้นทางจากพื้นที่ต่าง ๆ ในพัทยา",
+    areasLead:
+      "เลือกพื้นที่เพื่อดูแนวทางเบื้องต้น แล้วใช้หมุด Google Maps ที่ตรงจุดสำหรับเส้นทางสุดท้าย",
+    areaCta: "ดูคู่มือเส้นทาง",
+    allAreas: "ดูคู่มือสถานที่ทั้งหมด",
+    locationEyebrow: "เยี่ยมชม",
+    locationTitle: "สถานที่บน Pattaya 13 Alley",
+    locationBody:
+      "เปิดข้อมูลสาธารณะก่อนเดินทาง หากต้องการความช่วยเหลือในการหาทางเข้า โปรดสอบถามทาง WhatsApp",
+    phoneLabel: "โทรศัพท์",
+    faqTitle: "คำถามเกี่ยวกับสถานที่",
     faq: [
-      { q: "สั่งหรือจ่ายเงินบนเว็บได้ไหม?", a: "ไม่ได้ ไม่มี checkout การชำระเงิน การจอง หรือ order form สาธารณะ รายละเอียดถามใน WhatsApp" },
-      { q: "ดูเมนูวันนี้ได้ไหม?", a: "ได้ ส่ง WhatsApp เพื่อถามสายพันธุ์ เอฟเฟกต์ ความสด และสต็อกปัจจุบัน" },
-      { q: "รับประกันการจัดส่งไหม?", a: "ไม่รับประกัน การจัดส่งเป็นความเป็นไปได้ที่คุยแบบส่วนตัวหลังเช็กพื้นที่และรายละเอียด" },
+      {
+        q: "ควรค้นหาชื่อใดใน Google Maps?",
+        a: "Labs Cannabis แสดงบน Google Maps ในชื่อ LABS DISPENSARY",
+      },
+      {
+        q: "ร้านอยู่ที่ไหน?",
+        a: "ที่อยู่ที่เผยแพร่คือ 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150",
+      },
+      {
+        q: "ขอเส้นทางได้อย่างไร?",
+        a: "เปิดข้อมูล Google Maps สำหรับเส้นทาง หรือใช้ WhatsApp เพื่อขอเส้นทางและประสานงานการเยี่ยมชม",
+      },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
-  },
-  zh: {
-    title: "芭提雅大麻 | 今日菜单、品种与效果 | Labs Cannabis",
-    description:
-      "查看芭提雅新鲜大麻菜单：热门花、预卷优惠、效果、已列价格、Soi Hollywood 位置、配送可能性和快速 WhatsApp 联系。",
-    eyebrow: "芭提雅大麻菜单",
-    h1: "芭提雅大麻。今日新鲜菜单。",
-    lead: "室内花、热门品种、清晰效果、预卷优惠、Soi Hollywood 实体位置，以及面向20+成人的快速 WhatsApp。",
-    primaryCta: "WhatsApp 获取今日菜单",
-    mapCta: "打开 Google Maps",
-    proof: ["仅限20+", "新鲜花", "按效果匹配", "Soi Hollywood", "可咨询配送"],
-    menuEyebrow: "品种与效果",
-    menuTitle: "先选方向，再问今日新鲜库存",
-    menuLead: "卡片优先显示类型、效果、心情、使用场景，以及当前批次有数据时的 potency notes。库存在 WhatsApp 确认。",
-    askStrain: "WhatsApp 咨询",
-    potency: "效力",
-    confirmBatch: "确认当前批次",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": { effects: ["提神", "放松", "平衡"], mood: "清晰上扬，收尾柔和", useCase: "首次询问菜单的旗舰室内花。" },
-      "blue-dream": { effects: ["顺滑", "社交", "平衡"], mood: "轻松的莓果感", useCase: "想要更柔和 hybrid 方向时询问。" },
-      "og-kush": { effects: ["经典", "柔和", "泥土感"], mood: "松木感明显且平静", useCase: "适合熟悉的 Kush 风格。" },
-      "northern-lights": { effects: ["深度放松", "安静", "身体感"], mood: "慢而稳定", useCase: "主要目标是放松时询问。" },
-      "green-crack": { effects: ["专注", "能量", "明亮"], mood: "清醒且锐利", useCase: "适合白天 sativa 方向。" },
-      "jack-herer": { effects: ["创意", "清晰", "上扬"], mood: "干净且主动", useCase: "适合清晰创意型 profile。" },
-    },
-    effectsEyebrow: "按效果选择",
-    effectsTitle: "告诉我们想要的心情，不只是品种名",
-    effectsLead: "最快 WhatsApp 流程：告诉我们你在芭提雅哪里、想要什么效果、是否需要自取或咨询配送可能。",
-    effectsCta: "帮我按效果匹配",
-    effectCards: [
-      { title: "Relax", body: "偏 indica 或更安静的 hybrid 建议。" },
-      { title: "Social", body: "适合轻松夜晚的平衡花。" },
-      { title: "Focus", body: "更清醒的 sativa 方向。" },
-      { title: "Strong", body: "仅咨询有当前数据支持的高效力批次。" },
-    ],
-    freshnessEyebrow: "新鲜优先",
-    freshnessTitle: "真实花、真实店、当前库存在聊天中确认",
-    freshnessBody: "网站是 storefront，不是购物车。出发前请索取今日照片、新鲜度、效果和当前库存。",
-    dealsEyebrow: "热门咨询",
-    dealsTitle: "没有公开 checkout 的 deals",
-    dealsLead: "这些只是对话入口。库存、配送细节和任何优惠条款只在 WhatsApp 中处理。",
-    dealCta: "询问当前 deal",
-    trustEyebrow: "信任信号",
-    trustTitle: "真实芭提雅店铺，不是匿名菜单",
-    trustItems: ["到店前查看 Google listing 和地图", "内容前先通过20+ age gate", "没有公开 checkout、付款或 order form", "菜单、文件和配送细节私下处理"],
-    deliveryEyebrow: "配送可能性",
-    deliveryTitle: "在芭提雅，聊天后可能安排配送",
-    deliveryBody: "先发送你的区域：Jomtien、Walking Street、Naklua、Pratumnak、Central Pattaya 或 Soi Hollywood。我们在 WhatsApp 确认可行性。",
-    deliveryCta: "查询配送可能",
-    locationEyebrow: "位置",
-    locationTitle: "Soi Hollywood，靠近 Walking Street",
-    locationBody: "使用 Maps 查看最新列表和路线。到店前如需今日菜单和新鲜度说明，请先发消息。",
-    openMaps: "打开地图",
-    faqTitle: "常见问题",
-    faq: [
-      { q: "可以在网站上下单或付款吗？", a: "不可以。没有公开 checkout、付款、预订或 order form。细节请在 WhatsApp 咨询。" },
-      { q: "可以看今日菜单吗？", a: "可以。通过 WhatsApp 查询当前品种、效果、新鲜度和库存。" },
-      { q: "配送保证吗？", a: "不保证。配送只是可能性，需要在私聊中确认区域和细节。" },
-    ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "สวัสดี Labs Cannabis ฉันอยู่ในพัทยาและต้องการเส้นทางพร้อมความช่วยเหลือในการประสานงานการเยี่ยมชมร้าน",
   },
   ar: {
-    title: "القنب في باتايا | قائمة اليوم والسلالات والتأثيرات | Labs Cannabis",
+    title: "متجر القنب في باتايا | الخريطة والاتجاهات | Labs Cannabis",
     description:
-      "تصفح قائمة قنب حديثة في باتايا: زهور شائعة، عروض pre-roll، التأثيرات، الأسعار عند توفرها، موقع Soi Hollywood، إمكانية التوصيل، وتواصل سريع عبر WhatsApp.",
-    eyebrow: "قائمة القنب في باتايا",
-    h1: "القنب في باتايا. قائمة طازجة اليوم.",
-    lead: "زهور indoor، سلالات شائعة، تأثيرات واضحة، عروض pre-roll، موقع حقيقي في Soi Hollywood، ورد سريع عبر WhatsApp للبالغين 20+.",
-    primaryCta: "اطلب قائمة اليوم عبر WhatsApp",
-    mapCta: "افتح Google Maps",
-    proof: ["20+ فقط", "زهور طازجة", "مطابقة حسب التأثير", "Soi Hollywood", "التوصيل ممكن"],
-    menuEyebrow: "السلالات والتأثيرات",
-    menuTitle: "اختر الاتجاه ثم اسأل عن الطازج اليوم",
-    menuLead: "تعرض البطاقات النوع، التأثير، المزاج، الاستخدام، وملاحظات potency عند توفر بيانات للدفعة الحالية. التوفر يؤكد في WhatsApp.",
-    askStrain: "اسأل في WhatsApp",
-    potency: "القوة",
-    confirmBatch: "تأكيد الدفعة الحالية",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": { effects: ["نشاط", "استرخاء", "توازن"], mood: "ارتفاع صاف ونهاية سهلة", useCase: "الزهرة الداخلية الرئيسية لأول سؤال عن القائمة." },
-      "blue-dream": { effects: ["ناعم", "اجتماعي", "متوازن"], mood: "سهل وبرائحة توت", useCase: "اسأل عنه لاتجاه hybrid ألطف." },
-      "og-kush": { effects: ["كلاسيكي", "هادئ", "ترابي"], mood: "صنوبري وهادئ", useCase: "لملف Kush مألوف." },
-      "northern-lights": { effects: ["استرخاء عميق", "هادئ", "جسدي"], mood: "بطيء ومستقر", useCase: "عندما يكون الاسترخاء هو الهدف." },
-      "green-crack": { effects: ["تركيز", "طاقة", "سطوع"], mood: "يقظ وحاد", useCase: "لاتجاه sativa نهاري." },
-      "jack-herer": { effects: ["إبداع", "وضوح", "نشاط"], mood: "واضح ونشط", useCase: "لملف إبداعي صاف." },
-    },
-    effectsEyebrow: "اختر حسب التأثير",
-    effectsTitle: "أخبرنا بالمزاج المطلوب، وليس اسم السلالة فقط",
-    effectsLead: "أسرع تدفق عبر WhatsApp: أين أنت في باتايا، ما التأثير المطلوب، وهل يهمك الاستلام أو إمكانية التوصيل.",
-    effectsCta: "طابقني حسب التأثير",
-    effectCards: [
-      { title: "Relax", body: "اقتراحات indica أو hybrid أكثر هدوءاً." },
-      { title: "Social", body: "زهور متوازنة لمساء خفيف." },
-      { title: "Focus", body: "اتجاه sativa بإحساس أوضح." },
-      { title: "Strong", body: "اسأل فقط عن الدُفعات القوية ذات البيانات المؤكدة." },
+      "اعثر على Labs Cannabis في Pattaya 13 Alley. افتح بطاقة Google Maps المطابقة أو استخدم WhatsApp للاتجاهات وتنسيق الزيارة.",
+    eyebrow: "متجر القنب في باتايا",
+    h1: "اعثر على Labs Cannabis في باتايا.",
+    lead:
+      "استخدم دبوس الخريطة والعنوان والهاتف أدناه. يظهر المتجر حالياً على Google Maps باسم LABS DISPENSARY.",
+    primaryCta: "اطلب الاتجاهات",
+    mapCta: "فتح Google Maps",
+    proof: ["دبوس خريطة دقيق", "رابط البطاقة العامة", "Pattaya 13 Alley"],
+    identityTitle: "موقع واحد واسمان للتعرّف عليهما",
+    identityBody:
+      "Labs Cannabis هو اسم الموقع الإلكتروني. ويظهر الموقع نفسه في باتايا على Google Maps باسم LABS DISPENSARY.",
+    trustTitle: "خطط للزيارة باستخدام معلومات عامة",
+    trustItems: [
+      "يفتح زر الخريطة بطاقة Google Maps الحالية مباشرة.",
+      "يتطابق العنوان والهاتف مع معلومات الاتصال المحلية المنشورة على هذا الموقع.",
+      "يُستخدم WhatsApp للحصول على الاتجاهات وتنسيق الزيارة.",
     ],
-    freshnessEyebrow: "الطزاجة أولاً",
-    freshnessTitle: "زهور حقيقية، متجر حقيقي، والمخزون الحالي عبر الدردشة",
-    freshnessBody: "الموقع واجهة عرض وليس عربة شراء. اطلب صور اليوم والطزاجة والتأثيرات والتوفر قبل التحرك.",
-    dealsEyebrow: "طلبات شائعة",
-    dealsTitle: "عروض بدون checkout عام",
-    dealsLead: "استخدمها كبداية للمحادثة. التوفر والتوصيل وشروط أي عرض تتم فقط في WhatsApp.",
-    dealCta: "اسأل عن العرض الحالي",
-    trustEyebrow: "إشارات ثقة",
-    trustTitle: "متجر حقيقي في باتايا، وليس قائمة مجهولة",
-    trustItems: ["Google listing والخريطة قبل الزيارة", "بوابة عمر 20+ قبل المحتوى", "لا يوجد checkout أو دفع أو order form عام", "القائمة والوثائق والتوصيل تتم بشكل خاص"],
-    deliveryEyebrow: "إمكانية التوصيل",
-    deliveryTitle: "في باتايا قد يكون التوصيل ممكناً بعد الدردشة",
-    deliveryBody: "أرسل منطقتك أولاً: Jomtien أو Walking Street أو Naklua أو Pratumnak أو Central Pattaya أو Soi Hollywood. نؤكد الإمكانية في WhatsApp.",
-    deliveryCta: "تحقق من إمكانية التوصيل",
-    locationEyebrow: "الموقع",
-    locationTitle: "Soi Hollywood قرب Walking Street",
-    locationBody: "استخدم Maps لأحدث التفاصيل والاتجاهات. راسلنا قبل الزيارة إذا أردت قائمة اليوم وملاحظات الطزاجة.",
-    openMaps: "افتح الخريطة",
-    faqTitle: "الأسئلة الشائعة",
+    areasEyebrow: "أدلة مناطق باتايا",
+    areasTitle: "خطط لمسارك من مناطق باتايا",
+    areasLead:
+      "اختر منطقة للتوجيه المحلي، ثم استخدم دبوس Google Maps الدقيق للمسار النهائي.",
+    areaCta: "عرض دليل المسار",
+    allAreas: "عرض جميع أدلة المواقع",
+    locationEyebrow: "الزيارة",
+    locationTitle: "الموقع في Pattaya 13 Alley",
+    locationBody:
+      "افتح البطاقة العامة قبل التوجه. إذا احتجت مساعدة في العثور على المدخل، اسأل عبر WhatsApp.",
+    phoneLabel: "الهاتف",
+    faqTitle: "أسئلة الموقع",
     faq: [
-      { q: "هل يمكن الطلب أو الدفع على الموقع؟", a: "لا. لا يوجد checkout أو دفع أو حجز أو order form عام. التفاصيل عبر WhatsApp." },
-      { q: "هل يمكن رؤية قائمة اليوم؟", a: "نعم. استخدم WhatsApp للسؤال عن السلالات الحالية والتأثيرات والطزاجة والتوفر." },
-      { q: "هل التوصيل مضمون؟", a: "لا. التوصيل احتمال يناقش بشكل خاص بعد فحص المنطقة والتفاصيل." },
+      {
+        q: "ما الاسم الذي أبحث عنه في Google Maps؟",
+        a: "يظهر Labs Cannabis على Google Maps باسم LABS DISPENSARY.",
+      },
+      {
+        q: "أين يقع المتجر؟",
+        a: "العنوان المنشور هو 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
+      },
+      {
+        q: "كيف أطلب الاتجاهات؟",
+        a: "افتح بطاقة Google Maps للمسار أو استخدم WhatsApp للاتجاهات وتنسيق الزيارة.",
+      },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "مرحباً Labs Cannabis. أنا في باتايا وأرغب في الاتجاهات والمساعدة في تنسيق زيارة المتجر.",
   },
-  ja: {
-    title: "パタヤの大麻 | 本日のメニュー・品種・効果 | Labs Cannabis",
+  zh: {
+    title: "芭提雅大麻商店 | 地图与路线 | Labs Cannabis",
     description:
-      "パタヤの新鮮な大麻メニュー。人気フラワー、pre-roll deals、効果、掲載価格、Soi Hollywood の場所、配達可能性、WhatsApp で素早く相談。",
-    eyebrow: "パタヤ大麻メニュー",
-    h1: "パタヤの大麻。本日の新鮮メニュー。",
-    lead: "Indoor flower、人気品種、分かりやすい効果、pre-roll deals、Soi Hollywood の実店舗、20歳以上向けの WhatsApp 対応。",
-    primaryCta: "WhatsAppで本日のメニューを依頼",
-    mapCta: "Google Mapsを開く",
-    proof: ["20歳以上のみ", "新鮮な花", "効果で選べる", "Soi Hollywood", "配達相談可"],
-    menuEyebrow: "品種と効果",
-    menuTitle: "方向性を選び、今日の新鮮在庫を確認",
-    menuLead: "カードにはタイプ、効果、ムード、用途、現在ロットにデータがある場合の potency notes を表示します。在庫は WhatsApp で確認します。",
-    askStrain: "WhatsAppで聞く",
-    potency: "ポテンシー",
-    confirmBatch: "現在ロットを確認",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": { effects: ["高揚", "リラックス", "バランス"], mood: "クリアな上がりと穏やかな終わり", useCase: "最初に聞きやすい主力 indoor flower。" },
-      "blue-dream": { effects: ["滑らか", "社交的", "バランス"], mood: "軽くベリー感あり", useCase: "柔らかい hybrid 方向が欲しい時に。" },
-      "og-kush": { effects: ["クラシック", "穏やか", "土っぽい"], mood: "松の香りと落ち着き", useCase: "馴染みの Kush profile に。" },
-      "northern-lights": { effects: ["深いリラックス", "静か", "身体寄り"], mood: "ゆっくり落ち着く", useCase: "リラックス重視の時に。" },
-      "green-crack": { effects: ["集中", "エネルギー", "明るい"], mood: "シャープで覚醒感", useCase: "日中向け sativa 方向に。" },
-      "jack-herer": { effects: ["創造性", "明瞭", "高揚"], mood: "クリアでアクティブ", useCase: "頭をクリアにしたい creative profile に。" },
-    },
-    effectsEyebrow: "効果で選ぶ",
-    effectsTitle: "品種名だけでなく、欲しい気分を伝えてください",
-    effectsLead: "WhatsApp では、パタヤのどこにいるか、欲しい効果、pickup か配達可能性を知りたいかを伝えるのが最短です。",
-    effectsCta: "効果で提案してもらう",
-    effectCards: [
-      { title: "Relax", body: "Indica寄り、または落ち着いたhybrid。" },
-      { title: "Social", body: "軽い夜向けのバランス花。" },
-      { title: "Focus", body: "頭がクリアなsativa方向。" },
-      { title: "Strong", body: "確認済みデータがある高ポテンシーの現行ロットのみ。" },
+      "在 Pattaya 13 Alley 找到 Labs Cannabis。打开对应的 Google Maps 商家信息，或通过 WhatsApp 获取路线并协调到店。",
+    eyebrow: "芭提雅大麻商店",
+    h1: "在芭提雅找到 Labs Cannabis。",
+    lead:
+      "请使用下方准确的地图定位、地址和电话。该店目前在 Google Maps 上显示为 LABS DISPENSARY。",
+    primaryCta: "询问路线",
+    mapCta: "打开 Google Maps",
+    proof: ["准确地图定位", "公开商家信息链接", "Pattaya 13 Alley"],
+    identityTitle: "同一地点，两个可识别名称",
+    identityBody:
+      "Labs Cannabis 是网站名称。芭提雅的同一地点在 Google Maps 上显示为 LABS DISPENSARY。",
+    trustTitle: "根据公开信息规划到店",
+    trustItems: [
+      "地图按钮会直接打开当前 Google Maps 商家信息。",
+      "地址和电话与本网站发布的本地联系方式一致。",
+      "WhatsApp 用于获取路线并协调到店。",
     ],
-    freshnessEyebrow: "鮮度優先",
-    freshnessTitle: "実物の花、実店舗、現在在庫はチャットで確認",
-    freshnessBody: "このサイトはカートではなく storefront です。移動前に本日の写真、鮮度、効果、在庫を確認してください。",
-    dealsEyebrow: "人気の相談",
-    dealsTitle: "公開checkoutなしのdeals",
-    dealsLead: "会話の入口として使ってください。在庫、配達詳細、deal 条件は WhatsApp のみで扱います。",
-    dealCta: "現在のdealを聞く",
-    trustEyebrow: "信頼シグナル",
-    trustTitle: "匿名メニューではなく、パタヤの実店舗",
-    trustItems: ["訪問前にGoogle listingと地図を確認", "コンテンツ前に20+ age gate", "公開checkout、支払い、order formなし", "メニュー、書類、配送詳細は非公開で確認"],
-    deliveryEyebrow: "配達可能性",
-    deliveryTitle: "パタヤではチャット後に配達可能な場合があります",
-    deliveryBody: "Jomtien、Walking Street、Naklua、Pratumnak、Central Pattaya、Soi Hollywood などエリアを先に送ってください。WhatsAppで確認します。",
-    deliveryCta: "配達可能性を確認",
-    locationEyebrow: "場所",
-    locationTitle: "Walking Street 近くの Soi Hollywood",
-    locationBody: "最新情報と道順は Maps で確認してください。来店前に本日のメニューと鮮度メモが必要ならメッセージを。",
-    openMaps: "地図を開く",
-    faqTitle: "よくある質問",
+    areasEyebrow: "芭提雅区域指南",
+    areasTitle: "从芭提雅各区域规划路线",
+    areasLead:
+      "选择区域查看方位说明，最后请使用准确的 Google Maps 定位导航。",
+    areaCta: "查看路线指南",
+    allAreas: "查看全部地点指南",
+    locationEyebrow: "到店",
+    locationTitle: "Pattaya 13 Alley 地点",
+    locationBody:
+      "出发前请打开公开商家信息。如需寻找入口的帮助，请通过 WhatsApp 询问。",
+    phoneLabel: "电话",
+    faqTitle: "地点问题",
     faq: [
-      { q: "サイトで注文や支払いはできますか？", a: "できません。公開 checkout、支払い、予約、order form はありません。詳細は WhatsApp で確認します。" },
-      { q: "本日のメニューを見られますか？", a: "はい。現在の品種、効果、鮮度、在庫は WhatsApp で聞いてください。" },
-      { q: "配達は保証されますか？", a: "いいえ。配達はエリアと詳細を確認した後に非公開で相談する可能性です。" },
+      {
+        q: "在 Google Maps 上应搜索什么名称？",
+        a: "Labs Cannabis 在 Google Maps 上显示为 LABS DISPENSARY。",
+      },
+      {
+        q: "商店在哪里？",
+        a: "公开地址为 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150。",
+      },
+      {
+        q: "如何询问路线？",
+        a: "打开 Google Maps 商家信息进行导航，或通过 WhatsApp 获取路线并协调到店。",
+      },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "你好，Labs Cannabis。我在芭提雅，希望获取路线并协调到店。",
   },
   ko: {
-    title: "파타야 대마초 | 오늘 메뉴, 품종, 효과 | Labs Cannabis",
+    title: "파타야 대마초 매장 | 지도와 길 안내 | Labs Cannabis",
     description:
-      "파타야 신선 메뉴: 인기 flower, pre-roll deals, 효과, 표시된 가격, Soi Hollywood 위치, 배달 가능성, 빠른 WhatsApp 문의.",
-    eyebrow: "파타야 대마초 메뉴",
-    h1: "파타야 대마초. 오늘의 신선 메뉴.",
-    lead: "Indoor flower, 인기 품종, 명확한 효과, pre-roll deals, Soi Hollywood 실제 매장, 성인 20+를 위한 빠른 WhatsApp.",
-    primaryCta: "WhatsApp으로 오늘 메뉴 받기",
+      "Pattaya 13 Alley의 Labs Cannabis를 찾으세요. 해당 Google Maps 정보를 열거나 WhatsApp으로 길 안내와 방문 조율을 문의할 수 있습니다.",
+    eyebrow: "파타야 대마초 매장",
+    h1: "파타야에서 Labs Cannabis 찾기.",
+    lead:
+      "아래의 정확한 지도 핀, 주소, 전화번호를 이용하세요. Google Maps에는 현재 LABS DISPENSARY로 표시됩니다.",
+    primaryCta: "길 안내 문의",
     mapCta: "Google Maps 열기",
-    proof: ["20+ 전용", "신선한 flower", "효과별 추천", "Soi Hollywood", "배달 가능성"],
-    menuEyebrow: "품종과 효과",
-    menuTitle: "방향을 고른 뒤 신선한 재고를 확인하세요",
-    menuLead: "카드는 타입, 효과, 분위기, 사용 상황, 현재 배치 데이터가 있는 경우 potency notes를 먼저 보여줍니다. 재고는 WhatsApp에서 확인합니다.",
-    askStrain: "WhatsApp 문의",
-    potency: "강도",
-    confirmBatch: "현재 배치 확인",
-    typeLabels: { indica: "Indica", sativa: "Sativa", hybrid: "Hybrid" },
-    strainProfiles: {
-      "white-widow": { effects: ["상쾌함", "이완", "균형"], mood: "맑은 업리프트와 부드러운 마무리", useCase: "첫 메뉴 문의에 좋은 대표 indoor flower." },
-      "blue-dream": { effects: ["부드러움", "소셜", "균형"], mood: "편안한 베리 느낌", useCase: "더 부드러운 hybrid 방향을 원할 때." },
-      "og-kush": { effects: ["클래식", "차분함", "흙향"], mood: "소나무 향과 안정감", useCase: "익숙한 Kush profile을 원할 때." },
-      "northern-lights": { effects: ["깊은 이완", "조용함", "바디감"], mood: "느리고 안정적", useCase: "이완이 주목적일 때." },
-      "green-crack": { effects: ["집중", "에너지", "밝음"], mood: "선명하고 깨어 있음", useCase: "낮 시간 sativa 방향에." },
-      "jack-herer": { effects: ["창의", "명료", "업리프트"], mood: "맑고 활동적", useCase: "명료한 creative profile에." },
-    },
-    effectsEyebrow: "효과로 선택",
-    effectsTitle: "품종명뿐 아니라 원하는 느낌을 알려주세요",
-    effectsLead: "가장 빠른 WhatsApp 흐름: 파타야 어디인지, 원하는 효과, 픽업 또는 배달 가능성 여부를 말해주세요.",
-    effectsCta: "효과로 추천받기",
-    effectCards: [
-      { title: "Relax", body: "Indica 또는 더 차분한 hybrid 추천." },
-      { title: "Social", body: "가벼운 저녁용 균형 flower." },
-      { title: "Focus", body: "머리가 더 맑은 sativa 방향." },
-      { title: "Strong", body: "검증된 데이터가 있는 강한 현재 배치만 문의." },
+    proof: ["정확한 지도 핀", "공개 업체 정보 링크", "Pattaya 13 Alley"],
+    identityTitle: "같은 장소를 나타내는 두 이름",
+    identityBody:
+      "Labs Cannabis는 웹사이트 이름입니다. 파타야의 같은 장소가 Google Maps에는 LABS DISPENSARY로 표시됩니다.",
+    trustTitle: "공개 정보로 방문 계획하기",
+    trustItems: [
+      "지도 버튼은 현재 Google Maps 업체 정보를 직접 엽니다.",
+      "주소와 전화번호는 이 웹사이트에 게시된 현지 연락처와 일치합니다.",
+      "WhatsApp은 길 안내와 방문 조율에 사용됩니다.",
     ],
-    freshnessEyebrow: "신선함 우선",
-    freshnessTitle: "실제 flower, 실제 매장, 현재 재고는 채팅으로",
-    freshnessBody: "이 사이트는 장바구니가 아니라 storefront입니다. 이동 전 오늘 사진, 신선도, 효과, 재고를 문의하세요.",
-    dealsEyebrow: "인기 문의",
-    dealsTitle: "공개 checkout 없는 deals",
-    dealsLead: "대화 시작점으로 사용하세요. 재고, 배달 세부사항, deal 조건은 WhatsApp에서만 처리합니다.",
-    dealCta: "현재 deal 문의",
-    trustEyebrow: "신뢰 신호",
-    trustTitle: "익명 메뉴가 아닌 파타야 실제 매장",
-    trustItems: ["방문 전 Google listing과 지도 확인", "콘텐츠 전 20+ age gate", "공개 checkout, 결제, order form 없음", "메뉴, 문서, 배송 세부사항은 비공개 확인"],
-    deliveryEyebrow: "배달 가능성",
-    deliveryTitle: "파타야에서는 채팅 후 배달이 가능할 수 있습니다",
-    deliveryBody: "Jomtien, Walking Street, Naklua, Pratumnak, Central Pattaya, Soi Hollywood 등 지역을 먼저 보내주세요. WhatsApp에서 가능 여부를 확인합니다.",
-    deliveryCta: "배달 가능성 확인",
-    locationEyebrow: "위치",
-    locationTitle: "Walking Street 근처 Soi Hollywood",
-    locationBody: "최신 정보와 길찾기는 Maps를 사용하세요. 방문 전 오늘 메뉴와 신선도 메모가 필요하면 메시지 주세요.",
-    openMaps: "지도 열기",
-    faqTitle: "자주 묻는 질문",
+    areasEyebrow: "파타야 지역 가이드",
+    areasTitle: "파타야 각 지역에서 오는 길 계획",
+    areasLead:
+      "지역을 선택해 위치 안내를 확인하고, 마지막 경로는 정확한 Google Maps 핀을 이용하세요.",
+    areaCta: "경로 가이드 보기",
+    allAreas: "모든 위치 가이드 보기",
+    locationEyebrow: "방문",
+    locationTitle: "Pattaya 13 Alley 위치",
+    locationBody:
+      "출발 전에 공개 업체 정보를 여세요. 입구를 찾는 데 도움이 필요하면 WhatsApp으로 문의하세요.",
+    phoneLabel: "전화",
+    faqTitle: "위치 관련 질문",
     faq: [
-      { q: "웹사이트에서 주문이나 결제가 가능한가요?", a: "아니요. 공개 checkout, 결제, 예약, order form은 없습니다. 세부사항은 WhatsApp에서 문의하세요." },
-      { q: "오늘 메뉴를 볼 수 있나요?", a: "네. 현재 품종, 효과, 신선도, 재고는 WhatsApp으로 문의하세요." },
-      { q: "배달은 보장되나요?", a: "아니요. 배달은 지역과 세부사항 확인 후 비공개로 논의하는 가능성입니다." },
+      {
+        q: "Google Maps에서 어떤 이름을 찾아야 하나요?",
+        a: "Labs Cannabis는 Google Maps에 LABS DISPENSARY로 표시됩니다.",
+      },
+      {
+        q: "매장은 어디에 있나요?",
+        a: "게시된 주소는 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150입니다.",
+      },
+      {
+        q: "길 안내는 어떻게 문의하나요?",
+        a: "Google Maps 업체 정보를 열어 경로를 확인하거나 WhatsApp으로 길 안내와 방문 조율을 문의하세요.",
+      },
     ],
-    whatsapp: {
-      menu: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send today’s fresh menu, effects, location, and pickup/delivery options.",
-      effect: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please help me choose by effect: relax / social / focus / strong.",
-      deal: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please send the current flower and pre-roll deals.",
-      delivery: "Hi Labs Cannabis, I am 20+ and in Pattaya. Can you check delivery possibility for my area?",
-      location: "Hi Labs Cannabis, I am 20+ and near Soi Hollywood. Please send today’s menu and location details.",
-      strainPrefix: "Hi Labs Cannabis, I am 20+ and in Pattaya. Please tell me today’s availability for",
-    },
+    whatsappVisit:
+      "안녕하세요, Labs Cannabis. 파타야에 있으며 매장 길 안내와 방문 조율을 부탁드립니다.",
   },
-} satisfies Record<Locale, HomeCopy>;
+  ja: {
+    title: "パタヤの大麻ショップ | 地図と道順 | Labs Cannabis",
+    description:
+      "Pattaya 13 AlleyのLabs Cannabisを確認。該当するGoogle Maps情報を開くか、WhatsAppで道順と来店調整を問い合わせできます。",
+    eyebrow: "パタヤの大麻ショップ",
+    h1: "パタヤでLabs Cannabisを見つける。",
+    lead:
+      "下記の正確な地図ピン、住所、電話番号をご利用ください。Google Mapsでは現在LABS DISPENSARYと表示されています。",
+    primaryCta: "道順を問い合わせ",
+    mapCta: "Google Mapsを開く",
+    proof: ["正確な地図ピン", "公開リスティングへのリンク", "Pattaya 13 Alley"],
+    identityTitle: "同じ場所を示す二つの名称",
+    identityBody:
+      "Labs Cannabisはウェブサイト名です。パタヤの同じ場所はGoogle MapsでLABS DISPENSARYと表示されています。",
+    trustTitle: "公開情報で来店を計画",
+    trustItems: [
+      "地図ボタンは現在のGoogle Maps情報を直接開きます。",
+      "住所と電話番号は、このサイトで公開されている現地連絡先と一致します。",
+      "WhatsAppは道順の案内と来店調整に利用できます。",
+    ],
+    areasEyebrow: "パタヤのエリアガイド",
+    areasTitle: "パタヤ各地からの経路を計画",
+    areasLead:
+      "エリアを選んで位置の目安を確認し、最終経路には正確なGoogle Mapsピンをご利用ください。",
+    areaCta: "経路ガイドを見る",
+    allAreas: "すべての場所ガイドを見る",
+    locationEyebrow: "来店",
+    locationTitle: "Pattaya 13 Alleyの場所",
+    locationBody:
+      "出発前に公開リスティングを開いてください。入口を見つけるための案内が必要な場合はWhatsAppでお問い合わせください。",
+    phoneLabel: "電話",
+    faqTitle: "場所についての質問",
+    faq: [
+      {
+        q: "Google Mapsではどの名前を探せばよいですか？",
+        a: "Labs CannabisはGoogle MapsでLABS DISPENSARYと表示されています。",
+      },
+      {
+        q: "店舗はどこにありますか？",
+        a: "公開住所は32 Pattaya 13 Alley, Pattaya, Chon Buri 20150です。",
+      },
+      {
+        q: "道順はどう確認できますか？",
+        a: "Google Maps情報で経路を開くか、WhatsAppで道順と来店調整をお問い合わせください。",
+      },
+    ],
+    whatsappVisit:
+      "こんにちは、Labs Cannabis。パタヤにいます。店舗までの道順と来店調整をお願いします。",
+  },
+};
 
 const { lang } = Astro.params;
-const locale = lang as Locale;
+const locale = (lang ?? "en") as Locale;
 const copy = HOME_COPY[locale] ?? HOME_COPY.en;
-const local = HOME_LOCAL[locale] ?? HOME_LOCAL.en;
-const faq = [...copy.faq, ...local.faq];
-const numberLocale = LOCALE_HREFLANG[locale];
-const baht = (value: number) => new Intl.NumberFormat(numberLocale).format(value);
-const waHref = (message: string) => CONTACT.whatsappWithMsg(message);
-const strainHref = (strain: Strain) => waHref(`${copy.whatsapp.strainPrefix} ${strain.name}.`);
-const featuredDeals = PRICE_LADDER.filter((tier) => ["1g", "10g", "30g"].includes(tier.weight));
-const heroStyle = `background-image: linear-gradient(90deg, rgba(4, 9, 5, 0.84), rgba(4, 9, 5, 0.48)), url('${HOME_MEDIA.hero.src}')`;
+const addressLine =
+  ADDRESS.street + ", " + ADDRESS.locality + ", " + ADDRESS.region + " " + ADDRESS.postalCode;
+const identityBridge = BRAND.name + " — listed on Google Maps as " + GOOGLE.listingName;
+const mapsHref = getMapsSearchUrl();
+const visitHref = CONTACT.whatsappWithMsg(copy.whatsappVisit) + "&source=map";
+const enRuIntentLinks = locale === "ru"
+  ? {
+      nearMe: "Магазин каннабиса рядом в Паттайе",
+      walking: "Маршрут от Walking Street",
+      delivery: "Актуальные правила доставки каннабиса в Паттайе",
+    }
+  : {
+      nearMe: "Cannabis shop near me in Pattaya",
+      walking: "Directions from Walking Street",
+      delivery: "Current cannabis delivery rules in Pattaya",
+    };
 ---
 
 <PageLayout
@@ -651,303 +414,216 @@ const heroStyle = `background-image: linear-gradient(90deg, rgba(4, 9, 5, 0.84),
   pathSuffix=""
   title={copy.title}
   description={copy.description}
-  keywords={["cannabis Pattaya", "weed shop Pattaya", "cannabis menu Pattaya", "Pattaya delivery", "Soi Hollywood cannabis"]}
-  faq={faq}
+  keywords={[
+    "cannabis shop Pattaya",
+    "Labs Dispensary Pattaya",
+    "Pattaya 13 Alley cannabis",
+    "cannabis shop directions Pattaya",
+  ]}
+  faq={copy.faq}
   pageType="home"
 >
   <main>
-    <section id="home-hero" class="relative overflow-hidden bg-text bg-cover bg-center text-white" style={heroStyle}>
-      <div class="absolute inset-0 bg-[center_35%] bg-cover opacity-0"></div>
-      <div class="mx-auto grid min-h-[calc(100svh-4.5rem)] max-w-6xl content-end gap-8 px-4 py-10 md:min-h-[680px] md:grid-cols-[1.04fr_0.96fr] md:items-end md:py-16">
-        <div class="max-w-3xl">
-          <p class="text-sm font-bold uppercase tracking-[0.16em] text-emerald">{copy.eyebrow}</p>
-          <h1 class="mt-4 max-w-4xl text-5xl font-black leading-[0.98] text-white md:text-7xl">
-            {copy.h1}
-          </h1>
-          <p class="mt-5 max-w-2xl text-lg leading-relaxed text-white/86 md:text-xl">{copy.lead}</p>
-          <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={waHref(copy.whatsapp.menu)}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-lg bg-emerald px-5 py-3.5 text-base font-black text-black shadow-lg shadow-black/20"
-              data-track="contact_whatsapp_click"
-              data-whatsapp-source="hero"
-              data-whatsapp-ref="hero_menu"
-              data-utm-campaign="hero"
-            >
-              {copy.primaryCta}
-            </a>
-            <a
-              href={getMapsSearchUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-lg border border-white/45 bg-white/14 px-5 py-3.5 text-base font-bold text-white backdrop-blur-md"
-              data-track="map_open_click"
-              data-whatsapp-source="map"
-              data-track-placement="hero"
-              data-track-detail="hero:maps"
-            >
-              {copy.mapCta}
-            </a>
-          </div>
+    <section class="px-4 pb-12 pt-10 sm:pt-16">
+      <div class="mx-auto max-w-5xl">
+        <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.eyebrow}</p>
+        <h1 class="mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">{copy.h1}</h1>
+        <p class="mt-5 max-w-2xl text-lg leading-relaxed text-text-muted">{copy.lead}</p>
+        <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+          <a
+            href={visitHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="rounded-xl bg-emerald px-6 py-3.5 text-center font-bold text-black"
+            data-track="hero_whatsapp_click"
+            data-track-placement="hero"
+            data-track-detail="hero:directions"
+            data-wa-source="map"
+            data-whatsapp-ref="hero_directions"
+            data-utm-campaign="directions"
+          >
+            {copy.primaryCta}
+          </a>
+          <a
+            href={mapsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-surface px-6 py-3.5 text-center font-bold"
+            data-track="map_open_click"
+            data-track-placement="hero"
+            data-track-detail="hero:maps"
+          >
+            {copy.mapCta}
+          </a>
         </div>
-        <div class="grid gap-3 rounded-lg border border-white/18 bg-black/34 p-4 backdrop-blur-md md:mb-1">
-          <div class="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-2">
-            {copy.proof.map((item) => (
-              <div class="rounded-lg border border-white/14 bg-white/10 px-3 py-2 text-sm font-bold text-white">{item}</div>
+        <ul class="mt-6 flex flex-wrap gap-2" aria-label={copy.trustTitle}>
+          {copy.proof.map((item) => (
+            <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-sm text-text-muted">{item}</li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <section class="border-y border-border bg-bg-card/40 px-4 py-12">
+      <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
+        <article class="card-surface p-6">
+          <h2 class="text-2xl font-bold">{copy.identityTitle}</h2>
+          <p class="mt-3 leading-relaxed text-text-muted">{copy.identityBody}</p>
+          <p class="mt-5 font-bold">{identityBridge}</p>
+          <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
+          <a
+            class="mt-2 inline-flex font-bold text-text hover:text-emerald-dim"
+            href={CONTACT.tel}
+            data-track="contact_call_click"
+            data-track-placement="home_identity"
+            data-track-detail="home_identity:phone"
+          >
+            {CONTACT.phoneDisplay}
+          </a>
+        </article>
+        <article class="card-surface p-6">
+          <h2 class="text-2xl font-bold">{copy.trustTitle}</h2>
+          <ul class="mt-4 space-y-3 text-text-muted">
+            {copy.trustItems.map((item) => (
+              <li class="flex gap-3"><span aria-hidden="true" class="text-emerald">✓</span><span>{item}</span></li>
             ))}
-          </div>
-          <div class="rounded-lg bg-white px-4 py-3 text-text">
-            <p class="text-sm font-bold text-emerald-dim">{GOOGLE.rating} Google rating · {GOOGLE.reviewCount} reviews</p>
-            <p class="mt-1 text-sm leading-relaxed text-text-muted">
-              {ADDRESS.street}, {ADDRESS.locality}. {HOURS.open}-{HOURS.close}.
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="areas" class="px-4 py-14">
+      <div class="mx-auto max-w-5xl">
+        <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.areasEyebrow}</p>
+        <h2 class="mt-2 text-3xl font-bold">{copy.areasTitle}</h2>
+        <p class="mt-3 max-w-2xl leading-relaxed text-text-muted">{copy.areasLead}</p>
+        <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <a
+            href={localePath(locale, "labs-dispensary-pattaya")}
+            class="card-surface p-4 hover:border-emerald-dim"
+            data-track="local_intent_click"
+            data-track-placement="home"
+            data-track-detail="home:labs-dispensary"
+            data-seo-context-link
+          >
+            <span class="block text-lg font-bold">{identityBridge}</span>
+            <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
+          </a>
+          {(locale === "en" || locale === "ru") && (
+            <>
+              <a
+                href={localePath(locale, "cannabis-near-me-pattaya")}
+                class="card-surface p-4 hover:border-emerald-dim"
+                data-track="local_intent_click"
+                data-track-placement="home"
+                data-track-detail="home:near-me"
+                data-seo-context-link
+              >
+                <span class="block text-lg font-bold">{enRuIntentLinks.nearMe}</span>
+                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
+              </a>
+              <a
+                href={localePath(locale, "areas/walking-street")}
+                class="card-surface p-4 hover:border-emerald-dim"
+                data-track="local_intent_click"
+                data-track-placement="home"
+                data-track-detail="home:walking-street"
+                data-seo-context-link
+              >
+                <span class="block text-lg font-bold">{enRuIntentLinks.walking}</span>
+                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
+              </a>
+              <a
+                href={localePath(locale, "delivery/pattaya")}
+                class="card-surface p-4 hover:border-emerald-dim"
+                data-track="local_intent_click"
+                data-track-placement="home"
+                data-track-detail="home:delivery-rules"
+                data-seo-context-link
+              >
+                <span class="block text-lg font-bold">{enRuIntentLinks.delivery}</span>
+                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
+              </a>
+            </>
+          )}
+        </div>
+        <a href={localePath(locale, "locations")} class="mt-6 inline-flex font-bold text-emerald-dim hover:underline">
+          {copy.allAreas} →
+        </a>
+      </div>
+    </section>
+
+    <section id="visit" class="border-y border-border bg-bg-card/40 px-4 py-14">
+      <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.locationEyebrow}</p>
+          <h2 class="mt-2 text-3xl font-bold">{copy.locationTitle}</h2>
+          <p class="mt-3 leading-relaxed text-text-muted">{copy.locationBody}</p>
+          <div class="mt-5 rounded-xl border border-border bg-bg-card p-5">
+            <p class="font-bold">{identityBridge}</p>
+            <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
+            <p class="mt-2 text-text-muted">
+              {copy.phoneLabel}: <a
+                href={CONTACT.tel}
+                class="font-bold text-text hover:text-emerald-dim"
+                data-track="contact_call_click"
+                data-track-placement="home_location"
+                data-track-detail="home_location:phone"
+              >{CONTACT.phoneDisplay}</a>
             </p>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="menu" class="bg-bg py-14 md:py-18">
-      <div class="mx-auto max-w-6xl px-4">
-        <div class="max-w-3xl">
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{copy.menuEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.menuTitle}</h2>
-          <p class="mt-4 text-base leading-relaxed text-text-muted md:text-lg">{copy.menuLead}</p>
-        </div>
-        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {ALL_STRAINS.map((strain) => {
-            const profile = copy.strainProfiles[strain.slug] ?? copy.strainProfiles["white-widow"];
-            return (
-              <article class="rounded-lg border border-border bg-bg-card p-5 shadow-sm shadow-black/5">
-                <div class="flex items-start justify-between gap-3">
-                  <div>
-                    <p class="text-sm font-bold text-emerald-dim">{copy.typeLabels[strain.type]}</p>
-                    <h3 class="mt-1 text-2xl font-black text-text">{strain.name}</h3>
-                  </div>
-                  <p class="rounded-lg bg-bg-elevated px-3 py-2 text-sm font-bold text-text">
-                    {copy.potency}: {strain.thcPercent ? `${strain.thcPercent}%` : copy.confirmBatch}
-                  </p>
-                </div>
-                <div class="mt-4 flex flex-wrap gap-2">
-                  {profile.effects.map((effect) => (
-                    <span class="rounded-full bg-emerald/10 px-3 py-1 text-sm font-bold text-emerald-dim">{effect}</span>
-                  ))}
-                </div>
-                <p class="mt-4 text-base font-bold text-text">{profile.mood}</p>
-                <p class="mt-2 text-base leading-relaxed text-text-muted">{profile.useCase}</p>
-                <a
-                  href={strainHref(strain)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-text px-4 py-3 text-base font-bold text-white"
-                  data-track="contact_whatsapp_click"
-                  data-whatsapp-source="product_card"
-                  data-whatsapp-ref={strain.slug}
-                  data-utm-campaign="product_card"
-                  data-utm-content={strain.slug}
-                >
-                  {copy.askStrain}
-                </a>
-              </article>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-text py-14 text-white md:py-18">
-      <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[0.9fr_1.1fr]">
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald">{copy.effectsEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.effectsTitle}</h2>
-          <p class="mt-4 text-base leading-relaxed text-white/78 md:text-lg">{copy.effectsLead}</p>
-          <a
-            href={waHref(copy.whatsapp.effect)}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-emerald px-5 py-3.5 text-base font-black text-black sm:w-auto"
-            data-track="contact_whatsapp_click"
-            data-whatsapp-source="hero"
-            data-whatsapp-ref="effect_picker"
-            data-utm-campaign="effect_picker"
-          >
-            {copy.effectsCta}
-          </a>
-        </div>
-        <div class="grid gap-3 sm:grid-cols-2">
-          {copy.effectCards.map((item) => (
-            <article class="rounded-lg border border-white/16 bg-white/8 p-5">
-              <h3 class="text-2xl font-black">{item.title}</h3>
-              <p class="mt-2 text-base leading-relaxed text-white/78">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section id="fresh" class="bg-bg py-14 md:py-18">
-      <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-2 lg:items-center">
-        <div class="overflow-hidden rounded-lg border border-border bg-bg-card">
-          <img src={HOME_MEDIA.freshness.src} alt={HOME_MEDIA.freshness.alt} class="aspect-[4/3] w-full object-cover" loading="lazy" decoding="async" />
-        </div>
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{copy.freshnessEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.freshnessTitle}</h2>
-          <p class="mt-4 text-base leading-relaxed text-text-muted md:text-lg">{copy.freshnessBody}</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-bg-elevated py-14 md:py-18">
-      <div class="mx-auto max-w-6xl px-4">
-        <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{copy.dealsEyebrow}</p>
-        <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.dealsTitle}</h2>
-        <p class="mt-4 max-w-3xl text-base leading-relaxed text-text-muted md:text-lg">{copy.dealsLead}</p>
-        <div class="mt-8 grid gap-4 md:grid-cols-3">
-          {featuredDeals.map((tier) => (
-            <article class="rounded-lg border border-border bg-bg-card p-5 shadow-sm shadow-black/5">
-              <p class="text-sm font-bold text-emerald-dim">{tier.weight}</p>
-              <h3 class="mt-1 text-3xl font-black text-text">{baht(tier.total)}฿</h3>
-              <p class="mt-1 text-base text-text-muted">{baht(tier.perGram)}฿/g</p>
-              <a
-                href={waHref(`${copy.whatsapp.deal} ${tier.weight}.`)}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-emerald px-4 py-3 text-base font-black text-black"
-                data-track="contact_whatsapp_click"
-                data-whatsapp-source="product_card"
-                data-whatsapp-ref={`deal_${tier.weight}`}
-                data-utm-campaign="deals"
-                data-utm-content={tier.weight}
-              >
-                {copy.dealCta}
-              </a>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-bg py-14 md:py-18">
-      <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-[1.05fr_0.95fr]">
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{copy.trustEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.trustTitle}</h2>
-          <div class="mt-6 grid gap-3">
-            {copy.trustItems.map((item) => (
-              <p class="rounded-lg border border-border bg-bg-card px-4 py-3 text-base font-bold text-text">{item}</p>
-            ))}
-          </div>
-        </div>
-        <div class="rounded-lg border border-border bg-bg-card p-5 shadow-sm shadow-black/5">
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{copy.deliveryEyebrow}</p>
-          <h3 class="mt-2 text-3xl font-black leading-tight text-text">{copy.deliveryTitle}</h3>
-          <p class="mt-3 text-base leading-relaxed text-text-muted">{copy.deliveryBody}</p>
-          <a
-            href={waHref(copy.whatsapp.delivery)}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-5 inline-flex w-full items-center justify-center rounded-lg bg-text px-4 py-3 text-base font-bold text-white"
-            data-track="contact_whatsapp_click"
-            data-whatsapp-source="delivery"
-            data-whatsapp-ref="home_delivery"
-            data-utm-campaign="delivery"
-          >
-            {copy.deliveryCta}
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="areas" class="bg-bg-elevated py-14 md:py-18">
-      <div class="mx-auto max-w-6xl px-4">
-        <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">{local.eyebrow}</p>
-        <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{local.title}</h2>
-        <p class="mt-4 max-w-3xl text-base leading-relaxed text-text-muted md:text-lg">{local.lead}</p>
-        <div class="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {AREAS.map((area) => (
-            <article class="rounded-lg border border-border bg-bg-card p-4">
-              <h3 class="text-lg font-black text-text">{area.name[locale]}</h3>
-              <div class="mt-3 flex flex-col gap-2">
-                <a href={localePath(locale, `areas/${area.slug}`)} class="text-sm font-bold text-emerald-dim hover:underline">
-                  {renderCopy(local.shop, { area: area.name[locale] })}
-                </a>
-                <a href={localePath(locale, `delivery/${area.slug}`)} class="text-sm font-bold text-text-muted hover:text-emerald-dim">
-                  {renderCopy(local.delivery, { area: area.name[locale] })}
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href={localePath(locale, "cannabis-near-me-pattaya")} class="rounded-lg border border-border bg-bg-card px-4 py-2 text-sm font-bold hover:text-emerald-dim">{local.nearMe}</a>
-          <a href={localePath(locale, "how-to-buy-cannabis-pattaya")} class="rounded-lg border border-border bg-bg-card px-4 py-2 text-sm font-bold hover:text-emerald-dim">{local.howToBuy}</a>
-          <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="rounded-lg border border-border bg-bg-card px-4 py-2 text-sm font-bold hover:text-emerald-dim">{local.legal}</a>
-          <a href={localePath(locale, "locations")} class="rounded-lg border border-border bg-bg-card px-4 py-2 text-sm font-bold hover:text-emerald-dim">{local.more}</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="visit" class="bg-text py-14 text-white md:py-18">
-      <div class="mx-auto grid max-w-6xl gap-8 px-4 lg:grid-cols-2 lg:items-center">
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald">{copy.locationEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-black leading-tight md:text-5xl">{copy.locationTitle}</h2>
-          <p class="mt-4 text-base leading-relaxed text-white/78 md:text-lg">{copy.locationBody}</p>
-          <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
             <a
-              href={waHref(copy.whatsapp.location)}
+              href={mapsHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-lg bg-emerald px-5 py-3.5 text-base font-black text-black"
-              data-track="contact_whatsapp_click"
-              data-whatsapp-source="map"
-              data-whatsapp-ref="location_whatsapp"
-              data-utm-campaign="location"
-            >
-              {copy.primaryCta}
-            </a>
-            <a
-              href={getMapsSearchUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center justify-center rounded-lg border border-white/35 bg-white/10 px-5 py-3.5 text-base font-bold text-white"
+              class="rounded-xl bg-emerald px-5 py-3 text-center font-bold text-black"
               data-track="map_open_click"
               data-track-placement="location"
               data-track-detail="location:maps"
             >
-              {copy.openMaps}
+              {copy.mapCta}
+            </a>
+            <a
+              href={visitHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="card-surface px-5 py-3 text-center font-bold"
+              data-track="location_whatsapp_click"
+              data-track-placement="location"
+              data-track-detail="location:directions"
+              data-wa-source="map"
+              data-whatsapp-ref="visit_coordination"
+              data-utm-campaign="directions"
+            >
+              {copy.primaryCta}
             </a>
           </div>
         </div>
-        <div class="overflow-hidden rounded-lg border border-white/16 bg-white/8">
-          <iframe
-            src={`https://www.google.com/maps?q=${encodeURIComponent(GOOGLE.placeQuery)}&output=embed`}
-            width="100%"
-            height="360"
-            style="border:0"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            title="Labs Cannabis Pattaya map"
-          />
-        </div>
+        <iframe
+          src={getMapsEmbedUrl()}
+          title="Labs Cannabis location on Google Maps"
+          class="min-h-[360px] w-full rounded-2xl border border-border"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
       </div>
     </section>
 
-    <section class="bg-bg py-14 md:py-18">
-      <div class="mx-auto max-w-4xl px-4">
-        <h2 class="text-3xl font-black leading-tight md:text-5xl">{copy.faqTitle}</h2>
-        <div class="mt-7 grid gap-3">
-          {faq.map((item) => (
-            <article class="rounded-lg border border-border bg-bg-card p-5">
-              <h3 class="text-xl font-black text-text">{item.q}</h3>
-              <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
-            </article>
+    <section class="px-4 py-14">
+      <div class="mx-auto max-w-3xl">
+        <h2 class="text-3xl font-bold">{copy.faqTitle}</h2>
+        <div class="mt-6 space-y-3">
+          {copy.faq.map((item) => (
+            <details class="card-surface p-5">
+              <summary class="cursor-pointer font-bold">{item.q}</summary>
+              <p class="mt-3 leading-relaxed text-text-muted">{item.a}</p>
+            </details>
           ))}
         </div>
       </div>
     </section>
   </main>
-  <Footer locale={locale} />
+  <Footer locale={locale} pathSuffix="" />
 </PageLayout>
