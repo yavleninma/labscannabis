@@ -1,12 +1,15 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import MapBlock from "@/components/MapBlock.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
 import { renderCopy } from "@/data/area-copy";
 import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
-import { CONTACT, getMapsSearchUrl } from "@/data/site";
+import { getMapsDirectionsUrl } from "@/data/site";
+import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
@@ -33,8 +36,6 @@ const deliveryCopy: Record<
     intro: string;
     kicker: string;
     mapsCta: string;
-    whatsappCta: string;
-    whatsappMessage: string;
     scopeTitle: string;
     scopeBody: string;
     faqTitle: string;
@@ -53,12 +54,9 @@ const deliveryCopy: Record<
       "If you searched for cannabis delivery in {area}, the important current rule is that this page does not offer online ordering or delivery. Thai Government notices say cannabis flower is controlled and may not be sold through electronic channels or computer networks. Below are the official-source summary and directions to the physical location.",
     kicker: "Official rules and directions",
     mapsCta: "Get directions in Maps",
-    whatsappCta: "Ask about visit directions",
-    whatsappMessage:
-      "Hi Labs Cannabis. I am planning a physical visit from {area}. Please help with the location or directions only. I am not requesting an online order or delivery.",
-    scopeTitle: "Physical-visit information only",
+    scopeTitle: "What a visit from {area} looks like",
     scopeBody:
-      "Use Maps for the route. WhatsApp is available only to coordinate a physical visit or clarify directions. This page does not take online orders, payments, collection arrangements, or delivery requests and does not publish a menu, stock status, prices, or product photos.",
+      "Open Maps for the route from {area} — it is the fastest way in by taxi, bike or on foot. Bring identification showing you are 20 or older and a prescription issued in Thailand; both are checked at the counter. Ask on WhatsApp what is in the shop today and how to find the door before you cross Pattaya, and a person answers. Orders, payments and handover happen at the counter, never through this page.",
     faqTitle: "Online-sale rules and directions FAQ",
     relatedLabel: "Related official and location information",
     legalGuideLabel: "Thailand cannabis rules for tourists",
@@ -74,7 +72,7 @@ const deliveryCopy: Record<
       },
       {
         q: "What can WhatsApp be used for?",
-        a: "Only to confirm the physical location, ask for directions, or coordinate a visit. It is not an ordering, payment, collection, or delivery channel.",
+        a: "Ask what is in the shop today, how to find the door, what to bring, or anything about the paperwork — a person answers. What it is not is an ordering, payment, collection or delivery channel: all of that happens at the counter.",
       },
     ],
   },
@@ -87,12 +85,9 @@ const deliveryCopy: Record<
       "Если вы искали доставку каннабиса в {areaLocative}, важно знать: эта страница не предлагает онлайн-заказ или доставку. В уведомлениях правительства Таиланда сказано, что соцветия каннабиса контролируются и не могут продаваться через электронные каналы или компьютерные сети. Ниже — сводка официальных правил и маршрут к физической точке.",
     kicker: "Официальные правила и маршрут",
     mapsCta: "Построить маршрут в Maps",
-    whatsappCta: "Уточнить маршрут для визита",
-    whatsappMessage:
-      "Здравствуйте, Labs Cannabis. Я планирую лично приехать из {areaFrom}. Подскажите, пожалуйста, только местоположение или маршрут. Я не запрашиваю онлайн-заказ или доставку.",
-    scopeTitle: "Только информация для личного визита",
+    scopeTitle: "Как выглядит визит из {areaFrom}",
     scopeBody:
-      "Используйте Maps для маршрута. WhatsApp предназначен только для координации личного визита или уточнения дороги. Страница не принимает онлайн-заказы, оплату, запросы на выдачу или доставку и не публикует меню, наличие, цены или фотографии товаров.",
+      "Откройте маршрут из {areaFrom} в Maps — так быстрее всего доехать на такси, байке или дойти пешком. Возьмите документ, подтверждающий возраст 20+, и рецепт, выданный в Таиланде: оба проверяют у прилавка. Перед поездкой через всю Паттайю спросите в WhatsApp, что сегодня в магазине и как найти вход, — отвечает человек. Заказ, оплата и выдача происходят у прилавка, а не через эту страницу.",
     faqTitle: "FAQ о правилах онлайн-продаж и маршруте",
     relatedLabel: "Официальные правила и информация о месте",
     legalGuideLabel: "Правила каннабиса в Таиланде для туристов",
@@ -108,7 +103,7 @@ const deliveryCopy: Record<
       },
       {
         q: "Для чего можно использовать WhatsApp?",
-        a: "Только чтобы уточнить физическое местоположение, маршрут или скоординировать личный визит. Это не канал для заказа, оплаты, выдачи или доставки.",
+        a: "Спросите, что сегодня в магазине, как найти вход, что взять с собой и что с документами — отвечает человек. Чем WhatsApp не является, так это каналом заказа, оплаты, выдачи или доставки: всё это происходит у прилавка.",
       },
     ],
   },
@@ -121,12 +116,9 @@ const deliveryCopy: Record<
       "หากคุณค้นหาการจัดส่งกัญชาใน {area} ข้อสำคัญคือหน้านี้ไม่รับคำสั่งซื้อออนไลน์หรือให้บริการจัดส่ง ประกาศรัฐบาลไทยระบุว่าช่อดอกกัญชาเป็นสมุนไพรควบคุมและห้ามจำหน่ายผ่านช่องทางอิเล็กทรอนิกส์หรือเครือข่ายคอมพิวเตอร์ ด้านล่างคือสรุปแหล่งข้อมูลทางการและเส้นทางไปสถานที่จริง",
     kicker: "กฎทางการและเส้นทาง",
     mapsCta: "เปิดเส้นทางใน Maps",
-    whatsappCta: "สอบถามเส้นทางก่อนมา",
-    whatsappMessage:
-      "สวัสดี Labs Cannabis ฉันวางแผนเดินทางมาที่สถานที่จริงจาก {area} กรุณาช่วยเฉพาะเรื่องที่ตั้งหรือเส้นทาง ฉันไม่ได้ขอสั่งซื้อออนไลน์หรือขอจัดส่ง",
-    scopeTitle: "ข้อมูลสำหรับการมาเยือนสถานที่จริงเท่านั้น",
+    scopeTitle: "การมาที่ร้านจาก {area} เป็นอย่างไร",
     scopeBody:
-      "ใช้ Maps สำหรับเส้นทาง WhatsApp ใช้เฉพาะการประสานงานการมาเยือนหรือสอบถามเส้นทาง หน้านี้ไม่รับคำสั่งซื้อออนไลน์ การชำระเงิน การนัดรับสินค้า หรือการจัดส่ง และไม่เผยแพร่เมนู สต็อก ราคา หรือรูปภาพสินค้า",
+      "เปิด Maps ดูเส้นทางจาก {area} เป็นวิธีที่เร็วที่สุดไม่ว่าจะนั่งแท็กซี่ ขี่มอเตอร์ไซค์ หรือเดิน เตรียมบัตรที่แสดงว่าอายุ 20 ปีขึ้นไปและใบสั่งแพทย์ที่ออกในประเทศไทย ทั้งสองอย่างตรวจที่หน้าร้าน ก่อนออกเดินทางข้ามพัทยา ทัก WhatsApp ถามได้ว่าวันนี้ที่ร้านมีอะไรและเข้าประตูทางไหน มีคนตอบให้ ส่วนการสั่ง การชำระเงิน และการส่งมอบ ทำที่หน้าร้าน ไม่ใช่ผ่านหน้านี้",
     faqTitle: "คำถามเกี่ยวกับกฎการขายออนไลน์และเส้นทาง",
     relatedLabel: "กฎทางการและข้อมูลสถานที่ที่เกี่ยวข้อง",
     legalGuideLabel: "กฎกัญชาในไทยสำหรับนักท่องเที่ยว",
@@ -142,7 +134,7 @@ const deliveryCopy: Record<
       },
       {
         q: "ใช้ WhatsApp เรื่องอะไรได้บ้าง?",
-        a: "ใช้เฉพาะยืนยันที่ตั้ง สอบถามเส้นทาง หรือประสานงานการมาเยือน ไม่ใช่ช่องทางสั่งซื้อ ชำระเงิน นัดรับสินค้า หรือจัดส่ง",
+        a: "ถามได้ว่าวันนี้ที่ร้านมีอะไร เข้าประตูทางไหน ต้องเตรียมอะไรมา และเรื่องเอกสารต้องทำอย่างไร มีคนตอบให้ สิ่งที่ WhatsApp ไม่ใช่คือช่องทางสั่งซื้อ ชำระเงิน นัดรับสินค้า หรือจัดส่ง ทั้งหมดนั้นทำที่หน้าร้าน",
       },
     ],
   },
@@ -155,12 +147,9 @@ const deliveryCopy: Record<
       "إذا كنت تبحث عن توصيل القنب في {area}، فالمعلومة المهمة هي أن هذه الصفحة لا توفر الطلب عبر الإنترنت أو التوصيل. تقول إشعارات الحكومة التايلاندية إن زهور القنب خاضعة للرقابة ويحظر بيعها عبر القنوات الإلكترونية أو شبكات الحاسوب. في ما يلي ملخص للمصادر الرسمية واتجاهات الموقع الفعلي.",
     kicker: "القواعد الرسمية والاتجاهات",
     mapsCta: "افتح الاتجاهات في Maps",
-    whatsappCta: "اسأل عن اتجاهات الزيارة",
-    whatsappMessage:
-      "مرحبا Labs Cannabis. أخطط لزيارة الموقع الفعلي قادما من {area}. يرجى المساعدة في الموقع أو الاتجاهات فقط. لا أطلب شراء عبر الإنترنت أو توصيلا.",
-    scopeTitle: "معلومات الزيارة الفعلية فقط",
+    scopeTitle: "كيف تبدو الزيارة من {area}",
     scopeBody:
-      "استخدم Maps لمعرفة الطريق. يخصص WhatsApp فقط لتنسيق زيارة فعلية أو توضيح الاتجاهات. لا تستقبل الصفحة طلبات أو مدفوعات عبر الإنترنت أو ترتيبات استلام أو توصيل، ولا تنشر قائمة منتجات أو مخزونا أو أسعارا أو صور منتجات.",
+      "افتح Maps لمعرفة الطريق من {area} — أسرع وصول بالتاكسي أو الدراجة أو سيراً. أحضر معك إثباتاً يبيّن أن عمرك 20 عاماً فأكثر ووصفة صادرة داخل تايلاند؛ يُتحقق من الاثنين عند الطاولة. وقبل أن تقطع باتايا، اسأل على WhatsApp عما هو موجود في المتجر اليوم وكيف تجد الباب، يجيبك شخص. أما الطلب والدفع والتسليم فتتم عند الطاولة، لا عبر هذه الصفحة.",
     faqTitle: "أسئلة عن قواعد البيع الإلكتروني والاتجاهات",
     relatedLabel: "القواعد الرسمية ومعلومات الموقع ذات الصلة",
     legalGuideLabel: "قواعد القنب في تايلاند للسياح",
@@ -176,7 +165,7 @@ const deliveryCopy: Record<
       },
       {
         q: "في ماذا يمكن استخدام WhatsApp؟",
-        a: "فقط لتأكيد الموقع الفعلي أو السؤال عن الاتجاهات أو تنسيق الزيارة. وليس قناة للطلب أو الدفع أو الاستلام أو التوصيل.",
+        a: "اسأل عما هو موجود في المتجر اليوم، وكيف تصل إلى الباب، وماذا تحضر معك، وعن الأوراق المطلوبة — يجيبك شخص. وما ليس عليه WhatsApp هو الطلب أو الدفع أو الاستلام أو التوصيل: كل ذلك يتم عند الطاولة.",
       },
     ],
   },
@@ -189,12 +178,9 @@ const deliveryCopy: Record<
       "如果您搜索 {area} 大麻配送，请注意：本页不提供在线订购或配送。泰国政府通知称，大麻花属于受管制草药，禁止通过电子渠道或计算机网络销售。以下内容为官方来源摘要及前往实体地点的路线。",
     kicker: "官方规则与路线",
     mapsCta: "在地图中查看路线",
-    whatsappCta: "咨询到店路线",
-    whatsappMessage:
-      "您好，Labs Cannabis。我计划从 {area} 前往实体地点。请仅协助确认位置或路线；我并非申请在线订单或配送。",
-    scopeTitle: "仅提供实体到访信息",
+    scopeTitle: "从{area}到店是什么样的",
     scopeBody:
-      "请使用地图查看路线。WhatsApp 仅用于协调实体到访或确认路线。本页不接受在线订单、付款、取货或配送安排，也不发布菜单、库存、价格或产品照片。",
+      "在地图中打开从{area}出发的路线——无论坐出租车、骑摩托还是步行，这都是最快的方式。请带上能证明年满 20 岁的证件和在泰国开具的处方，两者都在柜台核验。穿越芭提雅之前，可以用 WhatsApp 问今天店里有什么、门在哪里，由店员回答。下单、付款和交付都在柜台完成，而不是通过本页。",
     faqTitle: "网络销售规则与路线常见问题",
     relatedLabel: "相关官方规则与地点信息",
     legalGuideLabel: "泰国游客大麻规则",
@@ -210,7 +196,7 @@ const deliveryCopy: Record<
       },
       {
         q: "WhatsApp 可以用于什么？",
-        a: "仅用于确认实体地点、咨询路线或协调到访，不用于订购、付款、取货或配送。",
+        a: "可以问今天店里有什么、门在哪里、需要带什么、证件手续怎么办——由店员回答。它不是订购、付款、取货或配送的渠道，这些都在柜台完成。",
       },
     ],
   },
@@ -223,12 +209,9 @@ const deliveryCopy: Record<
       "{area} 대마 배송을 검색하셨다면 이 페이지는 온라인 주문이나 배송을 제공하지 않는다는 점을 확인해 주세요. 태국 정부 공지에 따르면 대마 꽃은 관리 대상 약초이며 전자 수단이나 컴퓨터 네트워크를 통한 판매가 금지됩니다. 아래에는 공식 출처 요약과 실제 위치까지의 경로를 제공합니다.",
     kicker: "공식 규정 및 길 안내",
     mapsCta: "지도에서 경로 보기",
-    whatsappCta: "방문 길 안내 문의",
-    whatsappMessage:
-      "안녕하세요, Labs Cannabis. {area}에서 실제 위치로 방문할 예정입니다. 위치나 길 안내만 부탁드립니다. 온라인 주문이나 배송 요청이 아닙니다.",
-    scopeTitle: "실제 방문 정보만 제공",
+    scopeTitle: "{area}에서 매장까지 가는 길",
     scopeBody:
-      "경로는 지도에서 확인하세요. WhatsApp은 실제 방문 조율이나 길 안내에만 사용합니다. 이 페이지는 온라인 주문, 결제, 픽업 또는 배송 요청을 받지 않으며 메뉴, 재고, 가격 또는 제품 사진을 게시하지 않습니다.",
+      "{area}에서 출발하는 경로를 지도에서 열어 보세요. 택시, 오토바이, 도보 어느 쪽이든 가장 빠릅니다. 만 20세 이상임을 보여주는 신분증과 태국에서 발급된 처방전을 가져오세요. 둘 다 매장에서 확인합니다. 파타야를 가로지르기 전에 오늘 매장에 무엇이 있는지, 입구를 어떻게 찾는지 WhatsApp으로 물어보면 사람이 답합니다. 주문과 결제, 전달은 매장에서 이루어지며 이 페이지를 통하지 않습니다.",
     faqTitle: "온라인 판매 규정 및 길 안내 FAQ",
     relatedLabel: "관련 공식 규정 및 위치 정보",
     legalGuideLabel: "태국 관광객 대마 규정",
@@ -244,7 +227,7 @@ const deliveryCopy: Record<
       },
       {
         q: "WhatsApp은 무엇에 사용할 수 있나요?",
-        a: "실제 위치 확인, 길 안내 문의 또는 방문 조율에만 사용합니다. 주문, 결제, 픽업 또는 배송 채널이 아닙니다.",
+        a: "오늘 매장에 무엇이 있는지, 입구를 어떻게 찾는지, 무엇을 가져와야 하는지, 서류는 어떻게 되는지 물어보세요. 사람이 답합니다. 다만 주문, 결제, 픽업, 배송 채널은 아니며 그 모든 것은 매장에서 이루어집니다.",
       },
     ],
   },
@@ -257,12 +240,9 @@ const deliveryCopy: Record<
       "{area} の大麻配送を検索した方へ：このページはオンライン注文や配送を提供していません。タイ政府通知では、大麻花は管理対象のハーブで、電子的手段またはコンピューターネットワーク経由の販売は禁止されています。以下は公式情報の要約と実店舗への経路です。",
     kicker: "公式規則と道順",
     mapsCta: "地図で経路を見る",
-    whatsappCta: "来店の道順を問い合わせる",
-    whatsappMessage:
-      "こんにちは、Labs Cannabis。{area} から実店舗を訪問する予定です。所在地または道順のみ教えてください。オンライン注文や配送の依頼ではありません。",
-    scopeTitle: "実店舗への来店情報のみ",
+    scopeTitle: "{area}から来店するとどうなるか",
     scopeBody:
-      "経路は地図で確認してください。WhatsAppは実店舗への来店調整または道順確認にのみ使用できます。このページではオンライン注文、支払い、受け取り、配送の依頼を受け付けず、メニュー、在庫、価格、製品写真も掲載しません。",
+      "{area}からの経路を地図で開いてください。タクシー、バイク、徒歩のいずれでもこれがいちばん早い方法です。20歳以上であることを示す身分証と、タイ国内で発行された処方箋をお持ちください。どちらも店頭で確認します。パタヤを横断する前に、今日の店内の様子と入口の場所をWhatsAppで聞けば、人が答えます。注文と支払いと受け渡しは店頭で行い、このページを通しては行いません。",
     faqTitle: "オンライン販売規則・道順FAQ",
     relatedLabel: "関連する公式規則と所在地情報",
     legalGuideLabel: "タイ旅行者向け大麻ルール",
@@ -278,7 +258,7 @@ const deliveryCopy: Record<
       },
       {
         q: "WhatsAppは何に使えますか？",
-        a: "実店舗の所在地確認、道順の問い合わせ、来店調整のみです。注文、支払い、受け取り、配送のためのチャネルではありません。",
+        a: "今日の店内の様子、入口の場所、持ち物、書類のことなど、何でも聞いてください。人が答えます。ただし注文、支払い、受け取り、配送のためのチャネルではなく、それらはすべて店頭で行います。",
       },
     ],
   },
@@ -301,6 +281,7 @@ const title =
 const description = renderCopy(copy.description, vars);
 const h1 = renderCopy(copy.h1, vars);
 const intro = renderCopy(copy.intro, vars);
+const scopeTitle = renderCopy(copy.scopeTitle, vars);
 const scopeBody = renderCopy(copy.scopeBody, vars);
 const faq = copy.faq.map((item) => ({
   q: renderCopy(item.q, vars),
@@ -311,8 +292,10 @@ const breadcrumbs = [
   { name: copy.kicker, pathSuffix: "locations" },
   { name: areaName, pathSuffix: `delivery/${area.slug}` },
 ];
-const whatsappMessage = renderCopy(copy.whatsappMessage, vars);
-const whatsappUrl = `${CONTACT.whatsappWithMsg(whatsappMessage)}&source=visit_directions`;
+const labels = CTA_LABELS[locale];
+// Префилл больше не пишет за посетителя юридическую оговорку: он спрашивает то,
+// зачем человек и пришёл — открыты ли и как дойти.
+const whatsappUrl = ctaWhatsAppHref(locale, "area", { area: areaName });
 const article = {
   headline: h1,
   datePublished: "2026-08-16",
@@ -339,28 +322,26 @@ const article = {
 
       <div class="mt-6 grid gap-3 sm:grid-cols-2">
         <a
-          href={getMapsSearchUrl()}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
-          data-track="map_open_click"
-          data-track-placement="delivery_rules"
-          data-track-detail={`delivery_rules:${area.slug}:maps`}
-        >
-          {copy.mapsCta}
-        </a>
-        <a
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
-          data-track="contact_whatsapp_click"
-          data-track-placement="visit_directions"
-          data-track-detail={`delivery_rules:${area.slug}:whatsapp_directions`}
-          data-wa-source="visit_directions"
-          data-whatsapp-ref={`delivery_rules:${area.slug}`}
+          class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
+          data-track="contact_click"
+          data-channel="whatsapp"
+          data-placement="delivery"
         >
-          {copy.whatsappCta}
+          {labels.whatsapp}
+        </a>
+        <a
+          href={getMapsDirectionsUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-surface flex min-h-12 items-center justify-center px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          data-track="contact_click"
+          data-channel="directions"
+          data-placement="delivery"
+        >
+          {copy.mapsCta}
         </a>
       </div>
 
@@ -393,7 +374,7 @@ const article = {
       </section>
 
       <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="delivery-rules-scope-title">
-        <h2 id="delivery-rules-scope-title" class="text-xl font-bold">{copy.scopeTitle}</h2>
+        <h2 id="delivery-rules-scope-title" class="text-xl font-bold">{scopeTitle}</h2>
         <p class="mt-2 text-base leading-relaxed text-text-muted">{scopeBody}</p>
         <h3 class="mt-4 text-base font-bold text-emerald-dim">{rulesCopy.cautionTitle}</h3>
         <p class="mt-2 text-base leading-relaxed text-text-muted">{rulesCopy.caution}</p>
@@ -421,7 +402,9 @@ const article = {
         </a>
       </nav>
     </div>
+    <ContactRail locale={locale} intent="area" placement="delivery" area={areaName} />
   </article>
+  <RelatedLinks locale={locale} pathSuffix={`delivery/${area.slug}`} placement="delivery" />
   <MapBlock locale={locale} />
   <Footer locale={locale} pathSuffix={`delivery/${area.slug}`} />
 </PageLayout>

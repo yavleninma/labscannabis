@@ -1,5 +1,7 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
 import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
@@ -50,24 +52,30 @@ const article = {
           ))}
         </ul>
 
-        <div class="mt-4 grid gap-3 sm:grid-cols-2">
+        {/*
+          Первоисточники — сноски, а не кнопки. Раньше самой заметной кнопкой на
+          самой горячей странице была зелёная ссылка на тайскоязычный сайт
+          правительства: посетитель уходил с сайта и не возвращался. Ссылки нужны
+          (без них гайд не гайд), но вес у них должен быть как у сноски.
+        */}
+        <p class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-muted">
           <a
             href={LEGAL_GUIDE_SOURCES.thaiGovernment}
             target="_blank"
-            rel="noopener noreferrer"
-            class="rounded-xl bg-emerald px-4 py-3 text-center text-base font-bold text-black"
+            rel="nofollow noopener noreferrer"
+            class="underline hover:text-emerald-dim"
           >
             {copy.governmentSourceCta}
           </a>
           <a
             href={LEGAL_GUIDE_SOURCES.touristNotice}
             target="_blank"
-            rel="noopener noreferrer"
-            class="card-surface px-4 py-3 text-center text-base font-semibold text-emerald-dim"
+            rel="nofollow noopener noreferrer"
+            class="underline hover:text-emerald-dim"
           >
             {copy.touristSourceCta}
           </a>
-        </div>
+        </p>
       </section>
 
       <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="legal-caution-title">
@@ -85,6 +93,8 @@ const article = {
         ))}
       </section>
     </div>
+    <ContactRail locale={locale} intent="prescription" placement="legal_guide" />
   </article>
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="legal_guide" />
   <Footer locale={locale} pathSuffix={pathSuffix} />
 </PageLayout>

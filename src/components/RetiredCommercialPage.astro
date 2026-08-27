@@ -3,6 +3,8 @@ import type { Locale } from "@/lib/i18n";
 import { localePath } from "@/lib/i18n";
 import { GOOGLE } from "@/data/site";
 import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 
 interface Props {
@@ -86,10 +88,12 @@ const text = copy[locale] ?? copy.en;
       <p class="mt-4 text-lg leading-relaxed text-text-muted">{text.lead}</p>
       <p class="mt-4 text-base leading-relaxed text-text-muted">{text.body}</p>
       <nav class="mt-8 grid gap-3" aria-label={text.h1}>
-        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="retired_commercial" data-track-detail={`${pathSuffix}:maps`}>{text.maps}</a>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="contact_click" data-channel="maps" data-placement="retired">{text.maps}</a>
         <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{text.legal}</a>
       </nav>
     </div>
+    <ContactRail locale={locale} intent="visit" placement="retired" />
+    <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="retired" />
   </article>
   <Footer locale={locale} pathSuffix={pathSuffix} />
 </PageLayout>

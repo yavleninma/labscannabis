@@ -2,12 +2,15 @@
 import PageLayout from "@/layouts/PageLayout.astro";
 import ReviewStrip from "@/components/ReviewStrip.astro";
 import MapBlock from "@/components/MapBlock.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { SEO_PAGES } from "@/data/seo-matrix";
-import { GOOGLE } from "@/data/site";
+import { GOOGLE, getMapsDirectionsUrl } from "@/data/site";
 import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { loadSeoContent, seoDescription } from "@/lib/content";
+import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
@@ -133,6 +136,40 @@ const breadcrumbs = [
       <div class="mx-auto max-w-lg">
         <h1 class="text-3xl font-bold leading-tight">{content.h1 || page.h1Template[locale]}</h1>
         <p class="mt-4 text-base leading-relaxed text-text-muted">{content.intro}</p>
+
+        {/*
+          Пара кнопок сразу после лида, как в ветке delivery. До этого
+          единственным контактным CTA внутри `<article>` был ContactRail в самом
+          низу, после FAQ: человек, решивший написать после первого экрана, был
+          обязан пролистать всю страницу или целиться в иконку в шапке.
+          `data-boilerplate` — блок одинаков на всех SEO-страницах локали и не
+          должен попадать в замер уникальности основного контента (W1-02).
+        */}
+        <div data-boilerplate class="mt-6 grid gap-3 sm:grid-cols-2">
+          <a
+            href={ctaWhatsAppHref(locale, "menu")}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black"
+            data-track="contact_click"
+            data-channel="whatsapp"
+            data-placement="seo"
+          >
+            {CTA_LABELS[locale].whatsapp}
+          </a>
+          <a
+            href={getMapsDirectionsUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-surface flex min-h-12 items-center justify-center px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="contact_click"
+            data-channel="directions"
+            data-placement="seo"
+          >
+            {CTA_LABELS[locale].directions}
+          </a>
+        </div>
+
         {content.sections.map((section) => (
           <section class="mt-6">
             <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
@@ -141,7 +178,7 @@ const breadcrumbs = [
         ))}
         {content.faq.length > 0 && (
           <section class="mt-8">
-            <h2 class="mb-3 text-xl font-bold">FAQ</h2>
+            <h2 class="mb-3 text-xl font-bold">{ui.seo.faqTitle}</h2>
             {content.faq.map((item) => (
               <details class="card-surface mb-3 p-4">
                 <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
@@ -152,6 +189,7 @@ const breadcrumbs = [
         )}
         <p class="mt-6 text-base leading-relaxed text-text-muted">{content.closing}</p>
       </div>
+      <ContactRail locale={locale} intent="menu" placement="seo" />
     </article>
   ) : (
     <article class="px-4 py-12">
@@ -160,13 +198,15 @@ const breadcrumbs = [
         <p class="mt-4 text-lg leading-relaxed text-text-muted">{retired.lead}</p>
         <p class="mt-4 text-base leading-relaxed text-text-muted">{retired.body}</p>
         <nav class="mt-8 grid gap-3" aria-label={retired.h1}>
-          <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="retired_page" data-track-detail={`retired:${slug}:maps`}>{retired.maps}</a>
+          <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="contact_click" data-channel="maps" data-placement="retired">{retired.maps}</a>
           <a href={localePath(locale, "contact")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{retired.contact}</a>
           <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{retired.legal}</a>
         </nav>
       </div>
+      <ContactRail locale={locale} intent="visit" placement="seo" />
     </article>
   )}
+  <RelatedLinks locale={locale} pathSuffix={slug} placement="seo" />
   {content && <ReviewStrip locale={locale} />}
   {content && <MapBlock locale={locale} />}
   <Footer locale={locale} pathSuffix={slug} />

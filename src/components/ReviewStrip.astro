@@ -1,93 +1,103 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { GOOGLE } from "@/data/site";
+import { LOCALE_HREFLANG } from "@/lib/i18n";
+import { RATING, getMapsSearchUrl } from "@/data/site";
+import { renderCopy } from "@/data/area-copy";
+import { pickDailyLocalizedReviews } from "@/lib/reviews";
+import { t } from "@/lib/ui";
 
+/**
+ * Отзывы и рейтинг карточки Google (W1-12).
+ *
+ * До этого блок назывался «Проверьте актуальную карточку Google Maps» и не
+ * содержал ни одной цифры: 4.8 и сотня отзывов — самый сильный аргумент
+ * магазина — лежали в `src/data/site.ts` и не выводились нигде, а
+ * `src/lib/reviews.ts` вместе с семью файлами переводов не импортировался ни
+ * одной страницей. Здесь они и подключаются.
+ *
+ * Рейтинг показывается ТОЛЬКО визуально и ТОЛЬКО со ссылкой на источник:
+ * `aggregateRating` в разметке `LocalBusiness` звёзд в выдаче не даёт (Google
+ * не выводит review snippet для отзывов, которые контролирует сам объект), а
+ * разметка `Review` с именами здесь была бы прямой ложью — тексты переводились
+ * машинно, а имена в пуле выглядят реконструкцией. Отсюда же пометка о переводе
+ * на каждой карточке и ссылка «читать все».
+ *
+ * `data-boilerplate` — блок одинаков на всех страницах локали и не должен
+ * попадать в замер уникальности основного контента (W1-02).
+ */
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
-const copy: Record<
-  Locale,
-  {
-    title: string;
-    lead: string;
-    listing: string;
-    note: string;
-    cta: string;
-  }
-> = {
-  en: {
-    title: "Check the current Google Maps listing",
-    lead: "Open the public listing for the current pin, route, and listing details before visiting.",
-    listing: "Labs Cannabis — listed on Google Maps as LABS DISPENSARY",
-    note: "Public listing details can change. Check Google Maps before travelling.",
-    cta: "Open Google Maps",
-  },
-  ru: {
-    title: "Проверьте актуальную карточку Google Maps",
-    lead: "Перед визитом откройте публичную карточку с актуальным пином, маршрутом и данными.",
-    listing: "Labs Cannabis — в Google Maps указан как LABS DISPENSARY",
-    note: "Данные публичной карточки могут меняться. Перед поездкой проверьте Google Maps.",
-    cta: "Открыть Google Maps",
-  },
-  th: {
-    title: "ตรวจสอบข้อมูลล่าสุดใน Google Maps",
-    lead: "ก่อนเดินทาง โปรดเปิดข้อมูลสาธารณะเพื่อดูหมุด เส้นทาง และรายละเอียดล่าสุด",
-    listing: "Labs Cannabis — แสดงใน Google Maps ในชื่อ LABS DISPENSARY",
-    note: "รายละเอียดสาธารณะอาจเปลี่ยนแปลง โปรดตรวจสอบ Google Maps ก่อนเดินทาง",
-    cta: "เปิด Google Maps",
-  },
-  ar: {
-    title: "تحقق من بطاقة Google Maps الحالية",
-    lead: "افتح البطاقة العامة قبل الزيارة لمعرفة الدبوس والمسار والتفاصيل الحالية.",
-    listing: "Labs Cannabis — مدرج على Google Maps باسم LABS DISPENSARY",
-    note: "قد تتغير تفاصيل البطاقة العامة. تحقق من Google Maps قبل التوجه.",
-    cta: "فتح Google Maps",
-  },
-  zh: {
-    title: "查看当前 Google Maps 商家信息",
-    lead: "出发前请打开公开商家信息，查看当前定位、路线和详情。",
-    listing: "Labs Cannabis — 在 Google Maps 上显示为 LABS DISPENSARY",
-    note: "公开商家信息可能变化。出发前请查看 Google Maps。",
-    cta: "打开 Google Maps",
-  },
-  ko: {
-    title: "현재 Google Maps 업체 정보 확인",
-    lead: "방문 전에 공개 업체 정보에서 현재 핀, 경로와 세부 정보를 확인하세요.",
-    listing: "Labs Cannabis — Google Maps에는 LABS DISPENSARY로 표시",
-    note: "공개 업체 정보는 바뀔 수 있습니다. 출발 전에 Google Maps를 확인하세요.",
-    cta: "Google Maps 열기",
-  },
-  ja: {
-    title: "現在のGoogle Maps情報を確認",
-    lead: "来店前に公開情報を開き、現在のピン、経路、詳細をご確認ください。",
-    listing: "Labs Cannabis — Google MapsではLABS DISPENSARYと表示",
-    note: "公開情報は変更される場合があります。出発前にGoogle Mapsをご確認ください。",
-    cta: "Google Mapsを開く",
-  },
-};
-const text = copy[locale] ?? copy.en;
+const ui = t(locale);
+/**
+ * Пока отзывы не выверены по источнику (`REVIEWS_VERIFIED === false` в
+ * `src/data/reviews-pool.ts`), список пуст и блок показывает только рейтинг
+ * карточки со ссылкой на неё: 4.8 и число отзывов — цифра Google, а не наше
+ * утверждение об авторе. Именные цитаты включаются одним флагом.
+ */
+const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
+const subtitle = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+const readAll = renderCopy(ui.reviews.readAll, { count: RATING.count });
+const listingUrl = getMapsSearchUrl();
+const dateFormatter = new Intl.DateTimeFormat(LOCALE_HREFLANG[locale], {
+  year: "numeric",
+  month: "long",
+});
 ---
 
-<section class="py-10">
+<section data-boilerplate class="py-10">
   <div class="site-main">
-    <h2 class="section-title">{text.title}</h2>
-    <p class="section-lead">{text.lead}</p>
-    <div class="card-surface p-5">
-      <p class="text-base font-semibold text-text">{text.listing}</p>
-      <p class="mt-2 text-base leading-relaxed text-text-muted">{text.note}</p>
+    <h2 class="section-title">{ui.reviews.title}</h2>
+    <p class="section-lead">
       <a
-        href={GOOGLE.listingUrl}
+        href={listingUrl}
         target="_blank"
         rel="noopener noreferrer"
-        class="mt-4 inline-flex rounded-xl bg-emerald px-4 py-3 text-base font-bold text-black"
-        data-track="map_open_click"
-        data-track-placement="listing_verification"
-        data-track-detail="listing_verification:google_maps"
+        class="font-bold text-emerald-dim hover:underline"
+        data-track="contact_click"
+        data-channel="maps"
+        data-placement="reviews"
       >
-        {text.cta}
+        {subtitle}
       </a>
-    </div>
+    </p>
+
+    {reviews.length > 0 && (
+      <ul class="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {reviews.map((review) => (
+          <li class="card-surface flex flex-col p-5">
+            <p class="text-sm font-bold text-emerald" aria-label={`${review.stars}/5`}>
+              <span aria-hidden="true">{"★".repeat(review.stars)}</span>
+            </p>
+            <blockquote class="mt-3 flex-1 text-base leading-relaxed text-text">
+              {review.displayText}
+            </blockquote>
+            <p class="mt-4 text-sm font-semibold text-text">{review.name}</p>
+            <p class="mt-1 text-sm text-text-muted">{dateFormatter.format(new Date(review.date))}</p>
+            {review.isTranslation && (
+              <p class="mt-2 text-xs text-text-muted">
+                {renderCopy(ui.reviews.translatedNote, {
+                  lang: ui.reviews.sourceLang[review.originalLang],
+                })}
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <a
+      href={listingUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-5 inline-flex font-bold text-emerald-dim hover:underline"
+      data-track="contact_click"
+      data-channel="maps"
+      data-placement="reviews"
+    >
+      {readAll}
+    </a>
   </div>
 </section>

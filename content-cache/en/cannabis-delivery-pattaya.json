@@ -1,30 +1,30 @@
 {
-  "h1": "Cannabis Delivery in Pattaya",
-  "intro": "Looking for convenient cannabis delivery in Pattaya? At Labs Cannabis, formerly Labs Dispensary, we bring the best weed right to your doorstep. Whether you’re in the heart of the city or near the vibrant Walking Street, our reliable delivery service ensures you have access to high-quality products like the renowned White Widow strain. Enjoy the ease of ordering from home and experience the best of Pattaya’s cannabis scene today!",
+  "h1": "Cannabis delivery in Pattaya: what the rules actually say",
+  "intro": "This page does not offer delivery. Thai Government notices state that cannabis flower is a controlled herb and may not be sold through electronic channels or computer networks, and that advertising it through any channel is prohibited. What is left is the part that is legal and useful: where the shop is, how to reach it from Pattaya, and what to bring.",
   "sections": [
     {
-      "h2": "Why Choose Labs Cannabis for Delivery?",
-      "body": "At Labs Cannabis, we pride ourselves on offering a seamless delivery experience for all cannabis enthusiasts in Pattaya. Our extensive selection includes a variety of strains and products to suit every preference, from well-known favorites like White Widow to unique local varieties. We understand the importance of quality and consistency, which is why all our products are sourced from trusted growers. With weight tiers ranging from 1g to 1kg, you can choose the amount that fits your needs. Plus, our friendly staff ensures that you receive the best customer service, making your cannabis shopping experience enjoyable and hassle-free."
+      "h2": "Why there is no delivery offer here",
+      "body": "Since 26 June 2025 the sale of cannabis flower through electronic channels has been prohibited in Thailand, and that covers messengers, web forms and social networks alike. A dispensary that arranges a handover this way risks its licence. So no page on this site takes an order, a payment or a delivery request, and no menu, stock list or numbers are published."
     },
     {
-      "h2": "How to Order Cannabis Delivery in Pattaya",
-      "body": "Ordering cannabis delivery from Labs Cannabis is quick and easy! Simply browse our menu online, where you’ll find detailed descriptions of our products, including strains, edibles, and more. Once you’ve made your selection, you can place your order through our website or by contacting us directly via WhatsApp at +66 66 080 6784. Our team is ready to assist you with any questions you may have. We offer free in-store samples, so feel free to visit us on Soi Hollywood before placing your order. With our fast delivery service, you’ll receive your cannabis in no time!"
+      "h2": "Coming from Pattaya instead",
+      "body": "The shop is at 32 Pattaya 13 Alley in South Pattaya, listed on Google Maps as LABS DISPENSARY. Open the route in Maps from where you are; a taxi or motorbike driver will recognise Pattaya 13 Alley more readily than the shop name. Bring identification showing you are 20 or older and a prescription issued in Thailand, since both are checked at the counter."
+    },
+    {
+      "h2": "Prescription and age rules",
+      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country. This paragraph states the rule and offers to arrange nothing."
     }
   ],
   "faq": [
     {
-      "q": "What types of cannabis products do you offer?",
-      "a": "We offer a wide range of cannabis products, including various strains, edibles, concentrates, and accessories. Our selection includes popular strains like White Widow and many more."
+      "q": "Can I have cannabis delivered in Pattaya?",
+      "a": "No. Selling cannabis flower through electronic channels is prohibited in Thailand, and this shop hands flower over in person, at the counter."
     },
     {
-      "q": "Is there a minimum order amount for delivery?",
-      "a": "There is no strict minimum order amount for delivery, but we recommend ordering at least 1 gram to make the most of our service. Feel free to reach out for more details."
-    },
-    {
-      "q": "Can I get a sample of your products?",
-      "a": "Yes! We provide free in-store samples, so you can try before you buy. Stop by our location on Soi Hollywood to sample some of our best offerings."
+      "q": "What can I ask on WhatsApp?",
+      "a": "What is in the shop today, how to find the door, what to bring, and anything about the paperwork. It is not an ordering, payment or delivery channel."
     }
   ],
-  "closing": "Ready to enjoy high-quality cannabis delivered right to your door in Pattaya? Contact us via WhatsApp at +66 66 080 6784 to place your order today!",
+  "closing": "Open Google Maps for the route to 32 Pattaya 13 Alley, or ask on WhatsApp +66 66 080 6784 what is in the shop today. Adults 20+ with a prescription issued in Thailand.",
   "source": "openai"
 }

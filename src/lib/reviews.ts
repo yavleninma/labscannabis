@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Locale } from "@/lib/i18n";
 import type { Review } from "@/data/reviews-pool";
-import { REVIEWS_POOL, pickDailyReviews } from "@/data/reviews-pool";
+import { getPublishableReviews, pickDailyReviews } from "@/data/reviews-pool";
 
 export type ReviewSourceLang = Review["originalLang"];
 
@@ -46,10 +46,16 @@ export function localizeReview(review: Review, locale: Locale): LocalizedReview 
   return { ...review, displayText: fallbackText, isTranslation: !isNative };
 }
 
+/**
+ * Публикуемые отзывы на языке локали. Источник — `getPublishableReviews()`, а
+ * не сам пул: пока `REVIEWS_VERIFIED === false`, именных цитат не существует ни
+ * на одной странице, и рендер это переживает — `ReviewStrip` показывает только
+ * рейтинг карточки со ссылкой на источник.
+ */
 export function pickDailyLocalizedReviews(
   locale: Locale,
   date: Date = new Date(),
   n = 3,
 ): LocalizedReview[] {
-  return pickDailyReviews(REVIEWS_POOL, date, n).map((r) => localizeReview(r, locale));
+  return pickDailyReviews(getPublishableReviews(), date, n).map((r) => localizeReview(r, locale));
 }

@@ -7,6 +7,8 @@ import {
   getIndexPolicy,
   localePathname,
 } from "../src/lib/index-policy.mjs";
+import { findComplianceViolations } from "./lib/compliance-lexicon.mjs";
+import { buildShingles, extractMainText, measureMainText, topSimilarPairs } from "./lib/text-similarity.mjs";
 
 const DIST_DIR = path.resolve("dist");
 const VERCEL_CONFIG_PATH = path.resolve("vercel.json");
@@ -20,7 +22,6 @@ const HREFLANGS = {
   ko: "ko",
   ja: "ja",
 };
-const FORBIDDEN_JSON_LD_KEYS = new Set(["aggregateRating", "openingHoursSpecification", "priceRange"]);
 const MIN_TITLE_LENGTH = 8;
 const MAX_TITLE_LENGTH = 75;
 const MIN_DESCRIPTION_LENGTH = 40;
@@ -29,16 +30,101 @@ const MIN_H1_LENGTH = 2;
 const MAX_H1_LENGTH = 140;
 const MIN_BODY_TEXT_LENGTH = 400;
 const MAX_BODY_TEXT_LENGTH = 50_000;
+/**
+ * Каждая возвращённая в индекс страница обязана иметь контекстную ссылку на
+ * своей локали (`data-seo-context-link`) — иначе она сирота и её не обойдут.
+ * Проверка намеренно смотрит только на размеченные якоря: считать обычные `<a>`
+ * чекер не умеет, и требование «входящая ссылка на каждый indexable URL» уронит
+ * сборку немедленно.
+ *
+ * Список покрывает весь indexable-набор, кроме главной и `contact`: до них
+ * человек доходит по шапке и по служебной строке футера, и размечать их как
+ * тематические ссылки было бы враньём о смысле атрибута. Источники ссылок —
+ * `RelatedLinks.astro` и группы футера (W1-16); список слагов держится в
+ * `src/data/footer-seo-links.ts` и фильтруется той же политикой индексации,
+ * поэтому расхождение между этой таблицей и разметкой роняет сборку.
+ */
 const REQUIRED_CONTEXTUAL_INLINKS = [
   { suffix: "labs-dispensary-pattaya", locales: INDEX_LOCALES },
-  { suffix: "cannabis-near-me-pattaya", locales: ["en", "ru"] },
+  { suffix: "cannabis-near-me-pattaya", locales: INDEX_LOCALES },
+  { suffix: "locations", locales: INDEX_LOCALES },
+  { suffix: "guides/legal-cannabis-tourists", locales: INDEX_LOCALES },
+  { suffix: "buy-cannabis-pattaya", locales: ["en", "ru"] },
+  { suffix: "best-cannabis-shop-pattaya", locales: ["en", "ru"] },
+  { suffix: "cheap-weed-pattaya", locales: ["en", "ru"] },
+  { suffix: "areas/walking-street", locales: ["en", "ru"] },
   { suffix: "delivery/pattaya", locales: ["en", "ru"] },
 ];
 
+/**
+ * Разметка, которую нельзя эмитить никогда (W1-13).
+ *
+ * Прежний `FORBIDDEN_JSON_LD_KEYS` снят в W1-01 целиком — вместе с ним ушёл и
+ * запрет на `openingHoursSpecification`, а он законен ровно в тот день, когда
+ * владелец подтвердит часы (O-01). Здесь остаётся то, что незаконно или
+ * бесполезно в любой день:
+ *
+ * • `aggregateRating` — Google не выдаёт review snippet для self-serving
+ *   отзывов на `LocalBusiness`/`Organization`: заявка есть, звёзд нет;
+ * • `Offer`, `AggregateOffer`, `OfferCatalog`, `Product` и любое поле,
+ *   начинающееся на `price` (включая `priceRange`) — публикация оферты и
+ *   ценового ориентира через разметку эквивалентна публикации их на странице,
+ *   а это реклама каннабиса по приказу 2568;
+ * • `Review` — тексты отзывов у нас переводные, а имена не выверены по
+ *   источнику; разметка отзыва — это утверждение об авторе.
+ */
+const FORBIDDEN_JSON_LD_KEYS = ["aggregateRating"];
+const FORBIDDEN_JSON_LD_KEY_PREFIXES = ["price"];
+const FORBIDDEN_JSON_LD_TYPES = ["Offer", "AggregateOffer", "OfferCatalog", "Product", "Review"];
+
+/** Обходит распарсенный JSON-LD и возвращает список нарушений вида "ключ/тип". */
+function findForbiddenJsonLd(value, hits = []) {
+  if (Array.isArray(value)) {
+    for (const item of value) findForbiddenJsonLd(item, hits);
+    return hits;
+  }
+  if (!value || typeof value !== "object") return hits;
+
+  for (const [key, child] of Object.entries(value)) {
+    const lower = key.toLowerCase();
+    if (FORBIDDEN_JSON_LD_KEYS.includes(key)) hits.push(`key ${key}`);
+    if (FORBIDDEN_JSON_LD_KEY_PREFIXES.some((prefix) => lower.startsWith(prefix))) {
+      hits.push(`key ${key}`);
+    }
+    if (key === "@type") {
+      const types = Array.isArray(child) ? child : [child];
+      for (const type of types) {
+        if (FORBIDDEN_JSON_LD_TYPES.includes(type)) hits.push(`@type ${type}`);
+      }
+    }
+    findForbiddenJsonLd(child, hits);
+  }
+  return hits;
+}
+
+const CONTENT_CACHE_DIR = path.resolve("content-cache");
+/**
+ * content-cache вычищен (W1-10, `npm run fix:content-cache`), поэтому кэш
+ * охраняется наравне с `dist`: он подключается к сборке в W1-11, и любое
+ * нарушение, вернувшееся в JSON, обязано валить сборку до публикации, а не
+ * после. Обратно на "warn" не переключать — предупреждение здесь уже один раз
+ * позволило 64 обещаниям пробника в подарок дожить до релиза.
+ */
+const CONTENT_CACHE_SEVERITY = "block";
+const REPORT_MODE = process.argv.slice(2).includes("--report");
+const SIMILARITY_REPORT_PAIRS = 10;
+const MAX_PRINTED_WARNINGS = 5;
+
 const errors = [];
+const warnings = [];
+const uniquenessPages = [];
 
 function fail(message) {
   errors.push(message);
+}
+
+function warn(message) {
+  warnings.push(message);
 }
 
 function decodeHtml(value = "") {
@@ -192,9 +278,6 @@ function sitemapEntries() {
   const entries = [];
   for (const file of sitemapFiles) {
     const xml = readFileSync(file, "utf8");
-    if (/<lastmod>[^<]*<\/lastmod>/i.test(xml)) {
-      fail(`${path.relative(DIST_DIR, file)}: sitemap must not contain build-time lastmod values`);
-    }
     for (const block of xml.matchAll(/<url>[\s\S]*?<\/url>/gi)) {
       const loc = decodeHtml(block[0].match(/<loc>([\s\S]*?)<\/loc>/i)?.[1]?.trim() ?? "");
       const alternates = [];
@@ -207,22 +290,79 @@ function sitemapEntries() {
   return entries;
 }
 
-function walkHtmlFiles(directory) {
+function walkFiles(directory, extension = ".html") {
   if (!existsSync(directory)) return [];
   const files = [];
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
     const target = path.join(directory, entry.name);
-    if (entry.isDirectory()) files.push(...walkHtmlFiles(target));
-    if (entry.isFile() && entry.name.toLowerCase().endsWith(".html")) files.push(target);
+    if (entry.isDirectory()) files.push(...walkFiles(target, extension));
+    if (entry.isFile() && entry.name.toLowerCase().endsWith(extension)) files.push(target);
   }
   return files;
+}
+
+function repoRelative(file) {
+  return path.relative(process.cwd(), file).split(path.sep).join("/");
+}
+
+/**
+ * Доля символов чужого письма в основном тексте indexable-страницы.
+ *
+ * Проверка появилась после `/th/labs-dispensary-pattaya/`: страница вышла в
+ * индекс с телом наполовину по-английски — заголовки разделов и два абзаца
+ * остались от англоязычного исходника генератора, в который скрипт вставил
+ * отдельные тайские предложения. Чекер мерил длину и уникальность, но не язык,
+ * поэтому дефект дожил до `dist`.
+ *
+ * Имена собственные (Pattaya 13 Alley, Labs Cannabis, WhatsApp, Google Maps)
+ * латиницей законны в любой локали, отсюда порог, а не ноль. По той же причине
+ * из замера исключается текст ссылок: страницы-хабы (`locations`, `contact`)
+ * состоят из названий страниц и топонимов, и доля латиницы там ничего не
+ * говорит о языке прозы.
+ */
+const NON_LATIN_SCRIPTS = {
+  th: /\p{Script=Thai}/u,
+  ar: /\p{Script=Arabic}/u,
+  zh: /\p{Script=Han}/u,
+  ja: /[\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Han}]/u,
+  ko: /\p{Script=Hangul}/u,
+  ru: /\p{Script=Cyrillic}/u,
+};
+const LATIN_LETTER = /\p{Script=Latin}/u;
+/**
+ * Выше этой доли латиницы проза перестаёт быть текстом на языке локали.
+ * Порог взят с запасом над фактическим распределением: сорвавшаяся
+ * `/th/labs-dispensary-pattaya/` давала 42 %, ближайшая честная страница — вдвое
+ * меньше.
+ */
+const MAX_FOREIGN_SCRIPT_SHARE = 0.35;
+/** Латинская фраза от семи слов подряд — это уже непереведённый абзац, а не бренд. */
+const LONG_LATIN_PHRASE = /(?:\b[A-Za-z][A-Za-z'’-]*\b[^\p{L}\n]{1,3}){6}\b[A-Za-z][A-Za-z'’-]*\b/u;
+
+/**
+ * @param {string} locale
+ * @param {string} text основной текст страницы без общего обвеса
+ * @returns {{ share: number, letters: number } | null} `null` для локалей на латинице
+ */
+function foreignScriptShare(locale, text) {
+  const native = NON_LATIN_SCRIPTS[locale];
+  if (!native) return null;
+  let latin = 0;
+  let letters = 0;
+  for (const char of text) {
+    if (!/\p{L}/u.test(char)) continue;
+    letters++;
+    if (LATIN_LETTER.test(char)) latin++;
+  }
+  if (letters === 0) return null;
+  return { share: latin / letters, letters };
 }
 
 function builtLocalizedPages() {
   const pages = [];
   for (const locale of INDEX_LOCALES) {
     const localeDir = path.join(DIST_DIR, locale);
-    for (const file of walkHtmlFiles(localeDir)) {
+    for (const file of walkFiles(localeDir)) {
       const relative = path.relative(localeDir, file).split(path.sep);
       const fileName = relative.at(-1) ?? "";
       const suffixParts = fileName.toLowerCase() === "index.html"
@@ -235,19 +375,167 @@ function builtLocalizedPages() {
   return pages;
 }
 
-function forbiddenJsonLdPaths(value, prefix = "$") {
-  if (Array.isArray(value)) {
-    return value.flatMap((item, index) => forbiddenJsonLdPaths(item, `${prefix}[${index}]`));
+/**
+ * Тексты страницы, попадающие к посетителю: их и проверяет compliance-линтер.
+ *
+ * `H1` отделён от тела: в заголовке эхо поискового запроса законно
+ * («Best cannabis shop in Pattaya»), в прозе те же слова уже хвалят товар.
+ * `alt` и `title` — такой же публичный текст: их читают и поисковик, и
+ * скринридер, а раньше линтер не видел атрибутов вообще.
+ */
+function lintableHtmlTexts(html) {
+  const headHtml = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
+  const bodyHtml = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? "";
+  const texts = [];
+  for (const title of elementTexts(headHtml, "title")) texts.push({ origin: "title", text: title });
+  for (const meta of tags(headHtml, "meta")) {
+    const key = (meta.attrs.name ?? meta.attrs.property ?? "").toLowerCase();
+    if (!key.includes("description") && !key.includes("title")) continue;
+    if (meta.attrs.content) texts.push({ origin: `meta[${key}]`, text: meta.attrs.content });
   }
-  if (!value || typeof value !== "object") return [];
+  for (const h1 of elementTexts(bodyHtml, "h1")) texts.push({ origin: "h1", text: h1 });
+  texts.push({ origin: "body", text: visibleBodyText(html.replace(/<h1\b[\s\S]*?<\/h1>/gi, " ")) });
 
-  const matches = [];
-  for (const [key, child] of Object.entries(value)) {
-    const childPath = `${prefix}.${key}`;
-    if (FORBIDDEN_JSON_LD_KEYS.has(key)) matches.push(childPath);
-    matches.push(...forbiddenJsonLdPaths(child, childPath));
+  const attributeTexts = new Set();
+  for (const tag of html.matchAll(/<(?:img|a|area|button|iframe|source)\b[^>]*>/gi)) {
+    const attrs = getAttrs(tag[0]);
+    for (const value of [attrs.alt, attrs.title, attrs["aria-label"]]) {
+      if (value && value.trim()) attributeTexts.add(value.trim());
+    }
   }
-  return matches;
+  for (const value of attributeTexts) texts.push({ origin: "alt", text: value });
+
+  // Префилл мессенджера — такой же публичный текст, как и видимый на странице.
+  const prefills = new Set();
+  for (const match of html.matchAll(/[?&]text=([^"'&\s]+)/gi)) {
+    try {
+      prefills.add(decodeURIComponent(match[1]));
+    } catch {
+      prefills.add(match[1]);
+    }
+  }
+  for (const prefill of prefills) texts.push({ origin: "prefill", text: prefill });
+  return texts;
+}
+
+function collectJsonStrings(value, prefix, collected) {
+  if (typeof value === "string") {
+    collected.push({ origin: prefix, text: value });
+    return collected;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((item, index) => collectJsonStrings(item, `${prefix}[${index}]`, collected));
+    return collected;
+  }
+  if (value && typeof value === "object") {
+    for (const [key, child] of Object.entries(value)) collectJsonStrings(child, `${prefix}.${key}`, collected);
+  }
+  return collected;
+}
+
+/**
+ * Compliance-линтер (W1-02). По `dist/` он блокирует сборку: это ровно тот текст,
+ * который уезжает в прод и который тайский регулятор читает как рекламу. По
+ * `content-cache/` охраняется наравне с ним — см. CONTENT_CACHE_SEVERITY.
+ * Линтер ловит опечатки и регрессии; юридическую ответственность несёт вычитка
+ * человеком.
+ */
+function runComplianceLint() {
+  const roots = [
+    { dir: DIST_DIR, extension: ".html", severity: "block" },
+    { dir: CONTENT_CACHE_DIR, extension: ".json", severity: CONTENT_CACHE_SEVERITY },
+  ];
+
+  for (const root of roots) {
+    const report = root.severity === "block" ? fail : warn;
+    for (const file of walkFiles(root.dir, root.extension)) {
+      const relative = repoRelative(file);
+      const raw = readFileSync(file, "utf8");
+      let texts;
+      if (root.extension === ".json") {
+        try {
+          texts = collectJsonStrings(JSON.parse(raw), "$", []);
+        } catch (error) {
+          report(`${relative}: invalid JSON (${error.message})`);
+          continue;
+        }
+      } else {
+        texts = lintableHtmlTexts(raw);
+      }
+
+      const reported = new Set();
+      for (const { origin, text } of texts) {
+        for (const violation of findComplianceViolations(text, relative, origin)) {
+          if (reported.has(violation.ruleId)) continue;
+          reported.add(violation.ruleId);
+          report(`${relative} (${origin}): ${violation.hint} — ${JSON.stringify(violation.match)} [${violation.ruleId}]`);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Отчёт по уникальности (W1-02). В Волне 1 он ничего не блокирует: сначала
+ * переписывается шаблон гео-страниц (Волна 2), и только потом порог берётся из
+ * фактического распределения, а не назначается наугад.
+ */
+function reportContentUniqueness() {
+  if (uniquenessPages.length === 0) return;
+
+  console.log("Уникальность основного контента (отчёт, сборку не блокирует):");
+  for (const locale of INDEX_LOCALES) {
+    const entries = uniquenessPages
+      .filter((page) => page.locale === locale)
+      .map((page) => ({
+        id: page.suffix || "/",
+        indexable: page.indexable,
+        measure: measureMainText(page.text, locale),
+        shingles: buildShingles(page.text, locale),
+      }));
+    if (entries.length === 0) continue;
+
+    const pairs = topSimilarPairs(entries, SIMILARITY_REPORT_PAIRS);
+    const indexable = entries.filter((entry) => entry.indexable).sort((a, b) => a.measure.count - b.measure.count);
+    const worstIndexable = topSimilarPairs(indexable, 1)[0];
+    const worst = pairs[0];
+    const thinnest = indexable[0];
+    console.log(
+      `  ${locale}: страниц ${entries.length}` +
+        (worst
+          ? `, max Жаккар ${worst.score.toFixed(2)} (${worst.a} ↔ ${worst.b}` +
+            `${worst.identicalGroup > 2 ? `, группа из ${worst.identicalGroup}` : ""})`
+          : ", пар для сравнения нет") +
+        (worstIndexable ? `, среди indexable ${worstIndexable.score.toFixed(2)}` : "") +
+        (thinnest ? `, тоньше всех indexable: ${thinnest.id} — ${thinnest.measure.count} ${thinnest.measure.unit}` : ""),
+    );
+    if (!REPORT_MODE) continue;
+
+    for (const pair of pairs) {
+      const group = pair.identicalGroup > 2 ? ` (группа из ${pair.identicalGroup} одинаковых страниц)` : "";
+      console.log(`      ${pair.score.toFixed(2)}  ${pair.a} ↔ ${pair.b}${group}`);
+    }
+    for (const entry of indexable) {
+      console.log(`      ${String(entry.measure.count).padStart(5)} ${entry.measure.unit}  ${entry.id}`);
+    }
+  }
+}
+
+/** Таблица «локаль × суффикс × indexable» (W1-01, флаг --report). */
+function reportIndexMatrix() {
+  const suffixes = [...new Set(uniquenessPages.map((page) => page.suffix || "/"))].sort();
+  const width = Math.max(...suffixes.map((suffix) => suffix.length), 10);
+  const state = new Map(uniquenessPages.map((page) => [`${page.locale}|${page.suffix || "/"}`, page.indexable]));
+
+  console.log("Индексация (+ indexable, · noindex, пусто — страницы нет):");
+  console.log(`  ${"суффикс".padEnd(width)}  ${INDEX_LOCALES.map((locale) => locale.padStart(2)).join(" ")}`);
+  for (const suffix of suffixes) {
+    const cells = INDEX_LOCALES.map((locale) => {
+      const indexable = state.get(`${locale}|${suffix}`);
+      return (indexable === undefined ? " " : indexable ? "+" : "·").padStart(2);
+    });
+    console.log(`  ${suffix.padEnd(width)}  ${cells.join(" ")}`);
+  }
 }
 
 function validateAlternateSet(label, alternates, policy, sitemapUrls) {
@@ -294,9 +582,6 @@ function recordUnique(values, kind, value, url) {
   values.set(value, url);
 }
 
-if (EXPECTED_INDEXABLE_PAGE_COUNT !== 41) {
-  fail(`Index policy must contain exactly 41 pages, found ${EXPECTED_INDEXABLE_PAGE_COUNT}`);
-}
 validateRedirectDestinations();
 
 const entries = sitemapEntries();
@@ -359,6 +644,12 @@ for (const page of builtPages) {
   const pageLabel = path.relative(DIST_DIR, page.file);
   const html = readFileSync(page.file, "utf8");
   const headHtml = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
+  uniquenessPages.push({
+    locale: page.locale,
+    suffix: page.suffix,
+    indexable: policy.indexable,
+    text: extractMainText(html),
+  });
 
   if (policy.indexable) {
     for (const anchor of tags(html, "a")) {
@@ -492,8 +783,9 @@ for (const page of builtPages) {
   for (const script of jsonLdScripts) {
     try {
       const parsed = JSON.parse(decodeHtml(script[1].trim()));
-      for (const forbiddenPath of forbiddenJsonLdPaths(parsed)) {
-        fail(`${pageLabel}: forbidden volatile JSON-LD property at ${forbiddenPath}`);
+      const forbidden = [...new Set(findForbiddenJsonLd(parsed))];
+      if (forbidden.length > 0) {
+        fail(`${pageLabel}: JSON-LD must not contain ${forbidden.join(", ")}`);
       }
     } catch (error) {
       fail(`${pageLabel}: invalid JSON-LD (${error.message})`);
@@ -510,6 +802,27 @@ for (const page of builtPages) {
   }
   if (h1.length < MIN_H1_LENGTH || h1.length > MAX_H1_LENGTH) {
     fail(`${pageLabel}: H1 length ${h1.length} is outside ${MIN_H1_LENGTH}-${MAX_H1_LENGTH}`);
+  }
+
+  if (policy.indexable) {
+    const mainText = extractMainText(html);
+    const proseText = extractMainText(html.replace(/<a\b[\s\S]*?<\/a>/gi, " "));
+    const foreign = foreignScriptShare(page.locale, proseText);
+    // Ниже этого объёма прозы доля ничего не измеряет: страницы-хабы
+    // (`locations`, `contact`) — это карточка адреса и список ссылок, где
+    // латиница законна вся целиком. Порог совпадает с `MIN_BODY_TEXT_LENGTH`.
+    if (foreign && foreign.letters >= MIN_BODY_TEXT_LENGTH && foreign.share > MAX_FOREIGN_SCRIPT_SHARE) {
+      fail(
+        `${pageLabel}: ${Math.round(foreign.share * 100)}% of main-text letters are Latin — ` +
+          `the page is not written in "${page.locale}"`,
+      );
+    }
+    if (foreign) {
+      const phrase = mainText.match(LONG_LATIN_PHRASE);
+      if (phrase) {
+        fail(`${pageLabel}: untranslated Latin phrase in "${page.locale}" main text — ${JSON.stringify(phrase[0])}`);
+      }
+    }
   }
 
   const bodyTextLength = visibleBodyText(html).replace(/\s/g, "").length;
@@ -535,6 +848,54 @@ for (const requirement of REQUIRED_CONTEXTUAL_INLINKS) {
     }
   }
 }
+
+/**
+ * Компонент без единого импорта — заряженная мина, а не мёртвый код.
+ *
+ * `MedicalCardNote.astro` пролежал так целую волну: он не рендерился, поэтому
+ * ни один грep по `dist` его не видел, а внутри на семи локалях лежало
+ * приглашение договориться о доставке в мессенджере и формулировка «no
+ * confirmed online sale». Одна строка `<MedicalCardNote />` в любом файле
+ * вернула бы всё это на прод. Проверка дешёвая и ловит именно этот класс.
+ */
+function checkUnusedComponents() {
+  const componentsDir = path.resolve("src/components");
+  if (!existsSync(componentsDir)) return;
+
+  const sources = [
+    ...walkFiles(path.resolve("src"), ".astro"),
+    ...walkFiles(path.resolve("src"), ".ts"),
+    ...walkFiles(path.resolve("src"), ".tsx"),
+  ];
+  const allText = sources.map((file) => readFileSync(file, "utf8")).join("\n");
+
+  for (const extension of [".astro", ".tsx"]) {
+    for (const file of walkFiles(componentsDir, extension)) {
+      const name = path.basename(file, extension);
+      // Импорт компонента всегда идёт по имени файла: `@/components/<Name>`.
+      const imported = new RegExp(`components/${name}(?:\\.astro|\\.tsx)?["'\`]`).test(allText);
+      if (!imported) {
+        fail(`${repoRelative(file)}: component is never imported — delete it or use it`);
+      }
+    }
+  }
+}
+
+runComplianceLint();
+checkUnusedComponents();
+
+if (REPORT_MODE) reportIndexMatrix();
+
+if (warnings.length > 0) {
+  const printed = REPORT_MODE ? warnings.length : Math.min(warnings.length, MAX_PRINTED_WARNINGS);
+  console.warn(`Предупреждения compliance-линтера (сборку не блокируют): ${warnings.length}`);
+  for (const warning of warnings.slice(0, printed)) console.warn(`- ${warning}`);
+  if (printed < warnings.length) {
+    console.warn(`- …и ещё ${warnings.length - printed} — полный список: npm run check:seo -- --report`);
+  }
+}
+
+reportContentUniqueness();
 
 if (errors.length > 0) {
   console.error(`SEO check failed with ${errors.length} issue(s):`);

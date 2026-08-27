@@ -1,9 +1,39 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { BRAND, ADDRESS, CONTACT, GOOGLE } from "@/data/site";
-import { getSiteUrl, localePath, LOCALE_HREFLANG } from "@/lib/i18n";
+import { BRAND, ADDRESS, CONTACT, GOOGLE, getPublishableStaffLanguages } from "@/data/site";
+import { getSameAsUrls } from "@/data/citations";
+import { getOpeningHoursSpecification } from "@/lib/hours";
+import { getSiteUrl, localePath, LOCALES, LOCALE_HREFLANG } from "@/lib/i18n";
 import { getCanonical } from "@/lib/seo";
 
+/**
+ * Разметка бизнеса (W1-13).
+ *
+ * Чего здесь сознательно НЕТ и почему:
+ *
+ * • `aggregateRating` — Google не выводит review snippet, когда отзывами
+ *   распоряжается сам объект отзыва (self-serving reviews на `LocalBusiness` и
+ *   `Organization`). Звёзд в выдаче не будет, а заявка на них останется. Рейтинг
+ *   4.8 показывается визуально со ссылкой на карточку — см. `ReviewStrip`.
+ * • `Review` с именами — тексты в `reviews-cache` машинные, имена в пуле
+ *   выглядят реконструкцией. Разметка отзыва — это утверждение об авторе.
+ * • `Offer`, `Product`, `OfferCatalog`, любое поле `price`, а также
+ *   `priceRange` — публикация оферты и ценового ориентира через разметку
+ *   эквивалентна публикации их на странице, а это ровно то, что приказ 2568
+ *   квалифицирует как рекламу каннабиса. Для страниц сортов (Волна 2) —
+ *   `Article` + `about: {"@type": "Thing"}`, без цены и без наличия.
+ * • `openingHoursSpecification` — только из подтверждённых часов. Пока владелец
+ *   их не подтвердил (O-01), `getOpeningHoursSpecification()` отдаёт `null` и
+ *   поле не эмитится: ложное «Открыто сейчас» в выдаче приводит человека к
+ *   закрытой двери.
+ * • `knowsLanguage` / `availableLanguage` — только фактические языки персонала
+ *   (O-01). Сайт переведён на семь языков, но это факт о репозитории, а не
+ *   обещание про того, кто отвечает в мессенджере.
+ *
+ * `sameAs` собирается из `src/data/citations.ts` и содержит только карточки,
+ * которые владелец контролирует и у которых выверен NAP. Ссылка на карточку с
+ * чужим адресом усилила бы склейку с соседним магазином, а не исправила её.
+ */
 interface FaqItem {
   q: string;
   a: string;
@@ -50,6 +80,51 @@ const {
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const businessId = `${baseUrl}/#business`;
+const organizationId = `${baseUrl}/#org`;
+const websiteId = `${baseUrl}/#website`;
+const inLanguage = LOCALE_HREFLANG[locale];
+
+/**
+ * Картинки карточки знаний.
+ *
+ * Здесь стояли пять макро-снимков шишек из `public/media`. Изображение товара в
+ * маркетинговом контексте — самая наглядная форма рекламы контролируемой травы,
+ * и она расходится дальше сайта: в карточку знаний Google и в превью
+ * мессенджеров. Отдельно это прямо опровергало собственный дисклеймер страниц
+ * доставки («does not publish a menu, stock status, prices, or product photos»).
+ *
+ * Снимка помещения или фасада в репозитории нет ни одного: все файлы
+ * `public/media` — тот же товар крупным планом. Поэтому до фотографии витрины и
+ * вывески (O-15) в разметку уходит только нейтральная карточка бренда, а
+ * продуктовые макро не публикуются нигде.
+ */
+const IMAGE_PATHS = ["/og-image.svg"];
+const images = IMAGE_PATHS.map((file) => `${baseUrl}${file}`);
+/** Пока настоящего логотипа в репозитории нет, знак сайта — фавикон (O-15). */
+const logoUrl = `${baseUrl}/favicon.svg`;
+
+const postalAddress = {
+  "@type": "PostalAddress",
+  streetAddress: ADDRESS.street,
+  addressLocality: ADDRESS.locality,
+  addressRegion: ADDRESS.region,
+  postalCode: ADDRESS.postalCode,
+  addressCountry: ADDRESS.country,
+};
+
+/** Карточка Google подтверждена и остаётся в `sameAs` всегда; каталоги — по мере проверки. */
+const sameAs = [GOOGLE.listingUrl, ...getSameAsUrls()];
+const staffLanguages = getPublishableStaffLanguages();
+const openingHours = getOpeningHoursSpecification();
+
+const contactPoint = {
+  "@type": "ContactPoint",
+  telephone: CONTACT.phoneIntl,
+  contactType: "customer service",
+  url: `${baseUrl}${localePath(locale, "contact")}`,
+  areaServed: ADDRESS.country,
+  ...(staffLanguages ? { availableLanguage: staffLanguages } : {}),
+};
 
 const localBusiness = {
   "@context": "https://schema.org",
@@ -59,22 +134,54 @@ const localBusiness = {
   alternateName: GOOGLE.listingName,
   url: `${baseUrl}${localePath(locale)}`,
   telephone: CONTACT.phoneIntl,
-  image: `${baseUrl}/media/IMG_20260517_175646.jpg`,
-  sameAs: [GOOGLE.listingUrl],
+  image: images,
+  logo: logoUrl,
+  sameAs,
   hasMap: GOOGLE.listingUrl,
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: ADDRESS.street,
-    addressLocality: ADDRESS.locality,
-    addressRegion: ADDRESS.region,
-    postalCode: ADDRESS.postalCode,
-    addressCountry: ADDRESS.country,
-  },
+  address: postalAddress,
   geo: {
     "@type": "GeoCoordinates",
     latitude: ADDRESS.lat,
     longitude: ADDRESS.lng,
   },
+  // Один город, а не список из восьми районов. Розничная точка без доставки
+  // обслуживает тех, кто дошёл до прилавка: машиночитаемое «мы обслуживаем эти
+  // восемь районов» на сайте, который на 108 своих страницах письменно отрицает
+  // доставку, читается как заявка на покрытие и опровергает собственный текст.
+  areaServed: { "@type": "City", name: ADDRESS.locality },
+  currenciesAccepted: "THB",
+  parentOrganization: { "@id": organizationId },
+  contactPoint,
+  ...(openingHours ? { openingHoursSpecification: openingHours } : {}),
+  ...(staffLanguages ? { knowsLanguage: staffLanguages } : {}),
+};
+
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": organizationId,
+  name: BRAND.name,
+  alternateName: GOOGLE.listingName,
+  url: baseUrl,
+  logo: { "@type": "ImageObject", url: logoUrl },
+  image: images,
+  telephone: CONTACT.phoneIntl,
+  address: postalAddress,
+  sameAs,
+  contactPoint,
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: baseUrl,
+  name: BRAND.name,
+  alternateName: GOOGLE.listingName,
+  // Поиска по сайту нет, поэтому `SearchAction` здесь был бы заявкой на
+  // несуществующую функцию — sitelinks searchbox Google всё равно не выдаёт.
+  inLanguage: LOCALES.map((code) => LOCALE_HREFLANG[code]),
+  publisher: { "@id": organizationId },
 };
 
 const breadcrumbItems =
@@ -98,6 +205,7 @@ const breadcrumbLd =
     ? {
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
+        "@id": `${pageUrl}#breadcrumb`,
         itemListElement: breadcrumbItems.map((item, index) => ({
           "@type": "ListItem",
           position: index + 1,
@@ -132,17 +240,12 @@ const articleLd =
         "@id": `${pageUrl}#article`,
         headline: article.headline,
         description,
-        inLanguage: LOCALE_HREFLANG[locale],
+        inLanguage,
         mainEntityOfPage: pageUrl,
-        author: {
-          "@type": "Organization",
-          name: article.author ?? BRAND.name,
-        },
-        publisher: {
-          "@type": "Organization",
-          name: BRAND.name,
-          url: baseUrl,
-        },
+        author: article.author
+          ? { "@type": "Organization", name: article.author }
+          : { "@id": organizationId },
+        publisher: { "@id": organizationId },
         datePublished: article.datePublished,
         dateModified: article.dateModified,
       }
@@ -153,6 +256,8 @@ const faqLd =
     ? {
         "@context": "https://schema.org",
         "@type": "FAQPage",
+        "@id": `${pageUrl}#faq`,
+        inLanguage,
         mainEntity: faq.map((item) => ({
           "@type": "Question",
           name: item.q,
@@ -163,7 +268,15 @@ const faqLd =
 
 const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
 
-const jsonBlocks = [localBusiness, breadcrumbLd, serviceLd, articleLd, faqLd].filter(Boolean);
+const jsonBlocks = [
+  localBusiness,
+  organizationLd,
+  websiteLd,
+  breadcrumbLd,
+  serviceLd,
+  articleLd,
+  faqLd,
+].filter(Boolean);
 ---
 
 {jsonBlocks.map((block) => (

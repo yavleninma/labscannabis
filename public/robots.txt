@@ -1,6 +1,12 @@
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /studio/
+
+# Отдельная секция нужна: увидев своё имя, Яндекс полностью игнорирует "*".
+# Clean-param склеивает метки в один URL — ссылка из карточки Google Business
+# приходит с utm_source=gbp&utm_medium=organic-local&utm_campaign=gbp-website-button.
+# Директива Host не добавляется: Яндекс от неё отказался, зеркало задаётся 301.
+User-agent: Yandex
+Allow: /
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&gclid&fbclid
 
 Sitemap: https://labscannabis.boutique/sitemap-index.xml

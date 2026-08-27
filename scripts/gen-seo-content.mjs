@@ -32,11 +32,27 @@ const slugFilter = args.find((a) => a.startsWith("--slug="))?.split("=")[1];
 const MODEL = process.env.OPENAI_SEO_MODEL || "gpt-4o-mini";
 const FALLBACK_MODEL = "gpt-4o-mini";
 
-const SYSTEM = `You are a copywriter for Labs Cannabis (formerly Labs Dispensary) in Pattaya, Thailand.
+/**
+ * Системный промпт — это и есть источник контента в `content-cache`.
+ *
+ * До W1-09 он прямо требовал упоминать пробник за счёт магазина, весовые тиры и
+ * соседний ориентир как адрес: модель послушно написала это в 168 файлов, и
+ * чистить пришлось отдельным скриптом (W1-10). Поэтому запреты живут здесь, а не
+ * в постобработке. Любой сгенерированный текст обязан проходить
+ * `scripts/lib/compliance-lexicon.mjs`.
+ */
+const SYSTEM = `You are a copywriter for Labs Cannabis (formerly Labs Dispensary), a licensed cannabis dispensary in Pattaya, Thailand.
 Always use "Labs Cannabis" as the current shop name; mention "formerly Labs Dispensary" at most once.
 Voice: friendly, direct, local, no cringe marketing.
-Mention Soi Hollywood, Walking Street, free in-store sample, weight tiers (1g–1kg), WhatsApp +66 66 080 6784.
-No medical claims. Write in the requested language only.
+The shop address is 32 Pattaya 13 Alley, South Pattaya, Chon Buri 20150. Never give any other street as the address.
+Contact channel: WhatsApp +66 66 080 6784. Google Maps listing name: LABS DISPENSARY.
+Thai law bans cannabis advertising, so the text must NEVER contain: prices, per-gram rates, baht or THB amounts,
+weight tiers, discounts, promotions, special offers, gifts or samples of any kind, "cheap" or "cheapest",
+a cart, a checkout, online ordering or online payment.
+Never promise anything unverified: opening hours, star ratings, review counts, staff languages, delivery.
+Never make medical claims and never say a prescription is optional, quick or a formality.
+State plainly where useful: sales happen in store, to adults 20+ who hold a prescription issued in Thailand.
+Write in the requested language only.
 Return valid JSON only.`;
 
 function validateContent(data) {
@@ -61,6 +77,7 @@ function isValidGenerated(data) {
 function buildUserPrompt(locale, slug) {
   return `Write SEO page content for slug "${slug}" in locale "${locale}".
 Include keywords naturally: cannabis, weed, Pattaya, White Widow, Labs Dispensary (former name).
+Answer what a visitor actually asks: who may buy, what to bring, how to reach the door, what happens in store.
 JSON schema:
 {
   "h1": "string",

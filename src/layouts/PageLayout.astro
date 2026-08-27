@@ -6,6 +6,7 @@ import { getHreflangs, getCanonical } from "@/lib/seo";
 import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 import { ADDRESS } from "@/data/site";
+import Analytics from "@/components/Analytics.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
 import JsonLd from "@/components/JsonLd.astro";
@@ -53,6 +54,15 @@ const xDefault = indexPolicy.indexable ? getCanonical("en", pathSuffix) : null;
 const dir = isRtl(locale) ? "rtl" : "ltr";
 const ogLocale = LOCALE_HREFLANG[locale].replace("-", "_");
 const siteUrl = getSiteUrl();
+/**
+ * Картинка превью в соцсетях и мессенджерах.
+ *
+ * Здесь стоял макро-снимок шишек: превью товара уходило в каждый пересланный
+ * линк, то есть реклама контролируемой травы распространялась дальше самого
+ * сайта. Снимка помещения или вывески в репозитории пока нет (O-15), поэтому
+ * ссылки представляет нейтральная карточка бренда.
+ */
+const SHARE_IMAGE_PATH = "/og-image.svg";
 ---
 
 <!doctype html>
@@ -90,13 +100,14 @@ const siteUrl = getSiteUrl();
     <meta property="og:type" content={pageType === "guide" ? "article" : "website"} />
     <meta property="og:site_name" content="Labs Cannabis" />
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
+    <meta property="og:image" content={`${siteUrl}${SHARE_IMAGE_PATH}`} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDesc} />
-    <meta name="twitter:image" content={`${siteUrl}/media/IMG_20260517_175646.jpg`} />
+    <meta name="twitter:image" content={`${siteUrl}${SHARE_IMAGE_PATH}`} />
   </head>
   <body>
+    <Analytics />
     <SiteHeader locale={locale} pathSuffix={pathSuffix} />
     <slot />
     <StickyCTA locale={locale} />

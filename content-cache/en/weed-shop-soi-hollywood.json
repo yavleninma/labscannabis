@@ -1,30 +1,34 @@
 {
-  "h1": "Your Local Weed Shop on Soi Hollywood",
-  "intro": "Welcome to Labs Cannabis, your go-to destination for premium cannabis products in Pattaya! Formerly known as Labs Dispensary, we pride ourselves on offering a diverse selection of high-quality weed, including the popular White Widow strain. Conveniently located on Soi Hollywood, our shop is dedicated to providing you with a friendly shopping experience and knowledgeable staff. Plus, we offer free in-store samples so you can find the perfect product for your needs.",
+  "h1": "Your Local Weed Shop on Pattaya 13 Alley",
+  "intro": "Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya. Conveniently located on Pattaya 13 Alley, our shop is dedicated to providing you with a friendly shopping experience and knowledgeable staff. Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya.",
   "sections": [
     {
       "h2": "Explore Our Cannabis Selection",
-      "body": "At Labs Cannabis, we understand that every cannabis enthusiast has unique preferences. That’s why we provide a wide array of products to cater to all tastes and needs. From classic strains like White Widow to a variety of edibles and accessories, our selection is curated to ensure quality and satisfaction. Whether you’re a seasoned user or new to cannabis, our staff is here to help you navigate through our offerings. We also provide weight tiers ranging from 1g to 1kg, making it easy for you to choose the right amount for your experience. Visit us today and discover why we are the preferred weed shop in Pattaya!"
+      "body": "At Labs Cannabis, we understand that every cannabis enthusiast has unique preferences. That’s why we provide a wide array of products to cater to all tastes and needs. Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya. Whether you’re a seasoned user or new to cannabis, our staff is here to help you navigate through our offerings. Bring identification showing you are 20 or older; the paperwork is checked at the counter, not on this website. Visit us today and discover why we are the preferred weed shop in Pattaya!"
     },
     {
       "h2": "Why Choose Labs Cannabis?",
-      "body": "Choosing Labs Cannabis means opting for quality, variety, and community. Our friendly team is always ready to answer your questions and guide you through your cannabis journey. We prioritize sourcing the best products while ensuring that our shop remains a welcoming space for all. Located on Soi Hollywood, we are easily accessible and close to the vibrant Walking Street, making it a perfect stop during your Pattaya adventure. Don't forget to take advantage of our free in-store samples, allowing you to try before you buy. At Labs Cannabis, we’re committed to providing a top-notch experience every time you visit."
+      "body": "Choosing Labs Cannabis means opting for quality, variety, and community. Our friendly team is always ready to answer your questions and guide you through your cannabis journey. Bring identification showing you are 20 or older; the paperwork is checked at the counter, not on this website. Located on Pattaya 13 Alley, we are easily accessible and close to the vibrant Walking Street, making it a perfect stop during your Pattaya adventure. Labs Cannabis does not stock vapes, e-cigarettes or tobacco. At Labs Cannabis, we’re committed to providing a top-notch experience every time you visit."
+    },
+    {
+      "h2": "Prescription and age rules",
+      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country. This paragraph states the rule and offers to arrange nothing."
     }
   ],
   "faq": [
     {
-      "q": "What types of cannabis products do you offer?",
-      "a": "We offer a wide range of cannabis products including various strains, edibles, and accessories to suit every preference."
+      "q": "What should I bring?",
+      "a": "Identification that shows you are 20 or older and a valid Thai prescription. Both are checked at the counter before anything is handed over."
     },
     {
-      "q": "Can I get a sample before I buy?",
-      "a": "Absolutely! We provide free in-store samples so you can find the perfect product for your needs."
+      "q": "Do you sell vapes or e-cigarettes?",
+      "a": "No. Selling vapes and e-cigarettes is illegal in Thailand and we do not stock them. Labs Cannabis is a licensed cannabis dispensary."
     },
     {
       "q": "What is your location?",
-      "a": "We are conveniently located on Soi Hollywood in Pattaya, close to Walking Street."
+      "a": "We are conveniently located on Pattaya 13 Alley in Pattaya, close to Walking Street."
     }
   ],
-  "closing": "Ready to explore the best cannabis in Pattaya? Visit us at Labs Cannabis for an unforgettable experience. For any inquiries, feel free to reach out via WhatsApp at +66 66 080 6784!",
+  "closing": "Labs Cannabis does not stock vapes, e-cigarettes or tobacco. Visit us at Labs Cannabis for an unforgettable experience. For any inquiries, feel free to reach out via WhatsApp at +66 66 080 6784!",
   "source": "openai"
 }

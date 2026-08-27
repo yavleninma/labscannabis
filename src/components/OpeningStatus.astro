@@ -1,0 +1,122 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { getHoursView } from "@/lib/hours";
+
+/**
+ * Часы работы и живой статус «открыто сейчас» (W1-12).
+ *
+ * Пока владелец не подтвердил расписание (O-01), `getHoursView` возвращает
+ * `null` и компонент не рендерит НИЧЕГО. Это не заглушка на будущее, а рабочее
+ * состояние по умолчанию: пара 12:00–01:00 гуляет по истории репозитория из
+ * удалённого коммита и ни разу не проверялась, а человек, приехавший к закрытой
+ * двери, пишет отзыв, который стоит дороже любого трафика.
+ *
+ * Статус считается в браузере и всегда в часовом поясе магазина: турист с
+ * телефоном по Москве или Сеулу обязан увидеть ответ Паттайи, а не свой.
+ * До ответа скрипта бейдж скрыт (`hidden`) — в статике нет момента «сейчас»,
+ * и краулер не должен получить замороженное «Открыто».
+ */
+interface Props {
+  locale: Locale;
+  /**
+   * Классы обёртки. Утилита display НЕ задаётся базой намеренно: шапке нужен
+   * `hidden lg:inline-flex`, и он не должен спорить с базовым `inline-flex` —
+   * в одном слое Tailwind победителя выбирает порядок в CSS, а не в разметке.
+   */
+  class?: string;
+  /** Классы бейджа — по умолчанию наследует стиль строки часов. */
+  badgeClass?: string;
+  /** Тег обёртки: внутри `<ul>` в ContactRail нужен `li`, а не `span`. */
+  tag?: "span" | "li" | "p" | "div";
+}
+
+const { locale, class: className = "", badgeClass = "", tag = "span" } = Astro.props;
+const Wrapper = tag;
+const view = getHoursView(locale);
+---
+
+{view && (
+  <>
+    <Wrapper class:list={["flex-wrap items-center gap-2", className]}>
+      <span>{view.line}</span>
+      <span
+        data-opening-status
+        data-tz={view.hours.tz}
+        data-opens={view.opensMinutes}
+        data-closes={view.closesMinutes}
+        data-spans-midnight={view.hours.spansMidnight ? "true" : "false"}
+        data-open-label={view.openLabel}
+        data-closed-label={view.closedLabel}
+        class:list={[
+          "rounded-full px-2.5 py-0.5 font-semibold data-[open]:bg-emerald/15 data-[open]:text-emerald-dim",
+          badgeClass,
+        ]}
+        hidden
+      ></span>
+    </Wrapper>
+
+    <script is:inline>
+      /**
+       * Скрипт живёт ВНУТРИ условия `{view && …}` и объявлен `is:inline`: обычный
+       * `<script>` Astro поднимает в бандл страницы независимо от того, отрендерил
+       * ли компонент разметку, и при неподтверждённых часах во все 210 HTML уезжал
+       * килобайт JS, которому нечего искать. Флаг на `window` защищает от повторной
+       * инициализации, когда компонент стоит на странице дважды (шапка + рельс).
+       */
+      if (!window.__openingStatusReady) {
+        window.__openingStatusReady = true;
+        const nodes = document.querySelectorAll("[data-opening-status]");
+
+        if (nodes.length > 0) {
+          /** Минуты с полуночи в часовом поясе магазина, а не устройства. */
+          const minutesInZone = (timeZone, at) => {
+            try {
+              const parts = new Intl.DateTimeFormat("en-GB", {
+                timeZone,
+                hour: "2-digit",
+                minute: "2-digit",
+                hourCycle: "h23",
+              }).formatToParts(at);
+              const hour = Number(parts.find((part) => part.type === "hour")?.value);
+              const minute = Number(parts.find((part) => part.type === "minute")?.value);
+              if (!Number.isFinite(hour) || !Number.isFinite(minute)) return null;
+              return hour * 60 + minute;
+            } catch {
+              // Неизвестный движку часовой пояс: лучше не показать статус вообще,
+              // чем показать посчитанный по времени телефона.
+              return null;
+            }
+          };
+
+          const render = (node) => {
+            const timeZone = node.dataset.tz;
+            const opens = Number(node.dataset.opens);
+            const closes = Number(node.dataset.closes);
+            if (!timeZone || !Number.isFinite(opens) || !Number.isFinite(closes)) return;
+
+            const now = minutesInZone(timeZone, new Date());
+            if (now === null) return;
+
+            // Конец окна не включается: ровно в `closes` дверь уже закрыта.
+            const isOpen = node.dataset.spansMidnight === "true"
+              ? now >= opens || now < closes
+              : now >= opens && now < closes;
+
+            node.textContent = (isOpen ? node.dataset.openLabel : node.dataset.closedLabel) ?? "";
+            node.toggleAttribute("data-open", isOpen);
+            node.hidden = false;
+          };
+
+          const renderAll = () => nodes.forEach(render);
+          renderAll();
+          // Пересчёт раз в минуту и при возврате на вкладку: страница статическая и
+          // может провисеть открытой до самого закрытия.
+          window.setInterval(renderAll, 60_000);
+          document.addEventListener("visibilitychange", () => {
+            if (!document.hidden) renderAll();
+          });
+        }
+      }
+    </script>
+  </>
+)}

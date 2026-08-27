@@ -1,0 +1,157 @@
+---
+import type { Locale } from "@/lib/i18n";
+import type { TrackPlacement } from "@/lib/analytics";
+import { CONTACT, RATING, getMapsDirectionsUrl, getMapsSearchUrl } from "@/data/site";
+import OpeningStatus from "@/components/OpeningStatus.astro";
+import { CTA_LABELS, ctaWhatsAppHref, type PrefillIntent } from "@/data/cta-copy";
+import { renderCopy } from "@/data/area-copy";
+import { describeLandmarkWalk } from "@/lib/geo";
+import { t } from "@/lib/ui";
+
+/**
+ * Контактный блок внутри основного содержимого страницы (W1-07).
+ *
+ * До него LINE и Telegram жили ровно на 7 URL из 213 (`/contact/`), а на всех
+ * остальных страницах единственным контактным действием была плавающая кнопка
+ * поверх текста. Rail ставится в `<article>`/`<main>` — там, где человек дочитал
+ * до конца и у него возник вопрос.
+ *
+ * Компонент НЕ эмитит JSON-LD: он попадает и на noindex-страницы, а `check-seo`
+ * валит сборку, если noindex-страница отдаёт разметку.
+ */
+interface Props {
+  locale: Locale;
+  /** Что подставить в префилл мессенджера — см. `PrefillIntent`. */
+  intent?: PrefillIntent;
+  /** Где стоит блок: уезжает в аналитику как `data-placement` (W1-08). */
+  placement: TrackPlacement;
+  /** Название района на языке локали для `intent="area"`. */
+  area?: string;
+}
+
+const { locale, intent = "visit", placement, area } = Astro.props;
+const ui = t(locale);
+const labels = CTA_LABELS[locale];
+const whatsappHref = ctaWhatsAppHref(locale, intent, { area });
+const directionsHref = getMapsDirectionsUrl();
+const ratingLine = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+/** Вычисленное расстояние вместо обещания «5 минут пешком» из `ui.location.landmark`. */
+const landmarkLine = describeLandmarkWalk("walking-street", locale);
+const headingId = `contact-rail-${placement}`;
+---
+
+<section
+  data-boilerplate
+  class="px-4 py-10"
+  aria-labelledby={headingId}
+>
+  <div class="mx-auto max-w-lg">
+    <div class="card-surface p-5">
+      <h2 id={headingId} class="text-xl font-bold">{ui.contact.title}</h2>
+      <p class="mt-2 text-base leading-relaxed text-text-muted">{ui.contact.subtitle}</p>
+
+      <ul class="mt-4 flex flex-wrap gap-2 text-sm text-text-muted">
+        <li>
+          <a
+            href={getMapsSearchUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex rounded-full border border-border bg-bg-elevated px-3 py-1.5 font-semibold text-emerald-dim hover:border-emerald/40"
+            data-track="contact_click"
+            data-channel="maps"
+            data-placement={placement}
+          >
+            {ratingLine}
+          </a>
+        </li>
+        {landmarkLine && (
+          <li class="rounded-full border border-border bg-bg-card px-3 py-1.5">{landmarkLine}</li>
+        )}
+        {/* Пока часы не подтверждены (O-01), `OpeningStatus` не рендерит ничего — чипа просто нет. */}
+        <OpeningStatus
+          locale={locale}
+          tag="li"
+          class="inline-flex rounded-full border border-border bg-bg-card px-3 py-1.5"
+        />
+      </ul>
+
+      <div class="mt-5 grid gap-3 sm:grid-cols-2">
+        <a
+          href={whatsappHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex min-h-12 items-center justify-center gap-2 rounded-xl bg-emerald px-4 py-3 text-center text-base font-bold text-black sm:col-span-2"
+          data-track="contact_click"
+          data-channel="whatsapp"
+          data-placement={placement}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 shrink-0" aria-hidden="true">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          <span>{labels.whatsapp}</span>
+        </a>
+
+        <a
+          href={directionsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-bg-elevated px-4 py-3 text-center text-base font-semibold text-emerald-dim hover:border-emerald/40"
+          data-track="contact_click"
+          data-channel="directions"
+          data-placement={placement}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 shrink-0" aria-hidden="true">
+            <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM13 15v-2.5h-3V15H8v-3.5a1 1 0 011-1h4V8l3.5 3.5L13 15z"/>
+          </svg>
+          <span>{labels.directions}</span>
+        </a>
+
+        <a
+          href={CONTACT.tel}
+          class="flex min-h-12 items-center justify-center gap-2 rounded-xl border border-border bg-bg-elevated px-4 py-3 text-center text-base font-semibold text-text hover:border-emerald/40"
+          data-track="contact_click"
+          data-channel="phone"
+          data-placement={placement}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5 shrink-0" aria-hidden="true">
+            <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.36 11.36 0 003.56.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.56a1 1 0 01-.25 1.02l-2.2 2.21z"/>
+          </svg>
+          <span>{CONTACT.phoneDisplay}</span>
+        </a>
+
+        {/*
+          LINE и Telegram рендерятся только при поднятом флаге (O-02). Сейчас в
+          `CONTACT.line` лежит обрезанный телефон вместо LINE ID, а Telegram по
+          номеру открывается только при приватности «Все»: клик в ошибку хуже
+          отсутствия канала, поэтому кнопки не выводятся вообще.
+        */}
+        {CONTACT.lineEnabled && (
+          <a
+            href={CONTACT.line}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex min-h-12 items-center justify-center rounded-xl border border-border bg-bg-elevated px-4 py-3 text-center text-base font-semibold text-text hover:border-emerald/40"
+            data-track="contact_click"
+            data-channel="line"
+            data-placement={placement}
+          >
+            {ui.contact.line}
+          </a>
+        )}
+        {CONTACT.telegramEnabled && (
+          <a
+            href={CONTACT.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex min-h-12 items-center justify-center rounded-xl border border-border bg-bg-elevated px-4 py-3 text-center text-base font-semibold text-text hover:border-emerald/40"
+            data-track="contact_click"
+            data-channel="telegram"
+            data-placement={placement}
+          >
+            {ui.contact.telegram}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

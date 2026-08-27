@@ -74,3 +74,13 @@ body {
 .sticky-cta-shadow {
   box-shadow: 0 6px 28px rgba(16, 185, 129, 0.45);
 }
+
+/*
+ * Полоса жестов iPhone. Layout объявляет `viewport-fit=cover`, то есть страница
+ * рисуется под системной полосой, и любая панель, прижатая к `bottom-0`, уезжает
+ * под неё вместе с тач-таргетом. `max()` оставляет обычный отступ там, где
+ * безопасной зоны нет (Android, десктоп), где `env()` равен нулю.
+ */
+.safe-bottom {
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}

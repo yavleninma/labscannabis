@@ -1,19 +1,50 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import OpeningStatus from "@/components/OpeningStatus.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import ReviewStrip from "@/components/ReviewStrip.astro";
 import Footer from "@/components/Footer.astro";
-import { LOCALES, localePath, type Locale } from "@/lib/i18n";
+import { LOCALES, type Locale } from "@/lib/i18n";
 import {
   ADDRESS,
   BRAND,
   CONTACT,
   GOOGLE,
-  getMapsEmbedUrl,
+  RATING,
+  getMapsDirectionsUrl,
   getMapsSearchUrl,
+  getPublishableStaffLanguages,
 } from "@/data/site";
+import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
+import { renderCopy } from "@/data/area-copy";
+import { describeLandmarkWalk } from "@/lib/geo";
+import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
 }
+
+/**
+ * Главная (W1-15).
+ *
+ * Прежняя тема страницы была «под каким именем нас искать в Google Maps»: h1
+ * «Find Labs Cannabis in Pattaya», второй экран «One shop, two names to
+ * recognise», FAQ про название карточки. Это вопрос, которого посетитель не
+ * задаёт, и он публично закреплял путаницу имён. Человек, пришедший по запросу
+ * «купить травку в Паттайе», не видел ни повода зайти, ни доказательств, ни
+ * ответа на «а что у вас есть».
+ *
+ * Теперь первый экран отвечает на три вопроса подряд — что это за место, почему
+ * ему можно верить и как спросить про сегодняшнюю витрину, — а вопрос про
+ * название ушёл одним пунктом в FAQ.
+ *
+ * Чего на странице нет и быть не может: цен, весов, наличия, скидок, промо,
+ * образцов, медицинских обещаний и любой формы онлайн-заказа. Актуальный
+ * ассортимент сообщается в переписке и не публикуется.
+ */
+type TrustItem = { title: string; body: string };
 
 type HomeCopy = {
   title: string;
@@ -21,392 +52,552 @@ type HomeCopy = {
   eyebrow: string;
   h1: string;
   lead: string;
-  primaryCta: string;
-  mapCta: string;
-  proof: string[];
-  identityTitle: string;
-  identityBody: string;
+  /** Чип первого экрана рядом с рейтингом и вычисленной дистанцией. */
+  licensedChip: string;
+  shelfEyebrow: string;
+  shelfTitle: string;
+  shelfBody: string;
+  shelfPoints: string[];
   trustTitle: string;
-  trustItems: string[];
-  areasEyebrow: string;
-  areasTitle: string;
-  areasLead: string;
-  areaCta: string;
-  allAreas: string;
+  trustItems: TrustItem[];
+  /** Пункт про языки персонала — рендерится только после подтверждения (O-01). */
+  languagesTitle: string;
+  languagesBody: string;
+  relatedTitle: string;
+  relatedLead: string;
   locationEyebrow: string;
   locationTitle: string;
   locationBody: string;
+  listedAs: string;
   phoneLabel: string;
   faqTitle: string;
   faq: { q: string; a: string }[];
-  whatsappVisit: string;
 };
 
 const HOME_COPY: Record<Locale, HomeCopy> = {
   en: {
-    title: "Cannabis shop in Pattaya | Map and directions | Labs Cannabis",
+    title: "Licensed cannabis dispensary in Pattaya | LABS DISPENSARY",
     description:
-      "Find Labs Cannabis on Pattaya 13 Alley. Open the verified Google Maps listing, see the address and phone, or ask for directions and visit coordination on WhatsApp.",
-    eyebrow: "Cannabis shop in Pattaya",
-    h1: "Find Labs Cannabis in Pattaya.",
+      "LABS DISPENSARY (Labs Cannabis) on Pattaya 13 Alley, South Pattaya. 4.8★ on Google, a 10–13 minute walk from Walking Street. Ask on WhatsApp what is in store today. Adults 20+.",
+    eyebrow: "Licensed cannabis dispensary in Pattaya",
+    h1: "LABS DISPENSARY Pattaya — licensed cannabis dispensary on Pattaya 13 Alley",
     lead:
-      "Use the exact map pin, address and phone below. On Google Maps, the shop is currently listed as LABS DISPENSARY.",
-    primaryCta: "Ask for directions",
-    mapCta: "Open Google Maps",
-    proof: ["Exact map pin", "Public listing link", "Pattaya 13 Alley"],
-    identityTitle: "One shop, two names to recognise",
-    identityBody:
-      "Labs Cannabis is the website name. The same Pattaya location is listed on Google Maps as LABS DISPENSARY.",
-    trustTitle: "Plan a visit with public facts",
-    trustItems: [
-      "The map button opens the current Google Maps listing directly.",
-      "The address and phone match the local contact details published on this website.",
-      "WhatsApp is provided for directions and coordinating a visit.",
+      "One shop, one door, in South Pattaya. Ask on WhatsApp what is on the shelf right now — the selection changes daily, so it is never published here. Adults 20 and over, with a prescription issued in Thailand.",
+    licensedChip: "Licensed dispensary · 20+",
+    shelfEyebrow: "Today",
+    shelfTitle: "What is on the shelf today",
+    shelfBody:
+      "Stock rotates, so this website carries no menu, no weights and no numbers. Write to us and you get the honest answer for today, in one message, before you cross town.",
+    shelfPoints: [
+      "What arrived this week and what is left of it",
+      "What suits what you came looking for",
+      "How to find the door, and whether we are open right now",
     ],
-    areasEyebrow: "Pattaya area guides",
-    areasTitle: "Plan your route from around Pattaya",
-    areasLead:
-      "Choose an area for local orientation, then use the exact Google Maps pin for the final route.",
-    areaCta: "View route guide",
-    allAreas: "View all location guides",
+    trustTitle: "Why this is a safe door to walk through",
+    trustItems: [
+      {
+        title: "A licensed dispensary",
+        body:
+          "LABS DISPENSARY is a licensed cannabis shop in Pattaya. Everything happens in store, face to face, with adults 20 and over.",
+      },
+      {
+        title: "The rules, in plain words",
+        body:
+          "Cannabis flower is a controlled herb in Thailand. A prescription issued in Thailand is required, and one issued abroad is not accepted. This website takes no orders and no payments — the tourist legal guide links to the official sources.",
+      },
+      {
+        title: "Reviews you can check yourself",
+        body:
+          "The Google rating on this page is a link to the shop's own listing, not a number typed into the layout. Open it and read every review.",
+      },
+    ],
+    languagesTitle: "Languages at the counter",
+    languagesBody: "Staff answer in {languages}.",
+    relatedTitle: "Answers people arrive looking for",
+    relatedLead: "Straight to the page that answers the question you searched for.",
     locationEyebrow: "Visit",
-    locationTitle: "Pattaya 13 Alley location",
+    locationTitle: "Pattaya 13 Alley, South Pattaya",
     locationBody:
-      "Open the public listing before travelling. If you need help finding the entrance, ask on WhatsApp.",
+      "The pin below is the door itself. The directions button hands you to Google Maps already navigating; if the alley confuses you, message us and we will bring you in.",
+    listedAs: "{brand} is listed on Google Maps as {listing}",
     phoneLabel: "Phone",
-    faqTitle: "Location questions",
+    faqTitle: "Questions before you come",
     faq: [
       {
-        q: "What name should I look for on Google Maps?",
-        a: "Labs Cannabis is listed on Google Maps as LABS DISPENSARY.",
+        q: "Do you sell vapes, carts, e-cigarettes or hookah?",
+        a: "No. Selling vapes and e-cigarettes is illegal in Thailand and we do not stock them, in any form. LABS DISPENSARY is a licensed cannabis dispensary: cannabis flower is sold in store, to adults 20 and over who hold a prescription issued in Thailand.",
       },
       {
-        q: "Where is the shop?",
-        a: "The published address is 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
+        q: "What is on the shelf today?",
+        a: "The selection changes every day, so it is not published on this website — and neither are weights or numbers. Ask on WhatsApp and a person answers with today's picture. No orders and no payments are taken here.",
       },
       {
-        q: "How can I ask for directions?",
-        a: "Open the Google Maps listing for the route, or use WhatsApp for directions and visit coordination.",
+        q: "Do I need a prescription?",
+        a: "Yes. Cannabis flower is a controlled herb in Thailand, and a prescription issued in Thailand is required. A prescription from another country is not accepted. The tourist legal guide on this site links to the current official sources.",
+      },
+      {
+        q: "Where is the shop, and what name is on Google Maps?",
+        a: "32 Pattaya 13 Alley, South Pattaya, Chon Buri 20150. The website is called Labs Cannabis and the same door is listed on Google Maps as LABS DISPENSARY — one shop, two names.",
+      },
+      {
+        q: "How far is it from Walking Street?",
+        a: "It is a walk from the north end of Walking Street. The exact distance and the walking time are calculated from the coordinates and shown at the top of this page; the directions button opens navigation to the door.",
       },
     ],
-    whatsappVisit:
-      "Hi Labs Cannabis. I am in Pattaya and would like directions and help coordinating a visit to the shop.",
   },
   ru: {
-    title: "Магазин каннабиса в Паттайе | Карта и маршрут | Labs Cannabis",
+    title: "Лицензированный каннабис-диспенсери в Паттайе | LABS DISPENSARY",
     description:
-      "Найдите Labs Cannabis на Pattaya 13 Alley: точная карточка Google Maps, адрес, телефон и WhatsApp для маршрута и согласования визита.",
-    eyebrow: "Магазин каннабиса в Паттайе",
-    h1: "Как найти Labs Cannabis в Паттайе.",
+      "LABS DISPENSARY (Labs Cannabis) на Pattaya 13 Alley, Южная Паттайя. 4.8★ в Google, пешком от Walking Street. Спросите в WhatsApp, что есть сегодня. Только 20+.",
+    eyebrow: "Лицензированный каннабис-диспенсери в Паттайе",
+    h1: "LABS DISPENSARY Паттайя — лицензированный каннабис-диспенсери на Pattaya 13 Alley",
     lead:
-      "Ниже — точная точка на карте, адрес и телефон. В Google Maps магазин сейчас указан как LABS DISPENSARY.",
-    primaryCta: "Спросить маршрут",
-    mapCta: "Открыть Google Maps",
-    proof: ["Точная точка на карте", "Прямая ссылка на карточку", "Pattaya 13 Alley"],
-    identityTitle: "Один магазин, два узнаваемых названия",
-    identityBody:
-      "Labs Cannabis — название сайта. Эта же локация в Паттайе указана в Google Maps как LABS DISPENSARY.",
-    trustTitle: "Планируйте визит по проверяемым данным",
-    trustItems: [
-      "Кнопка карты открывает актуальную карточку Google Maps напрямую.",
-      "Адрес и телефон совпадают с локальными контактами, опубликованными на сайте.",
-      "WhatsApp используется для маршрута и согласования визита.",
+      "Один магазин, одна дверь, Южная Паттайя. Спросите в WhatsApp, что сейчас на витрине: она меняется каждый день, поэтому здесь не публикуется. Только 20+ и рецепт, выданный в Таиланде.",
+    licensedChip: "Лицензированный диспенсери · 20+",
+    shelfEyebrow: "Сегодня",
+    shelfTitle: "Что есть сегодня",
+    shelfBody:
+      "Витрина обновляется, поэтому на сайте нет ни меню, ни весов, ни сумм. Напишите — и получите честный ответ на сегодня одним сообщением, ещё до того, как поедете через весь город.",
+    shelfPoints: [
+      "Что приехало на этой неделе и что от этого осталось",
+      "Что подойдёт под то, за чем вы пришли",
+      "Как найти дверь и открыты ли мы прямо сейчас",
     ],
-    areasEyebrow: "Районы Паттайи",
-    areasTitle: "Спланируйте маршрут из своего района",
-    areasLead:
-      "Выберите район для ориентира, а для финального маршрута используйте точную точку Google Maps.",
-    areaCta: "Посмотреть маршрут",
-    allAreas: "Все районные маршруты",
+    trustTitle: "Почему сюда можно зайти спокойно",
+    trustItems: [
+      {
+        title: "Лицензированный магазин",
+        body:
+          "LABS DISPENSARY — лицензированный каннабис-магазин в Паттайе. Всё происходит в магазине, лично, с совершеннолетними от 20 лет.",
+      },
+      {
+        title: "Правила простыми словами",
+        body:
+          "Соцветия каннабиса — контролируемая трава. Нужен рецепт, выданный в Таиланде; выданный за границей не принимается. Сайт не принимает ни заказы, ни оплату — правовой гид ведёт на официальные источники.",
+      },
+      {
+        title: "Отзывы, которые можно проверить",
+        body:
+          "Рейтинг Google на этой странице — это ссылка на карточку самого магазина, а не число, вписанное в вёрстку. Откройте и прочитайте все отзывы.",
+      },
+    ],
+    languagesTitle: "Языки в магазине",
+    languagesBody: "Сотрудники отвечают на: {languages}.",
+    relatedTitle: "С чем сюда обычно приходят",
+    relatedLead: "Сразу на страницу, которая отвечает на ваш запрос.",
     locationEyebrow: "Визит",
-    locationTitle: "Локация на Pattaya 13 Alley",
+    locationTitle: "Pattaya 13 Alley, Южная Паттайя",
     locationBody:
-      "Перед поездкой откройте публичную карточку. Если нужна помощь с поиском входа, напишите в WhatsApp.",
+      "Точка ниже — это сама дверь. Кнопка маршрута сразу отдаёт вас в навигацию Google Maps; если переулок запутал — напишите, доведём.",
+    listedAs: "{brand} указан в Google Maps как {listing}",
     phoneLabel: "Телефон",
-    faqTitle: "Вопросы о локации",
+    faqTitle: "Вопросы перед визитом",
     faq: [
       {
-        q: "Какое название искать в Google Maps?",
-        a: "Labs Cannabis указан в Google Maps как LABS DISPENSARY.",
+        q: "Продаёте ли вы вейпы, картриджи, электронные сигареты или кальян?",
+        a: "Нет. Продажа вейпов и электронных сигарет в Таиланде запрещена, и мы не держим их ни в каком виде. LABS DISPENSARY — лицензированный каннабис-диспенсери: соцветия отпускаются в магазине совершеннолетним от 20 лет по рецепту, выданному в Таиланде.",
       },
       {
-        q: "Где находится магазин?",
-        a: "Опубликованный адрес: 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
+        q: "Что есть на витрине сегодня?",
+        a: "Витрина меняется каждый день, поэтому на сайте её нет — как нет ни весов, ни сумм. Спросите в WhatsApp — на сегодняшний вопрос отвечает человек. Заказы и оплата здесь не принимаются.",
       },
       {
-        q: "Как уточнить маршрут?",
-        a: "Откройте карточку Google Maps для маршрута или напишите в WhatsApp для навигации и согласования визита.",
+        q: "Нужен ли рецепт?",
+        a: "Да. Соцветия каннабиса — контролируемая трава, и нужен рецепт, выданный в Таиланде. Рецепт из другой страны не принимается. Правовой гид на этом сайте ведёт на актуальные официальные источники.",
+      },
+      {
+        q: "Где магазин и какое название в Google Maps?",
+        a: "32 Pattaya 13 Alley, Южная Паттайя, Чонбури 20150. Сайт называется Labs Cannabis, а эта же дверь указана в Google Maps как LABS DISPENSARY — один магазин, два названия.",
+      },
+      {
+        q: "Далеко ли от Walking Street?",
+        a: "Это пешая прогулка от северного конца Walking Street. Точное расстояние и время рассчитаны по координатам и показаны в начале страницы, а кнопка маршрута открывает навигацию прямо к двери.",
       },
     ],
-    whatsappVisit:
-      "Привет, Labs Cannabis. Я в Паттайе. Подскажите маршрут и помогите согласовать визит в магазин.",
   },
   th: {
-    title: "ร้านกัญชาในพัทยา | แผนที่และเส้นทาง | Labs Cannabis",
+    title: "ร้านกัญชาที่มีใบอนุญาตในพัทยา | LABS DISPENSARY",
     description:
-      "ค้นหา Labs Cannabis ที่ Pattaya 13 Alley เปิดข้อมูล Google Maps ที่ตรงกัน ดูที่อยู่และโทรศัพท์ หรือขอเส้นทางผ่าน WhatsApp",
-    eyebrow: "ร้านกัญชาในพัทยา",
-    h1: "ค้นหา Labs Cannabis ในพัทยา",
+      "LABS DISPENSARY (Labs Cannabis) ที่ Pattaya 13 Alley พัทยาใต้ 4.8★ บน Google เดินจาก Walking Street สอบถามทาง WhatsApp ว่าวันนี้มีอะไรที่ร้าน อายุ 20 ปีขึ้นไป",
+    eyebrow: "ร้านกัญชาที่มีใบอนุญาตในพัทยา",
+    h1: "LABS DISPENSARY พัทยา — ร้านกัญชาที่มีใบอนุญาตบน Pattaya 13 Alley",
     lead:
-      "ใช้หมุดแผนที่ ที่อยู่ และหมายเลขโทรศัพท์ด้านล่าง ใน Google Maps ร้านนี้แสดงชื่อว่า LABS DISPENSARY",
-    primaryCta: "ขอเส้นทาง",
-    mapCta: "เปิด Google Maps",
-    proof: ["หมุดแผนที่ตรงจุด", "ลิงก์ข้อมูลสาธารณะ", "Pattaya 13 Alley"],
-    identityTitle: "สถานที่เดียว สองชื่อที่ควรรู้",
-    identityBody:
-      "Labs Cannabis คือชื่อบนเว็บไซต์ และสถานที่เดียวกันในพัทยาแสดงบน Google Maps ในชื่อ LABS DISPENSARY",
-    trustTitle: "วางแผนการเยี่ยมชมด้วยข้อมูลสาธารณะ",
-    trustItems: [
-      "ปุ่มแผนที่จะเปิดข้อมูล Google Maps ปัจจุบันโดยตรง",
-      "ที่อยู่และโทรศัพท์ตรงกับข้อมูลติดต่อที่เผยแพร่บนเว็บไซต์นี้",
-      "ใช้ WhatsApp เพื่อขอเส้นทางและประสานงานการเยี่ยมชม",
+      "ร้านเดียว ประตูเดียว ในพัทยาใต้ สอบถามทาง WhatsApp ว่าตอนนี้หน้าร้านมีอะไร ของหมุนเวียนทุกวันจึงไม่เผยแพร่บนเว็บไซต์ สำหรับผู้ใหญ่อายุ 20 ปีขึ้นไป และต้องมีใบสั่งแพทย์ที่ออกในประเทศไทย",
+    licensedChip: "ร้านมีใบอนุญาต · 20+",
+    shelfEyebrow: "วันนี้",
+    shelfTitle: "วันนี้หน้าร้านมีอะไร",
+    shelfBody:
+      "ของหมุนเวียนตลอด เว็บไซต์นี้จึงไม่มีเมนู ไม่มีน้ำหนัก และไม่มีตัวเลขใด ๆ ทักมาแล้วคุณจะได้คำตอบจริงของวันนี้ในข้อความเดียว ก่อนจะเดินทางข้ามเมือง",
+    shelfPoints: [
+      "สัปดาห์นี้มีอะไรเข้ามาและเหลืออะไรบ้าง",
+      "อะไรเหมาะกับสิ่งที่คุณกำลังมองหา",
+      "หาประตูร้านอย่างไร และตอนนี้เปิดอยู่ไหม",
     ],
-    areasEyebrow: "คู่มือพื้นที่พัทยา",
-    areasTitle: "วางแผนเส้นทางจากพื้นที่ต่าง ๆ ในพัทยา",
-    areasLead:
-      "เลือกพื้นที่เพื่อดูแนวทางเบื้องต้น แล้วใช้หมุด Google Maps ที่ตรงจุดสำหรับเส้นทางสุดท้าย",
-    areaCta: "ดูคู่มือเส้นทาง",
-    allAreas: "ดูคู่มือสถานที่ทั้งหมด",
-    locationEyebrow: "เยี่ยมชม",
-    locationTitle: "สถานที่บน Pattaya 13 Alley",
+    trustTitle: "ทำไมเข้าร้านนี้ได้อย่างสบายใจ",
+    trustItems: [
+      {
+        title: "ร้านที่มีใบอนุญาต",
+        body:
+          "LABS DISPENSARY เป็นร้านกัญชาที่มีใบอนุญาตในพัทยา ทุกอย่างเกิดขึ้นที่หน้าร้าน พบกันตัวต่อตัว กับผู้ใหญ่อายุ 20 ปีขึ้นไป",
+      },
+      {
+        title: "กฎแบบเข้าใจง่าย",
+        body:
+          "ช่อดอกกัญชาเป็นสมุนไพรควบคุม ต้องมีใบสั่งแพทย์ที่ออกในประเทศไทย ใบสั่งจากต่างประเทศใช้ไม่ได้ เว็บไซต์นี้ไม่รับคำสั่งซื้อและไม่รับชำระเงิน คู่มือกฎหมายสำหรับนักท่องเที่ยวเชื่อมไปยังแหล่งข้อมูลทางการ",
+      },
+      {
+        title: "รีวิวที่ตรวจสอบเองได้",
+        body:
+          "คะแนน Google บนหน้านี้เป็นลิงก์ไปยังข้อมูลร้านโดยตรง ไม่ใช่ตัวเลขที่พิมพ์ลงในหน้าเว็บ เปิดดูและอ่านรีวิวทั้งหมดได้",
+      },
+    ],
+    languagesTitle: "ภาษาที่ใช้ในร้าน",
+    languagesBody: "พนักงานตอบเป็นภาษา {languages}",
+    relatedTitle: "สิ่งที่คนมักค้นหา",
+    relatedLead: "ไปยังหน้าที่ตอบคำถามที่คุณค้นหาได้ทันที",
+    locationEyebrow: "มาที่ร้าน",
+    locationTitle: "Pattaya 13 Alley พัทยาใต้",
     locationBody:
-      "เปิดข้อมูลสาธารณะก่อนเดินทาง หากต้องการความช่วยเหลือในการหาทางเข้า โปรดสอบถามทาง WhatsApp",
+      "หมุดด้านล่างคือประตูร้าน ปุ่มเส้นทางจะส่งคุณเข้าสู่การนำทางของ Google Maps ทันที ถ้าหลงในซอย ทักมาแล้วเราจะพาเข้า",
+    listedAs: "{brand} แสดงบน Google Maps ในชื่อ {listing}",
     phoneLabel: "โทรศัพท์",
-    faqTitle: "คำถามเกี่ยวกับสถานที่",
+    faqTitle: "คำถามก่อนมาที่ร้าน",
     faq: [
       {
-        q: "ควรค้นหาชื่อใดใน Google Maps?",
-        a: "Labs Cannabis แสดงบน Google Maps ในชื่อ LABS DISPENSARY",
+        q: "ร้านขายบุหรี่ไฟฟ้า พอต หรือชิชาไหม",
+        a: "ไม่ขาย การจำหน่ายบุหรี่ไฟฟ้าและพอตผิดกฎหมายในประเทศไทย และเราไม่มีสินค้าเหล่านี้ในทุกรูปแบบ LABS DISPENSARY เป็นร้านกัญชาที่มีใบอนุญาต ช่อดอกจำหน่ายที่หน้าร้านให้ผู้ใหญ่อายุ 20 ปีขึ้นไปที่มีใบสั่งแพทย์ที่ออกในประเทศไทย",
       },
       {
-        q: "ร้านอยู่ที่ไหน?",
-        a: "ที่อยู่ที่เผยแพร่คือ 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150",
+        q: "วันนี้หน้าร้านมีอะไรบ้าง",
+        a: "ของเปลี่ยนทุกวัน จึงไม่เผยแพร่บนเว็บไซต์ และไม่มีน้ำหนักหรือตัวเลขเช่นกัน ทัก WhatsApp แล้วมีคนตอบว่าวันนี้เป็นอย่างไร ที่นี่ไม่รับคำสั่งซื้อและไม่รับชำระเงิน",
       },
       {
-        q: "ขอเส้นทางได้อย่างไร?",
-        a: "เปิดข้อมูล Google Maps สำหรับเส้นทาง หรือใช้ WhatsApp เพื่อขอเส้นทางและประสานงานการเยี่ยมชม",
+        q: "ต้องมีใบสั่งแพทย์ไหม",
+        a: "ต้องมี ช่อดอกกัญชาเป็นสมุนไพรควบคุม และต้องมีใบสั่งแพทย์ที่ออกในประเทศไทย ใบสั่งจากประเทศอื่นใช้ไม่ได้ คู่มือกฎหมายบนเว็บไซต์นี้เชื่อมไปยังแหล่งข้อมูลทางการล่าสุด",
+      },
+      {
+        q: "ร้านอยู่ที่ไหน และใน Google Maps ใช้ชื่ออะไร",
+        a: "32 Pattaya 13 Alley พัทยาใต้ ชลบุรี 20150 เว็บไซต์ชื่อ Labs Cannabis ส่วนประตูเดียวกันนี้แสดงบน Google Maps ในชื่อ LABS DISPENSARY หนึ่งร้าน สองชื่อ",
+      },
+      {
+        q: "ห่างจาก Walking Street แค่ไหน",
+        a: "เดินได้จากปลายด้านเหนือของ Walking Street ระยะทางและเวลาเดินคำนวณจากพิกัดและแสดงไว้ด้านบนของหน้านี้ ส่วนปุ่มเส้นทางจะเปิดการนำทางไปยังประตูร้าน",
       },
     ],
-    whatsappVisit:
-      "สวัสดี Labs Cannabis ฉันอยู่ในพัทยาและต้องการเส้นทางพร้อมความช่วยเหลือในการประสานงานการเยี่ยมชมร้าน",
   },
   ar: {
-    title: "متجر القنب في باتايا | الخريطة والاتجاهات | Labs Cannabis",
+    title: "متجر قنب مرخّص في باتايا | LABS DISPENSARY",
     description:
-      "اعثر على Labs Cannabis في Pattaya 13 Alley. افتح بطاقة Google Maps المطابقة أو استخدم WhatsApp للاتجاهات وتنسيق الزيارة.",
-    eyebrow: "متجر القنب في باتايا",
-    h1: "اعثر على Labs Cannabis في باتايا.",
+      "LABS DISPENSARY (Labs Cannabis) في Pattaya 13 Alley، جنوب باتايا. 4.8★ على Google، على مسافة مشي من Walking Street. اسأل عبر WhatsApp عن المتوفر اليوم. للبالغين 20+.",
+    eyebrow: "متجر قنب مرخّص في باتايا",
+    h1: "LABS DISPENSARY باتايا — متجر قنب مرخّص في Pattaya 13 Alley",
     lead:
-      "استخدم دبوس الخريطة والعنوان والهاتف أدناه. يظهر المتجر حالياً على Google Maps باسم LABS DISPENSARY.",
-    primaryCta: "اطلب الاتجاهات",
-    mapCta: "فتح Google Maps",
-    proof: ["دبوس خريطة دقيق", "رابط البطاقة العامة", "Pattaya 13 Alley"],
-    identityTitle: "موقع واحد واسمان للتعرّف عليهما",
-    identityBody:
-      "Labs Cannabis هو اسم الموقع الإلكتروني. ويظهر الموقع نفسه في باتايا على Google Maps باسم LABS DISPENSARY.",
-    trustTitle: "خطط للزيارة باستخدام معلومات عامة",
-    trustItems: [
-      "يفتح زر الخريطة بطاقة Google Maps الحالية مباشرة.",
-      "يتطابق العنوان والهاتف مع معلومات الاتصال المحلية المنشورة على هذا الموقع.",
-      "يُستخدم WhatsApp للحصول على الاتجاهات وتنسيق الزيارة.",
+      "متجر واحد وباب واحد في جنوب باتايا. اسأل عبر WhatsApp عمّا هو متوفر الآن: المعروض يتغيّر يومياً ولذلك لا يُنشر هنا. للبالغين 20 عاماً فأكثر، مع وصفة صادرة في تايلاند.",
+    licensedChip: "متجر مرخّص · 20+",
+    shelfEyebrow: "اليوم",
+    shelfTitle: "ما المتوفر اليوم",
+    shelfBody:
+      "المعروض يتبدّل باستمرار، ولذلك لا يحتوي هذا الموقع على قائمة ولا أوزان ولا أرقام. راسلنا وستحصل على الجواب الصادق لهذا اليوم في رسالة واحدة، قبل أن تعبر المدينة.",
+    shelfPoints: [
+      "ما وصل هذا الأسبوع وما تبقّى منه",
+      "ما يناسب ما جئت تبحث عنه",
+      "كيف تجد الباب، وهل نحن مفتوحون الآن",
     ],
-    areasEyebrow: "أدلة مناطق باتايا",
-    areasTitle: "خطط لمسارك من مناطق باتايا",
-    areasLead:
-      "اختر منطقة للتوجيه المحلي، ثم استخدم دبوس Google Maps الدقيق للمسار النهائي.",
-    areaCta: "عرض دليل المسار",
-    allAreas: "عرض جميع أدلة المواقع",
+    trustTitle: "لماذا هذا باب آمن للدخول",
+    trustItems: [
+      {
+        title: "متجر مرخّص",
+        body:
+          "LABS DISPENSARY متجر قنب مرخّص في باتايا. كل شيء يجري داخل المتجر، وجهاً لوجه، مع بالغين في العشرين فأكثر.",
+      },
+      {
+        title: "القواعد بكلمات واضحة",
+        body:
+          "زهرة القنب عشبة خاضعة للرقابة في تايلاند. يلزم وجود وصفة صادرة في تايلاند، والوصفة الصادرة في الخارج غير مقبولة. هذا الموقع لا يقبل طلبات ولا مدفوعات، والدليل القانوني للسياح يحيل إلى المصادر الرسمية.",
+      },
+      {
+        title: "تقييمات يمكنك التحقق منها",
+        body:
+          "تقييم Google في هذه الصفحة رابط إلى بطاقة المتجر نفسها، لا رقم مكتوب في التصميم. افتحه واقرأ كل التقييمات.",
+      },
+    ],
+    languagesTitle: "اللغات داخل المتجر",
+    languagesBody: "يجيب الفريق بـ {languages}.",
+    relatedTitle: "ما يبحث عنه الزوار عادة",
+    relatedLead: "مباشرة إلى الصفحة التي تجيب عن سؤالك.",
     locationEyebrow: "الزيارة",
-    locationTitle: "الموقع في Pattaya 13 Alley",
+    locationTitle: "Pattaya 13 Alley، جنوب باتايا",
     locationBody:
-      "افتح البطاقة العامة قبل التوجه. إذا احتجت مساعدة في العثور على المدخل، اسأل عبر WhatsApp.",
+      "الدبوس في الأسفل هو الباب نفسه. زر الاتجاهات يسلّمك إلى ملاحة Google Maps مباشرة، وإن التبس عليك الزقاق فراسلنا وسنأتي بك.",
+    listedAs: "{brand} مدرج على Google Maps باسم {listing}",
     phoneLabel: "الهاتف",
-    faqTitle: "أسئلة الموقع",
+    faqTitle: "أسئلة قبل الزيارة",
     faq: [
       {
-        q: "ما الاسم الذي أبحث عنه في Google Maps؟",
-        a: "يظهر Labs Cannabis على Google Maps باسم LABS DISPENSARY.",
+        q: "هل تبيعون السجائر الإلكترونية أو الفيب أو الشيشة؟",
+        a: "لا. بيع الفيب والسجائر الإلكترونية غير قانوني في تايلاند، ولا نحتفظ بها بأي شكل. LABS DISPENSARY متجر قنب مرخّص: تُصرف زهرة القنب داخل المتجر للبالغين 20 عاماً فأكثر ممن يحملون وصفة صادرة في تايلاند.",
       },
       {
-        q: "أين يقع المتجر؟",
-        a: "العنوان المنشور هو 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150.",
+        q: "ما المتوفر اليوم؟",
+        a: "المعروض يتغيّر كل يوم، ولذلك لا يُنشر على هذا الموقع، ولا تُنشر معه أوزان أو أرقام. اسأل عبر WhatsApp ويجيبك شخص عن حال اليوم. لا تُقبل هنا طلبات ولا مدفوعات.",
       },
       {
-        q: "كيف أطلب الاتجاهات؟",
-        a: "افتح بطاقة Google Maps للمسار أو استخدم WhatsApp للاتجاهات وتنسيق الزيارة.",
+        q: "هل أحتاج إلى وصفة طبية؟",
+        a: "نعم. زهرة القنب عشبة خاضعة للرقابة في تايلاند، ويلزم وجود وصفة صادرة في تايلاند. الوصفة الصادرة في بلد آخر غير مقبولة. الدليل القانوني للسياح على هذا الموقع يحيل إلى المصادر الرسمية الحالية.",
+      },
+      {
+        q: "أين المتجر، وما الاسم على Google Maps؟",
+        a: "32 Pattaya 13 Alley، جنوب باتايا، شون بوري 20150. اسم الموقع الإلكتروني Labs Cannabis، والباب نفسه مدرج على Google Maps باسم LABS DISPENSARY — متجر واحد باسمين.",
+      },
+      {
+        q: "كم يبعد عن Walking Street؟",
+        a: "المسافة قابلة للمشي من الطرف الشمالي لـ Walking Street. المسافة الدقيقة وزمن المشي محسوبان من الإحداثيات ومعروضان في أعلى هذه الصفحة، وزر الاتجاهات يفتح الملاحة حتى الباب.",
       },
     ],
-    whatsappVisit:
-      "مرحباً Labs Cannabis. أنا في باتايا وأرغب في الاتجاهات والمساعدة في تنسيق زيارة المتجر.",
   },
   zh: {
-    title: "芭提雅大麻商店 | 地图与路线 | Labs Cannabis",
+    title: "芭提雅持牌大麻药房 | LABS DISPENSARY",
     description:
-      "在 Pattaya 13 Alley 找到 Labs Cannabis。打开对应的 Google Maps 商家信息，或通过 WhatsApp 获取路线并协调到店。",
-    eyebrow: "芭提雅大麻商店",
-    h1: "在芭提雅找到 Labs Cannabis。",
+      "LABS DISPENSARY（Labs Cannabis）位于芭提雅南区 Pattaya 13 Alley。Google 评分 4.8★，从 Walking Street 步行可达。今天店里有什么，请在 WhatsApp 询问。仅限 20 岁以上。",
+    eyebrow: "芭提雅持牌大麻药房",
+    h1: "LABS DISPENSARY 芭提雅 — Pattaya 13 Alley 的持牌大麻药房",
     lead:
-      "请使用下方准确的地图定位、地址和电话。该店目前在 Google Maps 上显示为 LABS DISPENSARY。",
-    primaryCta: "询问路线",
-    mapCta: "打开 Google Maps",
-    proof: ["准确地图定位", "公开商家信息链接", "Pattaya 13 Alley"],
-    identityTitle: "同一地点，两个可识别名称",
-    identityBody:
-      "Labs Cannabis 是网站名称。芭提雅的同一地点在 Google Maps 上显示为 LABS DISPENSARY。",
-    trustTitle: "根据公开信息规划到店",
-    trustItems: [
-      "地图按钮会直接打开当前 Google Maps 商家信息。",
-      "地址和电话与本网站发布的本地联系方式一致。",
-      "WhatsApp 用于获取路线并协调到店。",
+      "一家店，一道门，位于芭提雅南区。今天店里有什么，请在 WhatsApp 问我们：货每天都在变，所以本站从不公布。仅限 20 岁以上，并需要在泰国开具的处方。",
+    licensedChip: "持牌药房 · 20+",
+    shelfEyebrow: "今天",
+    shelfTitle: "今天店里有什么",
+    shelfBody:
+      "货品不断轮换，所以本站没有菜单、没有重量、也没有任何数字。给我们发条消息，你会在出门穿城之前，用一条消息拿到今天的真实答案。",
+    shelfPoints: [
+      "本周到了什么，还剩下什么",
+      "什么更贴近你想找的东西",
+      "怎么找到店门，以及现在是否营业",
     ],
-    areasEyebrow: "芭提雅区域指南",
-    areasTitle: "从芭提雅各区域规划路线",
-    areasLead:
-      "选择区域查看方位说明，最后请使用准确的 Google Maps 定位导航。",
-    areaCta: "查看路线指南",
-    allAreas: "查看全部地点指南",
+    trustTitle: "为什么可以放心进这道门",
+    trustItems: [
+      {
+        title: "持牌门店",
+        body:
+          "LABS DISPENSARY 是芭提雅的持牌大麻门店。一切都在店内当面完成，只面向 20 岁及以上的成年人。",
+      },
+      {
+        title: "规则，说人话",
+        body:
+          "大麻花在泰国属于受控草药。需要在泰国开具的处方，境外开具的处方不被接受。本网站不接受订单，也不接受付款；游客法律指南会链接到官方来源。",
+      },
+      {
+        title: "评价可以自己核实",
+        body:
+          "本页的 Google 评分是通往门店自身页面的链接，而不是写在版面里的数字。点开就能读到全部评价。",
+      },
+    ],
+    languagesTitle: "店内可用语言",
+    languagesBody: "店员使用 {languages} 回复。",
+    relatedTitle: "大家常找的答案",
+    relatedLead: "直接前往回答你搜索问题的那一页。",
     locationEyebrow: "到店",
-    locationTitle: "Pattaya 13 Alley 地点",
+    locationTitle: "Pattaya 13 Alley，芭提雅南区",
     locationBody:
-      "出发前请打开公开商家信息。如需寻找入口的帮助，请通过 WhatsApp 询问。",
+      "下方的定位就是店门。导航按钮会直接把你交给 Google Maps 开始导航；如果在巷子里绕晕了，发条消息，我们把你接进来。",
+    listedAs: "{brand} 在 Google Maps 上显示为 {listing}",
     phoneLabel: "电话",
-    faqTitle: "地点问题",
+    faqTitle: "到店前的问题",
     faq: [
       {
-        q: "在 Google Maps 上应搜索什么名称？",
-        a: "Labs Cannabis 在 Google Maps 上显示为 LABS DISPENSARY。",
+        q: "你们卖电子烟、烟弹或水烟吗？",
+        a: "不卖。在泰国销售电子烟属于违法，我们不以任何形式备货。LABS DISPENSARY 是持牌大麻药房：大麻花在店内出售，仅面向持有在泰国开具处方的 20 岁及以上成年人。",
       },
       {
-        q: "商店在哪里？",
-        a: "公开地址为 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150。",
+        q: "今天店里有什么？",
+        a: "货每天都在变，所以本站不公布，也不公布重量或数字。在 WhatsApp 问一句，由店员告诉你今天的情况。这里不接受订单，也不接受付款。",
       },
       {
-        q: "如何询问路线？",
-        a: "打开 Google Maps 商家信息进行导航，或通过 WhatsApp 获取路线并协调到店。",
+        q: "需要处方吗？",
+        a: "需要。大麻花在泰国属于受控草药，必须持有在泰国开具的处方。其他国家开具的处方不被接受。本站的游客法律指南链接到现行官方来源。",
+      },
+      {
+        q: "店在哪里？Google Maps 上叫什么名字？",
+        a: "32 Pattaya 13 Alley，芭提雅南区，春武里 20150。网站名为 Labs Cannabis，同一道门在 Google Maps 上显示为 LABS DISPENSARY —— 一家店，两个名字。",
+      },
+      {
+        q: "离 Walking Street 有多远？",
+        a: "从 Walking Street 北端步行可达。准确距离和步行时间由坐标计算得出，显示在本页顶部；导航按钮会直接开启到店门的导航。",
       },
     ],
-    whatsappVisit:
-      "你好，Labs Cannabis。我在芭提雅，希望获取路线并协调到店。",
   },
   ko: {
-    title: "파타야 대마초 매장 | 지도와 길 안내 | Labs Cannabis",
+    title: "파타야 허가 대마초 디스펜서리 | LABS DISPENSARY",
     description:
-      "Pattaya 13 Alley의 Labs Cannabis를 찾으세요. 해당 Google Maps 정보를 열거나 WhatsApp으로 길 안내와 방문 조율을 문의할 수 있습니다.",
-    eyebrow: "파타야 대마초 매장",
-    h1: "파타야에서 Labs Cannabis 찾기.",
+      "파타야 남부 Pattaya 13 Alley의 LABS DISPENSARY(Labs Cannabis). 구글 4.8★, Walking Street에서 도보 거리. 오늘 매장에 무엇이 있는지 WhatsApp으로 물어보세요. 20세 이상.",
+    eyebrow: "파타야의 허가받은 대마초 디스펜서리",
+    h1: "LABS DISPENSARY 파타야 — Pattaya 13 Alley의 허가받은 대마초 디스펜서리",
     lead:
-      "아래의 정확한 지도 핀, 주소, 전화번호를 이용하세요. Google Maps에는 현재 LABS DISPENSARY로 표시됩니다.",
-    primaryCta: "길 안내 문의",
-    mapCta: "Google Maps 열기",
-    proof: ["정확한 지도 핀", "공개 업체 정보 링크", "Pattaya 13 Alley"],
-    identityTitle: "같은 장소를 나타내는 두 이름",
-    identityBody:
-      "Labs Cannabis는 웹사이트 이름입니다. 파타야의 같은 장소가 Google Maps에는 LABS DISPENSARY로 표시됩니다.",
-    trustTitle: "공개 정보로 방문 계획하기",
-    trustItems: [
-      "지도 버튼은 현재 Google Maps 업체 정보를 직접 엽니다.",
-      "주소와 전화번호는 이 웹사이트에 게시된 현지 연락처와 일치합니다.",
-      "WhatsApp은 길 안내와 방문 조율에 사용됩니다.",
+      "파타야 남부의 매장 하나, 문 하나. 지금 매장에 무엇이 있는지 WhatsApp으로 물어보세요. 매일 바뀌기 때문에 여기에는 올리지 않습니다. 20세 이상, 태국에서 발급된 처방전이 필요합니다.",
+    licensedChip: "허가받은 매장 · 20+",
+    shelfEyebrow: "오늘",
+    shelfTitle: "오늘 매장에 있는 것",
+    shelfBody:
+      "재고는 계속 바뀝니다. 그래서 이 사이트에는 메뉴도, 무게도, 어떤 숫자도 없습니다. 메시지를 보내면 도시를 가로지르기 전에 오늘의 정직한 답을 한 통으로 받습니다.",
+    shelfPoints: [
+      "이번 주에 들어온 것과 남아 있는 것",
+      "찾고 계신 것에 어울리는 것",
+      "문을 찾는 방법과 지금 영업 여부",
     ],
-    areasEyebrow: "파타야 지역 가이드",
-    areasTitle: "파타야 각 지역에서 오는 길 계획",
-    areasLead:
-      "지역을 선택해 위치 안내를 확인하고, 마지막 경로는 정확한 Google Maps 핀을 이용하세요.",
-    areaCta: "경로 가이드 보기",
-    allAreas: "모든 위치 가이드 보기",
+    trustTitle: "안심하고 들어와도 되는 이유",
+    trustItems: [
+      {
+        title: "허가받은 매장",
+        body:
+          "LABS DISPENSARY는 파타야의 허가받은 대마초 매장입니다. 모든 것은 매장에서 얼굴을 보고, 20세 이상 성인과만 이루어집니다.",
+      },
+      {
+        title: "규정, 쉬운 말로",
+        body:
+          "대마 꽃은 태국에서 관리 대상 약초입니다. 태국에서 발급된 처방전이 필요하며, 해외에서 발급된 처방전은 인정되지 않습니다. 이 사이트는 주문도 결제도 받지 않고, 관광객 법률 가이드가 공식 출처로 연결됩니다.",
+      },
+      {
+        title: "직접 확인할 수 있는 후기",
+        body:
+          "이 페이지의 구글 평점은 매장 자체 정보로 연결되는 링크이며, 화면에 적어 넣은 숫자가 아닙니다. 열어서 모든 후기를 읽어 보세요.",
+      },
+    ],
+    languagesTitle: "매장에서 통하는 언어",
+    languagesBody: "직원은 {languages}로 답합니다.",
+    relatedTitle: "사람들이 찾아오는 질문",
+    relatedLead: "검색하신 질문에 답하는 페이지로 바로 이동합니다.",
     locationEyebrow: "방문",
-    locationTitle: "Pattaya 13 Alley 위치",
+    locationTitle: "Pattaya 13 Alley, 파타야 남부",
     locationBody:
-      "출발 전에 공개 업체 정보를 여세요. 입구를 찾는 데 도움이 필요하면 WhatsApp으로 문의하세요.",
+      "아래 핀이 바로 매장 문입니다. 길찾기 버튼은 곧바로 구글 지도 내비게이션으로 연결되고, 골목에서 헤매면 메시지를 주세요. 모시러 갑니다.",
+    listedAs: "{brand}는 Google Maps에 {listing}로 표시됩니다",
     phoneLabel: "전화",
-    faqTitle: "위치 관련 질문",
+    faqTitle: "방문 전 자주 묻는 질문",
     faq: [
       {
-        q: "Google Maps에서 어떤 이름을 찾아야 하나요?",
-        a: "Labs Cannabis는 Google Maps에 LABS DISPENSARY로 표시됩니다.",
+        q: "전자담배나 액상, 물담배도 판매하나요?",
+        a: "판매하지 않습니다. 태국에서 전자담배 판매는 불법이며 어떤 형태로도 취급하지 않습니다. LABS DISPENSARY는 허가받은 대마초 디스펜서리입니다. 대마 꽃은 태국에서 발급된 처방전을 가진 20세 이상 성인에게 매장에서만 제공됩니다.",
       },
       {
-        q: "매장은 어디에 있나요?",
-        a: "게시된 주소는 32 Pattaya 13 Alley, Pattaya, Chon Buri 20150입니다.",
+        q: "오늘 매장에는 무엇이 있나요?",
+        a: "매일 바뀌기 때문에 이 사이트에는 올리지 않으며, 무게나 숫자도 올리지 않습니다. WhatsApp으로 물어보시면 사람이 오늘 상황을 알려드립니다. 여기서는 주문도 결제도 받지 않습니다.",
       },
       {
-        q: "길 안내는 어떻게 문의하나요?",
-        a: "Google Maps 업체 정보를 열어 경로를 확인하거나 WhatsApp으로 길 안내와 방문 조율을 문의하세요.",
+        q: "처방전이 필요한가요?",
+        a: "필요합니다. 대마 꽃은 태국에서 관리 대상 약초이며 태국에서 발급된 처방전이 있어야 합니다. 다른 나라에서 발급된 처방전은 인정되지 않습니다. 이 사이트의 관광객 법률 가이드가 현행 공식 출처로 연결됩니다.",
+      },
+      {
+        q: "매장 위치와 구글 지도 이름은 무엇인가요?",
+        a: "32 Pattaya 13 Alley, 파타야 남부, 촌부리 20150. 웹사이트 이름은 Labs Cannabis이고 같은 문이 구글 지도에는 LABS DISPENSARY로 표시됩니다. 한 매장, 두 이름입니다.",
+      },
+      {
+        q: "Walking Street에서 얼마나 먼가요?",
+        a: "Walking Street 북쪽 끝에서 걸어올 수 있는 거리입니다. 정확한 거리와 도보 시간은 좌표로 계산해 이 페이지 상단에 표시하며, 길찾기 버튼은 매장 문까지 내비게이션을 엽니다.",
       },
     ],
-    whatsappVisit:
-      "안녕하세요, Labs Cannabis. 파타야에 있으며 매장 길 안내와 방문 조율을 부탁드립니다.",
   },
   ja: {
-    title: "パタヤの大麻ショップ | 地図と道順 | Labs Cannabis",
+    title: "パタヤの認可大麻ディスペンサリー | LABS DISPENSARY",
     description:
-      "Pattaya 13 AlleyのLabs Cannabisを確認。該当するGoogle Maps情報を開くか、WhatsAppで道順と来店調整を問い合わせできます。",
-    eyebrow: "パタヤの大麻ショップ",
-    h1: "パタヤでLabs Cannabisを見つける。",
+      "パタヤ南部 Pattaya 13 Alley の LABS DISPENSARY（Labs Cannabis）。Google 4.8★、Walking Street から徒歩圏。今日の店頭の様子は WhatsApp でお尋ねください。20歳以上限定。",
+    eyebrow: "パタヤの認可大麻ディスペンサリー",
+    h1: "LABS DISPENSARY パタヤ — Pattaya 13 Alley の認可大麻ディスペンサリー",
     lead:
-      "下記の正確な地図ピン、住所、電話番号をご利用ください。Google Mapsでは現在LABS DISPENSARYと表示されています。",
-    primaryCta: "道順を問い合わせ",
-    mapCta: "Google Mapsを開く",
-    proof: ["正確な地図ピン", "公開リスティングへのリンク", "Pattaya 13 Alley"],
-    identityTitle: "同じ場所を示す二つの名称",
-    identityBody:
-      "Labs Cannabisはウェブサイト名です。パタヤの同じ場所はGoogle MapsでLABS DISPENSARYと表示されています。",
-    trustTitle: "公開情報で来店を計画",
-    trustItems: [
-      "地図ボタンは現在のGoogle Maps情報を直接開きます。",
-      "住所と電話番号は、このサイトで公開されている現地連絡先と一致します。",
-      "WhatsAppは道順の案内と来店調整に利用できます。",
+      "パタヤ南部にある一軒の店、一つの扉。今日の店頭は WhatsApp でお尋ねください。中身は毎日変わるため、ここには掲載しません。20歳以上、タイで発行された処方箋が必要です。",
+    licensedChip: "認可店舗 · 20+",
+    shelfEyebrow: "本日",
+    shelfTitle: "今日の店頭",
+    shelfBody:
+      "品ぞろえは入れ替わり続けます。だからこのサイトにはメニューも重量も数字もありません。メッセージをいただければ、街を横切る前に、今日の正直な答えが一通で届きます。",
+    shelfPoints: [
+      "今週入ったものと、残っているもの",
+      "お探しのものに合うもの",
+      "扉の見つけ方と、今開いているかどうか",
     ],
-    areasEyebrow: "パタヤのエリアガイド",
-    areasTitle: "パタヤ各地からの経路を計画",
-    areasLead:
-      "エリアを選んで位置の目安を確認し、最終経路には正確なGoogle Mapsピンをご利用ください。",
-    areaCta: "経路ガイドを見る",
-    allAreas: "すべての場所ガイドを見る",
+    trustTitle: "この扉を安心して開けられる理由",
+    trustItems: [
+      {
+        title: "認可を受けた店舗",
+        body:
+          "LABS DISPENSARY はパタヤの認可を受けた大麻店です。すべては店内で、対面で、20歳以上の方とのみ行われます。",
+      },
+      {
+        title: "ルールを平易な言葉で",
+        body:
+          "大麻の花はタイでは管理対象のハーブです。タイで発行された処方箋が必要で、国外で発行されたものは受け付けられません。このサイトは注文も支払いも受け付けず、旅行者向け法律ガイドが公式情報へリンクします。",
+      },
+      {
+        title: "自分で確かめられる評価",
+        body:
+          "このページの Google 評価は店舗自身のリスティングへのリンクであり、紙面に書き込んだ数字ではありません。開いてすべての口コミをお読みください。",
+      },
+    ],
+    languagesTitle: "店頭で通じる言語",
+    languagesBody: "スタッフは{languages}で対応します。",
+    relatedTitle: "よく探されている答え",
+    relatedLead: "検索された疑問に答えるページへ、そのまま移動できます。",
     locationEyebrow: "来店",
-    locationTitle: "Pattaya 13 Alleyの場所",
+    locationTitle: "Pattaya 13 Alley、パタヤ南部",
     locationBody:
-      "出発前に公開リスティングを開いてください。入口を見つけるための案内が必要な場合はWhatsAppでお問い合わせください。",
+      "下のピンが扉そのものです。ルート案内ボタンはそのまま Google マップのナビへ引き渡します。路地で迷ったらメッセージをください、お迎えします。",
+    listedAs: "{brand}はGoogle Mapsで{listing}と表示されています",
     phoneLabel: "電話",
-    faqTitle: "場所についての質問",
+    faqTitle: "来店前のご質問",
     faq: [
       {
-        q: "Google Mapsではどの名前を探せばよいですか？",
-        a: "Labs CannabisはGoogle MapsでLABS DISPENSARYと表示されています。",
+        q: "電子タバコやベイプ、シーシャは扱っていますか？",
+        a: "扱っていません。タイでは電子タバコの販売は違法であり、いかなる形でも在庫しません。LABS DISPENSARY は認可を受けた大麻ディスペンサリーです。大麻の花は、タイで発行された処方箋をお持ちの20歳以上の方に、店内でのみお渡しします。",
       },
       {
-        q: "店舗はどこにありますか？",
-        a: "公開住所は32 Pattaya 13 Alley, Pattaya, Chon Buri 20150です。",
+        q: "今日は何がありますか？",
+        a: "中身は毎日変わるため、このサイトには掲載しません。重量や数字も同様です。WhatsApp でお尋ねいただければ、今日の様子を人がお答えします。ここでは注文も支払いも受け付けません。",
       },
       {
-        q: "道順はどう確認できますか？",
-        a: "Google Maps情報で経路を開くか、WhatsAppで道順と来店調整をお問い合わせください。",
+        q: "処方箋は必要ですか？",
+        a: "必要です。大麻の花はタイでは管理対象のハーブで、タイで発行された処方箋が求められます。他国で発行されたものは受け付けられません。当サイトの旅行者向け法律ガイドが現行の公式情報へリンクしています。",
+      },
+      {
+        q: "店の場所と、Google マップでの名称は？",
+        a: "32 Pattaya 13 Alley、パタヤ南部、チョンブリ 20150。ウェブサイト名は Labs Cannabis で、同じ扉が Google マップでは LABS DISPENSARY と表示されます。一軒の店に二つの名前です。",
+      },
+      {
+        q: "Walking Street からどのくらいですか？",
+        a: "Walking Street の北端から歩ける距離です。正確な距離と徒歩時間は座標から計算し、このページ上部に表示しています。ルート案内ボタンは扉までのナビを開きます。",
       },
     ],
-    whatsappVisit:
-      "こんにちは、Labs Cannabis。パタヤにいます。店舗までの道順と来店調整をお願いします。",
   },
 };
 
 const { lang } = Astro.params;
 const locale = (lang ?? "en") as Locale;
 const copy = HOME_COPY[locale] ?? HOME_COPY.en;
+const ui = t(locale);
+const labels = CTA_LABELS[locale];
 const addressLine =
   ADDRESS.street + ", " + ADDRESS.locality + ", " + ADDRESS.region + " " + ADDRESS.postalCode;
-const identityBridge = BRAND.name + " — listed on Google Maps as " + GOOGLE.listingName;
-const mapsHref = getMapsSearchUrl();
-const visitHref = CONTACT.whatsappWithMsg(copy.whatsappVisit) + "&source=map";
-const enRuIntentLinks = locale === "ru"
-  ? {
-      nearMe: "Магазин каннабиса рядом в Паттайе",
-      walking: "Маршрут от Walking Street",
-      delivery: "Актуальные правила доставки каннабиса в Паттайе",
-    }
-  : {
-      nearMe: "Cannabis shop near me in Pattaya",
-      walking: "Directions from Walking Street",
-      delivery: "Current cannabis delivery rules in Pattaya",
-    };
+const listedAs = renderCopy(copy.listedAs, { brand: BRAND.name, listing: GOOGLE.listingName });
+/** Deep link навигации: «как доехать» — это Maps, а «что есть» — это WhatsApp. */
+const directionsHref = getMapsDirectionsUrl();
+const visitHref = ctaWhatsAppHref(locale, "menu");
+/** Цифры карточки Google — визуально и со ссылкой на источник, без разметки рейтинга. */
+const ratingLine = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+/** Вычисленное расстояние вместо обещания «5 минут пешком» из `ui.location.landmark`. */
+const landmarkLine = describeLandmarkWalk("walking-street", locale);
+/**
+ * Языки персонала — единственный пункт блока доверия, который сегодня не
+ * рендерится: сайт переведён на семь языков, но это факт о репозитории, а не
+ * обещание про человека за прилавком. Пункт появится в тот день, когда владелец
+ * назовёт реальный список (O-01), и ни днём раньше.
+ */
+const staffLanguages = getPublishableStaffLanguages();
+const trustItems: TrustItem[] = staffLanguages
+  ? [
+      ...copy.trustItems,
+      {
+        title: copy.languagesTitle,
+        body: renderCopy(copy.languagesBody, { languages: staffLanguages.join(", ") }),
+      },
+    ]
+  : copy.trustItems;
 ---
 
 <PageLayout
@@ -415,16 +606,16 @@ const enRuIntentLinks = locale === "ru"
   title={copy.title}
   description={copy.description}
   keywords={[
-    "cannabis shop Pattaya",
-    "Labs Dispensary Pattaya",
+    "cannabis dispensary Pattaya",
+    "LABS DISPENSARY Pattaya",
+    "licensed cannabis shop Pattaya",
     "Pattaya 13 Alley cannabis",
-    "cannabis shop directions Pattaya",
   ]}
   faq={copy.faq}
   pageType="home"
 >
   <main>
-    <section class="px-4 pb-12 pt-10 sm:pt-16">
+    <section id="home-hero" class="px-4 pb-12 pt-10 sm:pt-16">
       <div class="mx-auto max-w-5xl">
         <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.eyebrow}</p>
         <h1 class="mt-3 max-w-3xl text-4xl font-bold leading-tight sm:text-6xl">{copy.h1}</h1>
@@ -434,182 +625,161 @@ const enRuIntentLinks = locale === "ru"
             href={visitHref}
             target="_blank"
             rel="noopener noreferrer"
-            class="rounded-xl bg-emerald px-6 py-3.5 text-center font-bold text-black"
-            data-track="hero_whatsapp_click"
-            data-track-placement="hero"
-            data-track-detail="hero:directions"
-            data-wa-source="map"
-            data-whatsapp-ref="hero_directions"
-            data-utm-campaign="directions"
+            class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-6 py-3.5 text-center font-bold text-black"
+            data-track="contact_click"
+            data-channel="whatsapp"
+            data-placement="hero"
           >
-            {copy.primaryCta}
+            {labels.whatsapp}
           </a>
           <a
-            href={mapsHref}
+            href={directionsHref}
             target="_blank"
             rel="noopener noreferrer"
-            class="card-surface px-6 py-3.5 text-center font-bold"
-            data-track="map_open_click"
-            data-track-placement="hero"
-            data-track-detail="hero:maps"
+            class="card-surface flex min-h-12 items-center justify-center px-6 py-3.5 text-center font-bold"
+            data-track="contact_click"
+            data-channel="directions"
+            data-placement="hero"
           >
-            {copy.mapCta}
+            {labels.directions}
           </a>
         </div>
-        <ul class="mt-6 flex flex-wrap gap-2" aria-label={copy.trustTitle}>
-          {copy.proof.map((item) => (
-            <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-sm text-text-muted">{item}</li>
-          ))}
+        {/*
+          Доказательства первого экрана: рейтинг ведёт в карточку-источник,
+          дистанция вычислена гаверсинусом из координат (W1-03), а часы
+          подставит `OpeningStatus` — пока они не подтверждены, чипа просто нет.
+        */}
+        <ul class="mt-6 flex flex-wrap gap-2 text-sm" aria-label={copy.trustTitle}>
+          <li>
+            <a
+              href={getMapsSearchUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex rounded-full border border-border bg-bg-elevated px-3 py-1.5 font-semibold text-emerald-dim hover:border-emerald/40"
+              data-track="contact_click"
+              data-channel="maps"
+              data-placement="hero"
+            >
+              {ratingLine}
+            </a>
+          </li>
+          {landmarkLine && (
+            <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-text-muted">
+              {landmarkLine}
+            </li>
+          )}
+          <OpeningStatus
+            locale={locale}
+            tag="li"
+            class="inline-flex rounded-full border border-border bg-bg-card px-3 py-1.5 text-text-muted"
+          />
+          <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-text-muted">
+            {copy.licensedChip}
+          </li>
         </ul>
       </div>
     </section>
 
-    <section class="border-y border-border bg-bg-card/40 px-4 py-12">
-      <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
-        <article class="card-surface p-6">
-          <h2 class="text-2xl font-bold">{copy.identityTitle}</h2>
-          <p class="mt-3 leading-relaxed text-text-muted">{copy.identityBody}</p>
-          <p class="mt-5 font-bold">{identityBridge}</p>
-          <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
-          <a
-            class="mt-2 inline-flex font-bold text-text hover:text-emerald-dim"
-            href={CONTACT.tel}
-            data-track="contact_call_click"
-            data-track-placement="home_identity"
-            data-track-detail="home_identity:phone"
-          >
-            {CONTACT.phoneDisplay}
-          </a>
-        </article>
-        <article class="card-surface p-6">
-          <h2 class="text-2xl font-bold">{copy.trustTitle}</h2>
-          <ul class="mt-4 space-y-3 text-text-muted">
-            {copy.trustItems.map((item) => (
-              <li class="flex gap-3"><span aria-hidden="true" class="text-emerald">✓</span><span>{item}</span></li>
-            ))}
-          </ul>
-        </article>
-      </div>
-    </section>
-
-    <section id="areas" class="px-4 py-14">
+    <section class="border-y border-border bg-bg-card/40 px-4 py-14">
       <div class="mx-auto max-w-5xl">
-        <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.areasEyebrow}</p>
-        <h2 class="mt-2 text-3xl font-bold">{copy.areasTitle}</h2>
-        <p class="mt-3 max-w-2xl leading-relaxed text-text-muted">{copy.areasLead}</p>
-        <div class="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <a
-            href={localePath(locale, "labs-dispensary-pattaya")}
-            class="card-surface p-4 hover:border-emerald-dim"
-            data-track="local_intent_click"
-            data-track-placement="home"
-            data-track-detail="home:labs-dispensary"
-            data-seo-context-link
-          >
-            <span class="block text-lg font-bold">{identityBridge}</span>
-            <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
-          </a>
-          {(locale === "en" || locale === "ru") && (
-            <>
-              <a
-                href={localePath(locale, "cannabis-near-me-pattaya")}
-                class="card-surface p-4 hover:border-emerald-dim"
-                data-track="local_intent_click"
-                data-track-placement="home"
-                data-track-detail="home:near-me"
-                data-seo-context-link
-              >
-                <span class="block text-lg font-bold">{enRuIntentLinks.nearMe}</span>
-                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
-              </a>
-              <a
-                href={localePath(locale, "areas/walking-street")}
-                class="card-surface p-4 hover:border-emerald-dim"
-                data-track="local_intent_click"
-                data-track-placement="home"
-                data-track-detail="home:walking-street"
-                data-seo-context-link
-              >
-                <span class="block text-lg font-bold">{enRuIntentLinks.walking}</span>
-                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
-              </a>
-              <a
-                href={localePath(locale, "delivery/pattaya")}
-                class="card-surface p-4 hover:border-emerald-dim"
-                data-track="local_intent_click"
-                data-track-placement="home"
-                data-track-detail="home:delivery-rules"
-                data-seo-context-link
-              >
-                <span class="block text-lg font-bold">{enRuIntentLinks.delivery}</span>
-                <span class="mt-2 block text-sm text-emerald-dim">{copy.areaCta} →</span>
-              </a>
-            </>
-          )}
-        </div>
-        <a href={localePath(locale, "locations")} class="mt-6 inline-flex font-bold text-emerald-dim hover:underline">
-          {copy.allAreas} →
+        <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.shelfEyebrow}</p>
+        <h2 class="mt-2 text-3xl font-bold">{copy.shelfTitle}</h2>
+        <p class="mt-3 max-w-2xl leading-relaxed text-text-muted">{copy.shelfBody}</p>
+        <ul class="mt-6 grid gap-3 sm:grid-cols-3">
+          {copy.shelfPoints.map((point) => (
+            <li class="card-surface p-5 leading-relaxed text-text-muted">
+              <span aria-hidden="true" class="mr-2 font-bold text-emerald">→</span>{point}
+            </li>
+          ))}
+        </ul>
+        <a
+          href={visitHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald px-6 py-3.5 text-center font-bold text-black"
+          data-track="contact_click"
+          data-channel="whatsapp"
+          data-placement="home"
+        >
+          {labels.whatsapp}
         </a>
       </div>
     </section>
 
-    <section id="visit" class="border-y border-border bg-bg-card/40 px-4 py-14">
-      <div class="mx-auto grid max-w-5xl gap-6 lg:grid-cols-2">
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.locationEyebrow}</p>
-          <h2 class="mt-2 text-3xl font-bold">{copy.locationTitle}</h2>
-          <p class="mt-3 leading-relaxed text-text-muted">{copy.locationBody}</p>
-          <div class="mt-5 rounded-xl border border-border bg-bg-card p-5">
-            <p class="font-bold">{identityBridge}</p>
-            <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
-            <p class="mt-2 text-text-muted">
-              {copy.phoneLabel}: <a
-                href={CONTACT.tel}
-                class="font-bold text-text hover:text-emerald-dim"
-                data-track="contact_call_click"
-                data-track-placement="home_location"
-                data-track-detail="home_location:phone"
-              >{CONTACT.phoneDisplay}</a>
-            </p>
-          </div>
-          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-            <a
-              href={mapsHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="rounded-xl bg-emerald px-5 py-3 text-center font-bold text-black"
-              data-track="map_open_click"
-              data-track-placement="location"
-              data-track-detail="location:maps"
-            >
-              {copy.mapCta}
-            </a>
-            <a
-              href={visitHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="card-surface px-5 py-3 text-center font-bold"
-              data-track="location_whatsapp_click"
-              data-track-placement="location"
-              data-track-detail="location:directions"
-              data-wa-source="map"
-              data-whatsapp-ref="visit_coordination"
-              data-utm-campaign="directions"
-            >
-              {copy.primaryCta}
-            </a>
-          </div>
+    <ContactRail locale={locale} intent="menu" placement="rail" />
+
+    <section class="px-4 py-14">
+      <div class="mx-auto max-w-5xl">
+        <h2 class="text-3xl font-bold">{copy.trustTitle}</h2>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {trustItems.map((item) => (
+            <article class="card-surface p-6">
+              <h3 class="text-xl font-bold">{item.title}</h3>
+              <p class="mt-3 leading-relaxed text-text-muted">{item.body}</p>
+            </article>
+          ))}
         </div>
-        <iframe
-          src={getMapsEmbedUrl()}
-          title="Labs Cannabis location on Google Maps"
-          class="min-h-[360px] w-full rounded-2xl border border-border"
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          allowfullscreen
-        ></iframe>
       </div>
     </section>
+
+    <ReviewStrip locale={locale} />
+
+    {/* Анонсы возвращённых в индекс страниц: 8 ссылок — весь набор в один клик. */}
+    <RelatedLinks
+      locale={locale}
+      pathSuffix=""
+      placement="home"
+      limit={8}
+      title={copy.relatedTitle}
+      lead={copy.relatedLead}
+    />
+
+    <section id="visit" class="border-y border-border bg-bg-card/40 px-4 py-14">
+      <div class="mx-auto max-w-5xl">
+        <p class="text-sm font-bold uppercase tracking-[0.18em] text-emerald-dim">{copy.locationEyebrow}</p>
+        <h2 class="mt-2 text-3xl font-bold">{copy.locationTitle}</h2>
+        <p class="mt-3 max-w-2xl leading-relaxed text-text-muted">{copy.locationBody}</p>
+        <div class="mt-5 max-w-xl rounded-xl border border-border bg-bg-card p-5">
+          <p class="font-bold">{listedAs}</p>
+          <address class="mt-2 not-italic leading-relaxed text-text-muted">{addressLine}</address>
+          <p class="mt-2 text-text-muted">
+            {copy.phoneLabel}: <a
+              href={CONTACT.tel}
+              class="font-bold text-text hover:text-emerald-dim"
+              data-track="contact_click"
+              data-channel="phone"
+              data-placement="home"
+            >{CONTACT.phoneDisplay}</a>
+          </p>
+        </div>
+        <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+          <a
+            href={directionsHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-5 py-3 text-center font-bold text-black"
+            data-track="contact_click"
+            data-channel="directions"
+            data-placement="map_block"
+          >
+            {labels.directions}
+          </a>
+          <a
+            href={visitHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="card-surface flex min-h-12 items-center justify-center px-5 py-3 text-center font-bold"
+            data-track="contact_click"
+            data-channel="whatsapp"
+            data-placement="map_block"
+          >
+            {labels.whatsappShort}
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <MapBlock locale={locale} />
 
     <section class="px-4 py-14">
       <div class="mx-auto max-w-3xl">

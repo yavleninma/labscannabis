@@ -1,30 +1,34 @@
 {
-  "h1": "Labs Dispensary — 同一店铺",
-  "intro": "Labs Dispensary — 同一店铺。Labs Cannabis（原 Labs Dispensary）位于 Soi Hollywood，服务芭提雅及芭提雅，White Widow 室内花，1g 300฿ 至 1kg 批发，可配送。WhatsApp +66 66 080 6784",
+  "h1": "芭提雅 Labs Cannabis — LABS DISPENSARY 商家页面背后的店",
+  "intro": "Labs Cannabis（原名 Labs Dispensary）是位于南芭提雅 32 Pattaya 13 Alley 的持牌大麻店。在 Google Maps 上，同一地点显示为 LABS DISPENSARY，因此两个名字通向同一扇门。大麻花在店内交付给年满 20 岁、持有泰国境内开具处方的成年人。本页说明店在哪里、到店是怎么回事，不公布菜单，也不公布任何数字。",
   "sections": [
     {
-      "h2": "为何选择 Labs Cannabis",
-      "body": "Google 4.8★，91 条评价。价格透明。距 Walking Street 5 分钟，芭提雅 客人方便到店。"
+      "h2": "店在什么位置",
+      "body": "地址是南芭提雅春武里府 32 Pattaya 13 Alley。距离 Walking Street 约 800 米，步行 10–13 分钟，这个数字由坐标算出，而不是口号。坐出租车或摩托车时，请报 Pattaya 13 Alley 这条巷子的名字，而不是店名，然后找 LABS DISPENSARY 的招牌。定位以 Google 商家页面为准，页面信息也会变动，出发前请先打开看看。"
     },
     {
-      "h2": "到店或 WhatsApp 咨询",
-      "body": "地址：32 Pattaya 13 Alley (Soi Hollywood)。每日 12:00–01:00。芭提雅可配送。"
+      "h2": "到店是怎么回事",
+      "body": "网站上不办理任何事情。你走进来，店员问你想找什么，然后打开罐子让你看、让你闻，再决定。柜台先核验能证明年满 20 岁的证件和在泰国开具的处方。罐子里的东西随每一批收成变化，所以“今天有什么”这个问题由 WhatsApp +66 66 080 6784 上的店员回答，而不是由网页回答。"
+    },
+    {
+      "h2": "处方与年龄规定",
+      "body": "自 2025 年 6 月 26 日起,大麻花在泰国属于受管制草药。它在店内当面交付给年满 20 岁、并出示由泰国境内执业者开具处方的成年人,处方最长覆盖 30 天疗程。境外开具的处方不被接受,大麻花也不得带出泰国。本段只说明规则,不代办任何手续。"
     }
   ],
   "faq": [
     {
-      "q": "需要医疗卡吗？",
-      "a": "20 岁以上需要，店内约 2 分钟免费协助。"
+      "q": "Labs Cannabis 在哪里？",
+      "a": "在南芭提雅春武里府 32 Pattaya 13 Alley。Google Maps 上同一地址显示为 LABS DISPENSARY。请打开实时商家页面查看当前定位与路线。"
     },
     {
-      "q": "可以配送吗？",
-      "a": "可以 — WhatsApp 告知区域。"
+      "q": "为什么有两个名字？",
+      "a": "店铺现用名为 Labs Cannabis，此前是 Labs Dispensary，Google 商家页面仍沿用旧名。两者指向同一地址和同一电话。"
     },
     {
-      "q": "最划算规格？",
-      "a": "10g 1,800฿ 最受欢迎，1kg 40,000฿。"
+      "q": "你们卖电子烟吗？",
+      "a": "不卖。在泰国销售电子烟属违法，本店不备货。Labs Cannabis 是持牌大麻店。"
     }
   ],
-  "closing": "点击下方重量档位 WhatsApp 下单，或今日到店 Soi Hollywood。",
+  "closing": "打开 Google Maps 上的 LABS DISPENSARY 页面查看前往 32 Pattaya 13 Alley 的定位与路线，或在 WhatsApp +66 66 080 6784 上问今天店里有什么。面向年满 20 岁、持泰国处方的成年人。",
   "source": "openai"
 }

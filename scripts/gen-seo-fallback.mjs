@@ -18,113 +18,211 @@ const AREA_NAMES = {
   jomtien: { en: "Jomtien", ru: "Джомтьен", th: "จอมเทียน", ar: "جومتين", zh: "乔木提恩", ko: "좀티엔", ja: "ジョムティエン" },
   "walking-street": { en: "Walking Street", ru: "Walking Street", th: "Walking Street", ar: "Walking Street", zh: "Walking Street", ko: "Walking Street", ja: "Walking Street" },
   "soi-hollywood": { en: "Soi Hollywood", ru: "Soi Hollywood", th: "ซอยฮอลลีวูด", ar: "Soi Hollywood", zh: "Soi Hollywood", ko: "Soi Hollywood", ja: "Soi Hollywood" },
-  naklua: { en: "Naklua", ru: "Накlua", th: "นาเกลือ", ar: "ناكلوا", zh: "那库阿", ko: "나클루아", ja: "ナクルア" },
-  pratumnak: { en: "Pratumnak", ru: "Pratumnak", th: "ประตูน้ำ", ar: "Pratumnak", zh: "Pratumnak", ko: "Pratumnak", ja: "Pratumnak" },
+  naklua: { en: "Naklua", ru: "Наклуа", th: "นาเกลือ", ar: "ناكلوا", zh: "那库阿", ko: "나클루아", ja: "ナクルア" },
+  pratumnak: { en: "Pratumnak", ru: "Пратамнак", th: "พระตำหนัก", ar: "Pratumnak", zh: "Pratumnak", ko: "Pratumnak", ja: "Pratumnak" },
   "central-pattaya": { en: "Central Pattaya", ru: "Центр Паттайи", th: "พัทยากลาง", ar: "وسط باتايا", zh: "芭提雅中心", ko: "파타야 중심", ja: "パタヤ中心" },
 };
 
+/**
+ * Шаблон, из которого создаётся контент для новых слагов.
+ *
+ * До W1-09 шаблон содержал ставки за грамм и оптовые суммы в батах, обещание
+ * пробника в подарок, устаревший рейтинг с числом отзывов,
+ * неподтверждённые часы, адрес по соседнему ориентиру вместо настоящего и
+ * строку про помощь с медкартой «за пару минут». Любой запуск генератора после
+ * расширения SEO_PAGES создавал всё это заново — то есть публиковал рекламу
+ * цены каннабиса и рекламу медуслуги на новых страницах.
+ *
+ * Правила для любой правки этого объекта:
+ * - ни цен, ни ฿, ни весовых тиров, ни скидок, ни бесплатных образцов;
+ * - ни одного факта, не подтверждённого владельцем: часы, рейтинг, число
+ *   отзывов, языки персонала, доставка — сюда не пишутся;
+ * - рецепт описывается констатацией требования, без «поможем оформить»,
+ *   без сроков и без «формальности»;
+ * - текст обязан пройти scripts/lib/compliance-lexicon.mjs.
+ */
 const COPY = {
   en: {
-    intro: (h1, area, weight) =>
-      `${h1}. Labs Cannabis (formerly Labs Dispensary) on Soi Hollywood serves ${area} and all of Pattaya with fresh indoor White Widow, weight pricing from 300฿/g to 1kg wholesale, walk-in samples, and delivery on request. WhatsApp +66 66 080 6784 — replies in ~5 minutes.${weight ? ` This page focuses on ${weight} tier pricing.` : ""}`,
-    s1h: "Why guests choose Labs Cannabis",
+    intro: (h1, area) =>
+      `${h1}. Labs Cannabis (formerly Labs Dispensary) is a licensed cannabis dispensary at 32 Pattaya 13 Alley in South Pattaya, within reach of ${area}. Everything is handed over in store, to adults 20+ who hold a Thai prescription — this website takes no orders and no payments. Questions about the shelf, the route or the paperwork go to WhatsApp +66 66 080 6784.`,
+    s1h: "What a visit looks like",
     s1b: (area) =>
-      `4.8★ on Google (91 reviews). Transparent tiers, no hidden fees, Russian- and English-speaking staff. Five minutes from Walking Street — easy pickup for guests in ${area}. Cash, QR, same-day pickup.`,
-    s2h: "Walk-in on Soi Hollywood or message first",
+      `The shop is licensed and every purchase happens face to face, at the counter. Strain types, effects and what is actually in the room that day are discussed with staff in store; the site publishes no prices, no stock lists and no advertising, because Thai law reads that as cannabis advertising. Coming from ${area}, ask for the exact route on WhatsApp before you set off.`,
+    s2h: "How to find us",
     s2b: () =>
-      "Address: 32 Pattaya 13 Alley (Soi Hollywood), Chon Buri 20150. Open daily 12:00–01:00. Free in-store sample. Medical card help on-site (~2 min). Delivery available in Pattaya — confirm on WhatsApp.",
+      "Address: 32 Pattaya 13 Alley, South Pattaya, Chon Buri 20150. Open the LABS DISPENSARY listing in Google Maps and navigate straight to the door. Bring ID that proves you are 20 or older, and your Thai prescription (ภ.ท.33). We do not sell vapes, e-cigarettes or tobacco.",
     faq: [
-      ["Do I need a medical card?", "Yes for adults 20+. We help you complete it free on-site in about two minutes."],
-      ["Is delivery available?", "Yes — message WhatsApp with your area in Pattaya. We confirm timing and availability."],
-      ["What is the best value tier?", "10g at 1,800฿ (180฿/g) is our most popular. 1kg wholesale is 40,000฿."],
+      [
+        "Who may buy cannabis flower in Thailand?",
+        "Adults aged 20 or older who hold a prescription issued inside Thailand. Prescriptions from other countries are not accepted, and the handover happens in person, in the shop.",
+      ],
+      [
+        "Does the website take orders?",
+        "No. There is no basket and no payment here. WhatsApp is for questions about the route, the paperwork and what is in the shop today.",
+      ],
+      [
+        "Do you sell vapes or e-cigarettes?",
+        "No. Selling vapes and e-cigarettes is illegal in Thailand and we do not stock them. Labs Cannabis is a licensed cannabis dispensary.",
+      ],
     ],
-    closing: "Tap a weight tier below to order on WhatsApp, or walk in today on Soi Hollywood.",
+    closing:
+      "Send your question to WhatsApp +66 66 080 6784, or open Google Maps and walk in: 32 Pattaya 13 Alley, adults 20+ with a Thai prescription.",
   },
   ru: {
-    intro: (h1, area, weight) =>
-      `${h1}. Labs Cannabis (ранее Labs Dispensary) на Soi Hollywood — свежий indoor White Widow, цены по весу от 300฿/г до опта 1кг, самовывоз и доставка по Паттайе. WhatsApp +66 66 080 6784, ответ ~5 минут.${weight ? ` Страница про тариф ${weight}.` : ""} Рядом с ${area}.`,
-    s1h: "Почему выбирают Labs Cannabis",
+    intro: (h1, area) =>
+      `${h1}. Labs Cannabis (ранее Labs Dispensary) — лицензированный каннабис-диспенсери по адресу 32 Pattaya 13 Alley, Южная Паттайя, недалеко от ${area}. Всё выдаётся в магазине, взрослым 20+ с тайским рецептом: сайт не принимает заказы и не проводит оплату. Вопросы о витрине, дороге и документах — в WhatsApp +66 66 080 6784.`,
+    s1h: "Как проходит визит",
     s1b: (area) =>
-      `4.8★ в Google, 91 отзыв. Честные цены по весу, без навязчивых допродаж. Русскоязычный персонал. 5 минут от Walking Street — удобно для гостей из ${area}. Нал, QR, самовывоз в день заказа.`,
-    s2h: "Приходите на Soi Hollywood или пишите в WhatsApp",
+      `Магазин лицензированный, покупка происходит только лично, у прилавка. Сорта, эффекты и то, что реально есть в этот день, обсуждаются с продавцом в магазине: цен, остатков и рекламных обещаний на сайте нет — в Таиланде это читается как реклама каннабиса. Из района ${area} уточните точный маршрут в WhatsApp заранее.`,
+    s2h: "Как нас найти",
     s2b: () =>
-      "Адрес: 32 Pattaya 13 Alley (Soi Hollywood). Ежедневно 12:00–01:00. Бесплатный семпл в магазине. Поможем с медкартой на месте (~2 мин). Доставка по Паттайе — уточняйте в WhatsApp.",
+      "Адрес: 32 Pattaya 13 Alley, Южная Паттайя, Чонбури 20150. Откройте карточку LABS DISPENSARY в Google Maps и стройте маршрут прямо до двери. Возьмите документ, подтверждающий возраст 20+, и тайский рецепт (ภ.ท.33). Вейпы, электронные сигареты и табак мы не продаём.",
     faq: [
-      ["Нужна медкарта?", "Да, с 20 лет. Оформим бесплатно на месте за пару минут."],
-      ["Есть доставка?", "Да — напишите в WhatsApp район в Паттайе, подтвердим время."],
-      ["Какой тариф выгоднее?", "10г за 1 800฿ — самый популярный. Опт 1кг — 40 000฿."],
+      [
+        "Кто может купить каннабис в Таиланде?",
+        "Взрослые от 20 лет с рецептом, выданным в Таиланде. Рецепты из других стран не принимаются, выдача происходит лично в магазине.",
+      ],
+      [
+        "Принимаете ли вы заказы через сайт?",
+        "Нет. Здесь нет ни корзины, ни оплаты. WhatsApp нужен для вопросов о дороге, документах и о том, что сегодня в магазине.",
+      ],
+      [
+        "Продаёте ли вы вейпы?",
+        "Нет. Продажа вейпов и электронных сигарет в Таиланде запрещена, мы их не держим. Labs Cannabis — лицензированный каннабис-диспенсери.",
+      ],
     ],
-    closing: "Выберите вес ниже и закажите в WhatsApp или заходите на Soi Hollywood.",
+    closing:
+      "Напишите в WhatsApp +66 66 080 6784 или откройте Google Maps и заходите: 32 Pattaya 13 Alley, для взрослых 20+ с тайским рецептом.",
   },
   th: {
-    intro: (h1, area, weight) =>
-      `${h1} Labs Cannabis (เดิม Labs Dispensary) บนซอยฮอลลีวูด บริการ ${area} และพัทยา White Widow indoor ราคาตามน้ำหนัก 300฿/g–1kg ส่งได้ WhatsApp +66 66 080 6784${weight ? ` โฟกัส ${weight}` : ""}`,
-    s1h: "ทำไมแขกถึงเลือก Labs Cannabis",
-    s1b: (area) => `4.8★ Google 91 รีวิว ราคาชัดเจน พนักงานเป็นกันเอง ใกล้ Walking Street 5 นาที เหมาะกับแขกจาก ${area}`,
-    s2h: "เดินเข้าร้านหรือทัก WhatsApp",
-    s2b: () => "ที่อยู่ 32 Pattaya 13 Alley (Soi Hollywood) เปิด 12:00–01:00 ทุกวัน มีส่งใน พัทยา",
+    intro: (h1, area) =>
+      `${h1} Labs Cannabis (เดิมชื่อ Labs Dispensary) เป็นร้านกัญชาที่ได้รับอนุญาต ตั้งอยู่ที่ 32 Pattaya 13 Alley พัทยาใต้ ใกล้กับ ${area} การส่งมอบทั้งหมดเกิดขึ้นที่หน้าร้าน สำหรับผู้ใหญ่อายุ 20 ปีขึ้นไปที่มีใบสั่งแพทย์ไทย เว็บไซต์นี้ไม่รับคำสั่งซื้อและไม่รับชำระเงิน สอบถามเรื่องหน้าร้าน เส้นทาง และเอกสารได้ทาง WhatsApp +66 66 080 6784`,
+    s1h: "การมาที่ร้านเป็นอย่างไร",
+    s1b: (area) =>
+      `ร้านมีใบอนุญาต และการซื้อทำที่เคาน์เตอร์แบบพบหน้าเท่านั้น สายพันธุ์ ผลที่ได้ และสิ่งที่มีอยู่จริงในวันนั้น พูดคุยกับพนักงานที่หน้าร้าน เว็บไซต์ไม่แสดงราคา ไม่แสดงสต็อก และไม่มีข้อความเชิญชวน เพราะกฎหมายไทยถือว่าเป็นการโฆษณากัญชา หากมาจาก ${area} ทักถามเส้นทางที่แน่นอนทาง WhatsApp ก่อนออกเดินทาง`,
+    s2h: "เดินทางมาหาเรา",
+    s2b: () =>
+      "ที่อยู่ 32 Pattaya 13 Alley พัทยาใต้ ชลบุรี 20150 เปิดข้อมูล LABS DISPENSARY ใน Google Maps แล้วนำทางมาที่หน้าประตูได้เลย เตรียมบัตรที่ยืนยันอายุ 20 ปีขึ้นไป และใบสั่งแพทย์ไทย (ภ.ท.33) เราไม่จำหน่ายบุหรี่ไฟฟ้าและยาสูบ",
     faq: [
-      ["ต้องมีบัตรแพทย์ไหม?", "ใช่ 20+ เราช่วยทำที่ร้านฟรี ~2 นาที"],
-      ["มีส่งไหม?", "มี — ทัก WhatsApp บอกพื้นที่"],
-      ["แพ็กไหนคุ้ม?", "10g 1,800฿ ยอดนิยม 1kg 40,000฿"],
+      [
+        "ใครซื้อดอกกัญชาในไทยได้บ้าง?",
+        "ผู้ที่มีอายุ 20 ปีขึ้นไปและมีใบสั่งแพทย์ที่ออกในประเทศไทย ใบสั่งจากต่างประเทศใช้ไม่ได้ และการส่งมอบทำที่หน้าร้านเท่านั้น",
+      ],
+      [
+        "สั่งผ่านเว็บไซต์ได้ไหม?",
+        "ไม่ได้ เว็บไซต์นี้ไม่มีตะกร้าและไม่มีการชำระเงิน WhatsApp ใช้สำหรับถามเส้นทาง เอกสาร และสิ่งที่มีที่หน้าร้านในวันนั้น",
+      ],
+      [
+        "ขายบุหรี่ไฟฟ้าไหม?",
+        "ไม่ขาย การจำหน่ายบุหรี่ไฟฟ้าในประเทศไทยผิดกฎหมาย เราไม่มีสินค้าประเภทนี้ Labs Cannabis เป็นร้านกัญชาที่ได้รับอนุญาต",
+      ],
     ],
-    closing: "แตะเลือกน้ำหนักด้านล่างเพื่อสั่ง WhatsApp หรือเดินเข้าร้านวันนี้",
+    closing:
+      "ทักมาที่ WhatsApp +66 66 080 6784 หรือเปิด Google Maps แล้วแวะมาที่ 32 Pattaya 13 Alley สำหรับผู้ใหญ่ 20 ปีขึ้นไปที่มีใบสั่งแพทย์ไทย",
   },
   ar: {
-    intro: (h1, area, weight) =>
-      `${h1}. Labs Cannabis (formerly Labs Dispensary) في Soi Hollywood — White Widow داخلي، أسعار حسب الوزن، توصيل في ${area} وباتايا. WhatsApp +66 66 080 6784${weight ? ` — ${weight}` : ""}`,
-    s1h: "لماذا Labs Cannabis",
-    s1b: (area) => `4.8★ على Google — 91 مراجعة. أسعار واضحة. 5 دقائق من Walking Street. مناسب لزوار ${area}.`,
-    s2h: "زُر المتجر أو راسلنا",
-    s2b: () => "32 Pattaya 13 Alley (Soi Hollywood). يومياً 12:00–01:00. توصيل متاح في باتايا.",
+    intro: (h1, area) =>
+      `${h1}. Labs Cannabis (سابقاً Labs Dispensary) متجر قنب مرخّص في 32 Pattaya 13 Alley، جنوب باتايا، على مقربة من ${area}. التسليم يتم داخل المتجر فقط، للبالغين 20 عاماً فأكثر ممن يحملون وصفة تايلاندية؛ هذا الموقع لا يستقبل طلبات ولا مدفوعات. الأسئلة عن المتوفر والطريق والأوراق عبر WhatsApp +66 66 080 6784`,
+    s1h: "كيف تسير الزيارة",
+    s1b: (area) =>
+      `المتجر مرخّص، والشراء يتم وجهاً لوجه عند الطاولة. السلالات والتأثيرات وما هو موجود فعلاً في ذلك اليوم تُناقش مع الموظفين داخل المتجر؛ الموقع لا ينشر أسعاراً ولا قوائم مخزون ولا دعاية، لأن القانون التايلاندي يقرأ ذلك إعلاناً عن القنب. من ${area} اسأل عن الطريق الدقيق عبر WhatsApp قبل التحرك.`,
+    s2h: "كيف تصل إلينا",
+    s2b: () =>
+      "العنوان: 32 Pattaya 13 Alley، جنوب باتايا، تشون بوري 20150. افتح بطاقة LABS DISPENSARY في Google Maps وابدأ التوجيه حتى الباب. أحضر ما يثبت أن عمرك 20 عاماً فأكثر، والوصفة التايلاندية (ภ.ท.33). لا نبيع السجائر الإلكترونية ولا التبغ.",
     faq: [
-      ["هل أحتاج بطاقة طبية؟", "نعم 20+. نساعدك مجاناً في المتجر."],
-      ["هل يوجد توصيل؟", "نعم — راسلنا على WhatsApp."],
-      ["أفضل قيمة؟", "10g بـ 1,800฿ — 1kg بـ 40,000฿."],
+      [
+        "من يستطيع شراء زهرة القنب في تايلاند؟",
+        "البالغون 20 عاماً فأكثر ممن يحملون وصفة صادرة داخل تايلاند. الوصفات الأجنبية غير مقبولة، والتسليم يتم شخصياً داخل المتجر.",
+      ],
+      [
+        "هل يستقبل الموقع الطلبات؟",
+        "لا. لا توجد سلة ولا دفع هنا. WhatsApp للأسئلة عن الطريق والأوراق وما هو موجود في المتجر اليوم.",
+      ],
+      [
+        "هل تبيعون السجائر الإلكترونية؟",
+        "لا. بيع السجائر الإلكترونية غير قانوني في تايلاند ولا نوفّرها. Labs Cannabis متجر قنب مرخّص.",
+      ],
     ],
-    closing: "اضغط على الوزن للطلب عبر WhatsApp أو زُر Soi Hollywood اليوم.",
+    closing:
+      "راسلنا على WhatsApp +66 66 080 6784 أو افتح Google Maps وزُر 32 Pattaya 13 Alley — للبالغين 20+ مع وصفة تايلاندية.",
   },
   zh: {
-    intro: (h1, area, weight) =>
-      `${h1}。Labs Cannabis（原 Labs Dispensary）位于 Soi Hollywood，服务${area}及芭提雅，White Widow 室内花，1g 300฿ 至 1kg 批发，可配送。WhatsApp +66 66 080 6784${weight ? `，本页侧重${weight}` : ""}`,
-    s1h: "为何选择 Labs Cannabis",
-    s1b: (area) => `Google 4.8★，91 条评价。价格透明。距 Walking Street 5 分钟，${area} 客人方便到店。`,
-    s2h: "到店或 WhatsApp 咨询",
-    s2b: () => "地址：32 Pattaya 13 Alley (Soi Hollywood)。每日 12:00–01:00。芭提雅可配送。",
+    intro: (h1, area) =>
+      `${h1}。Labs Cannabis（原 Labs Dispensary）是一家持证大麻专卖店，地址 32 Pattaya 13 Alley，南芭提雅，距${area}不远。所有交付都在店内完成，面向持泰国处方的 20 岁以上成年人；本网站不接受订单，也不收款。关于店内情况、路线和证件的问题请用 WhatsApp +66 66 080 6784 咨询。`,
+    s1h: "到店会遇到什么",
+    s1b: (area) =>
+      `本店持证经营，购买只能到店当面完成。品种、效果以及当天实际有什么，都由店员在店内当面说明；网站不公布价格、不公布库存、也不做任何宣传，因为泰国法律把这些视为大麻广告。从${area}出发前，请先用 WhatsApp 问清具体路线。`,
+    s2h: "怎么找到我们",
+    s2b: () =>
+      "地址：32 Pattaya 13 Alley，南芭提雅，春武里 20150。在 Google Maps 打开 LABS DISPENSARY 的商家页面，直接导航到店门口。请携带可证明年满 20 岁的证件和泰国处方（ภ.ท.33）。我们不售卖电子烟和烟草。",
     faq: [
-      ["需要医疗卡吗？", "20 岁以上需要，店内约 2 分钟免费协助。"],
-      ["可以配送吗？", "可以 — WhatsApp 告知区域。"],
-      ["最划算规格？", "10g 1,800฿ 最受欢迎，1kg 40,000฿。"],
+      [
+        "在泰国谁可以购买大麻花？",
+        "年满 20 岁并持有泰国境内开具处方的成年人。境外处方不被接受，交付须在店内当面完成。",
+      ],
+      [
+        "可以在网站上下单吗？",
+        "不可以。这里没有购物篮，也不收款。WhatsApp 只用于询问路线、证件和当天店内的情况。",
+      ],
+      [
+        "你们卖电子烟吗？",
+        "不卖。在泰国销售电子烟属于违法，我们没有这类商品。Labs Cannabis 是持证大麻专卖店。",
+      ],
     ],
-    closing: "点击下方重量档位 WhatsApp 下单，或今日到店 Soi Hollywood。",
+    closing:
+      "用 WhatsApp +66 66 080 6784 提问，或打开 Google Maps 直接到店：32 Pattaya 13 Alley，仅限持泰国处方的 20 岁以上成年人。",
   },
   ko: {
-    intro: (h1, area, weight) =>
-      `${h1}. Soi Hollywood Labs Cannabis(구 Labs Dispensary) — ${area} 및 파타야, White Widow indoor, 300฿/g~1kg 도매, 배달 가능. WhatsApp +66 66 080 6784${weight ? `, ${weight} 안내` : ""}`,
-    s1h: "Labs Cannabis를 선택하는 이유",
-    s1b: (area) => `Google 4.8★ 91리뷰. 투명한 가격. Walking Street에서 5분. ${area} 고객 방문 편리.`,
-    s2h: "매장 방문 또는 WhatsApp",
-    s2b: () => "32 Pattaya 13 Alley (Soi Hollywood). 매일 12:00–01:00. 파타야 배달 가능.",
+    intro: (h1, area) =>
+      `${h1}. Labs Cannabis(구 Labs Dispensary)는 32 Pattaya 13 Alley, 남파타야에 있는 허가받은 대마초 판매점이며 ${area}에서도 가깝습니다. 모든 전달은 태국 처방전을 소지한 만 20세 이상 성인을 대상으로 매장에서만 이루어지고, 이 웹사이트는 주문도 결제도 받지 않습니다. 매장 상황과 오는 길, 서류에 관한 질문은 WhatsApp +66 66 080 6784으로 보내주세요.`,
+    s1h: "매장에서는 이렇게 진행됩니다",
+    s1b: (area) =>
+      `매장은 허가를 받았고, 구매는 카운터에서 대면으로만 이루어집니다. 품종과 효과, 그날 실제로 무엇이 있는지는 매장에서 직원과 직접 이야기합니다. 웹사이트에는 가격도 재고도 광고 문구도 싣지 않습니다. 태국 법이 이를 대마초 광고로 보기 때문입니다. ${area}에서 출발하기 전에 WhatsApp으로 정확한 경로를 물어보세요.`,
+    s2h: "찾아오는 길",
+    s2b: () =>
+      "주소: 32 Pattaya 13 Alley, 남파타야, 촌부리 20150. Google Maps에서 LABS DISPENSARY 등록 정보를 열고 문 앞까지 길안내를 시작하세요. 만 20세 이상임을 확인할 수 있는 신분증과 태국 처방전(ภ.ท.33)을 가져오세요. 전자담배와 담배는 판매하지 않습니다.",
     faq: [
-      ["의료 카드 필요?", "20세 이상, 매장에서 무료 발급 지원."],
-      ["배달 되나요?", "WhatsApp으로 지역 문의."],
-      ["가성비?", "10g 1,800฿ 인기, 1kg 40,000฿."],
+      [
+        "태국에서 대마초 꽃은 누가 살 수 있나요?",
+        "태국에서 발급된 처방전을 가진 만 20세 이상 성인입니다. 해외 처방전은 인정되지 않으며, 전달은 매장에서 대면으로 진행됩니다.",
+      ],
+      [
+        "웹사이트에서 주문할 수 있나요?",
+        "아니요. 장바구니도 결제도 없습니다. WhatsApp은 경로와 서류, 그날 매장 상황을 묻기 위한 창구입니다.",
+      ],
+      [
+        "전자담배를 판매하나요?",
+        "판매하지 않습니다. 태국에서 전자담배 판매는 불법이며 취급하지 않습니다. Labs Cannabis는 허가받은 대마초 판매점입니다.",
+      ],
     ],
-    closing: "아래 무게를 탭해 WhatsApp 주문 또는 Soi Hollywood 방문.",
+    closing:
+      "WhatsApp +66 66 080 6784으로 문의하시거나 Google Maps를 열고 32 Pattaya 13 Alley로 오세요. 태국 처방전을 가진 만 20세 이상만 이용할 수 있습니다.",
   },
   ja: {
-    intro: (h1, area, weight) =>
-      `${h1}。Soi HollywoodのLabs Cannabis（旧Labs Dispensary）— ${area}・パタヤ対応、White Widow indoor、300฿/g〜1kg卸、配達可。WhatsApp +66 66 080 6784${weight ? `、${weight}ページ` : ""}`,
-    s1h: "Labs Cannabisが選ばれる理由",
-    s1b: (area) => `Google 4.8★ 91レビュー。明確な重量価格。Walking Streetから5分。${area}からも来店しやすい。`,
-    s2h: "来店またはWhatsApp",
-    s2b: () => "32 Pattaya 13 Alley (Soi Hollywood)。毎日12:00–01:00。パタヤ配達あり。",
+    intro: (h1, area) =>
+      `${h1}。Labs Cannabis（旧Labs Dispensary）は32 Pattaya 13 Alley、南パタヤにある認可を受けた大麻ディスペンサリーで、${area}からも近い場所にあります。受け渡しはタイの処方箋を持つ20歳以上の方に対して店頭でのみ行い、このサイトは注文も決済も受け付けません。店頭の様子や道順、書類についてのご質問はWhatsApp +66 66 080 6784へどうぞ。`,
+    s1h: "店頭での流れ",
+    s1b: (area) =>
+      `当店は認可を受けており、購入はカウンターでの対面のみです。品種や効果、その日に実際に何があるかは店頭でスタッフと直接お話しします。サイトには価格も在庫も宣伝文句も掲載しません。タイの法律ではそれが大麻の広告にあたるためです。${area}から向かう前に、正確な道順をWhatsAppでご確認ください。`,
+    s2h: "アクセス",
+    s2b: () =>
+      "住所：32 Pattaya 13 Alley、南パタヤ、チョンブリー 20150。Google MapsでLABS DISPENSARYの掲載情報を開き、店の入口までナビゲーションを開始してください。20歳以上であることを確認できる身分証と、タイの処方箋（ภ.ท.33）をお持ちください。電子タバコやたばこは扱っていません。",
     faq: [
-      ["医療カード必要？", "20歳以上。店内約2分で無料サポート。"],
-      ["配達ある？", "WhatsAppでエリア確認。"],
-      ["お得な量？", "10g 1,800฿人気、1kg 40,000฿。"],
+      [
+        "タイで大麻の花を購入できるのは誰ですか？",
+        "タイ国内で発行された処方箋を持つ20歳以上の方です。海外の処方箋は使えず、受け渡しは店頭で対面で行います。",
+      ],
+      [
+        "サイトから注文できますか？",
+        "できません。買い物かごも決済もありません。WhatsAppは道順や書類、その日の店頭の様子を尋ねるための窓口です。",
+      ],
+      [
+        "電子タバコは売っていますか？",
+        "販売していません。タイでは電子タバコの販売は違法で、当店では扱っていません。Labs Cannabisは認可を受けた大麻ディスペンサリーです。",
+      ],
     ],
-    closing: "下の重量からWhatsApp注文、またはSoi Hollywoodへ。",
+    closing:
+      "WhatsApp +66 66 080 6784へご質問いただくか、Google Mapsを開いて32 Pattaya 13 Alleyへお越しください。タイの処方箋をお持ちの20歳以上の方が対象です。",
   },
 };
 
@@ -152,10 +250,12 @@ function buildContent(locale, page) {
   const t = COPY[locale];
   const area = page.area ? (AREA_NAMES[page.area]?.[locale] ?? page.area) : AREA_NAMES.pattaya[locale];
   const h1 = page.h1Template[locale] ?? page.h1Template.en ?? page.slug;
+  // `page.weight` намеренно не подставляется: весовой тир в тексте — это ценовая
+  // витрина, даже без самой цифры цены.
   return {
     source: "fallback",
     h1,
-    intro: t.intro(h1, area, page.weight),
+    intro: t.intro(h1, area),
     sections: [
       { h2: t.s1h, body: t.s1b(area) },
       { h2: t.s2h, body: t.s2b() },

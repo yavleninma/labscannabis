@@ -6,29 +6,50 @@ import { t } from "@/lib/ui";
 interface Props {
   locale: Locale;
   pathSuffix?: string;
+  /**
+   * Шапка на 320 px (W1-06): переключатель сворачивается в один глобус без
+   * подписи и рамки. Место в правом верхнем углу принадлежит кнопкам действия,
+   * а не названию текущего языка — его человек и так видит по тексту страницы.
+   */
+  compact?: boolean;
 }
 
-const { locale, pathSuffix = "" } = Astro.props;
+const { locale, pathSuffix = "", compact = false } = Astro.props;
 const ui = t(locale);
 const policy = getIndexPolicy(locale, pathSuffix);
-const switcherLocales = policy.indexable
-  ? LOCALES.filter((lang) => policy.locales.includes(lang))
-  : LOCALES;
+/**
+ * Список для человека и разметка для робота — разные вещи, и раньше они были
+ * склеены одним условием: на indexable-странице в выпадашке оставались только
+ * indexable-локали. После возврата `buy-/best-/cheap-` в индекс на en+ru это
+ * оставило туристу из Таиланда, Китая, Японии, Кореи и ОАЭ ровно один пункт на
+ * самой горячей транзакционной странице. Ссылки показываются всегда на все 7
+ * локалей: страница в них собрана и отдаёт 200, просто не индексируется.
+ *
+ * `hreflang`/`rel=alternate` при этом по-прежнему ограничены `policy.locales` —
+ * это требование check-seo и единственно верная разметка: заявлять альтернативу
+ * на noindex-версию нельзя.
+ */
+const switcherLocales = LOCALES;
 const exposesAlternate = (lang: Locale) => policy.indexable && policy.locales.includes(lang);
 ---
 
 <div class="relative z-[90]">
   <details class="group/lang">
     <summary
-      class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg border border-border bg-bg-card px-3 py-2 text-sm font-medium text-text hover:border-emerald/40 [&::-webkit-details-marker]:hidden"
+      class:list={[
+        "flex cursor-pointer list-none items-center gap-1.5 text-sm font-medium text-text hover:border-emerald/40 [&::-webkit-details-marker]:hidden",
+        compact
+          ? "h-11 w-11 justify-center rounded-lg border border-transparent sm:h-auto sm:w-auto sm:justify-start sm:rounded-lg sm:border-border sm:bg-bg-card sm:px-3 sm:py-2"
+          : "rounded-lg border border-border bg-bg-card px-3 py-2",
+      ]}
       aria-label={ui.langSwitcher.label}
     >
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4 shrink-0 text-emerald-dim" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class:list={["shrink-0 text-emerald-dim", compact ? "h-5 w-5 sm:h-4 sm:w-4" : "h-4 w-4"]} aria-hidden="true">
         <circle cx="12" cy="12" r="10" />
         <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
       </svg>
-      <span>{LOCALE_NAMES[locale]}</span>
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-4 w-4 text-text-muted transition group-open/lang:rotate-180" aria-hidden="true">
+      <span class={compact ? "hidden sm:inline" : undefined}>{LOCALE_NAMES[locale]}</span>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class:list={["h-4 w-4 text-text-muted transition group-open/lang:rotate-180", compact && "hidden sm:block"]} aria-hidden="true">
         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
       </svg>
     </summary>
@@ -48,9 +69,9 @@ const exposesAlternate = (lang: Locale) => policy.indexable && policy.locales.in
               hreflang={exposesAlternate(lang) ? LOCALE_HREFLANG[lang] : undefined}
               rel={exposesAlternate(lang) ? "alternate" : undefined}
               class="block px-3 py-2 text-sm text-text hover:bg-bg-elevated hover:text-emerald-dim"
-              data-track="language_switch_click"
-              data-track-placement="language_switcher"
-              data-track-detail={`lang:${locale}-${lang}`}
+              data-track="nav_click"
+              data-placement="language"
+              data-target={lang}
             >
               {LOCALE_NAMES[lang]}
             </a>

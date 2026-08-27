@@ -1,14 +1,18 @@
 {
   "h1": "Wholesale Cannabis in Jomtien",
-  "intro": "Welcome to Labs Cannabis, your go-to destination for premium cannabis and weed in Pattaya. Located just a short distance from Jomtien, we offer a diverse selection of strains, including the popular White Widow. Whether you’re looking to stock up for personal use or seeking wholesale options for your business, we have you covered. With our friendly team and free in-store samples, exploring the world of cannabis has never been easier. Come visit us on Soi Hollywood or near Walking Street to discover the best products in town.",
+  "intro": "This site publishes no prices, no stock lists and no advertising: Thai law reads that as cannabis advertising, and the penalty lands on the shop's licence. Located just a short distance from Jomtien, we offer a diverse selection of strains, including the popular White Widow. Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya.",
   "sections": [
     {
       "h2": "Why Choose Labs Cannabis for Wholesale?",
-      "body": "At Labs Cannabis, we pride ourselves on providing quality cannabis products tailored for both individual consumers and businesses alike. Our wholesale offerings include a variety of weight tiers from 1g to 1kg, making it convenient for you to find exactly what you need. We understand the importance of quality, which is why we source our cannabis from trusted growers, ensuring every product meets our high standards. Our knowledgeable staff is here to assist you in selecting the right strains, including our beloved White Widow, known for its balanced effects and delightful aroma. Plus, with our convenient location near Jomtien, it’s easy to stop by and check out our selections."
+      "body": "Bring identification showing you are 20 or older; the paperwork is checked at the counter, not on this website. Our knowledgeable staff is here to assist you in selecting the right strains, including our beloved White Widow, known for its balanced effects and delightful aroma. Plus, with our convenient location near Jomtien, it’s easy to stop by and check out our selections."
     },
     {
       "h2": "The Benefits of Buying Cannabis Wholesale",
-      "body": "Buying cannabis wholesale not only saves you money but also provides a steady supply for your needs. Whether you’re a retail shop owner or an event organizer, our wholesale options allow you to stock up in bulk while enjoying the flexibility of our tiered weights. At Labs Cannabis, we offer competitive pricing and a range of strains, ensuring you have access to the best products on the market. Plus, with our free in-store samples, you can try before you buy, helping you make informed choices about what to order. Our team is dedicated to supporting your cannabis business and providing you with the best wholesale experience in Pattaya."
+      "body": "Buying cannabis wholesale not only saves you money but also provides a steady supply for your needs. Labs Cannabis does not stock vapes, e-cigarettes or tobacco. Staff talk you through strain types, aromas and effects at the counter, so the choice comes from what is actually in front of you."
+    },
+    {
+      "h2": "Prescription and age rules",
+      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country. This paragraph states the rule and offers to arrange nothing."
     }
   ],
   "faq": [
@@ -17,14 +21,14 @@
       "a": "We offer a wide variety of cannabis strains, including popular options like White Widow, along with many others to suit different preferences."
     },
     {
-      "q": "Do you provide samples for wholesale purchases?",
-      "a": "Yes! We offer free in-store samples for you to try before making a wholesale purchase."
+      "q": "Does the website take orders?",
+      "a": "No. There is no basket and no payment here. WhatsApp is for questions about the route, the paperwork and what is in the shop today."
     },
     {
       "q": "How can I place a wholesale order?",
       "a": "You can visit us at Labs Cannabis or contact us via WhatsApp at +66 66 080 6784 to discuss your wholesale needs."
     }
   ],
-  "closing": "Ready to explore our wholesale cannabis options? Visit us on Soi Hollywood or near Walking Street in Pattaya. For inquiries, feel free to reach out via WhatsApp at +66 66 080 6784. We’re here to help you find the perfect cannabis products for your business!",
+  "closing": "Ready to explore our wholesale cannabis options? Visit us on Pattaya 13 Alley or near Walking Street in Pattaya. For inquiries, feel free to reach out via WhatsApp at +66 66 080 6784. We’re here to help you find the perfect cannabis products for your business!",
   "source": "openai"
 }

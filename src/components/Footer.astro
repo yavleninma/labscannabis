@@ -3,7 +3,10 @@ import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/ui";
 import { localePath } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
-import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
+import OpeningStatus from "@/components/OpeningStatus.astro";
+import { ADDRESS, BRAND, CONTACT, GOOGLE, RATING, getMapsSearchUrl } from "@/data/site";
+import { getFooterSeoSections } from "@/data/footer-seo-links";
+import { renderCopy } from "@/data/area-copy";
 
 interface Props {
   locale: Locale;
@@ -13,52 +16,59 @@ interface Props {
 const { locale, pathSuffix = "" } = Astro.props;
 const ui = t(locale);
 const year = new Date().getFullYear();
-const footerCopy: Record<Locale, { visit: string; hours: string; maps: string; legal: string }> = {
+/**
+ * Строка «на Google Maps как LABS DISPENSARY» была захардкожена по-английски и
+ * уезжала в этом виде на все 210 страниц во всех 7 локалях. Перевод для этой же
+ * мысли уже существовал (`index.astro`, ключ `listedAs`) — теперь он один на всех.
+ */
+const listedAs = renderCopy(ui.footer.listedAs, { brand: BRAND.name, listing: GOOGLE.listingName });
+/**
+ * Ключа `hours` здесь больше нет. В нём лежало «Check Google Maps before
+ * visiting.» / «Перед визитом проверьте Google Maps.» — то есть сайт письменно
+ * признавался, что не знает собственных часов, и отправлял человека выяснять
+ * главный вопрос визита на чужой ресурс. Часы выводит `OpeningStatus`, когда их
+ * подтвердит владелец (O-01), а место в футере занимает то, что подтверждено
+ * прямо сейчас: рейтинг карточки и ссылка на отзывы.
+ */
+const footerCopy: Record<Locale, { visit: string; maps: string; legal: string }> = {
   en: {
     visit: "Visit",
-    hours: "Check Google Maps before visiting.",
     maps: "Open Google Maps",
     legal:
       "Cannabis flower is a controlled herb. The official tourist notice requires a valid prescription issued in Thailand and prohibits online sales and advertising. This site accepts no orders or payments; read the current legal guide.",
   },
   ru: {
     visit: "Локация",
-    hours: "Перед визитом проверьте Google Maps.",
     maps: "Открыть Google Maps",
     legal:
       "Соцветия каннабиса — контролируемая трава. Официальное уведомление требует от туристов действующий рецепт, выданный в Таиланде, и запрещает онлайн-продажи и рекламу. Сайт не принимает заказы или оплату; читайте актуальный legal guide.",
   },
   th: {
     visit: "ที่ตั้ง",
-    hours: "ตรวจสอบ Google Maps ก่อนเดินทาง",
     maps: "เปิด Google Maps",
     legal:
       "ช่อดอกกัญชาเป็นสมุนไพรควบคุม ประกาศสำหรับนักท่องเที่ยวกำหนดให้มีใบสั่งจ่ายยาที่ออกในไทยและห้ามขายออนไลน์หรือโฆษณา เว็บไซต์ไม่รับคำสั่งซื้อหรือชำระเงิน โปรดอ่านคู่มือกฎหมายปัจจุบัน",
   },
   ar: {
     visit: "الموقع",
-    hours: "تحقق من Google Maps قبل الزيارة.",
     maps: "فتح Google Maps",
     legal:
       "زهور القنب عشبة خاضعة للرقابة. يشترط الإشعار الرسمي للسياح وصفة سارية صادرة في تايلاند ويحظر البيع الإلكتروني والإعلان. لا يقبل الموقع طلبات أو مدفوعات؛ اقرأ الدليل القانوني الحالي.",
   },
   zh: {
     visit: "位置",
-    hours: "到访前请查看 Google Maps。",
     maps: "打开 Google Maps",
     legal:
       "大麻花属于受控草药。官方游客通知要求持有在泰国签发的有效处方，并禁止在线销售与广告。本网站不接受订单或付款；请阅读现行法律指南。",
   },
   ko: {
     visit: "위치",
-    hours: "방문 전에 Google Maps를 확인하세요.",
     maps: "Google Maps 열기",
     legal:
       "대마 꽃은 관리 대상 약초입니다. 공식 관광객 공지는 태국에서 발급된 유효한 처방전을 요구하고 온라인 판매와 광고를 금지합니다. 이 사이트는 주문이나 결제를 받지 않으며 최신 법률 가이드를 확인하세요.",
   },
   ja: {
     visit: "場所",
-    hours: "来店前にGoogle Mapsをご確認ください。",
     maps: "Google Mapsを開く",
     legal:
       "大麻の花は管理対象のハーブです。旅行者向け公式通知はタイ国内発行の有効な処方箋を求め、オンライン販売と広告を禁止しています。このサイトは注文や支払いを受け付けません。最新の法的ガイドをご確認ください。",
@@ -66,47 +76,94 @@ const footerCopy: Record<Locale, { visit: string; hours: string; maps: string; l
 };
 const copy = footerCopy[locale] ?? footerCopy.en;
 const addressLine = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
+/** Цифры карточки Google — визуально и со ссылкой на источник, без разметки рейтинга. */
+const ratingLine = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+/**
+ * Тематические группы ссылок (W1-16). Список фильтруется политикой индексации и
+ * текущим слагом, поэтому на `th`/`ar`/`zh`/`ko`/`ja` остаются только те цели,
+ * которые indexable на этой локали, а ссылки на саму себя не будет никогда.
+ */
+const seoSections = getFooterSeoSections(locale, pathSuffix);
 
 ---
 
-<footer class="border-t border-border bg-bg-elevated py-10 pb-24">
+<footer data-boilerplate class="border-t border-border bg-bg-elevated py-10 pb-28">
   <div class="site-main space-y-8 text-base text-text-muted">
     <nav class="flex flex-wrap gap-4 font-medium">
       <a href={localePath(locale)} class="hover:text-emerald-dim">{ui.nav.home}</a>
       <a
         href={`${localePath(locale)}#visit`}
         class="hover:text-emerald-dim"
-        data-track="menu_link_click"
-        data-track-placement="footer"
-        data-track-detail="footer:visit"
+        data-track="nav_click"
+        data-placement="footer"
+        data-target="visit"
       >
         {copy.visit}
       </a>
-      <a href={localePath(locale, "locations")} class="hover:text-emerald-dim">{ui.locations.title}</a>
-      <a href={localePath(locale, "guides/legal-cannabis-tourists")} class="hover:text-emerald-dim">{ui.footerSeo.legalGuide}</a>
       <a
         href={localePath(locale, "contact")}
         class="hover:text-emerald-dim"
-        data-track="menu_link_click"
-        data-track-placement="footer"
-        data-track-detail="footer:contact"
+        data-track="nav_click"
+        data-placement="footer"
+        data-target="contact"
       >
         {ui.nav.contact}
       </a>
     </nav>
 
+    {seoSections.length > 0 && (
+      <div class="grid gap-6 sm:grid-cols-3">
+        {seoSections.map((section) => (
+          <nav aria-label={ui.footerSeo[section.titleKey]}>
+            <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">
+              {ui.footerSeo[section.titleKey]}
+            </p>
+            <ul class="mt-3 space-y-2 text-sm">
+              {section.links.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="hover:text-emerald-dim"
+                    data-track="nav_click"
+                    data-placement="footer"
+                    data-target={link.suffix}
+                    data-seo-context-link
+                  >
+                    {ui.footerSeo[link.labelKey]}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        ))}
+      </div>
+    )}
+
     <div class="rounded-xl border border-border bg-bg-card p-4 text-sm leading-relaxed">
-      <p class="font-bold text-text">{BRAND.name} — listed on Google Maps as {GOOGLE.listingName}</p>
+      <p class="font-bold text-text">{listedAs}</p>
       <address class="mt-2 not-italic">{addressLine}</address>
       <div class="mt-2 flex flex-wrap gap-x-4 gap-y-2">
-        <a href={CONTACT.tel} class="font-bold text-text hover:text-emerald-dim" data-track="contact_call_click" data-track-placement="footer" data-track-detail="footer:nap_phone">{CONTACT.phoneDisplay}</a>
-        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-dim hover:underline" data-track="map_open_click" data-track-placement="footer" data-track-detail="footer:nap_maps">{copy.maps}</a>
+        <a href={CONTACT.tel} class="font-bold text-text hover:text-emerald-dim" data-track="contact_click" data-channel="phone" data-placement="footer">{CONTACT.phoneDisplay}</a>
+        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="font-bold text-emerald-dim hover:underline" data-track="contact_click" data-channel="maps" data-placement="footer">{copy.maps}</a>
       </div>
     </div>
 
     <div class="flex flex-wrap items-center justify-between gap-4 border-t border-border pt-6">
       <LanguageSwitcher locale={locale} pathSuffix={pathSuffix} />
-      <p class="text-sm">{copy.hours}</p>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+        <a
+          href={getMapsSearchUrl()}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-bold text-emerald-dim hover:underline"
+          data-track="contact_click"
+          data-channel="maps"
+          data-placement="footer"
+        >
+          {ratingLine}
+        </a>
+        <OpeningStatus locale={locale} class="inline-flex" />
+      </div>
     </div>
 
     <p class="text-sm leading-relaxed">{copy.legal}</p>

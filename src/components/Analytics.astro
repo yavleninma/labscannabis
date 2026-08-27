@@ -1,0 +1,52 @@
+---
+import { getYandexMetrikaId } from "@/lib/analytics";
+
+/**
+ * Второй счётчик — Яндекс.Метрика (W1-08).
+ *
+ * Зачем второй: просмотры считает Vercel Web Analytics (включён в
+ * `astro.config.mjs`), но кастомные события на тарифе Hobby молча не пишутся
+ * (O-09), а без событий конверсию измерить нечем. Метрика считает цели
+ * бесплатно, и русскоязычная доля трафика Паттайи в ней видна лучше всего.
+ *
+ * ID приходит из `PUBLIC_YM_ID`. Переменной нет — компонент не рендерит ничего:
+ * счётчик выключен, сайт работает ровно как раньше, ошибок в консоли нет.
+ *
+ * ⚠️ Вебвизор, запись сессий и карта кликов НЕ включаются: в Таиланде действует
+ * PDPA, а посетители приезжают из семи стран. Считаем только визиты и цели по
+ * исходящим кликам — этого достаточно для единственной метрики владельца.
+ * Решение про cookie-баннер — за владельцем (O-11).
+ */
+const ymId = getYandexMetrikaId();
+---
+
+{ymId && (
+  <>
+    <script define:vars={{ ymId }}>
+      (function (m, e, t, r, i, k, a) {
+        m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments); };
+        m[i].l = 1 * new Date();
+        for (let j = 0; j < e.scripts.length; j++) {
+          if (e.scripts[j].src === r) return;
+        }
+        k = e.createElement(t);
+        a = e.getElementsByTagName(t)[0];
+        k.async = 1;
+        k.src = r;
+        a.parentNode.insertBefore(k, a);
+      })(window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+      // `defer` НЕ включаем: он отменяет автоматическую отправку просмотра при
+      // инициализации, а сайт статический и второго вызова `hit` здесь нет.
+      window.ym(ymId, "init", {
+        trackLinks: true,
+        accurateTrackBounce: true,
+        clickmap: false,
+        webvisor: false,
+      });
+    </script>
+    <noscript>
+      <div><img src={`https://mc.yandex.ru/watch/${ymId}`} style="position:absolute; left:-9999px;" alt="" /></div>
+    </noscript>
+  </>
+)}

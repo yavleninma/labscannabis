@@ -1,12 +1,15 @@
 ---
 import PageLayout from "@/layouts/PageLayout.astro";
 import ReviewStrip from "@/components/ReviewStrip.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import MapBlock from "@/components/MapBlock.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
 import { AREA_DETAILS, renderCopy } from "@/data/area-copy";
-import { ADDRESS, CONTACT, GOOGLE } from "@/data/site";
+import { ADDRESS, getMapsDirectionsUrl } from "@/data/site";
+import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
 
 export function getStaticPaths() {
@@ -33,11 +36,8 @@ type AreaCopy = {
   visitTitle: string;
   visitBody: string;
   landmarksTitle: string;
-  maps: string;
-  whatsapp: string;
   relatedLabel: string;
   contact: string;
-  whatsappPrefill: string;
 };
 
 const areaCopy: Record<Locale, AreaCopy> = {
@@ -51,11 +51,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "Destination address",
     visitBody: "The published address is {address}. Use the live pin before travelling.",
     landmarksTitle: "Area references",
-    maps: "Open Google Maps",
-    whatsapp: "Ask for directions",
     relatedLabel: "Visit information",
     contact: "Contact and address",
-    whatsappPrefill: "Hi Labs Cannabis. I need help finding the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ru: {
     title: "Маршрут из {area} к LABS DISPENSARY | Паттайя",
@@ -67,11 +64,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "Адрес назначения",
     visitBody: "Опубликованный адрес: {address}. Перед поездкой откройте актуальный пин.",
     landmarksTitle: "Ориентиры района",
-    maps: "Открыть Google Maps",
-    whatsapp: "Спросить маршрут",
     relatedLabel: "Информация о визите",
     contact: "Контакты и адрес",
-    whatsappPrefill: "Здравствуйте. Помогите, пожалуйста, найти локацию в Google Maps по адресу 32 Pattaya 13 Alley.",
   },
   th: {
     title: "เส้นทางจาก {area} ไป LABS DISPENSARY | พัทยา",
@@ -83,11 +77,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "ที่อยู่ปลายทาง",
     visitBody: "ที่อยู่ที่เผยแพร่คือ {address} โปรดเปิดหมุดล่าสุดก่อนเดินทาง",
     landmarksTitle: "จุดอ้างอิงในพื้นที่",
-    maps: "เปิด Google Maps",
-    whatsapp: "ถามเส้นทาง",
     relatedLabel: "ข้อมูลการเดินทาง",
     contact: "ติดต่อและที่อยู่",
-    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ar: {
     title: "الاتجاهات من {area} إلى LABS DISPENSARY | باتايا",
@@ -99,11 +90,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "عنوان الوجهة",
     visitBody: "العنوان المنشور هو {address}. افتح الدبوس الحالي قبل السفر.",
     landmarksTitle: "معالم المنطقة",
-    maps: "افتح Google Maps",
-    whatsapp: "اسأل عن الاتجاهات",
     relatedLabel: "معلومات الزيارة",
     contact: "الاتصال والعنوان",
-    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   zh: {
     title: "从{area}前往 LABS DISPENSARY | 芭提雅",
@@ -115,11 +103,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "目的地地址",
     visitBody: "公开地址为 {address}。出发前请打开最新定位。",
     landmarksTitle: "区域参考",
-    maps: "打开 Google Maps",
-    whatsapp: "询问路线",
     relatedLabel: "到店信息",
     contact: "联系方式与地址",
-    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ko: {
     title: "{area}에서 LABS DISPENSARY 가는 길 | 파타야",
@@ -131,11 +116,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "목적지 주소",
     visitBody: "공개 주소는 {address}입니다. 출발 전에 최신 핀을 여세요.",
     landmarksTitle: "지역 참고 지점",
-    maps: "Google Maps 열기",
-    whatsapp: "길 안내 문의",
     relatedLabel: "방문 정보",
     contact: "연락처 및 주소",
-    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
   ja: {
     title: "{area}から LABS DISPENSARY への行き方 | パタヤ",
@@ -147,11 +129,8 @@ const areaCopy: Record<Locale, AreaCopy> = {
     visitTitle: "目的地住所",
     visitBody: "公開住所は {address} です。移動前に最新のピンを開いてください。",
     landmarksTitle: "エリアの目印",
-    maps: "Google Maps を開く",
-    whatsapp: "道順を確認",
     relatedLabel: "訪問情報",
     contact: "連絡先と住所",
-    whatsappPrefill: "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley.",
   },
 };
 
@@ -160,7 +139,10 @@ const ui = t(locale);
 const vars = { area: areaName, address: ADDRESS.street };
 const title = renderCopy(copy.title, vars);
 const description = renderCopy(copy.description, vars);
-const whatsappUrl = `${CONTACT.whatsappWithMsg(copy.whatsappPrefill)}&source=area_directions`;
+const labels = CTA_LABELS[locale];
+// Префилл на языке локали и с названием района: раньше пять локалей из семи
+// получали английский текст «help me find the Google Maps location».
+const whatsappUrl = ctaWhatsAppHref(locale, "area", { area: areaName });
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.locations.areasGroup, pathSuffix: "locations" },
@@ -203,12 +185,12 @@ const breadcrumbs = [
         </section>
       )}
 
-      <div class="mt-8 grid grid-cols-2 gap-3">
-        <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="map_open_click" data-track-placement="area_directions" data-track-detail={`area:${area.slug}:maps`}>
-          {copy.maps}
+      <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="contact_click" data-channel="whatsapp" data-placement="area">
+          {labels.whatsapp}
         </a>
-        <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="contact_whatsapp_click" data-track-placement="area_directions" data-track-detail={`area:${area.slug}:whatsapp`} data-wa-source="area_directions" data-whatsapp-ref={`area:${area.slug}`}>
-          {copy.whatsapp}
+        <a href={getMapsDirectionsUrl()} target="_blank" rel="noopener noreferrer" class="card-surface flex min-h-12 items-center justify-center px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="contact_click" data-channel="directions" data-placement="area">
+          {labels.directions}
         </a>
       </div>
 
@@ -216,7 +198,9 @@ const breadcrumbs = [
         <a href={localePath(locale, "contact")} class="card-surface block px-4 py-3 text-base font-medium hover:text-emerald-dim">{copy.contact}</a>
       </nav>
     </div>
+    <ContactRail locale={locale} intent="area" placement="area" area={areaName} />
   </article>
+  <RelatedLinks locale={locale} pathSuffix={`areas/${area.slug}`} placement="area" />
   <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
   <Footer locale={locale} pathSuffix={`areas/${area.slug}`} />

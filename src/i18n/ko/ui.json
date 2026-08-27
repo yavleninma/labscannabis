@@ -1,57 +1,13 @@
 {
   "meta": {
-    "title": "Labs Cannabis — 파타야 | 300฿/g~1kg",
-    "description": "파타야 premium indoor 대마초 White Widow 1g–1kg Soi Hollywood 매장 WhatsApp +66 66 080 6784"
+    "title": "LABS DISPENSARY 파타야 — 허가받은 대마초 판매점",
+    "description": "LABS DISPENSARY(Labs Cannabis) 허가받은 대마초 판매점. 32 Pattaya 13 Alley, 남파타야. 태국 처방전을 소지한 만 20세 이상. 문의는 WhatsApp +66 66 080 6784."
   },
   "brand": "Labs Cannabis",
   "formerBrand": "구 Labs Dispensary",
   "reels": {
-    "weights": {
-      "1g": "1그램",
-      "10g": "10그램",
-      "1kg": "1kg"
-    },
-    "pricingTitle": "꽃 가격",
-    "strainsInStock": "White Widow 및 기타 품종 재고 있음",
-    "jointsOfferPromo": "이벤트: 3 joints 200바트",
-    "featuredBadge": "인기",
-    "locationBadge": "Walking Street에서 도보 5분 · 배달 가능",
     "whatsapp": "WhatsApp",
     "map": "지도"
-  },
-  "prices": {
-    "title": "중량 선택",
-    "subtitle": "많이 살수록 g당 저렴 · WhatsApp 주문",
-    "mostPopular": "인기",
-    "wholesale": "도매",
-    "streetAnchor": "시장가 500–700฿/g · 우리 300฿",
-    "trustLine": "현금 · QR · 당일 픽업 · WhatsApp ~5분",
-    "urgency": "오늘 {grams}g 판매",
-    "labels": {
-      "tryout": "체험",
-      "evening": "저녁",
-      "intro": "입문",
-      "popular": "가성비",
-      "monthly": "월간",
-      "bulk": "대량",
-      "wholesale": "도매"
-    },
-    "orderVia": "WhatsApp 주문"
-  },
-  "whatsappPrefill": {
-    "1g": "안녕하세요 Labs Cannabis 👋 White Widow 1g 원합니다. 픽업 가능 시간?",
-    "3g": "안녕하세요 Labs Cannabis 👋 White Widow 3g",
-    "5g": "안녕하세요 Labs Cannabis 👋 White Widow 5g",
-    "10g": "안녕하세요 Labs Cannabis 👋 White Widow 10g",
-    "30g": "안녕하세요 Labs Cannabis 👋 White Widow 30g",
-    "100g": "안녕하세요 Labs Cannabis 👋 100g 재고 문의",
-    "1kg": "안녕하세요 Labs Cannabis 👋 1kg 도매 재고 및 일정"
-  },
-  "dima": {
-    "badge": "러시아어 가능",
-    "title": "Dima — 러시아어",
-    "text": "파타야 처음? Dima가 러시아어/영어로 중량과 품종 추천. WhatsApp 또는 Soi Hollywood 방문",
-    "cta": "Dima에게 WhatsApp"
   },
   "reviews": {
     "title": "게스트 리뷰",
@@ -66,12 +22,13 @@
   },
   "location": {
     "title": "위치",
-    "address": "32 Pattaya 13 Alley (Soi Hollywood), Pattaya, Chon Buri 20150",
-    "landmark": "Walking Street에서 도보 5분",
-    "step1": "Walking Street에서 Soi Hollywood로",
+    "address": "32 Pattaya 13 Alley, 남파타야, 촌부리 20150",
+    "step1": "Walking Street에서 Pattaya 13 Alley로",
     "step2": "LABS DISPENSARY / Labs Cannabis 간판",
     "step3": "골목 왼쪽 중간",
     "hours": "매일 {open} – {close}",
+    "openNow": "영업 중 · {close}까지",
+    "closedNow": "영업 종료 · {open} 오픈",
     "openMaps": "Google Maps"
   },
   "medical": {
@@ -80,7 +37,8 @@
   },
   "footer": {
     "disclaimer": "Labs Cannabis (구 Labs Dispensary). 파타야 허가 대마초 소매점. 만 20세 이상만 이용 가능합니다.",
-    "rights": "모든 권리 보유."
+    "rights": "모든 권리 보유.",
+    "listedAs": "{brand} — Google Maps에는 {listing}"
   },
   "ageGate": {
     "kicker": "성인 20+ 전용",
@@ -92,7 +50,7 @@
   },
   "contact": {
     "title": "연락",
-    "subtitle": "하나의 번호 — ~5분 내 답변",
+    "subtitle": "하나의 번호 — 사람이 답합니다",
     "whatsapp": "WhatsApp",
     "telegram": "Telegram",
     "line": "LINE",
@@ -100,7 +58,7 @@
   },
   "wholesale": {
     "title": "도매",
-    "subtitle": "100g–1kg · 픽업 전 WhatsApp 재고 확인"
+    "subtitle": "대량 문의는 WhatsApp으로, 재고는 매장에서 확인합니다."
   },
   "strains": {
     "flagship": "메인 품종",
@@ -108,7 +66,6 @@
   },
   "nav": {
     "home": "홈",
-    "prices": "가격",
     "contact": "연락",
     "wholesale": "도매"
   },
@@ -123,24 +80,24 @@
     "pattaya": "파타야",
     "jomtien": "좀티엔",
     "walkingStreet": "Walking Street",
-    "soiHollywood": "Soi Hollywood",
+    "soiHollywood": "Pattaya 13 Alley",
     "soiBuakhao": "Soi Buakhao",
     "naklua": "나클루아",
     "pratumnak": "Pratumnak",
     "nearMe": "근처 대마초",
+    "buyPattaya": "파타야에서 대마초 구매",
     "howToBuy": "구매 방법",
-    "w1g": "1g",
-    "w10g": "10g",
-    "w30g": "30g",
-    "w100g": "100g",
-    "w1kg": "1kg",
     "wholesale": "도매",
     "delivery": "배달",
-    "pattayaDelivery": "파타야 배달",
-    "bestShop": "최고 매장",
+    "pattayaDelivery": "배달 규정",
+    "bestShop": "파타야 대마초 매장",
+    "priceFactors": "가격을 좌우하는 것",
     "whiteWidow": "White Widow",
     "strainPage": "White Widow 품종",
-    "legalGuide": "관광객 법률 가이드"
+    "legalGuide": "관광객 법률 가이드",
+    "labsDispensary": "LABS DISPENSARY 파타야",
+    "walkingStreetRoute": "Walking Street에서 오는 길",
+    "relatedTitle": "관련 페이지"
   },
   "locations": {
     "title": "파타야 대마초 — 모든 페이지",
@@ -148,5 +105,8 @@
     "areasGroup": "지역",
     "weightsGroup": "무게별",
     "otherGroup": "기타"
+  },
+  "seo": {
+    "faqTitle": "자주 묻는 질문"
   }
 }

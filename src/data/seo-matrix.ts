@@ -1,4 +1,5 @@
 import type { Locale } from "@/lib/i18n";
+import { ADDRESS_ALIAS } from "@/data/site";
 
 export interface Area {
   slug: string;
@@ -30,8 +31,19 @@ export const AREAS: Area[] = [
     name: { en: "Walking Street", ru: "Walking Street", th: "Walking Street", ar: "Walking Street", zh: "Walking Street", ko: "Walking Street", ja: "Walking Street" },
   },
   {
+    // Название района, а не адрес магазина: сам магазин стоит по `ADDRESS`
+    // (32 Pattaya 13 Alley), и переулок упоминается только как ориентир —
+    // отсюда единственный источник строки, `ADDRESS_ALIAS.nearbyLandmark`.
     slug: "soi-hollywood",
-    name: { en: "Soi Hollywood", ru: "Soi Hollywood", th: "ซอยฮอลลีวูด", ar: "Soi Hollywood", zh: "Soi Hollywood", ko: "Soi Hollywood", ja: "Soi Hollywood" },
+    name: {
+      en: ADDRESS_ALIAS.nearbyLandmark,
+      ru: ADDRESS_ALIAS.nearbyLandmark,
+      th: "ซอยฮอลลีวูด",
+      ar: ADDRESS_ALIAS.nearbyLandmark,
+      zh: ADDRESS_ALIAS.nearbyLandmark,
+      ko: ADDRESS_ALIAS.nearbyLandmark,
+      ja: ADDRESS_ALIAS.nearbyLandmark,
+    },
   },
   {
     slug: "soi-buakhao",
@@ -57,22 +69,22 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "buy",
     area: "pattaya",
     titleTemplate: {
-      en: "Buy cannabis in Pattaya | Soi Hollywood shop | Labs Cannabis",
-      ru: "Купить каннабис в Паттайе | магазин на Soi Hollywood",
-      th: "ซื้อกัญชา พัทยา | ร้าน Soi Hollywood | Labs Cannabis",
-      ar: "شراء القنب في باتايا | متجر Soi Hollywood",
-      zh: "芭提雅购买大麻 | Soi Hollywood 门店",
-      ko: "파타야 대마초 구매 | Soi Hollywood 매장",
-      ja: "パタヤで大麻を買う | Soi Hollywood店舗",
+      en: "Buy cannabis in Pattaya | Pattaya 13 Alley shop | Labs Cannabis",
+      ru: "Купить каннабис в Паттайе | магазин на Pattaya 13 Alley",
+      th: "ซื้อกัญชา พัทยา | ร้านบนซอยพัทยา 13 | Labs Cannabis",
+      ar: "شراء القنب في باتايا | متجر في Pattaya 13 Alley",
+      zh: "芭提雅购买大麻 | Pattaya 13 Alley 门店",
+      ko: "파타야 대마초 구매 | Pattaya 13 Alley 매장",
+      ja: "パタヤで大麻を買う | Pattaya 13 Alley店舗",
     },
     h1Template: {
-      en: "Buy cannabis in Pattaya from a walk-in shop on Soi Hollywood",
-      ru: "Купить каннабис в Паттайе — магазин на Soi Hollywood",
-      th: "ซื้อกัญชา พัทยา — ร้านบนซอยฮอลลีวูด",
-      ar: "شراء القنب في باتايا — متجر Soi Hollywood",
-      zh: "在芭提雅购买大麻 — Soi Hollywood 实体店",
-      ko: "파타야에서 대마초 구매 — Soi Hollywood 매장",
-      ja: "パタヤで大麻を購入 — Soi Hollywood店舗",
+      en: "Buy cannabis in Pattaya at a walk-in shop on Pattaya 13 Alley",
+      ru: "Купить каннабис в Паттайе — магазин на Pattaya 13 Alley",
+      th: "ซื้อกัญชา พัทยา — ร้านบนซอยพัทยา 13",
+      ar: "شراء القنب في باتايا — متجر في Pattaya 13 Alley",
+      zh: "在芭提雅购买大麻 — Pattaya 13 Alley 实体店",
+      ko: "파타야에서 대마초 구매 — Pattaya 13 Alley 매장",
+      ja: "パタヤで大麻を購入 — Pattaya 13 Alleyの店舗",
     },
     keywords: {
       en: ["buy cannabis pattaya", "weed shop pattaya", "cannabis dispensary pattaya"],
@@ -121,22 +133,22 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "buy",
     area: "pattaya",
     titleTemplate: {
-      en: "Affordable cannabis in Pattaya | Listed weight tiers | Labs Cannabis",
-      ru: "Доступный каннабис в Паттайе | цены по весу",
-      th: "กัญชาราคาดี พัทยา | ราคาตามน้ำหนัก",
-      ar: "قنب بأسعار معقولة في باتايا",
-      zh: "芭提雅实惠大麻 | 按重量标价",
-      ko: "파타야 합리적인 대마초 | 중량 가격",
-      ja: "パタヤの手頃な大麻 | 重量別価格",
+      en: "Affordable cannabis in Pattaya | What changes the price | Labs Cannabis",
+      ru: "Доступный каннабис в Паттайе | от чего зависит цена",
+      th: "กัญชาราคาสมเหตุสมผล พัทยา | อะไรทำให้ราคาต่างกัน",
+      ar: "قنب بأسعار معقولة في باتايا | ما الذي يغيّر السعر",
+      zh: "芭提雅实惠大麻 | 价格由什么决定",
+      ko: "파타야 합리적인 대마초 | 가격을 좌우하는 것",
+      ja: "パタヤの手頃な大麻 | 価格を左右するもの",
     },
     h1Template: {
-      en: "Affordable cannabis in Pattaya — listed tiers, not a hidden menu",
-      ru: "Доступный каннабис в Паттайе — понятные веса, без скрытого меню",
-      th: "กัญชาราคาดี พัทยา — ราคาตามน้ำหนักชัดเจน",
-      ar: "قنب بأسعار معقولة في باتايا — أوزان معلنة",
-      zh: "芭提雅实惠大麻 — 公开重量档位",
-      ko: "파타야 합리적 대마초 — 공개 중량 가격",
-      ja: "パタヤの手頃な大麻 — 公開されている重量価格",
+      en: "Affordable cannabis in Pattaya — what actually changes the price",
+      ru: "Доступный каннабис в Паттайе — от чего зависит цена",
+      th: "กัญชาราคาสมเหตุสมผลในพัทยา — อะไรทำให้ราคาต่างกัน",
+      ar: "قنب بأسعار معقولة في باتايا — ما الذي يغيّر السعر",
+      zh: "芭提雅实惠大麻 — 价格由什么决定",
+      ko: "파타야의 합리적인 대마초 — 가격을 좌우하는 것",
+      ja: "パタヤの手頃な大麻 — 価格を左右するもの",
     },
     keywords: {
       en: ["cheap weed pattaya", "affordable cannabis pattaya", "cannabis prices pattaya"],
@@ -162,13 +174,13 @@ export const SEO_PAGES: SeoPage[] = [
       ja: "パタヤの大麻店情報 | 地図と経路",
     },
     h1Template: {
-      en: "Best cannabis shop in Pattaya — a real Soi Hollywood listing",
-      ru: "Лучший каннабис-шоп в Паттайе — реальный listing на Soi Hollywood",
-      th: "ร้านกัญชาดีที่สุด พัทยา — ร้านจริงบน Soi Hollywood",
-      ar: "أفضل متجر قنب في باتايا — قائمة Google حقيقية",
-      zh: "芭提雅最佳大麻店 — Soi Hollywood 真实店铺",
-      ko: "파타야 최고 매장 — Soi Hollywood 실제 리스팅",
-      ja: "パタヤ最高の店 — Soi Hollywoodの実在リスティング",
+      en: "Best cannabis shop in Pattaya — a listing you can verify",
+      ru: "Лучший каннабис-шоп в Паттайе — карточка, которую можно проверить",
+      th: "ร้านกัญชาดีที่สุด พัทยา — ร้านที่ตรวจสอบได้",
+      ar: "أفضل متجر قنب في باتايا — بطاقة يمكن التحقق منها",
+      zh: "芭提雅最佳大麻店 — 可以核验的商家页面",
+      ko: "파타야 최고 매장 — 확인할 수 있는 등록 정보",
+      ja: "パタヤ最高の店 — 確認できる掲載情報",
     },
     keywords: {
       en: ["best cannabis shop pattaya", "best dispensary pattaya", "top weed shop pattaya"],
@@ -203,7 +215,10 @@ export const SEO_PAGES: SeoPage[] = [
       ja: "LABS DISPENSARY パタヤ — 最新情報と経路",
     },
     keywords: {
-      en: ["labs dispensary pattaya", "labs cannabis pattaya", "labs dispensary soi hollywood"],
+      // Ключ с названием соседнего переулка убран: он ведёт на чужой магазин на
+      // той же улице и кормит склейку карточек в Maps. Ориентир живёт ровно в
+      // одном месте — `ADDRESS_ALIAS.nearbyLandmark`.
+      en: ["labs dispensary pattaya", "labs cannabis pattaya", "labs dispensary pattaya 13"],
       ru: ["labs dispensary паттайя", "labs cannabis паттайя"],
       th: ["labs dispensary พัทยา"],
       ar: ["labs dispensary باتايا"],

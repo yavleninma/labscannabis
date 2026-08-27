@@ -1,5 +1,6 @@
+import { execFileSync } from "node:child_process";
+
 import { defineConfig } from "astro/config";
-import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
@@ -16,6 +17,40 @@ const sitemapHreflangs = {
   ja: "ja",
 };
 
+/**
+ * Сигнал свежести для сайтмапа (W1-18). Запрет `lastmod` снят в W1-01: без него
+ * переобход возвращённых в индекс страниц растягивается на недели.
+ *
+ * Дата берётся из коммита, а не из часов сборки. `new Date()` объявлял поисковику,
+ * что изменились все 52 страницы, при каждой пересборке того же кода — при
+ * ретрае деплоя, правке переменной окружения, коммите в другой части
+ * репозитория. Google документированно перестаёт учитывать `lastmod`, который
+ * систематически не соответствует действительности, то есть такой сигнал
+ * работает ровно один раз, а дальше обесценивается.
+ *
+ * Отметка одна на всю сборку: сайт статический и пересобирается целиком из
+ * одного коммита. Ключевое свойство — она НЕ меняется от пересборки того же
+ * коммита. Даты (без времени) достаточно, и она стабильна между окружениями.
+ */
+const CONTENT_REVISION_FALLBACK = "2026-08-27";
+
+function resolveContentRevisionDate() {
+  try {
+    // %cs — дата коммита в формате YYYY-MM-DD, без времени и часового пояса.
+    const committed = execFileSync("git", ["log", "-1", "--format=%cs"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(committed)) return committed;
+  } catch {
+    // Сборка вне git-дерева (архив исходников, некоторые CI-раннеры): дата
+    // константой лучше, чем часы сборки — она хотя бы не врёт при каждом билде.
+  }
+  return CONTENT_REVISION_FALLBACK;
+}
+
+const buildLastmod = resolveContentRevisionDate();
+
 export default defineConfig({
   site,
   trailingSlash: "always",
@@ -26,7 +61,6 @@ export default defineConfig({
     },
   }),
   integrations: [
-    react(),
     sitemap({
       filter: (page) => getIndexPolicyForPathname(new URL(page).pathname).indexable,
       serialize: (item) => {
@@ -42,13 +76,14 @@ export default defineConfig({
           url: new URL(localePathname("en", policy.suffix), site).href,
         });
 
-        const { lastmod: _lastmod, links: _links, ...withoutFreshness } = item;
+        const { links: _links, ...withoutLinks } = item;
         const isHome = policy.suffix === "";
         return {
-          ...withoutFreshness,
+          ...withoutLinks,
           links,
+          lastmod: item.lastmod ?? buildLastmod,
           changefreq: isHome ? "daily" : "weekly",
-          priority: isHome ? 1 : withoutFreshness.priority,
+          priority: isHome ? 1 : withoutLinks.priority,
         };
       },
       i18n: {

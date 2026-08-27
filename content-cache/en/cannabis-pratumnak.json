@@ -1,30 +1,34 @@
 {
-  "h1": "Discover Premium Cannabis in Pratumnak",
-  "intro": "Welcome to Labs Cannabis, your go-to destination for high-quality cannabis in Pattaya. Located near Soi Hollywood, we pride ourselves on offering a diverse selection of weed strains, including the renowned White Widow. Whether you’re a seasoned enthusiast or new to the scene, our knowledgeable staff is here to help you find the perfect product. Plus, we invite you to enjoy free in-store samples to enhance your experience. Join us as we explore the vibrant cannabis culture in Pratumnak, where quality meets community.",
+  "h1": "Labs Cannabis Pattaya — licensed cannabis dispensary",
+  "intro": "This site publishes no prices, no stock lists and no advertising: Thai law reads that as cannabis advertising, and the penalty lands on the shop's licence. Whether you’re a seasoned enthusiast or new to the scene, our knowledgeable staff is here to help you find the perfect product. This site publishes no prices, no stock lists and no advertising: Thai law reads that as cannabis advertising, and the penalty lands on the shop's licence. Join us as we explore the vibrant cannabis culture in Pratumnak, where quality meets community.",
   "sections": [
     {
       "h2": "A Variety of Cannabis Strains",
-      "body": "At Labs Cannabis, we understand that every cannabis enthusiast has unique preferences. That's why we offer an extensive range of strains to suit all tastes. From the classic White Widow, known for its balanced effects, to an array of potent hybrids and indicas, our selection caters to every need. Each strain is carefully sourced and available in weight tiers ranging from 1g to 1kg, ensuring you can find exactly what you're looking for. Our friendly staff is always ready to provide recommendations based on your preferences, helping you make an informed choice. Whether you're after relaxation, creativity, or just a good time, we've got something for everyone in Pratumnak."
+      "body": "At Labs Cannabis, we understand that every cannabis enthusiast has unique preferences. That's why we offer an extensive range of strains to suit all tastes. Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya. Message WhatsApp +66 66 080 6784 before you set off — it saves a trip across Pattaya. Our friendly staff is always ready to provide recommendations based on your preferences, helping you make an informed choice. Whether you're after relaxation, creativity, or just a good time, we've got something for everyone in Pratumnak."
     },
     {
       "h2": "Experience Labs Cannabis Today",
-      "body": "Visiting Labs Cannabis in Pratumnak is more than just a shopping trip; it's an experience. Our shop is designed to create a welcoming atmosphere where you can explore the world of cannabis comfortably. Take advantage of our free in-store samples to discover new strains and products before making a purchase. Our knowledgeable team, formerly known as Labs Dispensary, is here to guide you through your cannabis journey, ensuring you leave with the right product for your needs. Don't hesitate to reach out via WhatsApp at +66 66 080 6784 for any inquiries or to learn more about our offerings. We look forward to welcoming you soon!"
+      "body": "Visiting Labs Cannabis in Pratumnak is more than just a shopping trip; it's an experience. Our shop is designed to create a welcoming atmosphere where you can explore the world of cannabis comfortably. Bring identification showing you are 20 or older; the paperwork is checked at the counter, not on this website. Our knowledgeable team, formerly known as Labs Dispensary, is here to guide you through your cannabis journey, ensuring you leave with the right product for your needs. Don't hesitate to reach out via WhatsApp at +66 66 080 6784 for any inquiries or to learn more about our offerings. We look forward to welcoming you soon!"
+    },
+    {
+      "h2": "Prescription and age rules",
+      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country. This paragraph states the rule and offers to arrange nothing."
     }
   ],
   "faq": [
     {
-      "q": "What types of cannabis products do you offer?",
-      "a": "We offer a wide variety of cannabis strains, including popular options like White Widow, along with edibles, oils, and more, all available in various weight tiers."
+      "q": "Do you sell vapes or e-cigarettes?",
+      "a": "No. Selling vapes and e-cigarettes is illegal in Thailand and we do not stock them. Labs Cannabis is a licensed cannabis dispensary."
     },
     {
-      "q": "Can I sample products before purchasing?",
-      "a": "Yes! We provide free in-store samples so you can explore different strains and find the one that suits you best."
+      "q": "Who may buy cannabis flower in Thailand?",
+      "a": "Adults aged 20 or older who hold a prescription issued inside Thailand. Prescriptions from other countries are not accepted, and the handover happens in person, in the shop."
     },
     {
       "q": "How can I contact you for more information?",
       "a": "You can reach us easily via WhatsApp at +66 66 080 6784 for any questions or to learn more about our products."
     }
   ],
-  "closing": "Come visit us at Labs Cannabis in Pratumnak today, and discover the best cannabis in Pattaya. Don't forget to reach out to us on WhatsApp at +66 66 080 6784 for any questions or assistance!",
+  "closing": "Bring identification showing you are 20 or older; the paperwork is checked at the counter, not on this website. Don't forget to reach out to us on WhatsApp at +66 66 080 6784 for any questions or assistance!",
   "source": "openai"
 }

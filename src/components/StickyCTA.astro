@@ -1,54 +1,120 @@
 ---
 import type { Locale } from "@/lib/i18n";
-import { CONTACT } from "@/data/site";
+import { CONTACT, getMapsDirectionsUrl } from "@/data/site";
+import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
 
+/**
+ * Нижняя панель целевых действий (W1-05).
+ *
+ * Была одна кнопка «Ask for directions» / «Спросить маршрут» с английским
+ * префиллом на всех семи локалях, к тому же с юридической оговоркой, написанной
+ * от лица посетителя. Стало три действия: написать, дойти и позвонить.
+ *
+ * «Проложить маршрут» — не дубль карточки Google: `getMapsDirectionsUrl()`
+ * открывает навигацию к двери сразу, и это главное целевое действие «дошёл сам»,
+ * которое в аналитике считается отдельно от кликов по карточке с отзывами.
+ */
 interface Props {
   locale: Locale;
 }
 
 const { locale } = Astro.props;
 const ui = t(locale);
-const labels: Record<Locale, string> = {
-  en: "Ask for directions",
-  ru: "Спросить маршрут",
-  th: "สอบถามเส้นทาง",
-  ar: "اسأل عن الاتجاهات",
-  zh: "询问路线",
-  ko: "길 안내 문의",
-  ja: "道順を確認",
-};
-const label = labels[locale] ?? labels.en;
-const source = "sticky_cta";
-const inquiryHref = CONTACT.whatsappWithMsg(
-  "Hi Labs Cannabis. Please help me find the Google Maps location at 32 Pattaya 13 Alley. I am not sending an order or payment.",
-);
-const sourcedHref = `${inquiryHref}&source=${encodeURIComponent(source)}`;
+const labels = CTA_LABELS[locale];
+const whatsappHref = ctaWhatsAppHref(locale, "menu");
+const directionsHref = getMapsDirectionsUrl();
+
+/**
+ * Третий канал — по рынку локали: Таиланд и соседи живут в LINE, русскоязычная
+ * аудитория в Telegram. Оба канала за флагами (O-02) и, пока флаг опущен,
+ * заменяются звонком — телефон подтверждён и работает всегда.
+ */
+const LINE_LOCALES: readonly Locale[] = ["th", "zh", "ko", "ja"];
+const third = CONTACT.lineEnabled && LINE_LOCALES.includes(locale)
+  ? { channel: "line", href: CONTACT.line, label: ui.contact.line, external: true }
+  : CONTACT.telegramEnabled && locale === "ru"
+    ? { channel: "telegram", href: CONTACT.telegram, label: ui.contact.telegram, external: true }
+    : { channel: "phone", href: CONTACT.tel, label: ui.contact.call, external: false };
 ---
 
-<a
-  id="sticky-wa-cta"
-  href={sourcedHref}
-  target="_blank"
-  rel="noopener noreferrer"
-  class="sticky-cta-shadow fixed bottom-4 start-4 end-4 z-50 flex min-h-14 translate-y-3 items-center justify-center gap-2 rounded-full bg-emerald px-5 py-3 text-base font-extrabold text-black opacity-0 pointer-events-none transition-all duration-300 ease-out data-[visible]:translate-y-0 data-[visible]:opacity-100 data-[visible]:pointer-events-auto sm:start-auto sm:bottom-5 sm:w-auto"
-  aria-label={`${label} - ${ui.contact.whatsapp}`}
+<div
+  id="sticky-cta"
+  data-boilerplate
   aria-hidden="true"
-  data-track="contact_whatsapp_click"
-  data-track-placement={source}
-  data-track-detail="sticky_cta:whatsapp"
-  data-wa-source={source}
-  data-whatsapp-ref="sticky_directions"
-  data-utm-campaign={source}
+  class="safe-bottom pointer-events-none fixed inset-x-0 bottom-0 z-50 translate-y-4 border-t border-border/70 bg-bg/85 px-3 pt-3 opacity-0 backdrop-blur-sm transition-all duration-300 ease-out data-[visible]:pointer-events-auto data-[visible]:translate-y-0 data-[visible]:opacity-100"
 >
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-  <span>{label}</span>
-</a>
+  <div class="mx-auto flex max-w-lg items-stretch gap-2">
+    <a
+      href={whatsappHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="sticky-cta-shadow flex min-h-12 min-w-0 flex-1 items-center justify-center gap-2 rounded-full bg-emerald px-4 text-base font-extrabold text-black"
+      data-track="contact_click"
+      data-channel="whatsapp"
+      data-placement="sticky"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6 shrink-0" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+      <span class="truncate">{labels.whatsappShort}</span>
+    </a>
+
+    <a
+      href={directionsHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-bg-card text-emerald-dim shadow-sm shadow-black/10"
+      aria-label={labels.directions}
+      title={labels.directions}
+      data-track="contact_click"
+      data-channel="directions"
+      data-placement="sticky"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
+        <path d="M21.71 11.29l-9-9a1 1 0 00-1.42 0l-9 9a1 1 0 000 1.42l9 9a1 1 0 001.42 0l9-9a1 1 0 000-1.42zM13 15v-2.5h-3V15H8v-3.5a1 1 0 011-1h4V8l3.5 3.5L13 15z"/>
+      </svg>
+    </a>
+
+    <a
+      href={third.href}
+      target={third.external ? "_blank" : undefined}
+      rel={third.external ? "noopener noreferrer" : undefined}
+      class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-border bg-bg-card text-text shadow-sm shadow-black/10"
+      aria-label={third.label}
+      title={third.label}
+      data-track="contact_click"
+      data-channel={third.channel}
+      data-placement="sticky"
+    >
+      {/*
+        Все три канала — иконками. Текстовая подпись в круге 48 px ломалась ровно
+        в тот день, ради которого кнопка и сделана: `ui.contact.telegram` — это
+        «Telegram» на всех 7 локалях, то есть ~74 px в 48-пиксельном круге без
+        `overflow: hidden`. Название канала живёт в `aria-label`/`title`, они уже
+        проставлены выше.
+      */}
+      {third.channel === "phone" && (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
+          <path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24 11.36 11.36 0 003.56.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.56a1 1 0 01-.25 1.02l-2.2 2.21z"/>
+        </svg>
+      )}
+      {third.channel === "telegram" && (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
+          <path d="M21.94 4.3 18.6 20.06c-.25 1.11-.9 1.39-1.83.87l-5.06-3.73-2.44 2.35c-.27.27-.5.5-1.02.5l.36-5.16 9.39-8.48c.41-.36-.09-.56-.63-.2L5.76 13.52.76 11.96c-1.09-.34-1.11-1.09.23-1.61l19.55-7.54c.9-.33 1.69.21 1.4 1.49z"/>
+        </svg>
+      )}
+      {third.channel === "line" && (
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-6 w-6" aria-hidden="true">
+          <path d="M12 2C6.2 2 1.5 5.82 1.5 10.53c0 4.22 3.73 7.76 8.77 8.43.34.07.8.23.92.52.11.27.07.68.04.95l-.15.9c-.05.27-.21 1.05.92.57s6.1-3.6 8.33-6.16c1.53-1.68 2.27-3.39 2.27-5.21C22.5 5.82 17.8 2 12 2zM7.6 13.2H5.51a.55.55 0 0 1-.55-.55V8.5a.55.55 0 0 1 1.1 0v3.6H7.6a.55.55 0 0 1 0 1.1zm2.16-.55a.55.55 0 0 1-1.1 0V8.5a.55.55 0 0 1 1.1 0v4.15zm5-.01a.55.55 0 0 1-.99.33l-2.13-2.9v2.58a.55.55 0 0 1-1.1 0V8.5a.55.55 0 0 1 .99-.33l2.13 2.9V8.5a.55.55 0 0 1 1.1 0v4.14zm3.44-2.62a.55.55 0 0 1 0 1.1h-1.53v.98h1.53a.55.55 0 0 1 0 1.1h-2.08a.55.55 0 0 1-.55-.55V8.5a.55.55 0 0 1 .55-.55h2.08a.55.55 0 0 1 0 1.1h-1.53v.97h1.53z"/>
+        </svg>
+      )}
+    </a>
+  </div>
+</div>
 
 <script>
-  const cta = document.getElementById("sticky-wa-cta");
+  const cta = document.getElementById("sticky-cta");
   if (cta) {
     const setVisible = (visible: boolean) => {
       if (visible) {
@@ -58,6 +124,10 @@ const sourcedHref = `${inquiryHref}&source=${encodeURIComponent(source)}`;
         cta.removeAttribute("data-visible");
         cta.setAttribute("aria-hidden", "true");
       }
+      // Три ссылки вместо одной — скрытая панель не должна оставаться в порядке
+      // обхода табом. `inert` выставляется только скриптом: в разметке его нет,
+      // и при отключённом JS панель ведёт себя ровно как раньше.
+      cta.inert = !visible;
     };
 
     const hero = document.getElementById("home-hero") || document.getElementById("reels-hero");
