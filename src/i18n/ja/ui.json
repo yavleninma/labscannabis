@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY（Labs Cannabis）認可を受けた大麻ディスペンサリー。32 Pattaya 13 Alley、南パタヤ。タイの処方箋を持つ20歳以上限定。お問い合わせは WhatsApp +66 66 080 6784。"
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "旧 Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "地図"
@@ -33,7 +32,7 @@
     "openMaps": "Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis（旧Labs Dispensary）。パタヤの認可大麻小売店。20歳以上のみ。",
+    "disclaimer": "LABS DISPENSARY（当サイトでは Labs Cannabis）。パタヤの認可大麻小売店。20歳以上のみ。",
     "rights": "無断転載を禁じます。",
     "listedAs": "{brand} — Google Maps では {listing}"
   },

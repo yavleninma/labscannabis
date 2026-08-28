@@ -141,7 +141,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
         {
           h2: "Walk in from Walking Street or message first",
           body:
-            "From Walking Street, turn into Pattaya 13 Alley and look for Labs Cannabis, formerly listed as Labs Dispensary. The Google listing is the source of truth for the pin and the current opening times. WhatsApp is the fastest way to check that someone is at the counter before you set off.",
+            "From Walking Street, turn into Pattaya 13 Alley and look for the LABS DISPENSARY signboard — the same shop this site calls Labs Cannabis. The Google listing is the source of truth for the pin and the current opening times. WhatsApp is the fastest way to check that someone is at the counter before you set off.",
         },
       ],
       faq: [
@@ -169,7 +169,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
         {
           h2: "Зайдите с Walking Street или напишите сначала",
           body:
-            "С Walking Street сверните в Pattaya 13 Alley и ищите Labs Cannabis, ранее Labs Dispensary. Карточка Google — источник правды по пину и текущему времени работы. WhatsApp быстрее всего подтвердит, что за прилавком кто-то есть, ещё до выхода.",
+            "С Walking Street сверните в Pattaya 13 Alley и ищите вывеску LABS DISPENSARY — это тот же магазин, который на сайте называется Labs Cannabis. Карточка Google — источник правды по пину и текущему времени работы. WhatsApp быстрее всего подтвердит, что за прилавком кто-то есть, ещё до выхода.",
         },
       ],
       faq: [

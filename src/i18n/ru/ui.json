@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY (Labs Cannabis) — лицензированный магазин каннабиса, 32 Pattaya 13 Alley, Южная Паттайя. Только 20+ и с тайским рецептом. Вопросы в WhatsApp +66 66 080 6784."
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "ранее Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "Карта"
@@ -33,7 +32,7 @@
     "openMaps": "Открыть в Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (ранее Labs Dispensary). Лицензированный ритейлер в Паттайе. Только 20+.",
+    "disclaimer": "LABS DISPENSARY, он же Labs Cannabis. Лицензированный магазин каннабиса в Паттайе. Только 20+.",
     "rights": "Все права защищены.",
     "listedAs": "{brand} — на Google Maps как {listing}"
   },

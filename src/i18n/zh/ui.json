@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY（Labs Cannabis）持证大麻专卖店，地址 32 Pattaya 13 Alley，南芭提雅。仅限 20 岁以上并持泰国处方。咨询请用 WhatsApp +66 66 080 6784。"
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "原 Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "地图"
@@ -33,7 +32,7 @@
     "openMaps": "打开Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis（原Labs Dispensary）芭提雅持证零售商 仅限20+",
+    "disclaimer": "LABS DISPENSARY（本站称 Labs Cannabis）芭提雅持证零售商 仅限20+",
     "rights": "版权所有",
     "listedAs": "{brand} — 在 Google Maps 上显示为 {listing}"
   },

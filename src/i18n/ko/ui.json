@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY(Labs Cannabis) 허가받은 대마초 판매점. 32 Pattaya 13 Alley, 남파타야. 태국 처방전을 소지한 만 20세 이상. 문의는 WhatsApp +66 66 080 6784."
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "구 Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "지도"
@@ -33,7 +32,7 @@
     "openMaps": "Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (구 Labs Dispensary). 파타야 허가 대마초 소매점. 만 20세 이상만 이용 가능합니다.",
+    "disclaimer": "LABS DISPENSARY (Labs Cannabis라고도 함). 파타야 허가 대마초 소매점. 만 20세 이상만 이용 가능합니다.",
     "rights": "모든 권리 보유.",
     "listedAs": "{brand} — Google Maps에는 {listing}"
   },

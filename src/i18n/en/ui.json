@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY (Labs Cannabis) — licensed cannabis dispensary at 32 Pattaya 13 Alley, South Pattaya. Adults 20+ with a Thai prescription. Questions on WhatsApp +66 66 080 6784."
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "formerly Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "Map"
@@ -33,7 +32,7 @@
     "openMaps": "Open in Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (formerly Labs Dispensary). Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
+    "disclaimer": "LABS DISPENSARY, also known as Labs Cannabis. Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
     "rights": "All rights reserved.",
     "listedAs": "{brand} — listed on Google Maps as {listing}"
   },

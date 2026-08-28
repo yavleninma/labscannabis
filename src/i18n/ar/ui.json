@@ -4,7 +4,6 @@
     "description": "LABS DISPENSARY (Labs Cannabis) متجر قنب مرخّص في 32 Pattaya 13 Alley، جنوب باتايا. للبالغين 20+ مع وصفة تايلاندية. الاستفسارات عبر WhatsApp +66 66 080 6784"
   },
   "brand": "Labs Cannabis",
-  "formerBrand": "سابقاً Labs Dispensary",
   "reels": {
     "whatsapp": "WhatsApp",
     "map": "الخريطة"
@@ -33,7 +32,7 @@
     "openMaps": "Google Maps"
   },
   "footer": {
-    "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). متجر قنب مرخص في باتايا، تايلاند. للبالغين 20+ فقط.",
+    "disclaimer": "LABS DISPENSARY، ويُعرف أيضاً باسم Labs Cannabis. متجر قنب مرخص في باتايا، تايلاند. للبالغين 20+ فقط.",
     "rights": "جميع الحقوق محفوظة",
     "listedAs": "{brand} — على Google Maps باسم {listing}"
   },

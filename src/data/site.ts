@@ -17,9 +17,16 @@ export const CONTACT = {
   telegramEnabled: false as boolean,
 } as const;
 
+/**
+ * У заведения два действующих названия, а не старое и новое. На вывеске и в
+ * карточке Google стоит LABS DISPENSARY — под ним магазин знают годами, и
+ * брендовый спрос идёт в основном на него. Labs Cannabis — название сайта.
+ * Ни одно из двух не называть бывшим: формулировка «ранее» обесценивает
+ * узнаваемое имя и уводит брендовый запрос к однофамильцам.
+ */
 export const BRAND = {
   name: "Labs Cannabis",
-  formerName: "Labs Dispensary",
+  listingName: "LABS DISPENSARY",
   domain: "labscannabis.boutique",
 } as const;
 
