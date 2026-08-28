@@ -121,17 +121,26 @@ function removeMarkedElements(html) {
 }
 
 /**
+ * <body> без общего обвеса: шапки, футера, контактной панели и блока отзывов.
+ * Возвращает HTML, а не текст, — по нему ещё режут разделы по H2.
+ *
+ * @param {string} html
+ */
+export function stripBoilerplate(html) {
+  let body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? html;
+  for (const tagName of BOILERPLATE_TAGS) {
+    body = removeAllElements(body, tagName);
+  }
+  return removeMarkedElements(body);
+}
+
+/**
  * Основной контент страницы: <body> без общего обвеса, тегов и сущностей.
  *
  * @param {string} html
  */
 export function extractMainText(html) {
-  let body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? html;
-  for (const tagName of BOILERPLATE_TAGS) {
-    body = removeAllElements(body, tagName);
-  }
-  body = removeMarkedElements(body);
-  return decodeHtml(body.replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+  return decodeHtml(stripBoilerplate(html).replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
 }
 
 /** @param {string} locale */

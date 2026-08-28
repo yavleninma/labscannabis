@@ -42,6 +42,7 @@ export type ContactChannel = (typeof CONTACT_CHANNELS)[number];
 /** Место на странице, откуда нажали. Отчёт «страница → канал → место». */
 export const TRACK_PLACEMENTS = [
   "header",
+  "breadcrumb",
   "hero",
   "home",
   "sticky",
@@ -49,6 +50,9 @@ export const TRACK_PLACEMENTS = [
   "footer",
   "map_block",
   "legal_guide",
+  "guides",
+  "about",
+  "strain",
   "area",
   "delivery",
   "seo",

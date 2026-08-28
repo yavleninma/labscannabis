@@ -75,6 +75,22 @@ export const LANDMARKS: Landmark[] = [
     },
   },
   {
+    // Южный конец Soi Buakhao, там где переулок выходит на South Pattaya Road —
+    // ближайшая к магазину точка улицы, и именно её проходит пешеход.
+    slug: "soi-buakhao",
+    lat: 12.9266,
+    lng: 100.8812,
+    name: {
+      en: "Soi Buakhao",
+      ru: "Сой Буакхао",
+      th: "ซอยบัวขาว",
+      ar: "سوي بواخاو",
+      zh: "Soi Buakhao",
+      ko: "소이 부아카오",
+      ja: "ソイ・ブアカオ",
+    },
+  },
+  {
     slug: "central-festival",
     lat: 12.93444,
     lng: 100.88389,

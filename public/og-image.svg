@@ -1,37 +1,30 @@
-<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="LABS DISPENSARY — Pattaya, Thailand">
+  <title>LABS DISPENSARY — Licensed cannabis dispensary, Pattaya, Thailand</title>
   <defs>
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#0a0a0a"/>
-      <stop offset="100%" style="stop-color:#111111"/>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07100b"/>
+      <stop offset="1" stop-color="#0f1c14"/>
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.15"/>
-      <stop offset="100%" style="stop-color:#10b981;stop-opacity:0"/>
+    <radialGradient id="glow" cx="0.5" cy="0.42" r="0.62">
+      <stop offset="0" stop-color="#10b981" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#10b981" stop-opacity="0"/>
     </radialGradient>
   </defs>
+
   <rect width="1200" height="630" fill="url(#bg)"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
-  <!-- Border -->
-  <rect x="40" y="40" width="1120" height="550" rx="20" fill="none" stroke="#262626" stroke-width="1"/>
-  <!-- Logo circle -->
-  <circle cx="600" cy="220" r="60" fill="none" stroke="#10b981" stroke-width="2" opacity="0.3"/>
-  <text x="600" y="235" text-anchor="middle" fill="#10b981" font-family="system-ui, sans-serif" font-size="36" font-weight="bold">LC</text>
-  <!-- Title -->
-  <text x="600" y="330" text-anchor="middle" font-family="system-ui, sans-serif" font-size="56" font-weight="bold">
-    <tspan fill="#10b981">Labs</tspan><tspan fill="#ffffff"> Cannabis</tspan>
-  </text>
-  <!-- Subtitle -->
-  <text x="600" y="380" text-anchor="middle" fill="#a3a3a3" font-family="system-ui, sans-serif" font-size="22">
-    Licensed Medical Cannabis Dispensary
-  </text>
-  <!-- Location -->
-  <text x="600" y="420" text-anchor="middle" fill="#737373" font-family="system-ui, sans-serif" font-size="18">
-    Soi Hollywood, Pattaya — Open 24/7
-  </text>
-  <!-- Bottom accent line -->
-  <rect x="500" y="470" width="200" height="2" rx="1" fill="#10b981" opacity="0.5"/>
-  <!-- Phone -->
-  <text x="600" y="510" text-anchor="middle" fill="#737373" font-family="system-ui, sans-serif" font-size="16">
-    +66 66 080 6784
-  </text>
+  <rect x="36" y="36" width="1128" height="558" rx="26" fill="none" stroke="#1f3a2a" stroke-width="2"/>
+
+  <text x="600" y="152" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="24" letter-spacing="6" fill="#9fb8a6">LABSCANNABIS.BOUTIQUE</text>
+
+  <text x="600" y="300" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="82" font-weight="bold" letter-spacing="2" fill="#ffffff">LABS DISPENSARY</text>
+  <text x="600" y="352" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="34" fill="#10b981">Labs Cannabis</text>
+
+  <rect x="510" y="396" width="180" height="3" rx="2" fill="#10b981" opacity="0.7"/>
+
+  <text x="600" y="460" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="30" fill="#ffffff">Licensed cannabis dispensary</text>
+  <text x="600" y="504" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="27" fill="#9fb8a6">Pattaya, Thailand</text>
+
+  <rect x="548" y="540" width="104" height="46" rx="23" fill="none" stroke="#10b981" stroke-width="2" opacity="0.85"/>
+  <text x="600" y="571" text-anchor="middle" font-family="DejaVu Sans, Liberation Sans, FreeSans, Arial, sans-serif" font-size="24" font-weight="bold" fill="#10b981">20+</text>
 </svg>

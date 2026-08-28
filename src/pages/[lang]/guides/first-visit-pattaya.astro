@@ -1,0 +1,20 @@
+---
+import GuideArticle from "@/components/GuideArticle.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { FIRST_VISIT_GUIDE } from "@/data/guide-first-visit";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const copy = FIRST_VISIT_GUIDE[locale];
+---
+
+<GuideArticle
+  locale={locale}
+  pathSuffix="guides/first-visit-pattaya"
+  copy={copy}
+  placement="guides"
+  intent="visit"
+/>

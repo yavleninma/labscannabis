@@ -39,7 +39,17 @@ interface FaqItem {
   a: string;
 }
 
-type PageType = "home" | "seo" | "area" | "delivery" | "guide" | "strain" | "contact" | "wholesale" | "locations";
+type PageType =
+  | "home"
+  | "seo"
+  | "area"
+  | "delivery"
+  | "guide"
+  | "strain"
+  | "contact"
+  | "wholesale"
+  | "locations"
+  | "about";
 
 interface BreadcrumbItem {
   name: string;
@@ -64,6 +74,8 @@ interface Props {
   breadcrumbs?: BreadcrumbItem[];
   serviceAreaName?: string;
   article?: ArticleData;
+  /** Предмет статьи для страниц сортов: `about: {"@type": "Thing"}`, без Product. */
+  aboutThing?: string;
 }
 
 const {
@@ -76,12 +88,14 @@ const {
   breadcrumbs = [],
   serviceAreaName,
   article,
+  aboutThing,
 } = Astro.props;
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const businessId = `${baseUrl}/#business`;
 const organizationId = `${baseUrl}/#org`;
 const websiteId = `${baseUrl}/#website`;
+const webPageId = `${pageUrl}#webpage`;
 const inLanguage = LOCALE_HREFLANG[locale];
 
 /**
@@ -94,14 +108,74 @@ const inLanguage = LOCALE_HREFLANG[locale];
  * доставки («does not publish a menu, stock status, prices, or product photos»).
  *
  * Снимка помещения или фасада в репозитории нет ни одного: все файлы
- * `public/media` — тот же товар крупным планом. Поэтому до фотографии витрины и
+ * `media-source/` — тот же товар крупным планом. Поэтому до фотографии витрины и
  * вывески (O-15) в разметку уходит только нейтральная карточка бренда, а
  * продуктовые макро не публикуются нигде.
  */
-const IMAGE_PATHS = ["/og-image.svg"];
-const images = IMAGE_PATHS.map((file) => `${baseUrl}${file}`);
-/** Пока настоящего логотипа в репозитории нет, знак сайта — фавикон (O-15). */
-const logoUrl = `${baseUrl}/favicon.svg`;
+const SHARE_IMAGE = {
+  path: "/og-image.png",
+  width: 1200,
+  height: 630,
+  encodingFormat: "image/png",
+} as const;
+/**
+ * Пока настоящего логотипа в репозитории нет, знак сайта — монограмма (O-15).
+ * Растр, а не `favicon.svg`: `Organization.logo` Google принимает только
+ * .jpg/.png/.gif и просит сторону не меньше 112px, то есть узел со ссылкой на
+ * SVG существовал, а картинки для карточки знаний фактически не было.
+ */
+const LOGO = {
+  path: "/logo-512.png",
+  width: 512,
+  height: 512,
+  encodingFormat: "image/png",
+} as const;
+const LOGO_PATH = LOGO.path;
+
+const primaryImageId = `${baseUrl}/#primaryimage`;
+const logoId = `${baseUrl}/#logo`;
+const shareImageUrl = `${baseUrl}${SHARE_IMAGE.path}`;
+const logoUrl = `${baseUrl}${LOGO_PATH}`;
+
+/**
+ * `ImageObject` вместо голой строки в `image`.
+ *
+ * Строка «вот URL картинки» не говорит ни размеров, ни формата, ни того, что
+ * именно на ней изображено, а Google для карточки знаний просит размеры и
+ * подпись. Узел объявляется один раз с собственным `@id`, а бизнес,
+ * организация и страница ссылаются на него — тогда картинка в графе одна, а не
+ * три одинаковых копии, и заменить её (T-12 переводит превью в растр) можно в
+ * одном месте.
+ *
+ * `width`/`height` взяты из самого файла (`sharp` печатает `1200x630` при
+ * генерации в `scripts/gen-og-image.mjs`), а не выдуманы: неверный размер в
+ * разметке — такое же непроверяемое утверждение, как неподтверждённые часы.
+ * Формат — растр: в `image` карточки знаний и в превью мессенджеров SVG не
+ * рисуется, поэтому и разметка, и `og:image` указывают на один PNG.
+ */
+const primaryImageLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "@id": primaryImageId,
+  url: shareImageUrl,
+  contentUrl: shareImageUrl,
+  width: SHARE_IMAGE.width,
+  height: SHARE_IMAGE.height,
+  encodingFormat: SHARE_IMAGE.encodingFormat,
+  caption: `${BRAND.name} (${GOOGLE.listingName}), ${ADDRESS.street}`,
+};
+
+const logoLd = {
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "@id": logoId,
+  url: logoUrl,
+  contentUrl: logoUrl,
+  width: LOGO.width,
+  height: LOGO.height,
+  encodingFormat: LOGO.encodingFormat,
+  caption: BRAND.name,
+};
 
 const postalAddress = {
   "@type": "PostalAddress",
@@ -134,8 +208,8 @@ const localBusiness = {
   alternateName: GOOGLE.listingName,
   url: `${baseUrl}${localePath(locale)}`,
   telephone: CONTACT.phoneIntl,
-  image: images,
-  logo: logoUrl,
+  image: { "@id": primaryImageId },
+  logo: { "@id": logoId },
   sameAs,
   hasMap: GOOGLE.listingUrl,
   address: postalAddress,
@@ -149,7 +223,10 @@ const localBusiness = {
   // восемь районов» на сайте, который на 108 своих страницах письменно отрицает
   // доставку, читается как заявка на покрытие и опровергает собственный текст.
   areaServed: { "@type": "City", name: ADDRESS.locality },
-  currenciesAccepted: "THB",
+  // `currenciesAccepted` здесь не будет. Это коммерческий сигнал в разметке
+  // сайта, который на семи языках пишет, что никакой торговли онлайн не ведёт;
+  // для выдачи он не даёт ничего, а рядом стоят намеренно вычищенные `Offer` и
+  // `priceRange`.
   parentOrganization: { "@id": organizationId },
   contactPoint,
   ...(openingHours ? { openingHoursSpecification: openingHours } : {}),
@@ -163,13 +240,47 @@ const organizationLd = {
   name: BRAND.name,
   alternateName: GOOGLE.listingName,
   url: baseUrl,
-  logo: { "@type": "ImageObject", url: logoUrl },
-  image: images,
+  logo: { "@id": logoId },
+  image: { "@id": primaryImageId },
   telephone: CONTACT.phoneIntl,
   address: postalAddress,
   sameAs,
   contactPoint,
 };
+
+/**
+ * `SearchAction` для `WebSite` — механизм есть, эмиссии нет.
+ *
+ * Разметка sitelinks searchbox описывает не намерение, а работающий эндпоинт:
+ * `urlTemplate` — это URL, который Google подставит запрос и по которому
+ * ожидает страницу результатов. Поиска по сайту сегодня нет вовсе (статическая
+ * сборка, в `dist` ноль JS, маршрута `/search/` не существует), поэтому любой
+ * шаблон, который можно сюда написать, вёл бы на 404. Заявка на несуществующую
+ * функцию — та же ошибка, что неподтверждённые часы: механизм готов, значения
+ * пустые, гейт закрыт.
+ *
+ * Когда страница поиска появится, включается одной правкой: `enabled: true` и
+ * `urlTemplate` с плейсхолдером `{q}`. Проверка шаблона стоит здесь же, чтобы
+ * включённый гейт с битым шаблоном не эмитил ничего вместо мусора.
+ */
+const SITE_SEARCH = {
+  enabled: false as boolean,
+  urlTemplate: null as string | null,
+  queryParam: "q",
+};
+
+function getSearchAction() {
+  if (!SITE_SEARCH.enabled) return null;
+  const template = SITE_SEARCH.urlTemplate;
+  if (!template || !template.includes(`{${SITE_SEARCH.queryParam}}`)) return null;
+  return {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: template },
+    "query-input": `required name=${SITE_SEARCH.queryParam}`,
+  };
+}
+
+const searchAction = getSearchAction();
 
 const websiteLd = {
   "@context": "https://schema.org",
@@ -178,12 +289,17 @@ const websiteLd = {
   url: baseUrl,
   name: BRAND.name,
   alternateName: GOOGLE.listingName,
-  // Поиска по сайту нет, поэтому `SearchAction` здесь был бы заявкой на
-  // несуществующую функцию — sitelinks searchbox Google всё равно не выдаёт.
   inLanguage: LOCALES.map((code) => LOCALE_HREFLANG[code]),
   publisher: { "@id": organizationId },
+  ...(searchAction ? { potentialAction: searchAction } : {}),
 };
 
+/**
+ * Цепочка. Явный массив со страницы имеет приоритет; запасной вариант из двух
+ * уровней остаётся для страниц, которые свой ещё не передают, — без него у
+ * второго уровня не было бы `BreadcrumbList` вовсе. Тот же массив рисует
+ * `Breadcrumbs.astro`, поэтому видимая цепочка и разметка не расходятся.
+ */
 const breadcrumbItems =
   breadcrumbs.length > 0
     ? breadcrumbs
@@ -233,7 +349,7 @@ const serviceLd =
     : null;
 
 const articleLd =
-  pageType === "guide" && article
+  (pageType === "guide" || pageType === "strain") && article
     ? {
         "@context": "https://schema.org",
         "@type": "Article",
@@ -241,15 +357,79 @@ const articleLd =
         headline: article.headline,
         description,
         inLanguage,
-        mainEntityOfPage: pageUrl,
+        mainEntityOfPage: { "@id": webPageId },
+        isPartOf: { "@id": webPageId },
+        image: { "@id": primaryImageId },
         author: article.author
           ? { "@type": "Organization", name: article.author }
           : { "@id": organizationId },
         publisher: { "@id": organizationId },
         datePublished: article.datePublished,
         dateModified: article.dateModified,
+        // Страница сорта описывает растение, а не товар: `Thing`, никогда
+        // `Product` — у `Product` Google ждёт цену и наличие, а публикация того
+        // и другого запрещена (приказ 2568).
+        ...(aboutThing ? { about: { "@type": "Thing", name: aboutThing } } : {}),
       }
     : null;
+
+/**
+ * Узел самой страницы.
+ *
+ * До этого страница как объект в графе не существовала: были бизнес, сайт и
+ * иногда статья, но ничто не говорило «вот этот документ, он часть вот этого
+ * сайта, у него вот такая цепочка и вот такая картинка». Из-за этого
+ * `BreadcrumbList` и `Article` висели в воздухе, а связка сайта с карточкой
+ * держалась на одном совпадении адреса — том самом, которое Google уже один раз
+ * склеил с чужим магазином на соседней улице.
+ *
+ * Тип узла берётся от смысла страницы: `AboutPage` для «о компании»,
+ * `ContactPage` для контактов, `CollectionPage` для хабов-списков, `WebPage`
+ * для всего остального.
+ *
+ * `mainEntity: {"@id": businessId}` ставится только на страницах, которые
+ * действительно описывают сам магазин (T-01): главная, «о компании», контакты,
+ * локация и брендовая страница. На гайде главной сущностью документа является
+ * статья, а не бизнес, и подменять одно другим — способ рассказать поисковику
+ * неправду о том, что он читает.
+ */
+const BUSINESS_PAGE_SUFFIXES = new Set([
+  "",
+  "about",
+  "contact",
+  "locations",
+  "labs-dispensary-pattaya",
+]);
+const COLLECTION_PAGE_SUFFIXES = new Set(["guides", "strains", "locations"]);
+const normalizedSuffix = pathSuffix.replace(/^\/+|\/+$/g, "");
+const describesBusiness = BUSINESS_PAGE_SUFFIXES.has(normalizedSuffix);
+
+const webPageType =
+  pageType === "about"
+    ? "AboutPage"
+    : pageType === "contact"
+      ? "ContactPage"
+      : COLLECTION_PAGE_SUFFIXES.has(normalizedSuffix)
+        ? "CollectionPage"
+        : "WebPage";
+
+const webPageLd = {
+  "@context": "https://schema.org",
+  "@type": webPageType,
+  "@id": webPageId,
+  url: pageUrl,
+  name: title,
+  description,
+  inLanguage,
+  isPartOf: { "@id": websiteId },
+  primaryImageOfPage: { "@id": primaryImageId },
+  ...(breadcrumbLd ? { breadcrumb: { "@id": breadcrumbLd["@id"] } } : {}),
+  ...(articleLd
+    ? { mainEntity: { "@id": articleLd["@id"] } }
+    : describesBusiness
+      ? { mainEntity: { "@id": businessId }, about: { "@id": businessId } }
+      : {}),
+};
 
 const faqLd =
   faq.length > 0
@@ -258,6 +438,7 @@ const faqLd =
         "@type": "FAQPage",
         "@id": `${pageUrl}#faq`,
         inLanguage,
+        isPartOf: { "@id": webPageId },
         mainEntity: faq.map((item) => ({
           "@type": "Question",
           name: item.q,
@@ -272,6 +453,9 @@ const jsonBlocks = [
   localBusiness,
   organizationLd,
   websiteLd,
+  primaryImageLd,
+  logoLd,
+  webPageLd,
   breadcrumbLd,
   serviceLd,
   articleLd,

@@ -4,8 +4,14 @@ import ContactRail from "@/components/ContactRail.astro";
 import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, type Locale } from "@/lib/i18n";
-import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
+import {
+  LEGAL_GUIDE_COPY,
+  LEGAL_GUIDE_PUBLISHED_ON,
+  LEGAL_GUIDE_SOURCES,
+} from "@/data/legal-guide";
+import { GUIDES_UPDATED_ON } from "@/data/guides";
 import { t } from "@/lib/ui";
+import { formatUpdatedLabel } from "@/lib/updated-date";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -20,10 +26,11 @@ const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: copy.breadcrumb, pathSuffix },
 ];
+const updatedLabel = formatUpdatedLabel(locale, GUIDES_UPDATED_ON);
 const article = {
   headline: copy.h1,
-  datePublished: "2026-08-16",
-  dateModified: "2026-08-16",
+  datePublished: LEGAL_GUIDE_PUBLISHED_ON,
+  dateModified: GUIDES_UPDATED_ON,
   author: "Labs Cannabis",
 };
 ---
@@ -40,8 +47,17 @@ const article = {
 >
   <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.sourceLabel}</p>
       <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      {/*
+        Ровно одна видимая дата. Раньше их было две — «источники сверены 16
+        августа» над заголовком и «обновлено 28 августа» под ним, — и читатель
+        правовой страницы видел расхождение там, где дата и есть весь сигнал
+        доверия. Строка про сверку снята: она заявляла проделанную работу,
+        которую нельзя подтвердить из окружения сборки.
+      */}
+      <p class="mt-2 text-sm text-text-muted">
+        <time datetime={GUIDES_UPDATED_ON}>{updatedLabel}</time>
+      </p>
       <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.intro}</p>
 
       <section class="mt-8" aria-labelledby="official-facts-title">
@@ -75,8 +91,33 @@ const article = {
           >
             {copy.touristSourceCta}
           </a>
+          <a
+            href={LEGAL_GUIDE_SOURCES.ministerialRegulation2026}
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            class="underline hover:text-emerald-dim"
+          >
+            {copy.ministerialSourceCta}
+          </a>
         </p>
       </section>
+
+      {/*
+        Разделы гайда. `basis` печатается видимо: пересказ уведомления и
+        практическая осторожность — разные вещи, и смешивать их означает
+        выдавать догадку за норму. Читатель должен видеть, что именно он читает.
+      */}
+      {copy.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-text-muted">
+            {copy.basisLabels[section.basis]}
+          </p>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
 
       <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="legal-caution-title">
         <h2 id="legal-caution-title" class="text-xl font-bold">{copy.cautionTitle}</h2>

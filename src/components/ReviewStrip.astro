@@ -1,10 +1,11 @@
 ---
 import type { Locale } from "@/lib/i18n";
 import { LOCALE_HREFLANG } from "@/lib/i18n";
-import { RATING, getMapsSearchUrl } from "@/data/site";
+import { getMapsSearchUrl } from "@/data/site";
 import { renderCopy } from "@/data/area-copy";
 import { pickDailyLocalizedReviews } from "@/lib/reviews";
 import { t } from "@/lib/ui";
+import { formatRatingLine, formatReadAllLine } from "@/lib/rating";
 
 /**
  * Отзывы и рейтинг карточки Google (W1-12).
@@ -38,8 +39,8 @@ const ui = t(locale);
  * утверждение об авторе. Именные цитаты включаются одним флагом.
  */
 const reviews = pickDailyLocalizedReviews(locale, new Date(), 3);
-const subtitle = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
-const readAll = renderCopy(ui.reviews.readAll, { count: RATING.count });
+const subtitle = formatRatingLine(locale);
+const readAll = formatReadAllLine(locale);
 const listingUrl = getMapsSearchUrl();
 const dateFormatter = new Intl.DateTimeFormat(LOCALE_HREFLANG[locale], {
   year: "numeric",

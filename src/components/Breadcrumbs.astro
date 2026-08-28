@@ -1,0 +1,66 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { localePath } from "@/lib/i18n";
+import { t } from "@/lib/ui";
+
+/**
+ * Видимые хлебные крошки (T-07).
+ *
+ * `BreadcrumbList` в `JsonLd.astro` эмитился и раньше, но на самих страницах
+ * крошек не было ни одной. Это ровно тот случай, когда разметка описывает
+ * структуру, которой на странице нет: Google документирует хлебные крошки как
+ * разметку видимого элемента, а человеку на третьем уровне («сорт» внутри
+ * «сортов» внутри сайта) без них некуда вернуться, кроме кнопки «назад».
+ *
+ * Компонент получает тот же массив, что уходит в разметку, — один источник на
+ * два потребителя, поэтому видимая цепочка и `BreadcrumbList` не могут
+ * разойтись. Рендерится только со второго уровня: крошка из одного элемента
+ * («Главная») — это не навигация, а украшение.
+ *
+ * Ссылки здесь НЕ помечены `data-seo-context-link`. Крошка ведёт вверх по
+ * иерархии на каждой странице раздела одинаково — это структурная навигация, и
+ * пометить её тематической связью значило бы снова размазать вес ровным слоем,
+ * от чего T-07 как раз уходит.
+ */
+export interface BreadcrumbItem {
+  name: string;
+  pathSuffix?: string;
+  href?: string;
+}
+
+interface Props {
+  locale: Locale;
+  items: BreadcrumbItem[];
+}
+
+const { locale, items } = Astro.props;
+const ui = t(locale);
+
+const hrefFor = (item: BreadcrumbItem) => item.href ?? localePath(locale, item.pathSuffix ?? "");
+const lastIndex = items.length - 1;
+---
+
+{items.length > 1 && (
+  <nav aria-label={ui.nav.breadcrumb} class="pt-4">
+    <ol class="site-main flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-text-muted">
+      {items.map((item, index) => (
+        <li class="flex items-center gap-2">
+          {index > 0 && <span aria-hidden="true" class="text-border">/</span>}
+          {index === lastIndex ? (
+            <span aria-current="page" class="font-semibold text-text">{item.name}</span>
+          ) : (
+            <a
+              href={hrefFor(item)}
+              class="hover:text-emerald-dim"
+              data-track="nav_click"
+              data-placement="breadcrumb"
+              data-target={item.pathSuffix || "home"}
+            >
+              {item.name}
+            </a>
+          )}
+        </li>
+      ))}
+    </ol>
+  </nav>
+)}

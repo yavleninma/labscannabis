@@ -8,10 +8,18 @@ import {
   localePathname,
 } from "../src/lib/index-policy.mjs";
 import { findComplianceViolations } from "./lib/compliance-lexicon.mjs";
-import { buildShingles, extractMainText, measureMainText, topSimilarPairs } from "./lib/text-similarity.mjs";
+import {
+  buildShingles,
+  extractMainText,
+  jaccard,
+  measureMainText,
+  stripBoilerplate,
+  topSimilarPairs,
+} from "./lib/text-similarity.mjs";
 
 const DIST_DIR = path.resolve("dist");
 const VERCEL_CONFIG_PATH = path.resolve("vercel.json");
+const I18N_DIR = path.resolve("src", "i18n");
 const SITE_URL = (process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique").replace(/\/+$/, "");
 const HREFLANGS = {
   en: "en",
@@ -31,29 +39,40 @@ const MAX_H1_LENGTH = 140;
 const MIN_BODY_TEXT_LENGTH = 400;
 const MAX_BODY_TEXT_LENGTH = 50_000;
 /**
- * Каждая возвращённая в индекс страница обязана иметь контекстную ссылку на
- * своей локали (`data-seo-context-link`) — иначе она сирота и её не обойдут.
- * Проверка намеренно смотрит только на размеченные якоря: считать обычные `<a>`
- * чекер не умеет, и требование «входящая ссылка на каждый indexable URL» уронит
- * сборку немедленно.
+ * Граф контекстных ссылок проверяется с обеих сторон (W1-16, T-07).
  *
- * Список покрывает весь indexable-набор, кроме главной и `contact`: до них
- * человек доходит по шапке и по служебной строке футера, и размечать их как
- * тематические ссылки было бы враньём о смысле атрибута. Источники ссылок —
- * `RelatedLinks.astro` и группы футера (W1-16); список слагов держится в
- * `src/data/footer-seo-links.ts` и фильтруется той же политикой индексации,
- * поэтому расхождение между этой таблицей и разметкой роняет сборку.
+ * Раньше здесь стоял ручной список слагов, у которых обязана быть входящая
+ * ссылка, и он покрывал не весь набор: главная и `contact` были из него выведены
+ * «потому что до них дойдут по шапке». Ручной список — это ещё и вторая копия
+ * `INDEX_POLICY_RULES`, которая расходится с ней при любом добавлении слага.
+ *
+ * Теперь требование выведено из самой политики индексации и действует на весь
+ * indexable-набор без исключений:
+ *
+ * • ВХОДЯЩИЕ: у каждой indexable-страницы есть хотя бы одна контекстная ссылка
+ *   на её собственной локали. Ноль — это сирота: страница, до которой краулер
+ *   доходит только по сквозному обвесу, не получает ни веса, ни темы.
+ * • ИСХОДЯЩИЕ: у каждой indexable-страницы есть хотя бы одна контекстная ссылка
+ *   наружу. До T-07 это не проверялось вовсе, и пять локалей упирались в тупик:
+ *   `cannabis-near-me-pattaya` на th/ar/zh/ko/ja не отдавала ни одной.
+ * • ХАБЫ: у страниц из `HUB_MIN_INLINKS` входящих должно быть заметно больше,
+ *   чем у остальных, — иначе «явные веса» снова выродятся в плоский граф. Порог
+ *   ограничен размером локали: на th/ar/zh/ko/ja indexable-страниц всего десять,
+ *   и больше девяти источников там взять физически неоткуда.
+ *
+ * Проверка намеренно смотрит только на размеченные якоря `data-seo-context-link`:
+ * сквозная навигация (шапка, служебный футер, хлебные крошки) их не ставит, и
+ * это и есть смысл атрибута — считается тематическая связь, а не обвес.
  */
-const REQUIRED_CONTEXTUAL_INLINKS = [
-  { suffix: "labs-dispensary-pattaya", locales: INDEX_LOCALES },
-  { suffix: "cannabis-near-me-pattaya", locales: INDEX_LOCALES },
-  { suffix: "locations", locales: INDEX_LOCALES },
-  { suffix: "guides/legal-cannabis-tourists", locales: INDEX_LOCALES },
-  { suffix: "buy-cannabis-pattaya", locales: ["en", "ru"] },
-  { suffix: "best-cannabis-shop-pattaya", locales: ["en", "ru"] },
-  { suffix: "cheap-weed-pattaya", locales: ["en", "ru"] },
-  { suffix: "areas/walking-street", locales: ["en", "ru"] },
-  { suffix: "delivery/pattaya", locales: ["en", "ru"] },
+/**
+ * Сколько источников обязано быть у хаба. Значение — верхняя планка; фактический
+ * порог берётся как `min(порог, indexable-страниц на локали - 1)`, потому что
+ * больше, чем «все остальные страницы локали», не бывает.
+ */
+const HUB_MIN_INLINKS = [
+  { suffix: "labs-dispensary-pattaya", min: 10 },
+  { suffix: "about", min: 10 },
+  { suffix: "guides/legal-cannabis-tourists", min: 10 },
 ];
 
 /**
@@ -444,6 +463,16 @@ function runComplianceLint() {
   const roots = [
     { dir: DIST_DIR, extension: ".html", severity: "block" },
     { dir: CONTENT_CACHE_DIR, extension: ".json", severity: CONTENT_CACHE_SEVERITY },
+    /**
+     * Строки интерфейса — слепой угол прошлой версии проверки: линтер смотрел
+     * только `dist/` и `content-cache/`, поэтому ключ `ageGate` во всех семи
+     * `src/i18n/<locale>/ui.json` спокойно приглашал «посмотреть меню каннабиса в
+     * Паттайе или оптовые запросы по Таиланду» — меню плюс оптовое предложение
+     * на семи языках, в одной строке кода от публикации. Ключ удалён, а
+     * каталог теперь проверяется наравне с остальными, чтобы следующий фолбэк
+     * не попал в тот же угол.
+     */
+    { dir: I18N_DIR, extension: ".json", severity: "block" },
   ];
 
   for (const root of roots) {
@@ -480,6 +509,139 @@ function runComplianceLint() {
  * переписывается шаблон гео-страниц (Волна 2), и только потом порог берётся из
  * фактического распределения, а не назначается наугад.
  */
+/** Текст страницы, нарезанный по H2: заголовок + тело до следующего H2. */
+function splitSectionsByH2(html) {
+  // Тот же обвес, что снимает `extractMainText`: контактная панель и блок
+  // отзывов стоят на каждой странице и сравнивать их друг с другом бессмысленно.
+  const parts = stripBoilerplate(html).split(/<h2\b[^>]*>/i).slice(1);
+  const sections = [];
+  for (const part of parts) {
+    const [rawHeading, ...rest] = part.split(/<\/h2>/i);
+    const heading = decodeHtml(rawHeading.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+    const body = decodeHtml(rest.join(" ").replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+    if (heading && body) sections.push({ heading, body });
+  }
+  return sections;
+}
+
+/** Пары вопрос-ответ из FAQPage JSON-LD. */
+function extractFaqPairs(html) {
+  const pairs = [];
+  for (const match of html.matchAll(/<script[^>]+application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    let parsed;
+    try {
+      parsed = JSON.parse(match[1]);
+    } catch {
+      continue;
+    }
+    if (parsed?.["@type"] !== "FAQPage") continue;
+    for (const entity of parsed.mainEntity ?? []) {
+      const q = String(entity?.name ?? "").replace(/\s+/g, " ").trim();
+      const a = String(entity?.acceptedAnswer?.text ?? "").replace(/\s+/g, " ").trim();
+      if (q && a) pairs.push(`${q}\u0000${a}`);
+    }
+  }
+  return pairs;
+}
+
+/**
+ * Два замера, которых раньше не было, — поэтому и дубль, и пятикратный FAQPage
+ * проехали молча.
+ *
+ * 1. Повтор ВНУТРИ страницы. `mergeSeoContent` дедуплицировал только заголовки,
+ *    и перефразированный заголовок с тем же телом проходил: на
+ *    `cheap-weed-pattaya` два раздела подряд говорили одно и то же (Жаккар 0.25
+ *    en / 0.26 ru). Порог тот же, что и в самом слиянии — `SECTION_DEDUP_JACCARD`.
+ * 2. Дублирующийся FAQPage. Три пары вопрос-ответ стояли дословно в разметке
+ *    пяти коммерческих страниц одной локали; по документации Google это
+ *    дублирующийся FAQ, из-за которого rich-результат не показывается.
+ */
+const INTRA_PAGE_DUPLICATE_SCORE = 0.2;
+const MAX_SHARED_FAQ_PAGES = 2;
+
+function reportDuplication() {
+  const intra = [];
+  for (const page of uniquenessPages) {
+    if (!page.indexable || page.sections.length < 2) continue;
+    const shingles = page.sections.map((section) => buildShingles(section.body, page.locale));
+    let worst = null;
+    for (let i = 0; i < shingles.length; i += 1) {
+      for (let j = i + 1; j < shingles.length; j += 1) {
+        const score = jaccard(shingles[i], shingles[j]);
+        if (score > INTRA_PAGE_DUPLICATE_SCORE && (!worst || score > worst.score)) {
+          worst = { score, a: page.sections[i].heading, b: page.sections[j].heading };
+        }
+      }
+    }
+    if (worst) intra.push({ id: `${page.locale}/${page.suffix || ""}`, ...worst });
+  }
+
+  const sharedFaq = [];
+  for (const locale of INDEX_LOCALES) {
+    const pages = uniquenessPages.filter((page) => page.locale === locale && page.indexable);
+    const owners = new Map();
+    for (const page of pages) {
+      for (const pair of new Set(page.faqPairs)) {
+        if (!owners.has(pair)) owners.set(pair, []);
+        owners.get(pair).push(page.suffix || "/");
+      }
+    }
+    for (const [pair, where] of owners) {
+      if (where.length > MAX_SHARED_FAQ_PAGES) {
+        sharedFaq.push({ locale, question: pair.split("\u0000")[0], where });
+      }
+    }
+  }
+
+  /**
+   * Доля символов основного текста, встречающихся дословно ещё на трёх и более
+   * indexable-страницах локали. Именно этот показатель раньше не измерялся,
+   * поэтому общий абзац на 16–18 % текста пяти коммерческих страниц проехал.
+   */
+  const shared = [];
+  for (const locale of INDEX_LOCALES) {
+    const pages = uniquenessPages.filter((page) => page.locale === locale && page.indexable);
+    if (pages.length < 4) continue;
+    const owners = new Map();
+    const bySentence = pages.map((page) => {
+      const sentences = page.text
+        .split(/(?<=[.!?。！？])\s+|(?<=[\u0E00-\u0E7F])\s{2,}/u)
+        .map((sentence) => sentence.trim())
+        .filter((sentence) => sentence.length >= 40);
+      for (const sentence of new Set(sentences)) {
+        owners.set(sentence, (owners.get(sentence) ?? 0) + 1);
+      }
+      return { page, sentences };
+    });
+    let worst = null;
+    for (const { page, sentences } of bySentence) {
+      const total = sentences.reduce((sum, sentence) => sum + sentence.length, 0);
+      if (total === 0) continue;
+      const repeated = sentences
+        .filter((sentence) => (owners.get(sentence) ?? 0) >= 4)
+        .reduce((sum, sentence) => sum + sentence.length, 0);
+      const share = repeated / total;
+      if (!worst || share > worst.share) worst = { id: page.suffix || "/", share };
+    }
+    if (worst) shared.push({ locale, ...worst });
+  }
+
+  console.log(
+    `Повтор внутри страницы (Жаккар > ${INTRA_PAGE_DUPLICATE_SCORE}): ${intra.length}; ` +
+      `пары вопрос-ответ FAQPage более чем на ${MAX_SHARED_FAQ_PAGES} indexable-страницах локали: ${sharedFaq.length}; ` +
+      "макс. доля текста, дословно повторённого ещё на ≥3 indexable-страницах локали: " +
+      shared
+        .map((item) => `${item.locale} ${(item.share * 100).toFixed(0)}% (${item.id})`)
+        .join(", "),
+  );
+  for (const item of intra.slice(0, SIMILARITY_REPORT_PAIRS)) {
+    console.log(`      ${item.score.toFixed(2)}  ${item.id}: «${item.a}» ↔ «${item.b}»`);
+  }
+  for (const item of sharedFaq.slice(0, SIMILARITY_REPORT_PAIRS)) {
+    console.log(`      ${item.locale}: «${item.question}» — ${item.where.join(", ")}`);
+  }
+}
+
 function reportContentUniqueness() {
   if (uniquenessPages.length === 0) return;
 
@@ -629,6 +791,8 @@ const builtUrls = new Set(builtPages.map((page) => page.url));
 const seenTitles = new Map();
 const seenH1s = new Map();
 const contextualInlinks = new Map();
+/** Сколько разных indexable-целей страница линкует контекстно. Ноль — тупик. */
+const contextualOutlinks = new Map();
 
 if (builtUrls.size !== builtPages.length) {
   fail(`Localized build contains ${builtPages.length - builtUrls.size} duplicate URL output file(s)`);
@@ -649,6 +813,10 @@ for (const page of builtPages) {
     suffix: page.suffix,
     indexable: policy.indexable,
     text: extractMainText(html),
+    /** Разделы по H2 — для замера повтора ВНУТРИ страницы. */
+    sections: splitSectionsByH2(html),
+    /** Пары вопрос-ответ из FAQPage — для замера дублей FAQ между страницами. */
+    faqPairs: extractFaqPairs(html),
   });
 
   if (policy.indexable) {
@@ -686,6 +854,8 @@ for (const page of builtPages) {
       }
       if (!contextualInlinks.has(targetUrl)) contextualInlinks.set(targetUrl, new Set());
       contextualInlinks.get(targetUrl).add(page.url);
+      if (!contextualOutlinks.has(page.url)) contextualOutlinks.set(page.url, new Set());
+      contextualOutlinks.get(page.url).add(targetUrl);
     }
   }
 
@@ -840,13 +1010,66 @@ if (builtPages.length === 0) {
   fail("No localized built HTML pages found.");
 }
 
-for (const requirement of REQUIRED_CONTEXTUAL_INLINKS) {
-  for (const locale of requirement.locales) {
-    const targetUrl = localeUrl(locale, requirement.suffix);
-    if ((contextualInlinks.get(targetUrl)?.size ?? 0) === 0) {
-      fail(`Indexable intent owner has no same-locale contextual inlink: ${targetUrl}`);
+/**
+ * Граф контекстных ссылок: сироты, тупики и веса хабов.
+ *
+ * Требование выводится из `INDEX_POLICY_RULES`, а не из второго списка рядом:
+ * добавили слаг в политику — он немедленно обязан получить и входящую, и
+ * исходящую контекстную ссылку на каждой локали, где он indexable.
+ */
+const indexableByLocale = new Map();
+for (const locale of INDEX_LOCALES) indexableByLocale.set(locale, []);
+for (const rule of INDEX_POLICY_RULES) {
+  for (const locale of rule.locales) indexableByLocale.get(locale)?.push(rule.suffix);
+}
+
+const inlinkCounts = [];
+for (const [locale, suffixes] of indexableByLocale) {
+  for (const suffix of suffixes) {
+    const url = localeUrl(locale, suffix);
+    const inCount = contextualInlinks.get(url)?.size ?? 0;
+    const outCount = contextualOutlinks.get(url)?.size ?? 0;
+    inlinkCounts.push({ url, inCount });
+    if (inCount === 0) {
+      fail(`Indexable page has no same-locale contextual inlink (orphan): ${url}`);
+    }
+    if (outCount === 0) {
+      fail(`Indexable page has no outgoing contextual link (dead end): ${url}`);
     }
   }
+}
+
+for (const hub of HUB_MIN_INLINKS) {
+  for (const [locale, suffixes] of indexableByLocale) {
+    if (!suffixes.includes(hub.suffix)) continue;
+    const url = localeUrl(locale, hub.suffix);
+    // Порог не может превысить размер локали: на th/ar/zh/ko/ja indexable-страниц
+    // всего десять, и десяти источников там взять неоткуда. Берётся доля от
+    // набора, а не «все остальные страницы»: требовать ссылку буквально с каждой
+    // страницы локали значит валить сборку за первую же новую страницу, которая
+    // хаб не линкует, — проверка должна ловить размытый вес, а не арифметику.
+    const cap = Math.max(1, Math.ceil((suffixes.length - 1) * 0.6));
+    const required = Math.min(hub.min, cap);
+    const actual = contextualInlinks.get(url)?.size ?? 0;
+    if (actual < required) {
+      fail(`Hub page has ${actual} contextual inlinks, expected at least ${required}: ${url}`);
+    }
+  }
+}
+
+/**
+ * Плоский граф ловится замером, а не на глаз: до T-07 число источников было
+ * одной и той же константой для всех страниц локали, то есть сигнала о важности
+ * не было вовсе. Если min и max снова сойдутся — сквозной блок опять помечен как
+ * контекстный.
+ */
+const inlinkValues = inlinkCounts.map((entry) => entry.inCount);
+const minInlinks = Math.min(...inlinkValues);
+const maxInlinks = Math.max(...inlinkValues);
+if (inlinkValues.length > 1 && minInlinks === maxInlinks) {
+  fail(
+    `Contextual inlink counts are flat (every indexable page has ${minInlinks} sources) — a sitewide block is marked as contextual`,
+  );
 }
 
 /**
@@ -881,8 +1104,146 @@ function checkUnusedComponents() {
   }
 }
 
+/**
+ * Карантин исходников медиа: они не публикуются вообще.
+ *
+ * Замер по всем 33 файлам каталога (93 МБ): это макро-снимки шишек, и часть из
+ * них отснята на подложках с детскими мультперсонажами — Powerpuff Girls,
+ * диснеевские принцессы, Rick and Morty, Пикачу. Изображение товара в
+ * маркетинговом контексте само по себе реклама контролируемого вещества, а
+ * товар на детской подложке — отдельный и куда более тяжёлый состав.
+ *
+ * Раньше файлы лежали в `public/media`, то есть копировались в `dist/media` и
+ * отдавались с домена лицензиата по прямому URL (`/media/IMG_*.jpg`) — при том,
+ * что ни одна страница на них не ссылалась. `X-Robots-Tag: noindex` закрывал
+ * только индексацию, но не доступ и не цитирование, и прямо противоречил
+ * собственному заявлению сайта «no product photographs anywhere on this domain».
+ * Исходники перенесены в `media-source/` вне сборки.
+ *
+ * Проверка держит три инварианта: (1) каталога `media` нет в `public/`,
+ * (2) его нет в `dist/`, (3) ни одна страница на `/media/` не ссылается. Когда
+ * появятся снимки фасада, вывески и лицензии на стене (O-15), их место —
+ * отдельный каталог (`public/photos/`), а не этот.
+ */
+function checkQuarantinedMedia() {
+  const publicMedia = path.resolve("public", "media");
+  if (existsSync(publicMedia)) {
+    fail(
+      "public/media/ снова существует — исходники макро-снимков товара публикуются по прямому URL; " +
+        "каталог должен лежать в media-source/ вне сборки",
+    );
+  }
+
+  const distMedia = path.join(DIST_DIR, "media");
+  if (existsSync(distMedia)) {
+    fail(
+      "dist/media/ существует — бинарные исходники уезжают в деплой и доступны по прямой ссылке " +
+        "на домене лицензиата",
+    );
+  }
+
+  const hits = new Map();
+  for (const file of walkFiles(DIST_DIR, ".html")) {
+    const html = readFileSync(file, "utf8");
+    for (const match of html.matchAll(/["'(](\/media\/[^"')\s]+)/g)) {
+      if (!hits.has(match[1])) hits.set(match[1], repoRelative(file));
+    }
+  }
+  for (const [reference, file] of hits) {
+    fail(
+      `${file}: страница ссылается на карантинный ${reference} — в media-source/ лежат только макро-снимки товара`,
+    );
+  }
+}
+
+/**
+ * В `dist/` не должно быть неиспользуемых бинарных ассетов: файл, на который не
+ * ссылается ни одна страница, всё равно отдаётся наружу по прямому URL. Иконки,
+ * превью для соцсетей и служебные файлы верификации в разметке не встречаются по
+ * определению, поэтому перечислены явно.
+ */
+const ALLOWED_UNREFERENCED_ASSETS = new Set([
+  "favicon.ico",
+  "favicon.svg",
+  "apple-touch-icon.png",
+  "logo-512.png",
+  "og-image.png",
+  "og-image.svg",
+]);
+
+const BINARY_ASSET_EXTENSIONS = new Set([
+  ".jpg",
+  ".jpeg",
+  ".png",
+  ".webp",
+  ".avif",
+  ".gif",
+  ".mp4",
+  ".webm",
+  ".mov",
+]);
+
+function checkUnreferencedBinaryAssets() {
+  let markup = "";
+  for (const file of walkFiles(DIST_DIR, ".html")) markup += readFileSync(file, "utf8");
+  for (const file of walkFiles(DIST_DIR, ".xml")) markup += readFileSync(file, "utf8");
+
+  for (const file of walkFiles(DIST_DIR, "")) {
+    const extension = path.extname(file).toLowerCase();
+    if (!BINARY_ASSET_EXTENSIONS.has(extension)) continue;
+    const name = path.basename(file);
+    if (ALLOWED_UNREFERENCED_ASSETS.has(name)) continue;
+    if (markup.includes(name)) continue;
+    fail(
+      `${repoRelative(file)}: бинарный ассет не используется ни на одной странице, но публикуется ` +
+        "по прямому URL — удалите его из сборки или сошлитесь на него",
+    );
+  }
+}
+
+/**
+ * Рукописные метры и минуты в копирайте.
+ *
+ * Все расстояния до ориентиров считаются гаверсинусом в `src/lib/geo.ts` и
+ * подставляются плейсхолдером `{walkingStreet}`. Написанное руками число живёт
+ * своей жизнью: на `buy-cannabis-pattaya` в лиде стояло «10–13 minute walk», а
+ * в FAQ той же страницы — «10 to 15 minutes on foot», и вторая цифра уезжала в
+ * `FAQPage` JSON-LD. Прошлая проверка была разовым грепом по трём файлам, и
+ * `src/lib/content.ts` с `content-cache/**` в неё не попали.
+ */
+const DISTANCE_SCAN_TARGETS = [
+  { dir: path.resolve("src", "data"), extension: ".ts" },
+  { dir: path.resolve("src", "lib"), extension: ".ts" },
+  { dir: path.resolve("content-cache"), extension: ".json" },
+];
+
+/** Число + единица расстояния или времени ходьбы. `{walkingStreet}` не число. */
+const HAND_WRITTEN_DISTANCE =
+  /\d[\d\s.,]*\s*(?:m\b|metres|meters|м(?![а-яё])|метр\p{L}*|เมตร|米|미터|メートル)[^.!?\n]{0,60}(?:walk|on foot|пешком|เดิน|步行|도보|徒歩)|(?:walk|on foot|пешком|เดิน|步行|도보|徒歩)[^.!?\n]{0,60}\d[\d\s.,–-]*\s*(?:min\b|minute|минут\p{L}*|นาที|分钟|분|分)/giu;
+
+function checkHandWrittenDistances() {
+  for (const target of DISTANCE_SCAN_TARGETS) {
+    for (const file of walkFiles(target.dir, target.extension)) {
+      const relative = repoRelative(file);
+      // `geo.ts` и есть источник этих чисел, а в комментариях они объясняются.
+      if (relative.endsWith("src/lib/geo.ts")) continue;
+      const text = readFileSync(file, "utf8");
+      const match = HAND_WRITTEN_DISTANCE.exec(text);
+      HAND_WRITTEN_DISTANCE.lastIndex = 0;
+      if (!match) continue;
+      fail(
+        `${relative}: расстояние или время ходьбы написано руками — ${JSON.stringify(match[0].replace(/\s+/g, " ").trim())}; ` +
+          "используйте плейсхолдер {walkingStreet} и describeLandmarkWalk()",
+      );
+    }
+  }
+}
+
 runComplianceLint();
 checkUnusedComponents();
+checkHandWrittenDistances();
+checkQuarantinedMedia();
+checkUnreferencedBinaryAssets();
 
 if (REPORT_MODE) reportIndexMatrix();
 
@@ -895,7 +1256,12 @@ if (warnings.length > 0) {
   }
 }
 
+console.log(
+  `Контекстная перелинковка: источников на indexable-страницу ${minInlinks}-${maxInlinks} (константа = плоский граф).`,
+);
+
 reportContentUniqueness();
+reportDuplication();
 
 if (errors.length > 0) {
   console.error(`SEO check failed with ${errors.length} issue(s):`);

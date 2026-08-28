@@ -4,7 +4,7 @@
   "sections": [
     {
       "h2": "Where the shop stands",
-      "body": "The address is 32 Pattaya 13 Alley, South Pattaya, Chon Buri. Walking Street lies about 800 metres away, a 10–13 minute walk measured from the coordinates rather than promised in a slogan. Arriving by taxi or motorbike, name Pattaya 13 Alley rather than the shop, then look for the LABS DISPENSARY sign. The Google listing is the source of truth for the pin, and listing details can change, so open it before you set off."
+      "body": "The address is 32 Pattaya 13 Alley, South Pattaya, Chon Buri. {walkingStreet} — measured from the coordinates rather than promised in a slogan. Arriving by taxi or motorbike, name Pattaya 13 Alley rather than the shop, then look for the LABS DISPENSARY sign. The Google listing is the source of truth for the pin, and listing details can change, so open it before you set off."
     },
     {
       "h2": "How a visit works",
@@ -12,7 +12,7 @@
     },
     {
       "h2": "Prescription and age rules",
-      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country. This paragraph states the rule and offers to arrange nothing."
+      "body": "Since 26 June 2025 cannabis flower has been a controlled herb in Thailand. It is dispensed in person, in the shop, to adults aged 20 or older who present a prescription issued by a licensed practitioner in Thailand; such a prescription covers a course of up to 30 days. Prescriptions issued abroad are not accepted, and flower may not be taken out of the country."
     }
   ],
   "faq": [

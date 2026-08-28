@@ -1,0 +1,60 @@
+# Пинг IndexNow после успешного деплоя.
+#
+# Почему отдельный workflow, а не шаг в main.yml: main.yml ничего не деплоит —
+# он делает checkout, npm ci, build, check:seo и git diff. Деплоит Vercel через
+# Git-интеграцию, и единственный момент, когда «новая версия уже доступна по
+# URL», — это deployment_status со state=success. Вставить пинг в main.yml
+# означало бы звать поисковики на страницы, которых ещё нет.
+#
+# Участники IndexNow: Bing, Яндекс, Naver, Seznam, Yep. Google протокол НЕ
+# поддерживает — этот workflow не ускоряет индексацию в Google и не заменяет
+# Search Console.
+name: IndexNow
+
+on:
+  deployment_status:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Только напечатать список URL, ничего не отправлять"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+# Пинги не должны обгонять друг друга: при двух деплоях подряд поисковику
+# полезнее один запрос с актуальным списком, чем гонка двух.
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  ping:
+    # deployment_status приходит на каждое изменение статуса, включая pending,
+    # error и preview-деплои веток. Пингуем только успешный production.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+       github.event.deployment_status.environment == 'Production')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Сайтмапа нет в репозитории: он появляется только после сборки, и список
+      # URL скрипт берёт именно из него, а не из захардкоженного массива.
+      - name: Build
+        run: npm run build
+
+      - name: Ping IndexNow
+        run: node scripts/ping-indexnow.mjs ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}

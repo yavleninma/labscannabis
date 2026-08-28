@@ -3,114 +3,52 @@ import PageLayout from "@/layouts/PageLayout.astro";
 import MapBlock from "@/components/MapBlock.astro";
 import ContactRail from "@/components/ContactRail.astro";
 import ReviewStrip from "@/components/ReviewStrip.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
 import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
+import { LOCATIONS_COPY } from "@/data/visit-copy";
+import { describeLandmarkWalk, getLandmark } from "@/lib/geo";
+import { renderCopy } from "@/data/area-copy";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
 }
 
 const locale = Astro.params.lang as Locale;
-type Copy = { title: string; description: string; h1: string; bridge: string; lead: string; maps: string; address: string; phone: string; contact: string; legal: string; walking: string };
-const copy: Record<Locale, Copy> = {
-  en: {
-    title: "Labs Cannabis location in Pattaya | Maps and address",
-    description: "Find the live LABS DISPENSARY Google Maps listing, published address and phone for Labs Cannabis in Pattaya.",
-    h1: "Labs Cannabis location in Pattaya",
-    bridge: "Listed on Google Maps as LABS DISPENSARY",
-    lead: "Use the live Maps listing for the current pin and route. The Google rating and guest reviews are below; the phone and WhatsApp answer everything else.",
-    maps: "Open Google Maps",
-    address: "Published address",
-    phone: "Phone",
-    contact: "Contact and visit coordination",
-    legal: "Current rules for tourists",
-    walking: "Directions from Walking Street",
-  },
-  ru: {
-    title: "Локация Labs Cannabis в Паттайе | Maps и адрес",
-    description: "Актуальная карточка LABS DISPENSARY в Google Maps, опубликованный адрес и телефон Labs Cannabis в Паттайе.",
-    h1: "Локация Labs Cannabis в Паттайе",
-    bridge: "В Google Maps указано название LABS DISPENSARY",
-    lead: "Текущий пин и маршрут смотрите в живой карточке Maps. Рейтинг Google и отзывы гостей — ниже, на остальное отвечаем по телефону и в WhatsApp.",
-    maps: "Открыть Google Maps",
-    address: "Опубликованный адрес",
-    phone: "Телефон",
-    contact: "Контакты и координация визита",
-    legal: "Актуальные правила для туристов",
-    walking: "Маршрут от Walking Street",
-  },
-  th: {
-    title: "ที่ตั้ง Labs Cannabis ในพัทยา | Maps และที่อยู่",
-    description: "ดูรายการ LABS DISPENSARY ใน Google Maps ที่อยู่และโทรศัพท์ที่เผยแพร่ของ Labs Cannabis ในพัทยา",
-    h1: "ที่ตั้ง Labs Cannabis ในพัทยา",
-    bridge: "แสดงใน Google Maps ในชื่อ LABS DISPENSARY",
-    lead: "ใช้ Maps สำหรับหมุดและเส้นทางปัจจุบัน คะแนน Google และรีวิวจากลูกค้าอยู่ด้านล่าง เรื่องอื่นสอบถามทางโทรศัพท์หรือ WhatsApp",
-    maps: "เปิด Google Maps",
-    address: "ที่อยู่ที่เผยแพร่",
-    phone: "โทรศัพท์",
-    contact: "ติดต่อและประสานการมาเยือน",
-    legal: "กฎปัจจุบันสำหรับนักท่องเที่ยว",
-    walking: "เส้นทางจาก Walking Street",
-  },
-  ar: {
-    title: "موقع Labs Cannabis في باتايا | Maps والعنوان",
-    description: "بطاقة LABS DISPENSARY المباشرة على Google Maps والعنوان والهاتف المنشوران لـ Labs Cannabis في باتايا.",
-    h1: "موقع Labs Cannabis في باتايا",
-    bridge: "مدرج على Google Maps باسم LABS DISPENSARY",
-    lead: "استخدم بطاقة Maps للدبوس والمسار الحاليين. تقييم Google وآراء الزوار في الأسفل، وما عدا ذلك نجيب عنه بالهاتف أو WhatsApp.",
-    maps: "افتح Google Maps",
-    address: "العنوان المنشور",
-    phone: "الهاتف",
-    contact: "الاتصال وتنسيق الزيارة",
-    legal: "القواعد الحالية للسياح",
-    walking: "الاتجاهات من Walking Street",
-  },
-  zh: {
-    title: "Labs Cannabis 芭提雅位置 | Maps 与地址",
-    description: "查看 Google Maps 上实时的 LABS DISPENSARY 页面，以及 Labs Cannabis 在芭提雅公开的地址和电话。",
-    h1: "Labs Cannabis 在芭提雅的位置",
-    bridge: "Google Maps 当前显示为 LABS DISPENSARY",
-    lead: "请使用实时 Maps 页面查看当前定位和路线。Google 评分与客人评价在下方，其余问题请通过电话或 WhatsApp 咨询。",
-    maps: "打开 Google Maps",
-    address: "公开地址",
-    phone: "电话",
-    contact: "联系与到店协调",
-    legal: "游客当前规则",
-    walking: "从 Walking Street 前往",
-  },
-  ko: {
-    title: "파타야 Labs Cannabis 위치 | Maps와 주소",
-    description: "Google Maps의 실시간 LABS DISPENSARY 정보와 파타야 Labs Cannabis의 공개 주소 및 전화번호를 확인하세요.",
-    h1: "파타야 Labs Cannabis 위치",
-    bridge: "Google Maps에는 LABS DISPENSARY로 표시됩니다",
-    lead: "현재 핀과 경로는 실시간 Maps 정보를 사용하세요. Google 평점과 게스트 리뷰는 아래에 있고, 나머지는 전화나 WhatsApp으로 답해 드립니다.",
-    maps: "Google Maps 열기",
-    address: "공개 주소",
-    phone: "전화",
-    contact: "연락 및 방문 조율",
-    legal: "관광객을 위한 현재 규정",
-    walking: "Walking Street에서 오는 길",
-  },
-  ja: {
-    title: "パタヤの Labs Cannabis 所在地 | Maps と住所",
-    description: "Google Maps の最新 LABS DISPENSARY リスティングと、パタヤの Labs Cannabis の公開住所・電話番号。",
-    h1: "パタヤの Labs Cannabis 所在地",
-    bridge: "Google Maps では LABS DISPENSARY と表示されています",
-    lead: "現在のピンと経路は Maps の最新情報をご利用ください。Google の評価とゲストの声は下にあり、その他のご質問は電話または WhatsApp でお答えします。",
-    maps: "Google Maps を開く",
-    address: "公開住所",
-    phone: "電話",
-    contact: "連絡先と来店調整",
-    legal: "旅行者向けの現在のルール",
-    walking: "Walking Street からの経路",
-  },
-};
-const text = copy[locale] ?? copy.en;
+const text = LOCATIONS_COPY[locale] ?? LOCATIONS_COPY.en;
 const ui = t(locale);
 const formattedAddress = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
+
+/**
+ * Маршруты. Название ориентира и строка расстояния приходят из `src/lib/geo.ts`
+ * — гаверсинус от пина магазина, а не рука копирайтера: обещание «5 минут
+ * пешком» до Walking Street возвращается однозвёздочным отзывом, потому что
+ * там 800 м. Ориентир без координат просто не рендерится.
+ */
+const routes = text.routes
+  .map((route) => ({
+    name: getLandmark(route.slug)?.name[locale] ?? null,
+    walk: describeLandmarkWalk(route.slug, locale),
+    body: route.body,
+  }))
+  .filter((route): route is { name: string; walk: string; body: string } =>
+    Boolean(route.name && route.walk),
+  );
+
+/** Те же вычисленные строки внутри FAQ — иначе цифра разъедется с разметкой. */
+const walkVars = {
+  walkingStreet: describeLandmarkWalk("walking-street", locale) ?? "",
+  jomtien: describeLandmarkWalk("jomtien-beach", locale) ?? "",
+};
+const faq = text.faq.map((item) => ({ q: item.q, a: renderCopy(item.a, walkVars) }));
+
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.footerSeo.allPages, pathSuffix: "locations" },
+];
 
 /**
  * Хаб перелинковки. Возвращённая в индекс страница без входящей ссылки на своей
@@ -125,11 +63,25 @@ const intentLinks = [
   { suffix: "best-cannabis-shop-pattaya", label: ui.footerSeo.bestShop },
   { suffix: "cheap-weed-pattaya", label: ui.footerSeo.priceFactors },
   { suffix: "areas/walking-street", label: text.walking },
+  { suffix: "areas/soi-buakhao", label: ui.footerSeo.soiBuakhaoRoute },
+  { suffix: "areas/central-pattaya", label: ui.footerSeo.centralPattayaRoute },
+  { suffix: "areas/jomtien", label: ui.footerSeo.jomtienRoute },
   { suffix: "delivery/pattaya", label: ui.footerSeo.pattayaDelivery },
+  { suffix: "about", label: ui.footerSeo.aboutUs },
+  { suffix: "guides", label: ui.footerSeo.guidesHub },
+  { suffix: "strains", label: ui.footerSeo.strainsHub },
 ].filter((link) => getIndexPolicy(locale, link.suffix).indexable);
 ---
 
-<PageLayout locale={locale} pathSuffix="locations" title={text.title} description={text.description} pageType="locations">
+<PageLayout
+  locale={locale}
+  pathSuffix="locations"
+  title={text.title}
+  description={text.description}
+  pageType="locations"
+  faq={faq}
+  breadcrumbs={breadcrumbs}
+>
   <main class="px-4 py-10">
     <div class="mx-auto max-w-lg">
       <h1 class="text-3xl font-bold leading-tight">{text.h1}</h1>
@@ -156,7 +108,40 @@ const intentLinks = [
         </div>
       </dl>
 
-      <nav class="mt-7 grid gap-3" aria-label={text.h1}>
+      <section class="mt-9">
+        <h2 class="text-xl font-bold text-emerald-dim">{text.routesTitle}</h2>
+        <p class="mt-3 text-base leading-relaxed text-text-muted">{text.routesIntro}</p>
+        <ul class="mt-4 grid gap-4">
+          {routes.map((route) => (
+            <li class="card-surface p-4">
+              <h3 class="text-base font-bold text-text">{route.name}</h3>
+              <p class="mt-1 text-sm font-semibold text-emerald-dim">{route.walk}</p>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{route.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {text.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      <section class="mt-9">
+        <h2 class="mb-3 text-xl font-bold">{text.faqTitle}</h2>
+        {faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <nav class="mt-9 grid gap-3" aria-label={text.h1}>
         <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="contact_click" data-channel="maps" data-placement="locations">{text.maps}</a>
         <a href={localePath(locale, "labs-dispensary-pattaya")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim" data-track="nav_click" data-placement="locations" data-target="labs-dispensary-pattaya" data-seo-context-link>{text.bridge}</a>
         <a href={localePath(locale, "contact")} class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim">{text.contact}</a>
@@ -169,6 +154,7 @@ const intentLinks = [
     <ContactRail locale={locale} intent="visit" placement="rail" />
     <ReviewStrip locale={locale} />
   </main>
+  <RelatedLinks locale={locale} pathSuffix="locations" placement="locations" />
   <MapBlock locale={locale} />
   <Footer locale={locale} pathSuffix="locations" />
 </PageLayout>

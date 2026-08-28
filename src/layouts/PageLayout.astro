@@ -5,9 +5,11 @@ import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
 import { getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
-import { ADDRESS } from "@/data/site";
+import { getFontStylesheetHref } from "@/lib/fonts";
+import { ADDRESS, GOOGLE } from "@/data/site";
 import Analytics from "@/components/Analytics.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
+import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
 import JsonLd from "@/components/JsonLd.astro";
 import TrackingScript from "@/components/TrackingScript.astro";
@@ -19,7 +21,17 @@ interface Props {
   pathSuffix?: string;
   keywords?: string[];
   faq?: { q: string; a: string }[];
-  pageType?: "home" | "seo" | "area" | "delivery" | "guide" | "strain" | "contact" | "wholesale" | "locations";
+  pageType?:
+    | "home"
+    | "seo"
+    | "area"
+    | "delivery"
+    | "guide"
+    | "strain"
+    | "contact"
+    | "wholesale"
+    | "locations"
+    | "about";
   breadcrumbs?: { name: string; pathSuffix?: string; href?: string }[];
   serviceAreaName?: string;
   article?: {
@@ -28,6 +40,8 @@ interface Props {
     dateModified?: string;
     author?: string;
   };
+  /** Предмет статьи для страниц сортов — уходит в `about: {"@type": "Thing"}`. */
+  aboutThing?: string;
 }
 
 const {
@@ -41,6 +55,7 @@ const {
   breadcrumbs = [],
   serviceAreaName,
   article,
+  aboutThing,
 } = Astro.props;
 const ui = t(locale);
 const pageTitle = title ?? ui.meta.title;
@@ -61,8 +76,21 @@ const siteUrl = getSiteUrl();
  * линк, то есть реклама контролируемой травы распространялась дальше самого
  * сайта. Снимка помещения или вывески в репозитории пока нет (O-15), поэтому
  * ссылки представляет нейтральная карточка бренда.
+ *
+ * Формат — растр, а не SVG. Facebook, WhatsApp, Telegram, LINE и X не рисуют
+ * SVG в карточке ссылки: пересланная ссылка приходила вообще без картинки, а
+ * весь раунд целится в обращения именно в мессенджерах. Файл собирается
+ * вручную (`node scripts/gen-og-image.mjs`) и лежит в репозитории — сборка в
+ * рабочее дерево не пишет.
  */
-const SHARE_IMAGE_PATH = "/og-image.svg";
+const SHARE_IMAGE = {
+  path: "/og-image.png",
+  width: 1200,
+  height: 630,
+  mimeType: "image/png",
+} as const;
+const shareImageUrl = `${siteUrl}${SHARE_IMAGE.path}`;
+const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.locality}`;
 ---
 
 <!doctype html>
@@ -88,27 +116,44 @@ const SHARE_IMAGE_PATH = "/og-image.svg";
       content={indexPolicy.indexable ? "index, follow, max-image-preview:large" : "noindex, follow"}
     />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    {/*
+      iOS не понимает SVG в `apple-touch-icon`, а ссылки на иконку в разметке
+      не было вовсе — файл `apple-touch-icon.svg` лежал в `public/` мёртвым
+      грузом. Растр собирается тем же `scripts/gen-og-image.mjs`.
+    */}
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;600;700&family=Noto+Sans+JP:wght@400;600;700&family=Noto+Sans+KR:wght@400;600;700&family=Noto+Sans+SC:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href={getFontStylesheetHref(locale)} rel="stylesheet" />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:type" content={pageType === "guide" ? "article" : "website"} />
     <meta property="og:site_name" content="Labs Cannabis" />
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:image" content={`${siteUrl}${SHARE_IMAGE_PATH}`} />
+    <meta property="og:image" content={shareImageUrl} />
+    <meta property="og:image:type" content={SHARE_IMAGE.mimeType} />
+    <meta property="og:image:width" content={String(SHARE_IMAGE.width)} />
+    <meta property="og:image:height" content={String(SHARE_IMAGE.height)} />
+    <meta property="og:image:alt" content={shareImageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={pageDesc} />
-    <meta name="twitter:image" content={`${siteUrl}${SHARE_IMAGE_PATH}`} />
+    <meta name="twitter:image" content={shareImageUrl} />
+    <meta name="twitter:image:alt" content={shareImageAlt} />
   </head>
   <body>
     <Analytics />
     <SiteHeader locale={locale} pathSuffix={pathSuffix} />
+    {/*
+      Видимые хлебные крошки — тот же массив, что уходит в `BreadcrumbList`
+      (T-07). До этого разметка описывала иерархию, которой на странице не было
+      ни в одном месте: Google документирует хлебные крошки как разметку
+      видимого элемента, а человек на третьем уровне не имел пути наверх.
+      Компонент сам ничего не рисует, когда крошка короче двух элементов.
+    */}
+    <Breadcrumbs locale={locale} items={breadcrumbs} />
     <slot />
     <StickyCTA locale={locale} />
     {indexPolicy.indexable && (
@@ -122,6 +167,7 @@ const SHARE_IMAGE_PATH = "/og-image.svg";
         breadcrumbs={breadcrumbs}
         serviceAreaName={serviceAreaName}
         article={article}
+        aboutThing={aboutThing}
       />
     )}
     <TrackingScript />

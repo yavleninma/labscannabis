@@ -1,12 +1,12 @@
 ---
 import type { Locale } from "@/lib/i18n";
 import type { TrackPlacement } from "@/lib/analytics";
-import { CONTACT, RATING, getMapsDirectionsUrl, getMapsSearchUrl } from "@/data/site";
+import { CONTACT, getMapsDirectionsUrl, getMapsSearchUrl } from "@/data/site";
 import OpeningStatus from "@/components/OpeningStatus.astro";
 import { CTA_LABELS, ctaWhatsAppHref, type PrefillIntent } from "@/data/cta-copy";
-import { renderCopy } from "@/data/area-copy";
 import { describeLandmarkWalk } from "@/lib/geo";
 import { t } from "@/lib/ui";
+import { formatRatingLine } from "@/lib/rating";
 
 /**
  * Контактный блок внутри основного содержимого страницы (W1-07).
@@ -34,7 +34,7 @@ const ui = t(locale);
 const labels = CTA_LABELS[locale];
 const whatsappHref = ctaWhatsAppHref(locale, intent, { area });
 const directionsHref = getMapsDirectionsUrl();
-const ratingLine = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+const ratingLine = formatRatingLine(locale);
 /** Вычисленное расстояние вместо обещания «5 минут пешком» из `ui.location.landmark`. */
 const landmarkLine = describeLandmarkWalk("walking-street", locale);
 const headingId = `contact-rail-${placement}`;

@@ -8,6 +8,7 @@ import { LOCALES, type Locale } from "@/lib/i18n";
 import { ADDRESS, BRAND, CONTACT, GOOGLE } from "@/data/site";
 import { t } from "@/lib/ui";
 import { renderCopy } from "@/data/area-copy";
+import { CONTACT_COPY } from "@/data/visit-copy";
 
 export function getStaticPaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
@@ -16,51 +17,7 @@ export function getStaticPaths() {
 const { lang } = Astro.params;
 const locale = lang as Locale;
 const ui = t(locale);
-const copy: Record<Locale, { description: string; lead: string; maps: string }> = {
-  en: {
-    description: "One number for Labs Cannabis in Pattaya: ask what is on the shelf today, how to find the door on Pattaya 13 Alley and what to bring.",
-    lead:
-      "One number for everything — ask what is on the shelf today, how to find the door, or what to bring with you. No orders and no payments are taken here; that happens at the counter.",
-    maps: "Open Google Maps",
-  },
-  ru: {
-    description: "Один номер Labs Cannabis в Паттайе: что сегодня на витрине, как найти вход на Pattaya 13 Alley и что взять с собой.",
-    lead:
-      "Один номер на всё — спросите, что сегодня на витрине, как найти вход и что взять с собой. Заказы и оплату здесь не принимают: это происходит у прилавка.",
-    maps: "Открыть Google Maps",
-  },
-  th: {
-    description: "เบอร์เดียวของ Labs Cannabis ในพัทยา ถามได้ว่าวันนี้หน้าร้านมีอะไร เข้าประตูทางไหนที่ Pattaya 13 Alley และต้องเตรียมอะไรมา",
-    lead:
-      "เบอร์เดียวครบทุกเรื่อง ถามได้ว่าวันนี้หน้าร้านมีอะไร เข้าประตูทางไหน และต้องเตรียมอะไรมา ที่นี่ไม่รับคำสั่งซื้อและไม่รับชำระเงิน ทั้งหมดนั้นทำที่หน้าร้าน",
-    maps: "เปิด Google Maps",
-  },
-  ar: {
-    description: "رقم واحد لـ Labs Cannabis في باتايا: ما هو متوفر اليوم، وكيف تجد الباب في Pattaya 13 Alley، وماذا تحضر معك.",
-    lead:
-      "رقم واحد لكل شيء — اسأل عما هو متوفر اليوم، وكيف تجد الباب، وماذا تحضر معك. لا تُقبل هنا طلبات ولا مدفوعات؛ ذلك يتم عند الطاولة.",
-    maps: "فتح Google Maps",
-  },
-  zh: {
-    description: "Labs Cannabis 芭提雅的一个号码：今天店里有什么、Pattaya 13 Alley 的门在哪里、需要带什么。",
-    lead:
-      "一个号码全搞定——问今天店里有什么、门在哪里、需要带什么。这里不接受订单与付款，这些都在柜台完成。",
-    maps: "打开 Google Maps",
-  },
-  ko: {
-    description: "파타야 Labs Cannabis의 번호 하나: 오늘 무엇이 있는지, Pattaya 13 Alley 입구는 어디인지, 무엇을 가져와야 하는지.",
-    lead:
-      "하나의 번호로 전부 — 오늘 매장에 무엇이 있는지, 입구를 어떻게 찾는지, 무엇을 가져와야 하는지 물어보세요. 여기서는 주문과 결제를 받지 않으며 그것은 매장에서 이루어집니다.",
-    maps: "Google Maps 열기",
-  },
-  ja: {
-    description: "パタヤのLabs Cannabis、番号は1つ。今日の品ぞろえ、Pattaya 13 Alleyの入口、持ち物を聞けます。",
-    lead:
-      "1番号で全部 — 今日の品ぞろえ、入口の場所、持ち物を聞いてください。ここでは注文も支払いも受け付けません。それは店頭で行います。",
-    maps: "Google Mapsを開く",
-  },
-};
-const contactCopy = copy[locale] ?? copy.en;
+const contactCopy = CONTACT_COPY[locale] ?? CONTACT_COPY.en;
 const addressLine = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
 /**
  * Title без города и бренда («Get in touch | Labs Cannabis») не отвечал ни на
@@ -83,6 +40,7 @@ const breadcrumbs = [
   description={contactCopy.description}
   pageType="contact"
   breadcrumbs={breadcrumbs}
+  faq={contactCopy.faq}
 >
   <main>
     <section class="px-4 pt-8">
@@ -97,6 +55,31 @@ const breadcrumbs = [
           <a href={CONTACT.tel} class="mt-2 inline-flex font-bold text-text hover:text-emerald-dim" data-track="contact_click" data-channel="phone" data-placement="contact">{CONTACT.phoneDisplay}</a>
           <a href={GOOGLE.listingUrl} target="_blank" rel="noopener noreferrer" class="mt-3 block font-bold text-emerald-dim hover:underline" data-track="contact_click" data-channel="maps" data-placement="contact">{contactCopy.maps}</a>
         </div>
+      </div>
+      <div class="mx-auto mt-9 max-w-lg">
+        {/*
+          Собственный текст страницы. До волны 2 здесь было 64-79 слов на локаль:
+          человек, дошедший до «Связаться», получал номер и ничего из того, что
+          он на самом деле собирался спросить.
+        */}
+        {contactCopy.sections.map((section) => (
+          <section class="mt-8">
+            <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+            {section.body.map((paragraph) => (
+              <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+            ))}
+          </section>
+        ))}
+
+        <section class="mt-9">
+          <h2 class="mb-3 text-xl font-bold">{contactCopy.faqTitle}</h2>
+          {contactCopy.faq.map((item) => (
+            <details class="card-surface mb-3 p-4">
+              <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+            </details>
+          ))}
+        </section>
       </div>
     </section>
     {/* Каналы, их подписи и флаги LINE/Telegram живут в одном месте — ContactRail. */}

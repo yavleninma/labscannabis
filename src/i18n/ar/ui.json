@@ -13,6 +13,7 @@
     "title": "آراء الزوار",
     "subtitle": "{rating}★ · {count} تقييم Google",
     "readAll": "كل {count} تقييم على Google →",
+    "checkedOn": "روجعت في {date}",
     "translatedNote": "ترجمة من تقييم Google الأصلي ({lang})",
     "sourceLang": {
       "en": "الإنجليزية",
@@ -31,22 +32,10 @@
     "closedNow": "مغلق الآن · يفتح {open}",
     "openMaps": "Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "لا يوجد public checkout أو دفع إلكتروني أو order form أو توصيل/بيع مؤكد على هذا الموقع. التفاصيل الفردية تتم عبر WhatsApp."
-  },
   "footer": {
     "disclaimer": "Labs Cannabis (سابقاً Labs Dispensary). متجر قنب مرخص في باتايا، تايلاند. للبالغين 20+ فقط.",
     "rights": "جميع الحقوق محفوظة",
     "listedAs": "{brand} — على Google Maps باسم {listing}"
-  },
-  "ageGate": {
-    "kicker": "للبالغين 20+ فقط",
-    "title": "هل عمرك 20+؟",
-    "text": "هذا الموقع للبالغين 20+ فقط. تابع فقط إذا كان عمرك 20 عاماً أو أكثر وتريد عرض معلومات قائمة القنب في باتايا أو استفسارات الجملة في تايلاند.",
-    "note": "لا يوجد public checkout أو دفع إلكتروني أو order form أو توصيل/بيع مؤكد على هذا الموقع. التفاصيل الفردية تتم عبر WhatsApp.",
-    "enter": "نعم، 20+",
-    "exit": "مغادرة"
   },
   "contact": {
     "title": "تواصل",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "الرئيسية",
     "contact": "تواصل",
-    "wholesale": "جملة"
+    "wholesale": "جملة",
+    "breadcrumb": "مسار التنقل"
   },
   "langSwitcher": {
     "label": "اختر اللغة"
@@ -97,7 +87,21 @@
     "legalGuide": "الدليل القانوني للسياح",
     "labsDispensary": "LABS DISPENSARY باتايا",
     "walkingStreetRoute": "الاتجاهات من Walking Street",
-    "relatedTitle": "صفحات ذات صلة"
+    "aboutUs": "عن المتجر",
+    "guidesHub": "كل الأدلة",
+    "prescriptionGuide": "هل تحتاج وصفة",
+    "firstVisitGuide": "أول زيارة",
+    "choosingGuide": "كيف تختار الزهرة",
+    "strainsHub": "ملاحظات الأصناف",
+    "whiteWidowStrain": "صنف White Widow",
+    "blueDreamStrain": "صنف Blue Dream",
+    "ogKushStrain": "صنف OG Kush",
+    "soiBuakhaoRoute": "الطريق من سوي بواخاو",
+    "jomtienRoute": "الطريق من جومتين",
+    "centralPattayaRoute": "الطريق من وسط باتايا",
+    "relatedTitle": "صفحات ذات صلة",
+    "homePage": "متجر القنب في باتايا",
+    "contactPage": "اسأل قبل الزيارة"
   },
   "locations": {
     "title": "القنب في باتايا — جميع الصفحات",

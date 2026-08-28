@@ -98,17 +98,63 @@ function normalizeKey(value: string): string {
 }
 
 /**
+ * Порог внутристраничного повтора: раздел, у которого пересечение по
+ * 4-словным шинглам с любым уже добавленным выше 0.20, не отрисовывается.
+ *
+ * Дедупликация по одному заголовку пропускала перефразированный заголовок с тем
+ * же телом. На `/en|ru/cheap-weed-pattaya/` так и вышло: «Why there is no number
+ * on this page» из `content.ts` и «Why the shop will not put a figure on this
+ * page» из `content-cache` стояли подряд, оба говорили одно и то же, а
+ * предложение «So there is no list here, no basket and no payment.» встречалось
+ * на странице дважды дословно. Замер: intra-page Жаккар 0.25 (en) и 0.26 (ru) —
+ * единственные такие пары на всём сайте, поэтому порог 0.20 отсекает их, не
+ * задевая ничего живого.
+ */
+export const SECTION_DEDUP_JACCARD = 0.2;
+
+const WORD_SHINGLE_SIZE = 4;
+const CHAR_NGRAM_SIZE = 8;
+/** th/zh/ja/ko не разделяют слова пробелами — там сравниваются символьные n-граммы. */
+const NO_WORD_BOUNDARY = /[\u0E00-\u0E7F\u3040-\u30FF\u3400-\u9FFF\uAC00-\uD7AF]/;
+
+function shingleSet(text: string): Set<string> {
+  const shingles = new Set<string>();
+  if (NO_WORD_BOUNDARY.test(text)) {
+    const chars = text.toLowerCase().replace(/[\s\p{P}\p{S}]+/gu, "");
+    for (let i = 0; i + CHAR_NGRAM_SIZE <= chars.length; i += 1) {
+      shingles.add(chars.slice(i, i + CHAR_NGRAM_SIZE));
+    }
+    return shingles;
+  }
+  const tokens = text.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+  for (let i = 0; i + WORD_SHINGLE_SIZE <= tokens.length; i += 1) {
+    shingles.add(tokens.slice(i, i + WORD_SHINGLE_SIZE).join(" "));
+  }
+  return shingles;
+}
+
+function jaccard(a: Set<string>, b: Set<string>): number {
+  if (a.size === 0 || b.size === 0) return 0;
+  const [small, large] = a.size <= b.size ? [a, b] : [b, a];
+  let intersection = 0;
+  for (const shingle of small) if (large.has(shingle)) intersection += 1;
+  const union = a.size + b.size - intersection;
+  return union === 0 ? 0 : intersection / union;
+}
+
+/**
  * Ручная копия задаёт «лицо» страницы, кэш добавляет объём.
  *
  * `h1`, `intro` и `closing` берутся из ручной копии: `h1` обязан совпадать с
  * `h1Template` в `src/data/seo-matrix.ts`, а `intro` уходит в meta description,
  * и обе строки уже вычитаны на соответствие §1.6 плана. Разделы и FAQ из кэша
- * дописываются следом с дедупликацией по заголовку — именно они поднимают
- * страницу с 60-240 слов до 250+ собственных слов.
+ * дописываются следом с дедупликацией по заголовку И по телу — именно они
+ * поднимают страницу с 60-240 слов до 250+ собственных слов.
  */
 export function mergeSeoContent(base: SeoContent, extra: SeoContent): SeoContent {
   const seenSections = new Set(base.sections.map((section) => normalizeKey(section.h2)));
   const seenQuestions = new Set(base.faq.map((item) => normalizeKey(item.q)));
+  const seenBodies = base.sections.map((section) => shingleSet(section.body));
 
   return {
     h1: base.h1,
@@ -118,7 +164,10 @@ export function mergeSeoContent(base: SeoContent, extra: SeoContent): SeoContent
       ...extra.sections.filter((section) => {
         const key = normalizeKey(section.h2);
         if (seenSections.has(key)) return false;
+        const body = shingleSet(section.body);
+        if (seenBodies.some((seen) => jaccard(seen, body) > SECTION_DEDUP_JACCARD)) return false;
         seenSections.add(key);
+        seenBodies.push(body);
         return true;
       }),
     ],

@@ -2,6 +2,36 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "framework": "astro",
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Permissions-Policy", "value": "geolocation=(), camera=(), microphone=(), payment=(), usb=()" },
+        { "key": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" }
+      ]
+    },
+    {
+      "source": "/_astro/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(og-image\\.png|og-image\\.svg|logo-512\\.png|apple-touch-icon\\.png|favicon\\.svg|favicon\\.ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=604800" }
+      ]
+    },
+    {
+      "source": "/(robots\\.txt|sitemap-index\\.xml|sitemap-\\d+\\.xml)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
+  ],
   "redirects": [
     {
       "source": "/",
@@ -24,12 +54,12 @@
     { "source": "/:legacy(reels|price|prices)/", "destination": "/en/", "permanent": true },
     { "source": "/:legacy(whatsapp|contact)", "destination": "/en/contact/", "permanent": true },
     { "source": "/:legacy(whatsapp|contact)/", "destination": "/en/contact/", "permanent": true },
-    { "source": "/:legacy(strain|strains)", "destination": "/en/locations/", "permanent": true },
-    { "source": "/:legacy(strain|strains)/", "destination": "/en/locations/", "permanent": true },
-    { "source": "/strains/:group(types|effects)/:slug", "destination": "/en/locations/", "permanent": true },
-    { "source": "/strains/:group(types|effects)/:slug/", "destination": "/en/locations/", "permanent": true },
-    { "source": "/strains/:slug", "destination": "/en/locations/", "permanent": true },
-    { "source": "/strains/:slug/", "destination": "/en/locations/", "permanent": true },
+    { "source": "/:legacy(strain|strains)", "destination": "/en/strains/", "permanent": true },
+    { "source": "/:legacy(strain|strains)/", "destination": "/en/strains/", "permanent": true },
+    { "source": "/strains/:group(types|effects)/:slug", "destination": "/en/strains/", "permanent": true },
+    { "source": "/strains/:group(types|effects)/:slug/", "destination": "/en/strains/", "permanent": true },
+    { "source": "/strains/:slug", "destination": "/en/strains/", "permanent": true },
+    { "source": "/strains/:slug/", "destination": "/en/strains/", "permanent": true },
 
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/:legacy(catalog|menu)", "destination": "/:lang/locations/", "permanent": true },
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/:legacy(catalog|menu)/", "destination": "/:lang/locations/", "permanent": true },
@@ -37,19 +67,35 @@
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/:legacy(reels|price|prices)/", "destination": "/:lang/", "permanent": true },
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/whatsapp", "destination": "/:lang/contact/", "permanent": true },
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/whatsapp/", "destination": "/:lang/contact/", "permanent": true },
-    { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/strains/:group(types|effects)/:slug", "destination": "/:lang/locations/", "permanent": true },
-    { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/strains/:group(types|effects)/:slug/", "destination": "/:lang/locations/", "permanent": true },
-    { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/strains/:slug", "destination": "/:lang/locations/", "permanent": true },
-    { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/strains/:slug/", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(en|ru)/strains/:group(types|effects)/:slug", "destination": "/:lang/strains/", "permanent": true },
+    { "source": "/:lang(en|ru)/strains/:group(types|effects)/:slug/", "destination": "/:lang/strains/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains/:group(types|effects)/:slug", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains/:group(types|effects)/:slug/", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(en|ru)/strains/:legacy(northern-lights|green-crack|jack-herer|purple-haze|amnesia-haze|gorilla-glue|gelato|sour-diesel|granddaddy-purple|pineapple-express)", "destination": "/:lang/strains/", "permanent": true },
+    { "source": "/:lang(en|ru)/strains/:legacy(northern-lights|green-crack|jack-herer|purple-haze|amnesia-haze|gorilla-glue|gelato|sour-diesel|granddaddy-purple|pineapple-express)/", "destination": "/:lang/strains/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains/:slug", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains/:slug/", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/strains/", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/guides/choosing-flower-pattaya", "destination": "/:lang/guides/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/guides/choosing-flower-pattaya/", "destination": "/:lang/guides/", "permanent": true },
 
     { "source": "/areas/walking-street", "destination": "/en/areas/walking-street/", "permanent": true },
     { "source": "/areas/walking-street/", "destination": "/en/areas/walking-street/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/areas/:area", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(th|ar|zh|ko|ja)/areas/:area/", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(en|ru)/areas/:legacy(pattaya|soi-hollywood|naklua|pratumnak)", "destination": "/:lang/locations/", "permanent": true },
+    { "source": "/:lang(en|ru)/areas/:legacy(pattaya|soi-hollywood|naklua|pratumnak)/", "destination": "/:lang/locations/", "permanent": true },
     { "source": "/areas/:area", "destination": "/en/locations/", "permanent": true },
     { "source": "/areas/:area/", "destination": "/en/locations/", "permanent": true },
     { "source": "/delivery/:area", "destination": "/en/delivery/pattaya/", "permanent": true },
     { "source": "/delivery/:area/", "destination": "/en/delivery/pattaya/", "permanent": true },
-    { "source": "/guides/:slug", "destination": "/en/guides/legal-cannabis-tourists/", "permanent": true },
-    { "source": "/guides/:slug/", "destination": "/en/guides/legal-cannabis-tourists/", "permanent": true },
+    { "source": "/guides", "destination": "/en/guides/", "permanent": true },
+    { "source": "/guides/", "destination": "/en/guides/", "permanent": true },
+    { "source": "/about", "destination": "/en/about/", "permanent": true },
+    { "source": "/about/", "destination": "/en/about/", "permanent": true },
+    { "source": "/guides/:slug", "destination": "/en/guides/", "permanent": true },
+    { "source": "/guides/:slug/", "destination": "/en/guides/", "permanent": true },
     { "source": "/wholesale", "destination": "/en/locations/", "permanent": true },
     { "source": "/wholesale/", "destination": "/en/locations/", "permanent": true },
     { "source": "/:lang(en|ru|th|ar|zh|ko|ja)/wholesale", "destination": "/:lang/locations/", "permanent": true },

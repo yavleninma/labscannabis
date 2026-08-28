@@ -1,12 +1,42 @@
 User-agent: *
 Allow: /
 
+# ── Яндекс ───────────────────────────────────────────────────────────────────
 # Отдельная секция нужна: увидев своё имя, Яндекс полностью игнорирует "*".
-# Clean-param склеивает метки в один URL — ссылка из карточки Google Business
-# приходит с utm_source=gbp&utm_medium=organic-local&utm_campaign=gbp-website-button.
+#
+# Clean-param склеивает размеченные ссылки с чистым URL — иначе одна и та же
+# страница попадает в индекс несколько раз, а её показатели делятся между
+# копиями. Разметка приходит с трёх сторон:
+#   utm_*   — кнопка сайта в карточке Google Business шлёт
+#             utm_source=gbp&utm_medium=organic-local&utm_campaign=gbp-website-button;
+#   ysclid  — Яндекс сам дописывает его к ссылке из своей выдачи, etext — из
+#             колдунщиков, yclid и _openstat — из Директа и внешних площадок;
+#   gclid, gbraid, wbraid, gad_source, fbclid, msclkid, igshid — метки Google,
+#             Meta, Microsoft и Instagram, которые дописываются к ссылке
+#             пересылающим клиентом, а не нами.
+# Правило безымянное по пути: параметры не влияют на содержимое ни на одной
+# странице сайта. Ограничение Яндекса — 500 символов на директиву.
+#
 # Директива Host не добавляется: Яндекс от неё отказался, зеркало задаётся 301.
 User-agent: Yandex
 Allow: /
-Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&gclid&fbclid
+Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&utm_id
+Clean-param: ysclid&yclid&etext&_openstat&from&lr
+Clean-param: gclid&gbraid&wbraid&gad_source&srsltid&fbclid&msclkid&igshid
+
+# ── Ответные краулеры LLM ────────────────────────────────────────────────────
+# Явное разрешение, а не умолчание. Правовой гид и гайды писались в формате
+# «короткий вопрос — короткий проверяемый ответ со ссылкой на первоисточник»
+# именно под цитирование в ответах: терять этот канал из-за чужой правки в
+# секции "*" не хочется. Обучающие краулеры здесь не перечислены отдельно —
+# им хватает общего правила.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
 
 Sitemap: https://labscannabis.boutique/sitemap-index.xml

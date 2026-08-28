@@ -1,8 +1,25 @@
 import type { Locale } from "@/lib/i18n";
 import { loadCachedSeoContent, mergeSeoContent, type SeoContent } from "@/lib/seo-content";
+import { getPageDepth } from "@/data/page-depth";
+import { renderCopy } from "@/data/area-copy";
+import { describeLandmarkWalk } from "@/lib/geo";
 
 export type { SeoContent };
 
+/**
+ * Общий compliance-FAQ. ПОЛНОСТЬЮ он стоит только на карточной странице
+ * `labs-dispensary-pattaya`.
+ *
+ * Раньше эти три пары вопрос-ответ уходили дословно в `FAQPage` JSON-LD пяти
+ * коммерческих страниц одной локали — по документации Google это
+ * дублирующийся FAQ, из-за которого rich-результат не показывается, а сами
+ * страницы становятся частично взаимозаменяемыми. Вместе с общим абзацем
+ * «Prescription and age rules» именно этот блок держал попарную похожесть
+ * коммерческого кластера на 0.12–0.14 при 0.10 по остальному сайту.
+ *
+ * На остальных страницах кластера остаётся не больше одного вопроса, и ответ
+ * переписан под контекст конкретной страницы.
+ */
 const COMPLIANCE_FAQ: Record<Locale, { q: string; a: string }[]> = {
   en: [
     {
@@ -29,7 +46,7 @@ const COMPLIANCE_FAQ: Record<Locale, { q: string; a: string }[]> = {
     },
     {
       q: "Где проверить актуальные правила?",
-      a: "Читайте legal guide на сайте и переходите к указанным там источникам правительства Таиланда. Правила могут меняться.",
+      a: "Читайте правовой гид на сайте и переходите к указанным там источникам правительства Таиланда. Правила могут меняться.",
     },
   ],
   th: [
@@ -114,12 +131,12 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     en: {
       h1: "Buy cannabis in Pattaya at a walk-in shop on Pattaya 13 Alley",
       intro:
-        "Labs Cannabis is a physical shop at 32 Pattaya 13 Alley in South Pattaya, a 10–13 minute walk from Walking Street. Adults 20+ who hold a Thai prescription can ask about today's flower, its effects and the route before setting off. Availability is confirmed in WhatsApp and at the counter, never through a public basket.",
+        "Labs Cannabis is a physical shop at 32 Pattaya 13 Alley in South Pattaya — {walkingStreet}. Adults 20+ who hold a Thai prescription can ask what is on the shelf today and how to find the door before setting off. Availability is confirmed in WhatsApp and at the counter, never through a public basket.",
       sections: [
         {
-          h2: "Start with today's menu, not a screenshot",
+          h2: "Ask what is on the shelf today",
           body:
-            "Ask which indoor flower is fresh today and which effect you are after. The site shows the shop, the address and the way to reach a person; what is actually in the jars, batch notes and photos are discussed privately before you cross Pattaya.",
+            "Describe the aroma family you already know — pine, sweet fruit, fuel — rather than asking for a list. The site shows the shop, the address and the way to reach a person; what is actually in the jars on the day is described by that person, before you cross Pattaya.",
         },
         {
           h2: "Walk in from Walking Street or message first",
@@ -128,23 +145,26 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
         },
       ],
       faq: [
-        ...COMPLIANCE_FAQ.en,
+        {
+          q: "Can I reserve today's flower and pay for it before I arrive?",
+          a: "No. There is no basket, no payment and no reservation on this domain — selling cannabis through electronic channels is prohibited in Thailand. A message can tell you what is on the shelf and whether someone is at the counter; the handover itself happens in the shop.",
+        },
         {
           q: "How far is the shop from Walking Street?",
-          a: "The shop is on Pattaya 13 Alley in South Pattaya, about 800 m from Walking Street — 10 to 15 minutes on foot. Open Google Maps for the live route.",
+          a: "The shop is on Pattaya 13 Alley in South Pattaya: {walkingStreet}. That is measured from the shop pin; open Google Maps for the live route.",
         },
       ],
-      closing: "Message Labs Cannabis on WhatsApp about today's flower, then walk in at 32 Pattaya 13 Alley.",
+      closing: "Message Labs Cannabis on WhatsApp about what is on the shelf today, then walk in at 32 Pattaya 13 Alley.",
     },
     ru: {
       h1: "Купить каннабис в Паттайе — магазин на Pattaya 13 Alley",
       intro:
-        "Labs Cannabis — физический магазин по адресу 32 Pattaya 13 Alley в Южной Паттайе, недалеко от Walking Street. Взрослые 20+ с тайским рецептом могут заранее спросить про сегодняшние цветы, эффекты и дорогу. Наличие подтверждается в WhatsApp и у прилавка, а не через публичную корзину.",
+        "Labs Cannabis — физический магазин по адресу 32 Pattaya 13 Alley в Южной Паттайе: {walkingStreet}. Взрослые 20+ с тайским рецептом могут заранее спросить, что сегодня на полке и как найти дверь. Наличие подтверждается в WhatsApp и у прилавка, а не через публичную корзину.",
       sections: [
         {
-          h2: "Начните с меню дня, а не со скриншота",
+          h2: "Спросите, что стоит на полке сегодня",
           body:
-            "Спросите, какой indoor свежий сегодня и какой эффект вам нужен. Сайт показывает магазин, адрес и способ дойти до живого человека; что реально стоит в банках, заметки по партии и фото обсуждаются приватно до поездки через всю Паттайю.",
+            "Опишите знакомое семейство аромата — сосна, сладкий фрукт, топливо — вместо того чтобы просить список. Сайт показывает магазин, адрес и способ дойти до живого человека; что реально стоит в банках в этот день, расскажет этот человек, ещё до поездки через всю Паттайю.",
         },
         {
           h2: "Зайдите с Walking Street или напишите сначала",
@@ -153,13 +173,16 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
         },
       ],
       faq: [
-        ...COMPLIANCE_FAQ.ru,
+        {
+          q: "Можно ли отложить цветок и оплатить его до приезда?",
+          a: "Нет. На этом домене нет ни корзины, ни оплаты, ни брони: продажа каннабиса через электронные каналы в Таиланде запрещена. В сообщении расскажут, что сегодня на полке и есть ли кто-то за прилавком; сама передача происходит в магазине.",
+        },
         {
           q: "Как далеко от Walking Street?",
-          a: "Магазин на Pattaya 13 Alley в Южной Паттайе, примерно 800 м от Walking Street — 10–15 минут пешком. Живой маршрут — в Google Maps.",
+          a: "Магазин на Pattaya 13 Alley в Южной Паттайе: {walkingStreet}. Значение посчитано от пина магазина; живой маршрут — в Google Maps.",
         },
       ],
-      closing: "Напишите в WhatsApp про сегодняшние цветы, затем заходите на 32 Pattaya 13 Alley.",
+      closing: "Напишите в WhatsApp, что сегодня на полке, затем заходите на 32 Pattaya 13 Alley.",
     },
     th: {
       h1: "ซื้อกัญชา พัทยา — ร้านบนซอยพัทยา 13",
@@ -333,41 +356,41 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
   // отвечает на вопрос «от чего зависит цена», а не называет её.
   "cheap-weed-pattaya": {
     en: {
-      h1: "Affordable cannabis in Pattaya — what actually changes the price",
+      h1: "What changes the price of cannabis in Pattaya",
       intro:
         "Thai law treats a published cannabis price as advertising, so Labs Cannabis does not list one on this site — and neither should any dispensary that intends to keep its licence. What can be explained honestly is why one gram costs more than another, so you walk in knowing what you are looking at. What is on the shelf today is a question for WhatsApp +66 66 080 6784.",
       sections: [
         {
           h2: "Why one gram costs more than another",
           body:
-            "Indoor flower costs more to grow than greenhouse or outdoor, and the difference shows up in density, smell and the quality of the trim. A slow cure, hand trimming and small batches all add cost, and so does a strain that yields badly. Flower that costs less in Pattaya is usually older, drier, machine-trimmed or grown outdoors — enough for some people, a disappointment for others. Ask to see and smell what is in the jar before you decide.",
-        },
-        {
-          h2: "Why there is no number on this page",
-          body:
-            "Since June 2025 cannabis flower is a controlled herb: it is handed over in the shop, to adults 20 or older who hold a prescription issued in Thailand, and advertising it — the price included — is what gets a dispensary suspended. So there is no list here, no basket and no payment. Message WhatsApp and ask what is in the shop today; the answer comes from a person, not from a page.",
+            "Indoor flower costs more to grow than greenhouse or outdoor, and the difference shows up in density, smell and the quality of the trim. A slow cure, hand trimming and small batches all add cost, and so does a strain that yields badly. Flower that costs less in Pattaya is usually older, drier, machine-trimmed or grown outdoors — enough for some people, a disappointment for others.",
         },
       ],
-      faq: COMPLIANCE_FAQ.en,
+      faq: [
+        {
+          q: "If nobody quotes a figure, what is worth asking in a message?",
+          a: "Ask what is on the shelf today, how it was grown — indoor, greenhouse or outdoor — and how recently it was cured. Those three answers explain most of the difference between one jar and another, and none of them is a price.",
+        },
+      ],
       closing: "Ask on WhatsApp what is on the shelf today, or open Google Maps and come to 32 Pattaya 13 Alley — adults 20+ with a Thai prescription.",
     },
     ru: {
-      h1: "Доступный каннабис в Паттайе — от чего на самом деле зависит цена",
+      h1: "От чего зависит цена каннабиса в Паттайе",
       intro:
-        "В Таиланде опубликованная цена на каннабис считается рекламой, поэтому Labs Cannabis не публикует её на сайте — как и любой диспенсери, который собирается сохранить лицензию. Зато можно честно объяснить, из-за чего один грамм дороже другого, чтобы вы пришли подготовленными. Что сегодня на витрине — вопрос для WhatsApp +66 66 080 6784.",
+        "В Таиланде опубликованная цена на каннабис считается рекламой, поэтому Labs Cannabis не публикует её на сайте — как и любой магазин каннабиса, который собирается сохранить лицензию. Зато можно честно объяснить, из-за чего один грамм дороже другого, чтобы вы пришли подготовленными. Что сегодня на витрине — вопрос для WhatsApp +66 66 080 6784.",
       sections: [
         {
           h2: "Из-за чего один грамм дороже другого",
           body:
-            "Indoor дороже теплицы и улицы в выращивании, и разница видна по плотности, запаху и качеству обрезки. Медленная просушка, ручной трим и маленькие партии добавляют себестоимости, как и сорт с низкой урожайностью. То, что в Паттайе стоит меньше, обычно лежалое, пересушенное, обрезанное машиной или выращенное на улице: кому-то этого достаточно, кого-то разочарует. Попросите посмотреть и понюхать то, что в банке, прежде чем решать.",
-        },
-        {
-          h2: "Почему на этой странице нет цифры",
-          body:
-            "С июня 2025 года цветок — контролируемая трава: он выдаётся в магазине взрослым от 20 лет с рецептом, выданным в Таиланде, а его реклама, включая цену, — это то, за что диспенсери приостанавливают. Поэтому здесь нет ни списка, ни корзины, ни оплаты. Напишите в WhatsApp и спросите, что сегодня в магазине: отвечает человек, а не страница.",
+            "Индор — выращивание в помещении — дороже теплицы и улицы, и разница видна по плотности, запаху и качеству обрезки. Медленная просушка, ручной трим и маленькие партии добавляют себестоимости, как и сорт с низкой урожайностью. То, что в Паттайе стоит меньше, обычно лежалое, пересушенное, обрезанное машиной или выращенное на улице: кому-то этого достаточно, кого-то разочарует.",
         },
       ],
-      faq: COMPLIANCE_FAQ.ru,
+      faq: [
+        {
+          q: "Если цифру никто не называет, о чём тогда писать?",
+          a: "Спросите, что сегодня на полке, как это выращено — индор, теплица или улица — и насколько недавно просушено. Эти три ответа объясняют большую часть разницы между банками, и ни один из них не является ценой.",
+        },
+      ],
       closing: "Спросите в WhatsApp, что сегодня на витрине, или откройте Google Maps и приезжайте на 32 Pattaya 13 Alley — для взрослых 20+ с тайским рецептом.",
     },
     th: {
@@ -468,7 +491,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
   },
   "best-cannabis-shop-pattaya": {
     en: {
-      h1: "Best cannabis shop in Pattaya — a listing you can verify",
+      h1: "Comparing cannabis shops in Pattaya — a listing you can verify",
       intro:
         "Guests comparing cannabis shops in Pattaya usually want a verifiable Google listing, a walk-in address and a direct chat. Labs Cannabis has all three at 32 Pattaya 13 Alley in South Pattaya. Open the live LABS DISPENSARY listing for the current rating, photos and hours — those change, and Google is the source of truth.",
       sections: [
@@ -483,26 +506,36 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
             "Open the Google profile for photos, reviews and directions. Then message WhatsApp about today's flower and its effects. A high rating is not a substitute for looking at today's jars at the counter.",
         },
       ],
-      faq: COMPLIANCE_FAQ.en,
+      faq: [
+        {
+          q: "What should I compare, if no shop publishes a menu or a price?",
+          a: "Compare what is checkable: a listing with a real address and current photos, a licence displayed where you can read it, staff who ask for age and documents before discussing anything, and a person who answers a message. The legal guide on this site explains why the menu and the price cannot be part of that comparison.",
+        },
+      ],
       closing: "Open the Google listing, then message WhatsApp if 32 Pattaya 13 Alley looks like the right stop.",
     },
     ru: {
-      h1: "Лучший каннабис-шоп в Паттайе — карточка, которую можно проверить",
+      h1: "Как сравнивать каннабис-шопы в Паттайе — карточка, которую можно проверить",
       intro:
         "Сравнивая шопы в Паттайе, гости обычно хотят проверяемую карточку Google, адрес и прямой чат. У Labs Cannabis есть всё три: 32 Pattaya 13 Alley, Южная Паттайя. Актуальные оценка, фото и часы — в живой карточке LABS DISPENSARY: они меняются, и источник правды именно Google.",
       sections: [
         {
           h2: "Что здесь значит «лучший»",
           body:
-            "Страница не ранжирует все магазины Паттайи. Она объясняет, зачем проверяют Labs Cannabis: физический адрес в переулке у Walking Street, лицензированный диспенсери, WhatsApp, на который отвечает человек, и Google-профиль, который можно открыть до поездки.",
+            "Страница не ранжирует все магазины Паттайи. Она объясняет, зачем проверяют Labs Cannabis: физический адрес в переулке у Walking Street, лицензия на стене, WhatsApp, на который отвечает человек, и Google-профиль, который можно открыть до поездки.",
         },
         {
-          h2: "Проверьте listing, потом спросите меню",
+          h2: "Проверьте карточку, потом спросите меню",
           body:
             "Откройте Google: фото, отзывы, маршрут. Затем напишите в WhatsApp про сегодняшние цветы и эффекты. Высокая оценка не заменяет взгляд в банки у прилавка.",
         },
       ],
-      faq: COMPLIANCE_FAQ.ru,
+      faq: [
+        {
+          q: "Что сравнивать, если ни один магазин не публикует меню и цену?",
+          a: "Сравнивайте проверяемое: карточку с реальным адресом и свежими фотографиями, лицензию на виду, сотрудников, которые спрашивают возраст и документы до разговора о товаре, и живого человека в переписке. Почему меню и цена не могут быть частью этого сравнения — в правовом гиде на сайте.",
+        },
+      ],
       closing: "Откройте карточку Google и напишите в WhatsApp, если 32 Pattaya 13 Alley — ваш вариант.",
     },
     th: {
@@ -766,57 +799,74 @@ export function seoDescription(content: SeoContent, max = 160): string {
 }
 
 /**
- * Слаги, которым временно разрешено остаться без собственного контента.
- *
- * Список обязан оставаться пустым. `how-to-buy-cannabis-pattaya` и
- * `cannathai-wholesale-cannabis-thailand` контента не имеют ни в `PAGE_COPY`,
- * ни в `content-cache`, поэтому они и не стоят в allowlist индексации
- * (`src/lib/index-policy.mjs`) — а `loadSeoContent` вызывается только для
- * indexable-страниц. Как только слаг возвращают в индекс без текста, сборка
- * обязана упасть здесь, а не тихо отдать generic-заглушку: именно так эти два
- * слага и превратились бы в тонкие дубли.
- */
-const CONTENT_GAP_ALLOWLIST: ReadonlySet<string> = new Set();
-
-/**
  * Контент SEO-страницы: ручная копия (приоритет) + разделы и FAQ из
  * `content-cache`. Если нет ни того, ни другого — сборка падает с именем слага.
  */
+/**
+ * Подстановка вычисленных расстояний в готовый текст.
+ *
+ * Раньше в этом файле стояли две рукописные и РАЗНЫЕ оценки пути от Walking
+ * Street — одна в лиде, другая в FAQ той же страницы, — причём вторая уезжала
+ * ещё и в FAQPage JSON-LD. Отчёт T-03 их не поймал, потому что грепом
+ * проверяли `visit-copy.ts`, `area-routes.ts` и `page-depth.ts`, а `content.ts`
+ * в список не попал. Теперь значение одно и приходит из `describeLandmarkWalk()`
+ * — того же гаверсинуса, что и на страницах районов.
+ */
+function renderWalkPlaceholders(content: SeoContent, locale: Locale): SeoContent {
+  const vars = {
+    walkingStreet: describeLandmarkWalk("walking-street", locale) ?? "",
+    jomtien: describeLandmarkWalk("jomtien-beach", locale) ?? "",
+  };
+  const render = (text: string) => renderCopy(text, vars);
+  return {
+    ...content,
+    h1: render(content.h1),
+    intro: render(content.intro),
+    sections: content.sections.map((section) => ({ ...section, body: render(section.body) })),
+    faq: content.faq.map((item) => ({ q: item.q, a: render(item.a) })),
+    closing: render(content.closing),
+  };
+}
+
 export function loadSeoContent(locale: Locale, slug: string): SeoContent {
   const curated = PAGE_COPY[slug]?.[locale];
   const cached = loadCachedSeoContent(locale, slug);
+  /**
+   * Добавочная глубина (волна 2) приклеивается последней и тем же
+   * `mergeSeoContent`: заголовки и вопросы дедуплицируются, поэтому раздел,
+   * тема которого уже есть в ручной копии или в кэше, просто не отрисуется.
+   */
+  const depth = getPageDepth(locale, slug);
+  const withDepth = (content: SeoContent): SeoContent =>
+    depth ? mergeSeoContent(content, { ...content, ...depth }) : content;
 
-  if (curated && cached) return mergeSeoContent({ ...curated, source: "fallback" }, cached);
-  if (curated) return { ...curated, source: "fallback" };
-  if (cached) return cached;
-
-  if (!CONTENT_GAP_ALLOWLIST.has(slug)) {
-    throw new Error(
-      `No SEO content for "${slug}" in locale "${locale}": add it to PAGE_COPY (src/lib/content.ts) ` +
-        `or to content-cache/${locale}/${slug}.json before making the page indexable.`,
-    );
+  if (curated && cached) {
+    return renderWalkPlaceholders(withDepth(mergeSeoContent({ ...curated, source: "fallback" }, cached)), locale);
   }
+  if (curated) return renderWalkPlaceholders(withDepth({ ...curated, source: "fallback" }), locale);
+  if (cached) return renderWalkPlaceholders(withDepth(cached), locale);
 
-  return {
-    h1: "Labs Cannabis Pattaya menu inquiry",
-    intro:
-      "Product-led cannabis menu information for adults 20+ in Pattaya: fresh flower, effects, location, and WhatsApp contact before visiting Labs Cannabis.",
-    sections: [
-      {
-        h2: "Check the fresh menu first",
-        body:
-          "Use WhatsApp to ask what flower is fresh today, which effects match your mood, and what details are available for current strains. The website is a storefront, not a public cart.",
-      },
-      {
-        h2: "Plan pickup or delivery possibility",
-        body:
-          "Labs Cannabis is at 32 Pattaya 13 Alley in South Pattaya. Message first if you want to check that someone is at the counter before you set off.",
-      },
-    ],
-    faq: COMPLIANCE_FAQ[locale] ?? COMPLIANCE_FAQ.en,
-    closing: "Message Labs Cannabis on WhatsApp for today's menu, effects, freshness, and directions.",
-    source: "fallback",
-  };
+  /**
+   * Единственный безопасный дефолт здесь — отказ сборки.
+   *
+   * Раньше ниже лежал фолбэк-объект: H1 «Labs Cannabis Pattaya menu inquiry»,
+   * intro про «fresh flower, effects», разделы «Check the fresh menu first» и
+   * «Plan pickup or delivery possibility». Он был недостижим только потому, что
+   * `CONTENT_GAP_ALLOWLIST` был пустым `Set`, — одной строки в этом множестве
+   * хватило бы, чтобы меню, подбор по эффекту и доставка вышли в публикацию,
+   * причём по-английски на любой из семи локалей. Ни одна из тех формулировок
+   * не ловится линтером: правило `delivery-offer-en` не знает «pickup or
+   * delivery possibility», а правил на «menu» и «effects» нет вовсе.
+   *
+   * Слаг без текста не должен становиться indexable — за этим следит allowlist
+   * в `src/lib/index-policy.mjs`, а `loadSeoContent` вызывается только для
+   * indexable-страниц. Если такое всё же произошло, сборка обязана упасть с
+   * именем слага, а не тихо отдать рекламную заглушку.
+   */
+  throw new Error(
+    `No SEO content for "${slug}" in locale "${locale}": add it to PAGE_COPY (src/lib/content.ts) ` +
+      `or to content-cache/${locale}/${slug}.json before making the page indexable.`,
+  );
 }
 
 export const HOME_FAQ = COMPLIANCE_FAQ.en;

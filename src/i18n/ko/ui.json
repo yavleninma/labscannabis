@@ -13,6 +13,7 @@
     "title": "게스트 리뷰",
     "subtitle": "Google {rating}★ · {count}개",
     "readAll": "Google {count}개 리뷰 →",
+    "checkedOn": "{date} 확인",
     "translatedNote": "Google 원본 리뷰 번역 ({lang})",
     "sourceLang": {
       "en": "영어",
@@ -31,22 +32,10 @@
     "closedNow": "영업 종료 · {open} 오픈",
     "openMaps": "Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "이 웹사이트에는 public checkout, 온라인 결제, order form 또는 확정된 배송/판매가 없습니다. 개별 세부 사항은 WhatsApp에서 논의합니다."
-  },
   "footer": {
     "disclaimer": "Labs Cannabis (구 Labs Dispensary). 파타야 허가 대마초 소매점. 만 20세 이상만 이용 가능합니다.",
     "rights": "모든 권리 보유.",
     "listedAs": "{brand} — Google Maps에는 {listing}"
-  },
-  "ageGate": {
-    "kicker": "성인 20+ 전용",
-    "title": "만 20세 이상?",
-    "text": "이 사이트는 성인 20+ 전용입니다. 만 20세 이상이며 파타야 대마 메뉴 정보 또는 태국 도매 문의를 보려는 경우에만 계속하세요.",
-    "note": "이 웹사이트에는 public checkout, 온라인 결제, order form 또는 확정된 배송/판매가 없습니다. 개별 세부 사항은 WhatsApp에서 논의합니다.",
-    "enter": "예, 20+",
-    "exit": "나가기"
   },
   "contact": {
     "title": "연락",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "홈",
     "contact": "연락",
-    "wholesale": "도매"
+    "wholesale": "도매",
+    "breadcrumb": "탐색 경로"
   },
   "langSwitcher": {
     "label": "언어 선택"
@@ -97,7 +87,21 @@
     "legalGuide": "관광객 법률 가이드",
     "labsDispensary": "LABS DISPENSARY 파타야",
     "walkingStreetRoute": "Walking Street에서 오는 길",
-    "relatedTitle": "관련 페이지"
+    "aboutUs": "매장 소개",
+    "guidesHub": "가이드 전체",
+    "prescriptionGuide": "처방전이 필요한가",
+    "firstVisitGuide": "첫 방문",
+    "choosingGuide": "꽃 고르는 법",
+    "strainsHub": "품종 노트",
+    "whiteWidowStrain": "White Widow 품종",
+    "blueDreamStrain": "Blue Dream 품종",
+    "ogKushStrain": "OG Kush 품종",
+    "soiBuakhaoRoute": "소이 부아카오에서 가는 길",
+    "jomtienRoute": "좀티엔에서 가는 길",
+    "centralPattayaRoute": "파타야 중심에서 가는 길",
+    "relatedTitle": "관련 페이지",
+    "homePage": "파타야 대마 매장",
+    "contactPage": "방문 전 문의"
   },
   "locations": {
     "title": "파타야 대마초 — 모든 페이지",

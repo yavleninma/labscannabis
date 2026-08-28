@@ -1,0 +1,33 @@
+---
+import StrainArticle from "@/components/StrainArticle.astro";
+import RetiredCommercialPage from "@/components/RetiredCommercialPage.astro";
+import { type Locale } from "@/lib/i18n";
+import { getAvailableLocales } from "@/lib/index-policy.mjs";
+import { getStrainPage } from "@/data/strain-pages";
+
+/**
+ * Локали без вычитанного носителем текста страницу НЕ получают вовсе.
+ *
+ * Раньше маршрут генерировался на всех семи локалях, а `vercel.json` пятерым из
+ * них отдавал 301 на `/:lang/locations/` — то есть половина набора шла первым
+ * путём, половина вторым, и `/:lang/strains/` провалилось между ними, отдавая
+ * 200 на заглушку в 508 символов без единой исходящей ссылки в свой же раздел.
+ * Решение сведено к одному: список локалей берётся из `getAvailableLocales()`
+ * (тот же источник, что у переключателя языка), а 301 в `vercel.json` остаётся
+ * единственным обработчиком остальных пяти. То же самое уже сделано в
+ * `src/pages/[lang]/areas/[area].astro`.
+ */
+export function getStaticPaths() {
+  return getAvailableLocales("strains/og-kush").map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const pathSuffix = "strains/og-kush";
+const copy = getStrainPage("og-kush", locale);
+---
+
+{copy ? (
+  <StrainArticle locale={locale} pathSuffix={pathSuffix} copy={copy} />
+) : (
+  <RetiredCommercialPage locale={locale} pathSuffix={pathSuffix} />
+)}

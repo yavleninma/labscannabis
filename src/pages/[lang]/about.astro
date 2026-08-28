@@ -1,0 +1,135 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import Footer from "@/components/Footer.astro";
+import { LOCALES, localePath, type Locale } from "@/lib/i18n";
+import { ABOUT_COPY } from "@/data/about-copy";
+import { BUSINESS_ENTITY, getPublishableLicense } from "@/data/business-entity";
+import { GOOGLE } from "@/data/site";
+import { t } from "@/lib/ui";
+
+export function getStaticPaths() {
+  return LOCALES.map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const copy = ABOUT_COPY[locale] ?? ABOUT_COPY.en;
+const ui = t(locale);
+const pathSuffix = "about";
+/**
+ * Лицензия печатается ТОЛЬКО через гейт. `getPublishableLicense()` отдаёт `null`,
+ * пока владелец не сверил номер, орган и срок с бумагой (O-02), и тогда в HTML
+ * не уходит ни одного поля — страница вместо номера объясняет, где документ
+ * можно прочитать. Обратно на литерал не переписывать.
+ */
+const license = getPublishableLicense();
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: copy.kicker, pathSuffix },
+];
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={pathSuffix}
+  title={copy.title}
+  description={copy.description}
+  pageType="about"
+  breadcrumbs={breadcrumbs}
+  faq={copy.faq}
+>
+  <main class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.lead}</p>
+
+      <section class="mt-8" aria-labelledby="about-nap-title">
+        <h2 id="about-nap-title" class="text-xl font-bold text-emerald-dim">{copy.napTitle}</h2>
+        <dl class="card-surface mt-3 space-y-3 p-5">
+          <div>
+            <dt class="text-sm font-semibold text-emerald-dim">{copy.napListingLabel}</dt>
+            <dd class="mt-1 text-base text-text">{BUSINESS_ENTITY.listingName}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold text-emerald-dim">{copy.napSiteLabel}</dt>
+            <dd class="mt-1 text-base text-text">{BUSINESS_ENTITY.siteName}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold text-emerald-dim">{copy.napAddressLabel}</dt>
+            <dd class="mt-1 text-base text-text">
+              <address class="not-italic">{BUSINESS_ENTITY.addressLine}</address>
+            </dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold text-emerald-dim">{copy.napPhoneLabel}</dt>
+            <dd class="mt-1 text-base text-text">{BUSINESS_ENTITY.phone}</dd>
+          </div>
+          <div>
+            <dt class="text-sm font-semibold text-emerald-dim">{copy.napSiteUrlLabel}</dt>
+            <dd class="mt-1 text-base text-text">{BUSINESS_ENTITY.domain}</dd>
+          </div>
+        </dl>
+      </section>
+
+      {copy.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      <section class="mt-9" aria-labelledby="about-license-title">
+        <h2 id="about-license-title" class="text-xl font-bold text-emerald-dim">{copy.licenseTitle}</h2>
+        {copy.licenseBody.map((paragraph) => (
+          <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+        ))}
+        {license && (
+          <dl class="card-surface mt-4 space-y-2 p-4 text-base text-text-muted">
+            <div><dt class="inline font-semibold text-text">№</dt> <dd class="inline">{license.number}</dd></div>
+            <div><dd class="inline">{license.authority}</dd></div>
+            <div><dd class="inline">{license.issuedOn} — {license.validUntil}</dd></div>
+          </dl>
+        )}
+      </section>
+
+      <section class="mt-9">
+        <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
+        {copy.faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <nav class="mt-9 grid gap-3" aria-label={copy.napTitle}>
+        <a
+          href={GOOGLE.listingUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          data-track="contact_click"
+          data-channel="maps"
+          data-placement="about"
+        >{BUSINESS_ENTITY.listingName}</a>
+        <a
+          href={localePath(locale, "locations")}
+          class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          data-track="nav_click"
+          data-placement="about"
+          data-target="locations"
+          data-seo-context-link
+        >{ui.footerSeo.allPages}</a>
+      </nav>
+    </div>
+    <ContactRail locale={locale} intent="visit" placement="about" />
+  </main>
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="about" />
+  <MapBlock locale={locale} />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

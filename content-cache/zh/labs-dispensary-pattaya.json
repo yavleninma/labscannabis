@@ -4,7 +4,7 @@
   "sections": [
     {
       "h2": "店在什么位置",
-      "body": "地址是南芭提雅春武里府 32 Pattaya 13 Alley。距离 Walking Street 约 800 米，步行 10–13 分钟，这个数字由坐标算出，而不是口号。坐出租车或摩托车时，请报 Pattaya 13 Alley 这条巷子的名字，而不是店名，然后找 LABS DISPENSARY 的招牌。定位以 Google 商家页面为准，页面信息也会变动，出发前请先打开看看。"
+      "body": "地址是南芭提雅春武里府 32 Pattaya 13 Alley。{walkingStreet}，这个数字由坐标算出，而不是口号。坐出租车或摩托车时，请报 Pattaya 13 Alley 这条巷子的名字，而不是店名，然后找 LABS DISPENSARY 的招牌。定位以 Google 商家页面为准，页面信息也会变动，出发前请先打开看看。"
     },
     {
       "h2": "到店是怎么回事",

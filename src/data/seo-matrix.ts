@@ -17,6 +17,23 @@ export interface SeoPage {
   keywords: Record<Locale, string[]>;
 }
 
+/**
+ * Реестр коммерческих слагов, которые рендерит `src/pages/[lang]/[seoSlug].astro`.
+ *
+ * ВАЖНО (волна 2): новые страницы волны — `about`, `guides`, `guides/*`,
+ * `strains`, `strains/*` — в `SEO_PAGES` НЕ добавляются и добавлены быть не
+ * могут. У каждой из них собственный маршрут в `src/pages/[lang]/`, и запись в
+ * этом массиве породила бы второй генератор для того же URL, то есть конфликт
+ * маршрутов на сборке. Их единственный реестр — `INDEX_POLICY_RULES` в
+ * `src/lib/index-policy.mjs` (оттуда же считается
+ * `EXPECTED_INDEXABLE_PAGE_COUNT`), подписи ссылок — `SEO_LINK_LABEL_KEYS` в
+ * `src/data/footer-seo-links.ts`.
+ *
+ * `AREAS` ниже остаётся списком гео-слагов, но страница района теперь
+ * генерируется только при наличии авторского маршрута в `src/data/area-routes.ts`:
+ * район без маршрута не попадает в `getStaticPaths` вовсе, а его прежний URL
+ * закрыт 301 в `vercel.json`.
+ */
 export const AREAS: Area[] = [
   {
     slug: "pattaya",
@@ -38,7 +55,11 @@ export const AREAS: Area[] = [
     name: {
       en: ADDRESS_ALIAS.nearbyLandmark,
       ru: ADDRESS_ALIAS.nearbyLandmark,
-      th: "ซอยฮอลลีวูด",
+      // Транслитерация «ซอยฮอลลีวูด» уезжала в <title>, og:title и twitter:title
+      // тайской страницы доставки. Латиница — единственная разрешённая форма
+      // ориентира (`ADDRESS_ALIAS.nearbyLandmark`), и на всех семи локалях она
+      // одна: иначе карточку склеивает с чужим магазином на соседней улице.
+      th: ADDRESS_ALIAS.nearbyLandmark,
       ar: ADDRESS_ALIAS.nearbyLandmark,
       zh: ADDRESS_ALIAS.nearbyLandmark,
       ko: ADDRESS_ALIAS.nearbyLandmark,
@@ -132,23 +153,27 @@ export const SEO_PAGES: SeoPage[] = [
     slug: "cheap-weed-pattaya",
     intent: "buy",
     area: "pattaya",
+    // Ключ остаётся в URL и в теле страницы, интент не теряется. Из заголовка
+    // уходит оценка («доступный», «affordable»): хвалить доступность
+    // контролируемой травы в сниппете выдачи — это и есть реклама, а доктрины
+    // «эхо поискового запроса» у тайского регулятора не существует.
     titleTemplate: {
-      en: "Affordable cannabis in Pattaya | What changes the price | Labs Cannabis",
-      ru: "Доступный каннабис в Паттайе | от чего зависит цена",
-      th: "กัญชาราคาสมเหตุสมผล พัทยา | อะไรทำให้ราคาต่างกัน",
-      ar: "قنب بأسعار معقولة في باتايا | ما الذي يغيّر السعر",
-      zh: "芭提雅实惠大麻 | 价格由什么决定",
-      ko: "파타야 합리적인 대마초 | 가격을 좌우하는 것",
-      ja: "パタヤの手頃な大麻 | 価格を左右するもの",
+      en: "What changes the price of cannabis in Pattaya | Labs Cannabis",
+      ru: "От чего зависит цена каннабиса в Паттайе | Labs Cannabis",
+      th: "อะไรทำให้ราคากัญชาในพัทยาต่างกัน | Labs Cannabis",
+      ar: "ما الذي يغيّر سعر القنب في باتايا | Labs Cannabis",
+      zh: "芭提雅大麻的价格由什么决定 | Labs Cannabis",
+      ko: "파타야 대마초 가격을 좌우하는 것 | Labs Cannabis",
+      ja: "パタヤの大麻の価格を左右するもの | Labs Cannabis",
     },
     h1Template: {
-      en: "Affordable cannabis in Pattaya — what actually changes the price",
-      ru: "Доступный каннабис в Паттайе — от чего зависит цена",
-      th: "กัญชาราคาสมเหตุสมผลในพัทยา — อะไรทำให้ราคาต่างกัน",
-      ar: "قنب بأسعار معقولة في باتايا — ما الذي يغيّر السعر",
-      zh: "芭提雅实惠大麻 — 价格由什么决定",
-      ko: "파타야의 합리적인 대마초 — 가격을 좌우하는 것",
-      ja: "パタヤの手頃な大麻 — 価格を左右するもの",
+      en: "What changes the price of cannabis in Pattaya",
+      ru: "От чего зависит цена каннабиса в Паттайе",
+      th: "อะไรทำให้ราคากัญชาในพัทยาต่างกัน",
+      ar: "ما الذي يغيّر سعر القنب في باتايا",
+      zh: "芭提雅大麻的价格由什么决定",
+      ko: "파타야 대마초 가격을 좌우하는 것",
+      ja: "パタヤの大麻の価格を左右するもの",
     },
     keywords: {
       en: ["cheap weed pattaya", "affordable cannabis pattaya", "cannabis prices pattaya"],
@@ -173,14 +198,17 @@ export const SEO_PAGES: SeoPage[] = [
       ko: "파타야 대마초 매장 정보 | 지도와 경로",
       ja: "パタヤの大麻店情報 | 地図と経路",
     },
+    // Title уже был нейтральным («Cannabis shop information in Pattaya»), а H1
+    // оставался рекламным — решение было применено наполовину. Теперь оба поля
+    // говорят про сравнение, а не про превосходство.
     h1Template: {
-      en: "Best cannabis shop in Pattaya — a listing you can verify",
-      ru: "Лучший каннабис-шоп в Паттайе — карточка, которую можно проверить",
-      th: "ร้านกัญชาดีที่สุด พัทยา — ร้านที่ตรวจสอบได้",
-      ar: "أفضل متجر قنب في باتايا — بطاقة يمكن التحقق منها",
-      zh: "芭提雅最佳大麻店 — 可以核验的商家页面",
-      ko: "파타야 최고 매장 — 확인할 수 있는 등록 정보",
-      ja: "パタヤ最高の店 — 確認できる掲載情報",
+      en: "Comparing cannabis shops in Pattaya — a listing you can verify",
+      ru: "Как сравнивать каннабис-шопы в Паттайе — карточка, которую можно проверить",
+      th: "เปรียบเทียบร้านกัญชาในพัทยา — ร้านที่ตรวจสอบได้",
+      ar: "كيف تقارن متاجر القنب في باتايا — بطاقة يمكن التحقق منها",
+      zh: "如何比较芭提雅的大麻店 — 可以核验的商家页面",
+      ko: "파타야 대마초 매장 비교하기 — 확인할 수 있는 등록 정보",
+      ja: "パタヤの大麻店の比べ方 — 確認できる掲載情報",
     },
     keywords: {
       en: ["best cannabis shop pattaya", "best dispensary pattaya", "top weed shop pattaya"],

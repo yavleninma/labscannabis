@@ -9,6 +9,7 @@ import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { SEO_PAGES } from "@/data/seo-matrix";
 import { GOOGLE, getMapsDirectionsUrl } from "@/data/site";
 import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { SEO_LINK_LABEL_KEYS } from "@/data/footer-seo-links";
 import { loadSeoContent, seoDescription } from "@/lib/content";
 import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
@@ -45,10 +46,10 @@ const retiredCopy: Record<Locale, RetiredCopy> = {
   },
   ru: {
     title: "Страница закрыта | Labs Cannabis Паттайя",
-    description: "Эта старая поисковая страница закрыта. Используйте актуальную карточку Maps, контакты и legal guide с официальными источниками.",
+    description: "Эта старая поисковая страница закрыта. Используйте актуальную карточку Maps, контакты и правовой гид с официальными источниками.",
     h1: "Эта страница больше не используется",
     lead: "Она дублировала другой интент или зависела от коммерческих данных, которые здесь не поддерживаются.",
-    body: "Актуальный пин и маршрут находятся в Google Maps. Контактная страница нужна только для координации визита, а legal guide ведёт на источники правительства Таиланда.",
+    body: "Актуальный пин и маршрут находятся в Google Maps. Контактная страница нужна только для координации визита, а правовой гид ведёт на источники правительства Таиланда.",
     maps: "Открыть Google Maps",
     contact: "Контакты и адрес",
     legal: "Актуальные правила для туристов",
@@ -115,9 +116,22 @@ const retired = retiredCopy[locale] ?? retiredCopy.en;
 const content = policy.indexable ? loadSeoContent(locale, slug) : null;
 const title = content ? page.titleTemplate[locale] : retired.title;
 const description = content ? seoDescription(content) : retired.description;
+/**
+ * Последняя крошка — короткая подпись интента, а не H1.
+ *
+ * H1 этих страниц намеренно содержит сам запрос («Best cannabis shop in
+ * Pattaya», «Дешёвый каннабис в Паттайе»), и compliance-линтер вырезает H1 из
+ * проверяемого текста ровно поэтому. Крошка, повторяющая H1 дословно, вернула
+ * бы рекламный регистр в проверяемое тело страницы — сборка на этом падает, и
+ * правильно падает. Плюс крошка длиной в заголовок бесполезна и человеку.
+ */
+const crumbLabelKey = SEO_LINK_LABEL_KEYS[slug];
+const crumbLabel = policy.indexable
+  ? (crumbLabelKey ? ui.footerSeo[crumbLabelKey] : content!.h1)
+  : retired.h1;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
-  { name: policy.indexable ? content!.h1 : retired.h1, pathSuffix: slug },
+  { name: crumbLabel, pathSuffix: slug },
 ];
 ---
 

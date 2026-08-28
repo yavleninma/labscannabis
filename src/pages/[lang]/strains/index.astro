@@ -1,0 +1,102 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import Footer from "@/components/Footer.astro";
+import RetiredCommercialPage from "@/components/RetiredCommercialPage.astro";
+import { localePath, type Locale } from "@/lib/i18n";
+import { STRAINS_INDEX_COPY } from "@/data/strain-pages";
+import { getAvailableLocales, getIndexPolicy } from "@/lib/index-policy.mjs";
+import { t } from "@/lib/ui";
+
+/**
+ * Локали без вычитанного носителем текста страницу НЕ получают вовсе.
+ *
+ * Раньше маршрут генерировался на всех семи локалях, а `vercel.json` пятерым из
+ * них отдавал 301 на `/:lang/locations/` — то есть половина набора шла первым
+ * путём, половина вторым, и `/:lang/strains/` провалилось между ними, отдавая
+ * 200 на заглушку в 508 символов без единой исходящей ссылки в свой же раздел.
+ * Решение сведено к одному: список локалей берётся из `getAvailableLocales()`
+ * (тот же источник, что у переключателя языка), а 301 в `vercel.json` остаётся
+ * единственным обработчиком остальных пяти. То же самое уже сделано в
+ * `src/pages/[lang]/areas/[area].astro`.
+ */
+export function getStaticPaths() {
+  return getAvailableLocales("strains").map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const copy = STRAINS_INDEX_COPY[locale];
+const ui = t(locale);
+const pathSuffix = "strains";
+const items = (copy?.items ?? []).filter((item) => getIndexPolicy(locale, item.suffix).indexable);
+const breadcrumbs = copy
+  ? [
+      { name: ui.nav.home, pathSuffix: "" },
+      { name: copy.kicker, pathSuffix },
+    ]
+  : [];
+---
+
+{copy ? (
+  <PageLayout
+    locale={locale}
+    pathSuffix={pathSuffix}
+    title={copy.title}
+    description={copy.description}
+    pageType="strain"
+    breadcrumbs={breadcrumbs}
+    faq={copy.faq}
+  >
+    <main class="px-4 pt-8 pb-6">
+      <div class="mx-auto max-w-lg">
+        <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
+        <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+        <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.lead}</p>
+
+        <section class="mt-8" aria-labelledby="strains-list-title">
+          <h2 id="strains-list-title" class="text-xl font-bold text-emerald-dim">{copy.itemsTitle}</h2>
+          <ul class="mt-4 grid gap-4">
+            {items.map((item) => (
+              <li class="card-surface p-4">
+                <a
+                  href={localePath(locale, item.suffix)}
+                  class="text-base font-bold text-emerald-dim hover:underline"
+                  data-track="nav_click"
+                  data-placement="strain"
+                  data-target={item.suffix}
+                  data-seo-context-link
+                >{item.label}</a>
+                <p class="mt-2 text-base leading-relaxed text-text-muted">{item.blurb}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        {copy.sections.map((section) => (
+          <section class="mt-9">
+            <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+            {section.body.map((paragraph) => (
+              <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+            ))}
+          </section>
+        ))}
+
+        <section class="mt-9">
+          <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
+          {copy.faq.map((item) => (
+            <details class="card-surface mb-3 p-4">
+              <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+            </details>
+          ))}
+        </section>
+      </div>
+      <ContactRail locale={locale} intent="menu" placement="strain" />
+    </main>
+    <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="strain" />
+    <Footer locale={locale} pathSuffix={pathSuffix} />
+  </PageLayout>
+) : (
+  <RetiredCommercialPage locale={locale} pathSuffix={pathSuffix} />
+)}

@@ -1,0 +1,128 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import Footer from "@/components/Footer.astro";
+import { localePath, type Locale } from "@/lib/i18n";
+import type { StrainPageCopy } from "@/data/strain-pages";
+import { GUIDES_PUBLISHED_ON, GUIDES_UPDATED_ON } from "@/data/guides";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { t } from "@/lib/ui";
+
+/**
+ * Каркас страницы сорта (T-11).
+ *
+ * Разметка строго по предписанию `JsonLd.astro`: `Article` + `about` типа
+ * `Thing`. Ни `Product`, ни `Offer`, ни `aggregateRating` — публикация оферты
+ * через разметку эквивалентна публикации цены на странице.
+ *
+ * В блоке фактов НЕТ и не может быть содержания каннабиноидов: это правило
+ * снято линтером только на правовом гиде, и здесь оно снято быть не должно —
+ * цифра по партии относится к лабораторному отчёту, а не к сорту вообще.
+ */
+interface Props {
+  locale: Locale;
+  pathSuffix: string;
+  copy: StrainPageCopy;
+}
+
+const { locale, pathSuffix, copy } = Astro.props;
+const ui = t(locale);
+const hubSuffix = "strains";
+const guideSuffix = "guides/choosing-flower-pattaya";
+const showHub = getIndexPolicy(locale, hubSuffix).indexable;
+const showGuide = getIndexPolicy(locale, guideSuffix).indexable;
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: copy.kicker, pathSuffix: hubSuffix },
+  { name: copy.thingName, pathSuffix },
+];
+const article = {
+  headline: copy.h1,
+  datePublished: GUIDES_PUBLISHED_ON,
+  dateModified: GUIDES_UPDATED_ON,
+  author: "Labs Cannabis",
+};
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={pathSuffix}
+  title={copy.title}
+  description={copy.description}
+  faq={copy.faq}
+  pageType="strain"
+  breadcrumbs={breadcrumbs}
+  article={article}
+  aboutThing={copy.thingName}
+>
+  <article class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.lead}</p>
+
+      <section class="mt-8" aria-labelledby="strain-facts-title">
+        <h2 id="strain-facts-title" class="text-xl font-bold text-emerald-dim">{copy.factsTitle}</h2>
+        <dl class="card-surface mt-3 space-y-3 p-5">
+          {copy.facts.map((fact) => (
+            <div>
+              <dt class="text-sm font-semibold text-emerald-dim">{fact.label}</dt>
+              <dd class="mt-1 text-base leading-relaxed text-text-muted">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+
+      {copy.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      <aside class="card-surface mt-9 border border-border px-4 py-4" aria-labelledby="strain-disclaimer-title">
+        <h2 id="strain-disclaimer-title" class="text-xl font-bold">{copy.disclaimerTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{copy.disclaimer}</p>
+      </aside>
+
+      <section class="mt-9">
+        <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
+        {copy.faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <nav class="mt-9 grid gap-3" aria-label={copy.kicker}>
+        {showGuide && (
+          <a
+            href={localePath(locale, guideSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement="strain"
+            data-target={guideSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.choosingGuide}</a>
+        )}
+        {showHub && (
+          <a
+            href={localePath(locale, hubSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement="strain"
+            data-target={hubSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.strainsHub}</a>
+        )}
+      </nav>
+    </div>
+    <ContactRail locale={locale} intent="menu" placement="strain" />
+  </article>
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="strain" />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

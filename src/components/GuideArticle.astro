@@ -1,0 +1,162 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import Footer from "@/components/Footer.astro";
+import { localePath, type Locale } from "@/lib/i18n";
+import type { GuideCopy } from "@/data/guides";
+import { GUIDES_PUBLISHED_ON, GUIDES_UPDATED_ON } from "@/data/guides";
+import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import type { PrefillIntent } from "@/data/cta-copy";
+import type { TrackPlacement } from "@/lib/analytics";
+import { t } from "@/lib/ui";
+import { formatUpdatedLabel } from "@/lib/updated-date";
+
+/**
+ * Общий каркас гайда (T-04, T-11).
+ *
+ * Все три новых гайда рендерятся одним шаблоном, но текст у них разный целиком:
+ * шаблон не подставляет ни одной переменной в прозу — он только раскладывает
+ * готовые абзацы. Именно подстановка `{area}` в общий текст дала гео-страницам
+ * похожесть 0.81, и повторять этот приём в знаниевом кластере нельзя.
+ *
+ * Что шаблон делает обязательным для каждого гайда:
+ * • видимая дата обновления (`<time datetime>`) и она же в `Article.dateModified`;
+ * • видимая пометка основания над каждым разделом — «официальный источник» либо
+ *   «практическая осторожность»;
+ * • FAQPage из `copy.faq`;
+ * • контекстная ссылка на правовой гид, если он indexable на этой локали, —
+ *   иначе новый гайд остаётся тупиком без исходящих ссылок.
+ */
+interface Props {
+  locale: Locale;
+  pathSuffix: string;
+  copy: GuideCopy;
+  placement: TrackPlacement;
+  intent: PrefillIntent;
+}
+
+const { locale, pathSuffix, copy, placement, intent } = Astro.props;
+const ui = t(locale);
+const legalCopy = LEGAL_GUIDE_COPY[locale];
+const legalSuffix = "guides/legal-cannabis-tourists";
+const guidesHubSuffix = "guides";
+const showLegalLink = pathSuffix !== legalSuffix && getIndexPolicy(locale, legalSuffix).indexable;
+const showHubLink = getIndexPolicy(locale, guidesHubSuffix).indexable;
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.footerSeo.guidesHub, pathSuffix: guidesHubSuffix },
+  { name: copy.kicker, pathSuffix },
+];
+const updatedLabel = formatUpdatedLabel(locale, GUIDES_UPDATED_ON);
+const article = {
+  headline: copy.h1,
+  datePublished: GUIDES_PUBLISHED_ON,
+  dateModified: GUIDES_UPDATED_ON,
+  author: "Labs Cannabis",
+};
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={pathSuffix}
+  title={copy.title}
+  description={copy.description}
+  faq={copy.faq}
+  pageType="guide"
+  breadcrumbs={breadcrumbs}
+  article={article}
+>
+  <article class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      <p class="mt-2 text-sm text-text-muted">
+        <time datetime={GUIDES_UPDATED_ON}>{updatedLabel}</time>
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.intro}</p>
+
+      <section class="mt-8" aria-labelledby="guide-checklist-title">
+        <h2 id="guide-checklist-title" class="text-xl font-bold text-emerald-dim">{copy.checklistTitle}</h2>
+        <ul class="mt-3 grid gap-3">
+          {copy.checklist.map((item) => (
+            <li class="card-surface px-4 py-3 text-base leading-relaxed text-text-muted">{item}</li>
+          ))}
+        </ul>
+      </section>
+
+      {copy.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-text-muted">
+            {copy.basisLabels[section.basis]}
+          </p>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      {/*
+        Первоисточники — сноски, а не кнопки: зелёная кнопка на тайскоязычный
+        сайт правительства уводит посетителя и не возвращает.
+      */}
+      <p class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-muted">
+        <a
+          href={LEGAL_GUIDE_SOURCES.thaiGovernment}
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          class="underline hover:text-emerald-dim"
+        >{legalCopy.governmentSourceCta}</a>
+        <a
+          href={LEGAL_GUIDE_SOURCES.touristNotice}
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          class="underline hover:text-emerald-dim"
+        >{legalCopy.touristSourceCta}</a>
+      </p>
+
+      <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="guide-caution-title">
+        <h2 id="guide-caution-title" class="text-xl font-bold">{copy.cautionTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{copy.caution}</p>
+      </aside>
+
+      <section class="mt-8">
+        <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>
+        {copy.faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+
+      <nav class="mt-8 grid gap-3" aria-label={copy.kicker}>
+        {showLegalLink && (
+          <a
+            href={localePath(locale, legalSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement={placement}
+            data-target={legalSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.legalGuide}</a>
+        )}
+        {showHubLink && (
+          <a
+            href={localePath(locale, guidesHubSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement={placement}
+            data-target={guidesHubSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.guidesHub}</a>
+        )}
+      </nav>
+    </div>
+    <ContactRail locale={locale} intent={intent} placement={placement} />
+  </article>
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement={placement} />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

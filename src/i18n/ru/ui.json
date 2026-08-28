@@ -1,7 +1,7 @@
 {
   "meta": {
-    "title": "LABS DISPENSARY Паттайя — лицензированный диспенсери",
-    "description": "LABS DISPENSARY (Labs Cannabis) — лицензированный каннабис-диспенсери, 32 Pattaya 13 Alley, Южная Паттайя. Только 20+ и с тайским рецептом. Вопросы в WhatsApp +66 66 080 6784."
+    "title": "LABS DISPENSARY Паттайя — магазин каннабиса 20+",
+    "description": "LABS DISPENSARY (Labs Cannabis) — лицензированный магазин каннабиса, 32 Pattaya 13 Alley, Южная Паттайя. Только 20+ и с тайским рецептом. Вопросы в WhatsApp +66 66 080 6784."
   },
   "brand": "Labs Cannabis",
   "formerBrand": "ранее Labs Dispensary",
@@ -11,8 +11,9 @@
   },
   "reviews": {
     "title": "Отзывы гостей",
-    "subtitle": "{rating}★ · {count} отзывов в Google",
-    "readAll": "Все {count} отзывов в Google →",
+    "subtitle": "{rating}★ · {count} {reviews} в Google",
+    "readAll": "Все {count} {reviews} в Google →",
+    "checkedOn": "сверено {date}",
     "translatedNote": "Перевод оригинального отзыва из Google ({lang})",
     "sourceLang": {
       "en": "английский",
@@ -24,29 +25,17 @@
     "title": "Как нас найти",
     "address": "32 Pattaya 13 Alley, Южная Паттайя, Чонбури 20150",
     "step1": "Идите по Pattaya 13 Alley от Walking Street.",
-    "step2": "Ищи вывеску LABS DISPENSARY / Labs Cannabis.",
+    "step2": "Ищите вывеску LABS DISPENSARY / Labs Cannabis.",
     "step3": "Мы слева, примерно в середине переулка.",
     "hours": "Ежедневно {open} – {close}",
     "openNow": "Открыто сейчас · до {close}",
     "closedNow": "Закрыто · откроется в {open}",
     "openMaps": "Открыть в Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "На сайте нет публичного checkout, онлайн-оплаты, order form или подтвержденной доставки/продажи. Индивидуальные детали обсуждаются в WhatsApp."
-  },
   "footer": {
     "disclaimer": "Labs Cannabis (ранее Labs Dispensary). Лицензированный ритейлер в Паттайе. Только 20+.",
     "rights": "Все права защищены.",
     "listedAs": "{brand} — на Google Maps как {listing}"
-  },
-  "ageGate": {
-    "kicker": "Только для взрослых 20+",
-    "title": "Вам есть 20 лет?",
-    "text": "Сайт только для взрослых 20+. Продолжайте, только если вам уже есть 20 лет и вы хотите посмотреть меню каннабиса в Паттайе или оптовые запросы по Таиланду.",
-    "note": "На сайте нет публичного checkout, онлайн-оплаты, order form или подтвержденной доставки/продажи. Индивидуальные детали обсуждаются в WhatsApp.",
-    "enter": "Да, мне 20+",
-    "exit": "Выйти"
   },
   "contact": {
     "title": "Связаться",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "Главная",
     "contact": "Контакты",
-    "wholesale": "Опт"
+    "wholesale": "Опт",
+    "breadcrumb": "Навигационная цепочка"
   },
   "langSwitcher": {
     "label": "Выбрать язык"
@@ -97,7 +87,21 @@
     "legalGuide": "Правовой гид для туристов",
     "labsDispensary": "LABS DISPENSARY Паттайя",
     "walkingStreetRoute": "Маршрут от Walking Street",
-    "relatedTitle": "Смежные страницы"
+    "aboutUs": "О магазине",
+    "guidesHub": "Все гиды",
+    "prescriptionGuide": "Нужен ли рецепт",
+    "firstVisitGuide": "Первый визит",
+    "choosingGuide": "Как выбрать цветок",
+    "strainsHub": "Заметки о сортах",
+    "whiteWidowStrain": "Сорт White Widow",
+    "blueDreamStrain": "Сорт Blue Dream",
+    "ogKushStrain": "Сорт OG Kush",
+    "soiBuakhaoRoute": "Маршрут от Сой Буакхао",
+    "jomtienRoute": "Маршрут из Джомтьена",
+    "centralPattayaRoute": "Маршрут из Центральной Паттайи",
+    "relatedTitle": "Смежные страницы",
+    "homePage": "Магазин каннабиса в Паттайе",
+    "contactPage": "Спросить перед визитом"
   },
   "locations": {
     "title": "Каннабис в Паттайе — все страницы",

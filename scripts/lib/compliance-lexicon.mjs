@@ -32,12 +32,16 @@ const MONEY = { money: true };
  */
 const CONTEXTUAL = { contextual: true };
 /**
- * Правила, которым разрешено эхо поискового запроса в `title`, `description` и
- * `H1`: «Best cannabis shop in Pattaya», «Доступный каннабис в Паттайе» —
- * это название интента, по которому страницу ищут, а не оценка товара.
- * В теле страницы те же слова уже описывают товар, и там правило действует.
+ * Послабление «эхо поискового запроса» СНЯТО.
+ *
+ * Оно освобождало от правил рекламного регистра ровно те три поля, которые
+ * тайский регулятор и видит в выдаче: `title`, `description` и `H1`. Заголовок
+ * «Best cannabis shop in Pattaya» или «Доступный каннабис в Паттайе» —
+ * это похвала контролируемой траве в сниппете, и доктрины, по которой похвала
+ * перестаёт быть рекламой оттого, что совпала с формулировкой запроса, у
+ * регулятора не существует. Запрос по-прежнему закрывается — ключ остаётся в
+ * URL и в теле страницы, а заголовок отвечает на него без оценки.
  */
-const QUERY_ECHO = { queryEcho: true };
 /**
  * Правила, снимаемые в легальном гайде: он обязан цитировать нормативные пороги
  * (THC 0,2 %, размеры штрафов) — без них гайд бесполезен.
@@ -48,7 +52,7 @@ const GUIDE = { guideAllowed: true };
  * @param {string} id
  * @param {RegExp} pattern глобальная регулярка
  * @param {string} hint что именно запрещено и почему
- * @param {{ money?: boolean, contextual?: boolean, queryEcho?: boolean, guideAllowed?: boolean }} [options]
+ * @param {{ money?: boolean, contextual?: boolean, guideAllowed?: boolean }} [options]
  */
 function rule(id, pattern, hint, options = {}) {
   if (!pattern.global) throw new Error(`Compliance rule ${id} must use the g flag`);
@@ -58,14 +62,12 @@ function rule(id, pattern, hint, options = {}) {
     hint,
     money: false,
     contextual: false,
-    queryEcho: false,
     guideAllowed: false,
     ...options,
   });
 }
 
 /** Источники текста, где эхо запроса законно: заголовок, описание, H1. */
-const QUERY_ECHO_ORIGINS = /^(?:title|meta\[|h1$|\$\.h1$|\$\.sections\[\d+\]\.h2$)/;
 
 export const COMPLIANCE_RULES = Object.freeze([
   // --- Цены -----------------------------------------------------------------
@@ -179,25 +181,23 @@ export const COMPLIANCE_RULES = Object.freeze([
   // Приказ 2568 запрещает рекламу контролируемой травы «через все каналы», и
   // цена для состава нарушения не обязательна: достаточно расхваливания товара.
   // «premium», «highest quality», «best strains» — это оценка товара, а не факт
-  // о магазине. В `title`/`description`/`H1` те же слова допустимы как эхо
-  // запроса («Best cannabis shop in Pattaya»), см. QUERY_ECHO.
+  // о магазине — и в `title`/`description`/`H1` тоже: именно эти поля попадают
+  // в сниппет выдачи.
   rule(
     "ad-register-en",
     /\bpremium\b|\btop[-\s]?(?:quality|shelf|grade)\b|\b(?:highest|finest|superior|exceptional|unmatched)[-\s](?:quality|standards?|selection|service|cannabis|strains?)\b|\bhigh[-\s]quality\b|\bfinest\b|\bonly the best\b|\bbest (?:cannabis|weed|strains?|products?|selection|dispensary|shop|quality)\b|\bhigh standards\b|\baffordable\b|\bfantastic selection\b|\bpremier destination\b|\bwe pride ourselves\b/gi,
     "рекламный регистр (оценка товара)",
-    QUERY_ECHO,
   ),
   rule(
     "ad-register-ru",
-    /(?<!\p{L})(?:премиум\p{L}*|лучш\p{L}+\s+(?:каннабис\p{L}*|сорт\p{L}*|продукт\p{L}*|товар\p{L}*|качеств\p{L}*|выбор\p{L}*|сервис\p{L}*|магазин\p{L}*|шоп\p{L}*|диспенсери)|только\s+лучш\p{L}+|высококачественн\p{L}*|высочайш\p{L}+\s+качеств\p{L}*|высшего\s+качества|первоклассн\p{L}*|отборн\p{L}*|доступн\p{L}+\s+(?:каннабис\p{L}*|цен\p{L}*))/giu,
+    /(?<!\p{L})(?:премиум\p{L}*|лучш\p{L}+\s+(?:каннабис\p{L}*|сорт\p{L}*|продукт\p{L}*|товар\p{L}*|качеств\p{L}*|выбор\p{L}*|сервис\p{L}*|магазин\p{L}*|шоп\p{L}*|диспенсер[иа]|диспенсари)|только\s+лучш\p{L}+|высококачественн\p{L}*|высочайш\p{L}+\s+качеств\p{L}*|высшего\s+качества|первоклассн\p{L}*|отборн\p{L}*|доступн\p{L}+\s+(?:каннабис\p{L}*|цен\p{L}*))/giu,
     "рекламный регистр (оценка товара)",
-    QUERY_ECHO,
   ),
-  rule("ad-register-th", /ที่ดีที่สุด|ดีที่สุด|คุณภาพสูง|คุณภาพดีเยี่ยม|พรีเมียม|ชั้นนำ/g, "рекламный регистр (оценка товара)", QUERY_ECHO),
-  rule("ad-register-zh", /最好的|最佳|顶级|优质|高品质|精品|一流/g, "рекламный регистр (оценка товара)", QUERY_ECHO),
-  rule("ad-register-ko", /최고급|최고의|최상급|프리미엄|고품질/g, "рекламный регистр (оценка товара)", QUERY_ECHO),
-  rule("ad-register-ja", /最高品質|最高級|最高の|プレミアム|極上|高品質/g, "рекламный регистр (оценка товара)", QUERY_ECHO),
-  rule("ad-register-ar", /أفضل\s+(?:منتج|جودة|متجر|أنواع|سلالات)|فاخر|جودة\s+عالية|أعلى\s+جودة|ممتازة?/g, "рекламный регистр (оценка товара)", QUERY_ECHO),
+  rule("ad-register-th", /ที่ดีที่สุด|ดีที่สุด|คุณภาพสูง|คุณภาพดีเยี่ยม|พรีเมียม|ชั้นนำ/g, "рекламный регистр (оценка товара)"),
+  rule("ad-register-zh", /最好的|最佳|顶级|优质|高品质|精品|一流/g, "рекламный регистр (оценка товара)"),
+  rule("ad-register-ko", /최고급|최고의|최상급|프리미엄|고품질/g, "рекламный регистр (оценка товара)"),
+  rule("ad-register-ja", /最高品質|最高級|最高の|プレミアム|極上|高品質/g, "рекламный регистр (оценка товара)"),
+  rule("ad-register-ar", /أفضل\s+(?:منتج|جودة|متجر|أنواع|سلالات)|فاخر|جودة\s+عالية|أعلى\s+جودة|ممتازة?/g, "рекламный регистр (оценка товара)"),
 
   // --- Весовые тиры ---------------------------------------------------------
   // «от 1 г до 1 кг» — публичная оферта количества: страница диспенсери,
@@ -314,8 +314,40 @@ export const COMPLIANCE_RULES = Object.freeze([
   // писал только генератор, и машинная чистка по литералу их не видит.
   rule(
     "address-hollywood-translit",
-    /ソーヒリウッド|ソイ[・\s]?ハリウッド|소이\s?할리우드|[Сс]ой\s?[ГХ]олливуд|[Сс]ои\s?[ГХ]олливуд/g,
+    // Правило покрывало только ja/ko/ru, поэтому тайская, арабская и китайская
+    // транслитерации спокойно стояли и в прозе, и внутри FAQPage JSON-LD как
+    // `Question.name` — машиночитаемый вид, худший из возможных для склейки
+    // карточки с чужим магазином.
+    /ソーヒリウッド|ソイ[・\s]?ハリウッド|소이\s?할리우드|[Сс]ой\s?[ГХ]олливуд|[Сс]ои\s?[ГХ]олливуд|ซอย\s?ฮอลลีวูด|سوي\s?هوليوود|索伊\s?好莱坞|[索苏]\p{Script=Han}{0,2}好莱坞/gu,
     "чужой адрес Soi Hollywood в транслитерации",
+  ),
+  // --- Перенос ценового ответа в мессенджер ---------------------------------
+  // Приказ 2568 запрещает рекламу «во всех каналах», и предложение спросить
+  // цену в WhatsApp — это ровно перенос ценового ответа в электронный канал.
+  // Действующие money-правила ловят только цифры, поэтому «ask on WhatsApp what
+  // it costs» проходило мимо них, хотя страница ниже сама писала, что цифры не
+  // называют нигде и в переписке. Правило срабатывает, когда «спросить»,
+  // «цена» и «канал связи» стоят в ОДНОМ предложении и рядом нет отрицания.
+  rule(
+    "price-ask-via-channel",
+    /(?:^|[.!?\n])(?![^.!?\n]*(?:\b(?:not|no|never|cannot|won't|don't|doesn't)\b|(?<!\p{L})(?:не|нет|нельзя|никто|никогда|без)(?!\p{L})|ไม่|[不没]|없|ません|ليس|(?<!\p{L})لا(?!\p{L})))(?=[^.!?\n]*(?:\bask\b|(?<!\p{L})спрос\p{L}*|(?<!\p{L})спрашива\p{L}*|สอบถาม|ถาม|问|اسأل|문의))(?=[^.!?\n]*(?:\bcosts?\b|\bprices?\b|(?<!\p{L})стои\p{L}*|(?<!\p{L})обойд\p{L}*|(?<!\p{L})цен\p{L}*|ราคา|多少钱|价格|سعر|가격))(?=[^.!?\n]*(?:whatsapp|\bmessage\b|\bmessenger\b|\bchat\b|(?<!\p{L})переписк\p{L}*|(?<!\p{L})сообщени\p{L}*|(?<!\p{L})напиш\p{L}*|ข้อความ|消息|رسالة|메시지))[^.!?\n]+/giu,
+    "предложение спросить цену в мессенджере — перенос ценового ответа в электронный канал",
+    // Вопрос FAQ «Можно ли спросить цену в переписке?» с ответом «Нет» — это
+    // дисклеймер, а не оферта: отрицание рядом снимает правило.
+    CONTEXTUAL,
+  ),
+
+  // --- Ложный тип заведения -------------------------------------------------
+  // 药房 — «аптека», 诊所 — «клиника». Это не перевод слова dispensary, а
+  // заявление о классе лицензии, которого у розничного прилавка нет: китайская
+  // главная называла магазин 持牌大麻药房 в <title>, <h1>, og/twitter и в
+  // `WebPage.name`, пока zh-страница «о компании» на том же домене писала
+  // «它不是诊所». Сравнение («仪式感比药房少») правилом не ловится — оно требует
+  // связки со словом «каннабис» или с «持牌».
+  rule(
+    "venue-type-zh",
+    /大麻\s*(?:药房|药店|诊所)|持牌\s*(?:药房|药店|诊所)|(?:药房|药店|诊所)\s*·/g,
+    "ложный тип заведения: 药房/药店 — аптека, 诊所 — клиника, а это розничный прилавок",
   ),
   rule(
     "address-hollywood-homoglyph",
@@ -369,19 +401,17 @@ function hasNegationNear(text, index, length) {
  * @param {string} text
  * @param {string} relativePath путь для allowlist (относительный, со слэшами)
  * @param {string} [origin] откуда взят текст: `title`, `meta[...]`, `h1`, `body`,
- *   `alt`, `prefill` или JSON-путь вида `$.sections[0].body`. По нему снимаются
- *   правила эха запроса — заголовок вправе повторять формулировку запроса.
+ *   `alt`, `prefill` или JSON-путь вида `$.sections[0].body`. Используется
+ *   вызывающей стороной для сообщения об ошибке; правила от него не зависят.
  * @returns {{ ruleId: string, hint: string, match: string }[]}
  */
 export function findComplianceViolations(text, relativePath = "", origin = "") {
   if (!text) return [];
   const guideAllowed = isMoneyAllowlisted(relativePath);
-  const queryEchoAllowed = QUERY_ECHO_ORIGINS.test(origin);
   const violations = [];
 
   for (const complianceRule of COMPLIANCE_RULES) {
     if ((complianceRule.money || complianceRule.guideAllowed) && guideAllowed) continue;
-    if (complianceRule.queryEcho && queryEchoAllowed) continue;
     for (const match of text.matchAll(complianceRule.pattern)) {
       if (complianceRule.contextual && hasNegationNear(text, match.index, match[0].length)) continue;
       violations.push({

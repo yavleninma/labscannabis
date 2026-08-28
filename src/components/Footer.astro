@@ -1,11 +1,12 @@
 ---
 import type { Locale } from "@/lib/i18n";
 import { t } from "@/lib/ui";
+import { formatRatingLine } from "@/lib/rating";
 import { localePath } from "@/lib/i18n";
 import LanguageSwitcher from "@/components/LanguageSwitcher.astro";
 import OpeningStatus from "@/components/OpeningStatus.astro";
-import { ADDRESS, BRAND, CONTACT, GOOGLE, RATING, getMapsSearchUrl } from "@/data/site";
-import { getFooterSeoSections } from "@/data/footer-seo-links";
+import { ADDRESS, BRAND, CONTACT, GOOGLE, getMapsSearchUrl } from "@/data/site";
+import { getFooterServiceLinks } from "@/data/footer-seo-links";
 import { renderCopy } from "@/data/area-copy";
 
 interface Props {
@@ -41,7 +42,7 @@ const footerCopy: Record<Locale, { visit: string; maps: string; legal: string }>
     visit: "Локация",
     maps: "Открыть Google Maps",
     legal:
-      "Соцветия каннабиса — контролируемая трава. Официальное уведомление требует от туристов действующий рецепт, выданный в Таиланде, и запрещает онлайн-продажи и рекламу. Сайт не принимает заказы или оплату; читайте актуальный legal guide.",
+      "Соцветия каннабиса — контролируемая трава. Официальное уведомление требует от туристов действующий рецепт, выданный в Таиланде, и запрещает онлайн-продажи и рекламу. Сайт не принимает заказы или оплату; читайте актуальный правовой гид.",
   },
   th: {
     visit: "ที่ตั้ง",
@@ -77,13 +78,22 @@ const footerCopy: Record<Locale, { visit: string; maps: string; legal: string }>
 const copy = footerCopy[locale] ?? footerCopy.en;
 const addressLine = `${ADDRESS.street}, ${ADDRESS.locality}, ${ADDRESS.region} ${ADDRESS.postalCode}`;
 /** Цифры карточки Google — визуально и со ссылкой на источник, без разметки рейтинга. */
-const ratingLine = renderCopy(ui.reviews.subtitle, { rating: RATING.value, count: RATING.count });
+const ratingLine = formatRatingLine(locale);
 /**
- * Тематические группы ссылок (W1-16). Список фильтруется политикой индексации и
- * текущим слагом, поэтому на `th`/`ar`/`zh`/`ko`/`ja` остаются только те цели,
- * которые indexable на этой локали, а ссылки на саму себя не будет никогда.
+ * Служебный минимум футера (T-07).
+ *
+ * Здесь стояли три тематические группы на пятнадцать слагов, и они уходили в
+ * футер каждой страницы. Из-за этого у любой indexable-страницы было ровно одно
+ * и то же число источников: вес размазывался ровным слоем, и структура сайта не
+ * читалась ни человеком, ни краулером. Тематические связи переехали в
+ * `RelatedLinks` (свой набор у каждого слага), а в футере остаётся то, что в
+ * футере ищут: где мы, кто мы и что говорит закон.
+ *
+ * Эти ссылки НЕ размечены `data-seo-context-link`: они одинаковы на всех
+ * страницах, и помечать boilerplate тематической связью — способ вернуть тот же
+ * плоский граф под новым именем.
  */
-const seoSections = getFooterSeoSections(locale, pathSuffix);
+const serviceLinks = getFooterServiceLinks(locale, pathSuffix);
 
 ---
 
@@ -111,32 +121,20 @@ const seoSections = getFooterSeoSections(locale, pathSuffix);
       </a>
     </nav>
 
-    {seoSections.length > 0 && (
-      <div class="grid gap-6 sm:grid-cols-3">
-        {seoSections.map((section) => (
-          <nav aria-label={ui.footerSeo[section.titleKey]}>
-            <p class="text-sm font-bold uppercase tracking-[0.14em] text-emerald-dim">
-              {ui.footerSeo[section.titleKey]}
-            </p>
-            <ul class="mt-3 space-y-2 text-sm">
-              {section.links.map((link) => (
-                <li>
-                  <a
-                    href={link.href}
-                    class="hover:text-emerald-dim"
-                    data-track="nav_click"
-                    data-placement="footer"
-                    data-target={link.suffix}
-                    data-seo-context-link
-                  >
-                    {ui.footerSeo[link.labelKey]}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </nav>
+    {serviceLinks.length > 0 && (
+      <nav aria-label={ui.footerSeo.moreTitle} class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        {serviceLinks.map((link) => (
+          <a
+            href={link.href}
+            class="hover:text-emerald-dim"
+            data-track="nav_click"
+            data-placement="footer"
+            data-target={link.suffix}
+          >
+            {ui.footerSeo[link.labelKey]}
+          </a>
         ))}
-      </div>
+      </nav>
     )}
 
     <div class="rounded-xl border border-border bg-bg-card p-4 text-sm leading-relaxed">

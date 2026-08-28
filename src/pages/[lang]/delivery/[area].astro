@@ -5,6 +5,7 @@ import ContactRail from "@/components/ContactRail.astro";
 import RelatedLinks from "@/components/RelatedLinks.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
+import { GUIDES_PUBLISHED_ON, GUIDES_UPDATED_ON } from "@/data/guides";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
 import { renderCopy } from "@/data/area-copy";
 import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
@@ -38,6 +39,8 @@ const deliveryCopy: Record<
     mapsCta: string;
     scopeTitle: string;
     scopeBody: string;
+    /** Авторские разделы. Пишутся только там, где страница indexable (en, ru). */
+    sections?: { h2: string; body: string }[];
     faqTitle: string;
     relatedLabel: string;
     legalGuideLabel: string;
@@ -57,6 +60,23 @@ const deliveryCopy: Record<
     scopeTitle: "What a visit from {area} looks like",
     scopeBody:
       "Open Maps for the route from {area} — it is the fastest way in by taxi, bike or on foot. Bring identification showing you are 20 or older and a prescription issued in Thailand; both are checked at the counter. Ask on WhatsApp what is in the shop today and how to find the door before you cross Pattaya, and a person answers. Orders, payments and handover happen at the counter, never through this page.",
+    sections: [
+      {
+        h2: "Why so many people search for delivery here",
+        body:
+          "The habit is left over from 2022 and 2023, when shops across Pattaya advertised a rider and a phone order the way a pizza place does. What changed is the legal ground under that habit: cannabis flower became a controlled herb, and the government notice now prohibits sale through electronic channels or computer networks and prohibits advertising through all channels. The searches did not disappear with the rule change — they are simply looking for something a licensed shop is no longer allowed to offer.",
+      },
+      {
+        h2: "A shop that still offers it online is telling you something",
+        body:
+          "Some listings and chat accounts still promise to bring flower to a hotel room. That is not a service with a better price attached, it is a business running outside the rule that keeps a licence alive, and you have no way to check what arrives at the door, how it was stored or who sent it. If something goes wrong there is no counter to go back to. The trade-off is not convenience against inconvenience; it is a shop with an address against a stranger with a bag.",
+      },
+      {
+        h2: "Plan the trip instead, it is shorter than it looks",
+        body:
+          "From most of central Pattaya this is a short ride: a baht bus on the fixed loop for the standard fare, a motorbike taxi, or a booked car with the pin loaded. Give the driver Pattaya 13 Alley rather than the shop name — several hundred cannabis shops trade in this city and drivers know the numbered sois, not the signs. Bring your passport and your prescription, because the person buying has to be the person the documents belong to.",
+      },
+    ],
     faqTitle: "Online-sale rules and directions FAQ",
     relatedLabel: "Related official and location information",
     legalGuideLabel: "Thailand cannabis rules for tourists",
@@ -88,6 +108,23 @@ const deliveryCopy: Record<
     scopeTitle: "Как выглядит визит из {areaFrom}",
     scopeBody:
       "Откройте маршрут из {areaFrom} в Maps — так быстрее всего доехать на такси, байке или дойти пешком. Возьмите документ, подтверждающий возраст 20+, и рецепт, выданный в Таиланде: оба проверяют у прилавка. Перед поездкой через всю Паттайю спросите в WhatsApp, что сегодня в магазине и как найти вход, — отвечает человек. Заказ, оплата и выдача происходят у прилавка, а не через эту страницу.",
+    sections: [
+      {
+        h2: "Почему доставку продолжают искать",
+        body:
+          "Привычка осталась с 2022 и 2023 годов, когда магазины по всей Паттайе рекламировали курьера и заказ по телефону так же, как это делает пиццерия. Изменилось юридическое основание под этой привычкой: цветок стал контролируемой травой, и уведомление правительства запрещает продажу через электронные каналы и компьютерные сети, а также рекламу во всех каналах. Запросы после смены правил никуда не делись — просто они ищут то, что лицензированный магазин предлагать больше не вправе.",
+      },
+      {
+        h2: "Магазин, который всё ещё предлагает это онлайн, кое-что о себе сообщает",
+        body:
+          "Отдельные карточки и чат-аккаунты по-прежнему обещают привезти цветок в номер. Это не та же услуга, только удобнее: это бизнес за пределами правила, на котором держится лицензия, и вы никак не проверите, что приехало к двери, как оно хранилось и кто его отправил. Если что-то пойдёт не так, возвращаться будет некуда. Размен здесь не между удобством и неудобством, а между магазином с адресом и незнакомым человеком с пакетом.",
+      },
+      {
+        h2: "Спланируйте поездку — она короче, чем кажется",
+        body:
+          "Из большей части центральной Паттайи это недолгая дорога: сонгтео по кругу за обычный проезд, байк-такси или заказанная машина с загруженным пином. Водителю называйте «Pattaya 13 Alley», а не название магазина: каннабис-шопов в городе несколько сотен, и водители знают нумерованные сои, а не вывески. Возьмите паспорт и рецепт — покупателем должен быть тот, кому принадлежат документы.",
+      },
+    ],
     faqTitle: "FAQ о правилах онлайн-продаж и маршруте",
     relatedLabel: "Официальные правила и информация о месте",
     legalGuideLabel: "Правила каннабиса в Таиланде для туристов",
@@ -298,8 +335,11 @@ const labels = CTA_LABELS[locale];
 const whatsappUrl = ctaWhatsAppHref(locale, "area", { area: areaName });
 const article = {
   headline: h1,
-  datePublished: "2026-08-16",
-  dateModified: "2026-08-16",
+  // Даты кластера — из одной константы (`GUIDES_UPDATED_ON`), а не третьим
+  // литералом: раньше эти две страницы отдавали `dateModified` за 16 августа,
+  // когда весь остальной сайт отдавал 28-е.
+  datePublished: GUIDES_PUBLISHED_ON,
+  dateModified: GUIDES_UPDATED_ON,
   author: "Labs Cannabis",
 };
 ---
@@ -379,6 +419,13 @@ const article = {
         <h3 class="mt-4 text-base font-bold text-emerald-dim">{rulesCopy.cautionTitle}</h3>
         <p class="mt-2 text-base leading-relaxed text-text-muted">{rulesCopy.caution}</p>
       </aside>
+
+      {copy.sections?.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          <p class="mt-3 text-base leading-relaxed text-text-muted">{section.body}</p>
+        </section>
+      ))}
 
       <section class="mt-8">
         <h2 class="mb-3 text-xl font-bold">{copy.faqTitle}</h2>

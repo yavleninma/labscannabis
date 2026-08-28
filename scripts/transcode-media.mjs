@@ -6,8 +6,14 @@ import ffmpegInstaller from "@ffmpeg-installer/ffmpeg";
 import sharp from "sharp";
 
 const FFMPEG = ffmpegInstaller.path;
-const STOCK = path.join(process.cwd(), "stock-photo");
-const OUT = path.join(process.cwd(), "public", "media");
+// Каталоги переопределяются переменными окружения: иначе конвейер нельзя
+// прогнать на одном файле, не трогая рабочий каталог.
+//
+// Выход — `media-source/`, а НЕ `public/`: файлы каталога не публикуются
+// (см. `checkQuarantinedMedia()` в scripts/check-seo.mjs). Всё, что попадает
+// в `public/`, отдаётся с домена по прямому URL, а это макро-снимки товара.
+const STOCK = path.resolve(process.env.MEDIA_SOURCE_DIR || path.join(process.cwd(), "stock-photo"));
+const OUT = path.resolve(process.env.MEDIA_OUTPUT_DIR || path.join(process.cwd(), "media-source"));
 
 const IMAGE_EXT = /\.(jpe?g|png)$/i;
 const VIDEO_EXT = /\.(mp4|mov|webm)$/i;
@@ -43,22 +49,21 @@ function transcodeVideo(file) {
   console.log(`✓ video ${base}`);
 }
 
+/** Кодеки и их настройки. */
+const ENCODERS = [
+  { extension: "jpg", apply: (pipeline) => pipeline.jpeg({ quality: 88 }) },
+  { extension: "avif", apply: (pipeline) => pipeline.avif({ quality: 60 }) },
+  { extension: "webp", apply: (pipeline) => pipeline.webp({ quality: 75 }) },
+];
+
 async function transcodeImage(file) {
   const ext = path.extname(file);
   const base = path.basename(file, ext);
-  const normalized = path.join(OUT, `${base}.jpg`);
-  const avifOut = path.join(OUT, `${base}.avif`);
-  const webpOut = path.join(OUT, `${base}.webp`);
+  for (const { extension, apply } of ENCODERS) {
+    const out = path.join(OUT, `${base}.${extension}`);
+    if (isNewer(file, out)) await apply(sharp(file)).toFile(out);
+  }
 
-  if (isNewer(file, normalized)) {
-    await sharp(file).jpeg({ quality: 88 }).toFile(normalized);
-  }
-  if (isNewer(file, avifOut)) {
-    await sharp(file).avif({ quality: 60 }).toFile(avifOut);
-  }
-  if (isNewer(file, webpOut)) {
-    await sharp(file).webp({ quality: 75 }).toFile(webpOut);
-  }
   console.log(`✓ image ${base}`);
 }
 
@@ -71,7 +76,7 @@ async function main() {
     if (VIDEO_EXT.test(name)) transcodeVideo(full);
     else if (IMAGE_EXT.test(name)) await transcodeImage(full);
   }
-  console.log("Media pipeline done → public/media/");
+  console.log(`Media pipeline done → ${path.relative(process.cwd(), OUT)}/`);
 }
 
 main().catch((e) => {

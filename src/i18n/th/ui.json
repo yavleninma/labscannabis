@@ -13,6 +13,7 @@
     "title": "รีวิวจากลูกค้า",
     "subtitle": "{rating}★ · {count} รีวิว Google",
     "readAll": "อ่าน {count} รีวิว Google →",
+    "checkedOn": "ตรวจสอบเมื่อ {date}",
     "translatedNote": "แปลจากรีวิว Google ต้นฉบับ ({lang})",
     "sourceLang": {
       "en": "อังกฤษ",
@@ -31,22 +32,10 @@
     "closedNow": "ปิดอยู่ · เปิด {open}",
     "openMaps": "เปิด Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "เว็บไซต์นี้ไม่มี public checkout การชำระเงินออนไลน์ order form หรือการยืนยัน delivery/sale รายละเอียดรายบุคคลคุยใน WhatsApp"
-  },
   "footer": {
     "disclaimer": "Labs Cannabis (เดิม Labs Dispensary) ร้านกัญชาที่ได้รับอนุญาตในพัทยา สำหรับผู้ใหญ่ 20+ เท่านั้น",
     "rights": "สงวนลิขสิทธิ์",
     "listedAs": "{brand} — บน Google Maps ใช้ชื่อ {listing}"
-  },
-  "ageGate": {
-    "kicker": "สำหรับผู้ใหญ่ 20+ เท่านั้น",
-    "title": "คุณอายุ 20 ปีขึ้นไหม?",
-    "text": "เว็บไซต์สำหรับผู้ใหญ่ 20+ เท่านั้น กดต่อเมื่อคุณอายุอย่างน้อย 20 ปี และต้องการดูข้อมูลเมนูกัญชาในพัทยาหรือสอบถาม wholesale ในประเทศไทย",
-    "note": "เว็บไซต์นี้ไม่มี public checkout การชำระเงินออนไลน์ order form หรือการยืนยัน delivery/sale รายละเอียดรายบุคคลคุยใน WhatsApp",
-    "enter": "ใช่ 20+",
-    "exit": "ออก"
   },
   "contact": {
     "title": "ติดต่อ",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "หน้าแรก",
     "contact": "ติดต่อ",
-    "wholesale": "ขายส่ง"
+    "wholesale": "ขายส่ง",
+    "breadcrumb": "เส้นทางนำทาง"
   },
   "langSwitcher": {
     "label": "เลือกภาษา"
@@ -97,7 +87,21 @@
     "legalGuide": "คู่มือกฎหมายสำหรับนักท่องเที่ยว",
     "labsDispensary": "LABS DISPENSARY พัทยา",
     "walkingStreetRoute": "เส้นทางจาก Walking Street",
-    "relatedTitle": "หน้าที่เกี่ยวข้อง"
+    "aboutUs": "เกี่ยวกับร้าน",
+    "guidesHub": "คู่มือทั้งหมด",
+    "prescriptionGuide": "ต้องมีใบสั่งแพทย์ไหม",
+    "firstVisitGuide": "มาครั้งแรก",
+    "choosingGuide": "วิธีเลือกช่อดอก",
+    "strainsHub": "เกี่ยวกับสายพันธุ์",
+    "whiteWidowStrain": "สายพันธุ์ White Widow",
+    "blueDreamStrain": "สายพันธุ์ Blue Dream",
+    "ogKushStrain": "สายพันธุ์ OG Kush",
+    "soiBuakhaoRoute": "เส้นทางจากซอยบัวขาว",
+    "jomtienRoute": "เส้นทางจากจอมเทียน",
+    "centralPattayaRoute": "เส้นทางจากพัทยากลาง",
+    "relatedTitle": "หน้าที่เกี่ยวข้อง",
+    "homePage": "ร้านกัญชาในพัทยา",
+    "contactPage": "สอบถามก่อนมาที่ร้าน"
   },
   "locations": {
     "title": "กัญชาในพัทยา — หน้าทั้งหมด",

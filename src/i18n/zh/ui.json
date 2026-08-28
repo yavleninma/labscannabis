@@ -13,6 +13,7 @@
     "title": "客人评价",
     "subtitle": "Google {rating}★ · {count}条评价",
     "readAll": "查看全部{count}条Google评价 →",
+    "checkedOn": "核对于 {date}",
     "translatedNote": "译自Google原始评价（{lang}）",
     "sourceLang": {
       "en": "英语",
@@ -31,22 +32,10 @@
     "closedNow": "现在休息 · {open} 营业",
     "openMaps": "打开Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "本网站没有 public checkout、在线付款、order form 或确认的配送/销售。个人细节请在 WhatsApp 沟通。"
-  },
   "footer": {
     "disclaimer": "Labs Cannabis（原Labs Dispensary）芭提雅持证零售商 仅限20+",
     "rights": "版权所有",
     "listedAs": "{brand} — 在 Google Maps 上显示为 {listing}"
-  },
-  "ageGate": {
-    "kicker": "仅限20岁以上成人",
-    "title": "您是否已满20岁？",
-    "text": "本网站仅限20岁以上成人。仅当你已满20岁，并希望查看芭提雅大麻菜单信息或泰国批发咨询时继续。",
-    "note": "本网站没有 public checkout、在线付款、order form 或确认的配送/销售。个人细节请在 WhatsApp 沟通。",
-    "enter": "是，已满20",
-    "exit": "离开"
   },
   "contact": {
     "title": "联系我们",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "首页",
     "contact": "联系",
-    "wholesale": "批发"
+    "wholesale": "批发",
+    "breadcrumb": "面包屑导航"
   },
   "langSwitcher": {
     "label": "选择语言"
@@ -97,7 +87,21 @@
     "legalGuide": "游客法律指南",
     "labsDispensary": "LABS DISPENSARY 芭提雅",
     "walkingStreetRoute": "从 Walking Street 前往",
-    "relatedTitle": "相关页面"
+    "aboutUs": "关于本店",
+    "guidesHub": "全部指南",
+    "prescriptionGuide": "需要处方吗",
+    "firstVisitGuide": "第一次到店",
+    "choosingGuide": "如何挑选干花",
+    "strainsHub": "品种笔记",
+    "whiteWidowStrain": "White Widow 品种",
+    "blueDreamStrain": "Blue Dream 品种",
+    "ogKushStrain": "OG Kush 品种",
+    "soiBuakhaoRoute": "从 Soi Buakhao 出发",
+    "jomtienRoute": "从乔木提恩出发",
+    "centralPattayaRoute": "从芭提雅中区出发",
+    "relatedTitle": "相关页面",
+    "homePage": "芭提雅大麻商店",
+    "contactPage": "到店前先咨询"
   },
   "locations": {
     "title": "芭提雅大麻 — 所有页面",

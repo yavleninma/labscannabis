@@ -13,6 +13,7 @@
     "title": "ゲストの声",
     "subtitle": "Google {rating}★ · {count}件",
     "readAll": "Google {count}件のレビュー →",
+    "checkedOn": "{date}確認",
     "translatedNote": "Google元レビューの翻訳（{lang}）",
     "sourceLang": {
       "en": "英語",
@@ -31,22 +32,10 @@
     "closedNow": "営業時間外 · {open}開店",
     "openMaps": "Google Maps"
   },
-  "medical": {
-    "badge": "20+",
-    "text": "このサイトには public checkout、オンライン決済、order form、確定した配送/販売はありません。個別の詳細は WhatsApp で確認します。"
-  },
   "footer": {
     "disclaimer": "Labs Cannabis（旧Labs Dispensary）。パタヤの認可大麻小売店。20歳以上のみ。",
     "rights": "無断転載を禁じます。",
     "listedAs": "{brand} — Google Maps では {listing}"
-  },
-  "ageGate": {
-    "kicker": "20歳以上の成人のみ",
-    "title": "20歳以上ですか？",
-    "text": "このサイトは20歳以上の成人専用です。20歳以上で、パタヤの大麻メニュー情報またはタイ国内の卸売問い合わせを確認したい場合のみ続行してください。",
-    "note": "このサイトには public checkout、オンライン決済、order form、確定した配送/販売はありません。個別の詳細は WhatsApp で確認します。",
-    "enter": "はい、20+",
-    "exit": "退出"
   },
   "contact": {
     "title": "お問い合わせ",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "ホーム",
     "contact": "連絡",
-    "wholesale": "卸売"
+    "wholesale": "卸売",
+    "breadcrumb": "パンくずリスト"
   },
   "langSwitcher": {
     "label": "言語を選択"
@@ -97,7 +87,21 @@
     "legalGuide": "旅行者向け法律ガイド",
     "labsDispensary": "LABS DISPENSARY パタヤ",
     "walkingStreetRoute": "Walking Street からの経路",
-    "relatedTitle": "関連ページ"
+    "aboutUs": "店について",
+    "guidesHub": "ガイド一覧",
+    "prescriptionGuide": "処方箋は必要か",
+    "firstVisitGuide": "初めての来店",
+    "choosingGuide": "花の選び方",
+    "strainsHub": "品種ノート",
+    "whiteWidowStrain": "White Widow の品種",
+    "blueDreamStrain": "Blue Dream の品種",
+    "ogKushStrain": "OG Kush の品種",
+    "soiBuakhaoRoute": "ソイ・ブアカオからの道順",
+    "jomtienRoute": "ジョムティエンからの道順",
+    "centralPattayaRoute": "パタヤ中心部からの道順",
+    "relatedTitle": "関連ページ",
+    "homePage": "パタヤの大麻ショップ",
+    "contactPage": "訪問前の問い合わせ"
   },
   "locations": {
     "title": "パタヤの大麻 — すべてのページ",

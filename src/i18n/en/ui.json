@@ -13,6 +13,7 @@
     "title": "What guests say",
     "subtitle": "{rating}★ · {count} reviews on Google",
     "readAll": "Read all {count} reviews on Google →",
+    "checkedOn": "checked {date}",
     "translatedNote": "Translated from the original Google review ({lang})",
     "sourceLang": {
       "en": "English",
@@ -31,22 +32,10 @@
     "closedNow": "Closed now · opens {open}",
     "openMaps": "Open in Google Maps"
   },
-  "medical": {
-    "badge": "20+ only",
-    "text": "No public checkout, online payment, order form, or confirmed delivery/sale happens on this website. Individual details go to WhatsApp."
-  },
   "footer": {
     "disclaimer": "Labs Cannabis (formerly Labs Dispensary). Licensed cannabis retailer in Pattaya, Thailand. For adults 20+ only.",
     "rights": "All rights reserved.",
     "listedAs": "{brand} — listed on Google Maps as {listing}"
-  },
-  "ageGate": {
-    "kicker": "Adults 20+ only",
-    "title": "Are you 20 or older?",
-    "text": "This site is for adults 20+ only. Continue only if you are at least 20 and want to view cannabis menu information for Pattaya or wholesale inquiries in Thailand.",
-    "note": "No public checkout, online payment, order form, or confirmed delivery/sale happens on this website. Individual details go to WhatsApp.",
-    "enter": "Yes, I'm 20+",
-    "exit": "Leave"
   },
   "contact": {
     "title": "Get in touch",
@@ -67,7 +56,8 @@
   "nav": {
     "home": "Home",
     "contact": "Contact",
-    "wholesale": "Wholesale"
+    "wholesale": "Wholesale",
+    "breadcrumb": "Breadcrumb"
   },
   "langSwitcher": {
     "label": "Choose language"
@@ -97,7 +87,21 @@
     "legalGuide": "Tourist legal guide",
     "labsDispensary": "LABS DISPENSARY Pattaya",
     "walkingStreetRoute": "Directions from Walking Street",
-    "relatedTitle": "Related pages"
+    "aboutUs": "About the shop",
+    "guidesHub": "All guides",
+    "prescriptionGuide": "Do you need a prescription",
+    "firstVisitGuide": "Your first visit",
+    "choosingGuide": "How to choose flower",
+    "strainsHub": "Strain notes",
+    "whiteWidowStrain": "White Widow strain",
+    "blueDreamStrain": "Blue Dream strain",
+    "ogKushStrain": "OG Kush strain",
+    "soiBuakhaoRoute": "Directions from Soi Buakhao",
+    "jomtienRoute": "Directions from Jomtien",
+    "centralPattayaRoute": "Directions from Central Pattaya",
+    "relatedTitle": "Related pages",
+    "homePage": "Cannabis dispensary in Pattaya",
+    "contactPage": "Ask before you visit"
   },
   "locations": {
     "title": "Cannabis in Pattaya — all pages",

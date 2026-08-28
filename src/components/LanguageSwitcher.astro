@@ -1,6 +1,6 @@
 ---
 import { LOCALES, LOCALE_NAMES, LOCALE_HREFLANG, localePath, type Locale } from "@/lib/i18n";
-import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { getAvailableLocales, getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 
 interface Props {
@@ -18,18 +18,26 @@ const { locale, pathSuffix = "", compact = false } = Astro.props;
 const ui = t(locale);
 const policy = getIndexPolicy(locale, pathSuffix);
 /**
- * Список для человека и разметка для робота — разные вещи, и раньше они были
- * склеены одним условием: на indexable-странице в выпадашке оставались только
- * indexable-локали. После возврата `buy-/best-/cheap-` в индекс на en+ru это
- * оставило туристу из Таиланда, Китая, Японии, Кореи и ОАЭ ровно один пункт на
- * самой горячей транзакционной странице. Ссылки показываются всегда на все 7
- * локалей: страница в них собрана и отдаёт 200, просто не индексируется.
+ * Пункты выпадашки — все семь локалей, но ЦЕЛЬ ссылки зависит от того, есть ли
+ * у текущего URL настоящая страница на этой локали.
  *
- * `hreflang`/`rel=alternate` при этом по-прежнему ограничены `policy.locales` —
- * это требование check-seo и единственно верная разметка: заявлять альтернативу
- * на noindex-версию нельзя.
+ * Раньше ссылка всегда вела на тот же путь в другой локали, независимо от
+ * перевода. С `/en/strains/white-widow/` пункт «ไทย» упирался в 301 из
+ * `vercel.json` и выбрасывал читателя на `/th/locations/`; с
+ * `/en/cheap-weed-pattaya/` — на страницу-надгробие «หน้านี้ถูกยกเลิกแล้ว» в
+ * 160–431 символ. Затронуто было 90 ссылок с indexable-страниц, и весь удар
+ * приходился на тайских, китайских, корейских и японских туристов — основную
+ * аудиторию Паттайи.
+ *
+ * Теперь локаль без перевода ведёт на корень своей локали: одним переходом, без
+ * 301-прыжка, и не притворяясь, что перевод этой страницы существует.
+ *
+ * `hreflang`/`rel=alternate` по-прежнему ограничены `policy.locales`: заявлять
+ * альтернативу на noindex-версию нельзя, и это требование check-seo.
  */
+const availableLocales = getAvailableLocales(pathSuffix);
 const switcherLocales = LOCALES;
+const targetSuffix = (lang: Locale) => (availableLocales.includes(lang) ? pathSuffix : "");
 const exposesAlternate = (lang: Locale) => policy.indexable && policy.locales.includes(lang);
 ---
 
@@ -65,7 +73,7 @@ const exposesAlternate = (lang: Locale) => policy.indexable && policy.locales.in
             </span>
           ) : (
             <a
-              href={localePath(lang, pathSuffix)}
+              href={localePath(lang, targetSuffix(lang))}
               hreflang={exposesAlternate(lang) ? LOCALE_HREFLANG[lang] : undefined}
               rel={exposesAlternate(lang) ? "alternate" : undefined}
               class="block px-3 py-2 text-sm text-text hover:bg-bg-elevated hover:text-emerald-dim"

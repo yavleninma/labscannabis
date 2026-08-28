@@ -7,15 +7,33 @@ import MapBlock from "@/components/MapBlock.astro";
 import Footer from "@/components/Footer.astro";
 import { LOCALES, localePath, type Locale } from "@/lib/i18n";
 import { AREAS, getAreaBySlug } from "@/data/seo-matrix";
-import { AREA_DETAILS, renderCopy } from "@/data/area-copy";
-import { ADDRESS, getMapsDirectionsUrl } from "@/data/site";
+import { renderCopy } from "@/data/area-copy";
+import { getAreaRoute } from "@/data/area-routes";
+import { describeLandmarkWalk } from "@/lib/geo";
+import { getMapsDirectionsUrl } from "@/data/site";
 import { CTA_LABELS, ctaWhatsAppHref } from "@/data/cta-copy";
 import { t } from "@/lib/ui";
 
+/**
+ * Страница района = маршрут, а не подстановка названия (T-05).
+ *
+ * До этой волны шаблон рендерил один и тот же текст на восемь районов, подставляя
+ * `{area}`: попарная похожесть основного контента 0.81-0.82, то есть настоящие
+ * дубли и doorway-риск. Теперь район попадает в `getStaticPaths` ТОЛЬКО если для
+ * него на этой локали написан авторский маршрут в `AREA_ROUTES`. Нет маршрута —
+ * нет страницы; прежние URL закрыты 301 в `vercel.json`.
+ *
+ * Расстояния и время берутся исключительно из `getWalkFromShop()` через
+ * `describeLandmarkWalk`: ни одного числа метров или минут в этом файле и в
+ * `area-routes.ts` нет и быть не должно.
+ */
 export function getStaticPaths() {
   const paths: { params: { lang: string; area: string } }[] = [];
   for (const lang of LOCALES) {
-    for (const area of AREAS) paths.push({ params: { lang, area: area.slug } });
+    for (const area of AREAS) {
+      if (!getAreaRoute(area.slug, lang as Locale)) continue;
+      paths.push({ params: { lang, area: area.slug } });
+    }
   }
   return paths;
 }
@@ -24,166 +42,75 @@ const { lang, area: areaSlug } = Astro.params;
 const locale = lang as Locale;
 const area = getAreaBySlug(areaSlug!)!;
 const areaName = area.name[locale];
-const details = AREA_DETAILS[area.slug] ?? { landmarks: [] };
+const route = getAreaRoute(area.slug, locale)!;
+const routeWalk = route.landmarkSlug ? describeLandmarkWalk(route.landmarkSlug, locale) : null;
+const routeFaq = route.faq.map((item) => ({
+  q: item.q,
+  a: renderCopy(item.a, { walk: routeWalk ?? "" }),
+}));
 
-type AreaCopy = {
-  title: string;
-  description: string;
-  h1: string;
-  intro: string;
-  listingTitle: string;
-  listingBody: string;
-  visitTitle: string;
-  visitBody: string;
-  landmarksTitle: string;
-  relatedLabel: string;
-  contact: string;
-};
-
-const areaCopy: Record<Locale, AreaCopy> = {
-  en: {
-    title: "Directions from {area} to LABS DISPENSARY | Pattaya",
-    description: "Open the live Google Maps listing and directions from {area} to 32 Pattaya 13 Alley in Pattaya.",
-    h1: "Directions from {area} to LABS DISPENSARY",
-    intro: "This website uses the Labs Cannabis name. Google Maps currently lists the same contact address and phone as LABS DISPENSARY.",
-    listingTitle: "Use the live Maps listing",
-    listingBody: "Open Google Maps for the current pin, route and public listing details. Hours and review information can change, so they are not repeated here.",
-    visitTitle: "Destination address",
-    visitBody: "The published address is {address}. Use the live pin before travelling.",
-    landmarksTitle: "Area references",
-    relatedLabel: "Visit information",
-    contact: "Contact and address",
-  },
-  ru: {
-    title: "Маршрут из {area} к LABS DISPENSARY | Паттайя",
-    description: "Откройте актуальную карточку Google Maps и маршрут из {area} к адресу 32 Pattaya 13 Alley в Паттайе.",
-    h1: "Маршрут из {area} к LABS DISPENSARY",
-    intro: "Сайт использует название Labs Cannabis. В Google Maps тот же адрес и телефон сейчас указаны в карточке LABS DISPENSARY.",
-    listingTitle: "Проверяйте актуальную карточку Maps",
-    listingBody: "В Google Maps находятся текущий пин, маршрут и публичные данные карточки. Часы и отзывы могут меняться, поэтому мы не дублируем их здесь.",
-    visitTitle: "Адрес назначения",
-    visitBody: "Опубликованный адрес: {address}. Перед поездкой откройте актуальный пин.",
-    landmarksTitle: "Ориентиры района",
-    relatedLabel: "Информация о визите",
-    contact: "Контакты и адрес",
-  },
-  th: {
-    title: "เส้นทางจาก {area} ไป LABS DISPENSARY | พัทยา",
-    description: "เปิด Google Maps และเส้นทางปัจจุบันจาก {area} ไปยัง 32 Pattaya 13 Alley พัทยา",
-    h1: "เส้นทางจาก {area} ไป LABS DISPENSARY",
-    intro: "เว็บไซต์ใช้ชื่อ Labs Cannabis ส่วน Google Maps แสดงที่อยู่และโทรศัพท์เดียวกันในชื่อ LABS DISPENSARY",
-    listingTitle: "ใช้ข้อมูลล่าสุดจาก Maps",
-    listingBody: "เปิด Google Maps เพื่อดูหมุด เส้นทาง และข้อมูลสาธารณะล่าสุด เวลาเปิดและรีวิวอาจเปลี่ยนแปลง จึงไม่แสดงซ้ำที่นี่",
-    visitTitle: "ที่อยู่ปลายทาง",
-    visitBody: "ที่อยู่ที่เผยแพร่คือ {address} โปรดเปิดหมุดล่าสุดก่อนเดินทาง",
-    landmarksTitle: "จุดอ้างอิงในพื้นที่",
-    relatedLabel: "ข้อมูลการเดินทาง",
-    contact: "ติดต่อและที่อยู่",
-  },
-  ar: {
-    title: "الاتجاهات من {area} إلى LABS DISPENSARY | باتايا",
-    description: "افتح بطاقة Google Maps المباشرة والاتجاهات من {area} إلى 32 Pattaya 13 Alley في باتايا.",
-    h1: "الاتجاهات من {area} إلى LABS DISPENSARY",
-    intro: "يستخدم الموقع اسم Labs Cannabis، بينما تعرض Google Maps العنوان والهاتف نفسيهما باسم LABS DISPENSARY.",
-    listingTitle: "استخدم بطاقة Maps المباشرة",
-    listingBody: "افتح Google Maps للدبوس والمسار وبيانات البطاقة الحالية. قد تتغير الساعات والمراجعات، لذلك لا نكررها هنا.",
-    visitTitle: "عنوان الوجهة",
-    visitBody: "العنوان المنشور هو {address}. افتح الدبوس الحالي قبل السفر.",
-    landmarksTitle: "معالم المنطقة",
-    relatedLabel: "معلومات الزيارة",
-    contact: "الاتصال والعنوان",
-  },
-  zh: {
-    title: "从{area}前往 LABS DISPENSARY | 芭提雅",
-    description: "打开实时 Google Maps 商家页面，查看从{area}前往芭提雅 32 Pattaya 13 Alley 的路线。",
-    h1: "从{area}前往 LABS DISPENSARY",
-    intro: "本网站使用 Labs Cannabis 名称；Google Maps 目前以 LABS DISPENSARY 显示相同的地址和电话。",
-    listingTitle: "使用实时 Maps 页面",
-    listingBody: "请在 Google Maps 查看当前定位、路线和公开信息。营业时间与评价可能变化，因此这里不重复显示。",
-    visitTitle: "目的地地址",
-    visitBody: "公开地址为 {address}。出发前请打开最新定位。",
-    landmarksTitle: "区域参考",
-    relatedLabel: "到店信息",
-    contact: "联系方式与地址",
-  },
-  ko: {
-    title: "{area}에서 LABS DISPENSARY 가는 길 | 파타야",
-    description: "실시간 Google Maps 정보와 {area}에서 파타야 32 Pattaya 13 Alley까지의 경로를 확인하세요.",
-    h1: "{area}에서 LABS DISPENSARY 가는 길",
-    intro: "웹사이트는 Labs Cannabis 이름을 사용하며, Google Maps에는 같은 주소와 전화번호가 LABS DISPENSARY로 표시됩니다.",
-    listingTitle: "실시간 Maps 정보 사용",
-    listingBody: "현재 핀, 경로와 공개 정보는 Google Maps에서 확인하세요. 영업시간과 리뷰 정보는 변경될 수 있어 여기에 반복하지 않습니다.",
-    visitTitle: "목적지 주소",
-    visitBody: "공개 주소는 {address}입니다. 출발 전에 최신 핀을 여세요.",
-    landmarksTitle: "지역 참고 지점",
-    relatedLabel: "방문 정보",
-    contact: "연락처 및 주소",
-  },
-  ja: {
-    title: "{area}から LABS DISPENSARY への行き方 | パタヤ",
-    description: "Google Maps の最新リスティングと、{area}からパタヤの 32 Pattaya 13 Alley までの経路を確認できます。",
-    h1: "{area}から LABS DISPENSARY への行き方",
-    intro: "このサイトは Labs Cannabis の名称を使用し、Google Maps では同じ住所と電話番号が LABS DISPENSARY として表示されています。",
-    listingTitle: "最新の Maps リスティングを使用",
-    listingBody: "現在のピン、経路、公開情報は Google Maps で確認してください。営業時間やレビューは変わるため、ここでは掲載しません。",
-    visitTitle: "目的地住所",
-    visitBody: "公開住所は {address} です。移動前に最新のピンを開いてください。",
-    landmarksTitle: "エリアの目印",
-    relatedLabel: "訪問情報",
-    contact: "連絡先と住所",
-  },
-};
-
-const copy = areaCopy[locale] ?? areaCopy.en;
 const ui = t(locale);
-const vars = { area: areaName, address: ADDRESS.street };
-const title = renderCopy(copy.title, vars);
-const description = renderCopy(copy.description, vars);
 const labels = CTA_LABELS[locale];
-// Префилл на языке локали и с названием района: раньше пять локалей из семи
-// получали английский текст «help me find the Google Maps location».
+// Префилл на языке локали и с названием района.
 const whatsappUrl = ctaWhatsAppHref(locale, "area", { area: areaName });
+const pathSuffix = `areas/${area.slug}`;
 const breadcrumbs = [
   { name: ui.nav.home, pathSuffix: "" },
   { name: ui.locations.areasGroup, pathSuffix: "locations" },
-  { name: areaName, pathSuffix: `areas/${area.slug}` },
+  { name: areaName, pathSuffix },
 ];
 ---
 
 <PageLayout
   locale={locale}
-  pathSuffix={`areas/${area.slug}`}
-  title={title}
-  description={description}
+  pathSuffix={pathSuffix}
+  title={route.title}
+  description={route.description}
   pageType="area"
   breadcrumbs={breadcrumbs}
+  faq={routeFaq}
   serviceAreaName={areaName}
 >
   <article class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">
-      <h1 class="text-3xl font-bold leading-tight">{renderCopy(copy.h1, vars)}</h1>
-      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.intro}</p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{route.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{route.h1}</h1>
+      {routeWalk && <p class="mt-2 text-sm font-semibold text-emerald-dim">{routeWalk}</p>}
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{route.intro}</p>
 
       <section class="mt-8">
-        <h2 class="text-xl font-bold text-emerald-dim">{copy.listingTitle}</h2>
-        <p class="mt-2 text-base leading-relaxed text-text-muted">{copy.listingBody}</p>
+        <h2 class="text-xl font-bold text-emerald-dim">{route.routeTitle}</h2>
+        <p class="mt-3 text-base leading-relaxed text-text-muted">{route.routeIntro}</p>
+        <ol class="mt-4 grid gap-4">
+          {route.steps.map((step, index) => (
+            <li class="card-surface p-4">
+              <h3 class="text-base font-bold text-text">
+                <span class="text-emerald-dim">{index + 1}.</span> {step.title}
+              </h3>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{step.body}</p>
+            </li>
+          ))}
+        </ol>
       </section>
 
-      <section class="mt-8">
-        <h2 class="text-xl font-bold text-emerald-dim">{copy.visitTitle}</h2>
-        <p class="mt-2 text-base leading-relaxed text-text-muted">{renderCopy(copy.visitBody, vars)}</p>
-      </section>
-
-      {details.landmarks.length > 0 && (
-        <section class="mt-8">
-          <h2 class="text-xl font-bold text-emerald-dim">{copy.landmarksTitle}</h2>
-          <ul class="mt-3 flex flex-wrap gap-2">
-            {details.landmarks.map((landmark) => (
-              <li class="rounded-full border border-border bg-bg-card px-3 py-1.5 text-sm text-text-muted">{landmark}</li>
-            ))}
-          </ul>
+      {route.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
         </section>
-      )}
+      ))}
+
+      <section class="mt-9">
+        <h2 class="mb-3 text-xl font-bold">{route.faqTitle}</h2>
+        {routeFaq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
 
       <div class="mt-8 grid gap-3 sm:grid-cols-2">
         <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" class="flex min-h-12 items-center justify-center rounded-xl bg-emerald px-4 py-3.5 text-center text-base font-bold text-black" data-track="contact_click" data-channel="whatsapp" data-placement="area">
@@ -194,14 +121,14 @@ const breadcrumbs = [
         </a>
       </div>
 
-      <nav class="mt-8" aria-label={copy.relatedLabel}>
-        <a href={localePath(locale, "contact")} class="card-surface block px-4 py-3 text-base font-medium hover:text-emerald-dim">{copy.contact}</a>
+      <nav class="mt-8" aria-label={route.kicker}>
+        <a href={localePath(locale, "locations")} class="card-surface block px-4 py-3 text-base font-medium hover:text-emerald-dim" data-track="nav_click" data-placement="area" data-target="locations" data-seo-context-link>{ui.footerSeo.allPages}</a>
       </nav>
     </div>
     <ContactRail locale={locale} intent="area" placement="area" area={areaName} />
   </article>
-  <RelatedLinks locale={locale} pathSuffix={`areas/${area.slug}`} placement="area" />
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="area" />
   <ReviewStrip locale={locale} />
   <MapBlock locale={locale} />
-  <Footer locale={locale} pathSuffix={`areas/${area.slug}`} />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
 </PageLayout>
