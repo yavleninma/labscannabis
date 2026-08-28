@@ -1,4 +1,5 @@
 import type { PartialGuideCopyByLocale } from "@/data/guides";
+import { CHOOSING_FLOWER_GUIDE_OPEN_LOCALES } from "@/data/guide-choosing-flower-open-locales";
 
 /**
  * Гайд «как выбрать цветок» (T-11), en+ru.
@@ -13,7 +14,7 @@ import type { PartialGuideCopyByLocale } from "@/data/guides";
  * содержания (линтер снимает это правило только на правовом гиде), оценочные
  * обороты про товар, цены, вес и наличие.
  */
-export const CHOOSING_FLOWER_GUIDE: PartialGuideCopyByLocale = {
+const CHOOSING_FLOWER_GUIDE_EN_RU: PartialGuideCopyByLocale = {
   en: {
     title: "How to choose cannabis flower in Pattaya: a buyer's guide",
     description:
@@ -252,4 +253,17 @@ export const CHOOSING_FLOWER_GUIDE: PartialGuideCopyByLocale = {
     caution:
       "Здесь нет ни одного утверждения о цветке на нашей собственной полке, о ферме или о сертификате, который у нас якобы есть: такие заявления требуют документов, а документы публикуются тогда, когда они проверены, а не тогда, когда это удобно. Страница описывает то, что любой покупатель может проверить сам у любого прилавка в городе.",
   },
+};
+
+/**
+ * Гид на всех семи локалях.
+ *
+ * en+ru написаны в первом раунде; th/ar/zh/ko/ja — в
+ * `guide-choosing-flower-open-locales.ts`, и это не перевод: у каждой локали
+ * свой набор разделов под своего читателя. Слияние по ключу-локали, поэтому
+ * пересечения быть не может.
+ */
+export const CHOOSING_FLOWER_GUIDE: PartialGuideCopyByLocale = {
+  ...CHOOSING_FLOWER_GUIDE_EN_RU,
+  ...CHOOSING_FLOWER_GUIDE_OPEN_LOCALES,
 };

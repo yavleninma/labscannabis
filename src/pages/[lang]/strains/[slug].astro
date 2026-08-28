@@ -1,0 +1,41 @@
+---
+import StrainArticle from "@/components/StrainArticle.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { STRAIN_PAGES, getStrainPage } from "@/data/strain-pages";
+
+/**
+ * Маршрут кластера сортов.
+ *
+ * Раньше здесь лежало по файлу на слаг (`white-widow.astro`, `blue-dream.astro`,
+ * `og-kush.astro`), и каждый брал локали из `getAvailableLocales()`, то есть из
+ * политики индексации. Для трёх страниц это работало, для двадцати — нет, и
+ * дело не только в копипасте:
+ *
+ * ПУТИ БЕРУТСЯ ИЗ ДАННЫХ, А НЕ ИЗ ПОЛИТИКИ ИНДЕКСАЦИИ. Страница, которую не
+ * пропустили ворота качества, обязана остаться живой под `noindex, follow`.
+ * Если брать локали из allowlist, отклонённый сорт исчезнет вместе с URL, и
+ * вместо честного noindex получится 404 на ссылке, которая уже где-то стоит.
+ * Тот же принцип уже действует в `questions/[topic].astro` и
+ * `getting-here/[from].astro`.
+ *
+ * Локаль без написанного текста страницы не получает вовсе: `getStrainPage()`
+ * вернёт `null`, и путь не создастся. Машинный перевод описания сорта — ровно
+ * та тонкая страница, из-за которой в Search Console набрались 149 отказов.
+ */
+export function getStaticPaths() {
+  const paths = [];
+  for (const slug of Object.keys(STRAIN_PAGES).sort()) {
+    for (const lang of LOCALES) {
+      if (!getStrainPage(slug, lang)) continue;
+      paths.push({ params: { lang, slug } });
+    }
+  }
+  return paths;
+}
+
+const locale = Astro.params.lang as Locale;
+const slug = Astro.params.slug as string;
+const copy = getStrainPage(slug, locale)!;
+---
+
+<StrainArticle locale={locale} pathSuffix={`strains/${slug}`} copy={copy} />

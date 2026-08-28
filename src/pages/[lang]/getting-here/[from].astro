@@ -1,0 +1,40 @@
+---
+import GeoRouteArticle from "@/components/GeoRouteArticle.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { GEO_ROUTES, getGeoRoute } from "@/data/geo-routes";
+import { getLandmark } from "@/lib/geo";
+
+/**
+ * Маршрут гео-кластера «как добраться от ориентира».
+ *
+ * Пути берутся из ДАННЫХ, а не из политики индексации. Страница, которую не
+ * пропустили ворота качества, обязана остаться живой под `noindex, follow`:
+ * если брать локали из allowlist, отклонённая страница исчезнет вместе с URL,
+ * и вместо честного noindex получится 404 на уже существующей ссылке.
+ *
+ * Двойное условие. Локаль получает страницу, только если для неё написан И
+ * копирайт (`GEO_ROUTES`), И фактура маршрута в наборе ориентиров
+ * (`landmark.travel`). Одного без другого не бывает: авторские разделы без
+ * фактуры дали бы страницу «как добраться», в которой не сказано, как
+ * добраться, а фактура без разделов — страницу, у которой сверх расстояния
+ * нет ничего.
+ */
+export function getStaticPaths() {
+  const paths = [];
+  for (const slug of Object.keys(GEO_ROUTES).sort()) {
+    const landmark = getLandmark(slug);
+    if (!landmark) continue;
+    for (const lang of LOCALES) {
+      if (!getGeoRoute(slug, lang)) continue;
+      if (!landmark.travel[lang]) continue;
+      paths.push({ params: { lang, from: slug } });
+    }
+  }
+  return paths;
+}
+
+const locale = Astro.params.lang as Locale;
+const slug = Astro.params.from as string;
+---
+
+<GeoRouteArticle locale={locale} slug={slug} />

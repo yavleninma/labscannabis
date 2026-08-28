@@ -16,7 +16,12 @@
     "gen:reviews": "node scripts/gen-review-translations.mjs",
     "fix:content-cache": "node scripts/fix-content-cache.mjs",
     "check:seo": "node scripts/check-seo.mjs",
-    "check": "npm run build && npm run check:seo"
+    "check:factory": "node scripts/check-factory.mjs",
+    "check:strains": "node scripts/check-strains.mjs",
+    "check": "npm run build && npm run check:seo",
+    "seo:indexnow": "node scripts/ping-indexnow.mjs",
+    "seo:gsc": "node scripts/gsc-submit.mjs",
+    "gen:og": "node scripts/gen-og-image.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.3.0",

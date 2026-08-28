@@ -6,20 +6,31 @@ import Footer from "@/components/Footer.astro";
 import RetiredCommercialPage from "@/components/RetiredCommercialPage.astro";
 import { localePath, type Locale } from "@/lib/i18n";
 import { STRAINS_INDEX_COPY } from "@/data/strain-pages";
+import { getStrainsByFamily, strainPathSuffix } from "@/data/strain-catalog";
 import { getAvailableLocales, getIndexPolicy } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 
 /**
- * Локали без вычитанного носителем текста страницу НЕ получают вовсе.
+ * Хаб кластера сортов: страница ВЫБОРА, а не перечисления.
  *
- * Раньше маршрут генерировался на всех семи локалях, а `vercel.json` пятерым из
- * них отдавал 301 на `/:lang/locations/` — то есть половина набора шла первым
- * путём, половина вторым, и `/:lang/strains/` провалилось между ними, отдавая
- * 200 на заглушку в 508 символов без единой исходящей ссылки в свой же раздел.
- * Решение сведено к одному: список локалей берётся из `getAvailableLocales()`
- * (тот же источник, что у переключателя языка), а 301 в `vercel.json` остаётся
- * единственным обработчиком остальных пяти. То же самое уже сделано в
- * `src/pages/[lang]/areas/[area].astro`.
+ * Двадцать ссылок в один столбик — это оглавление, и человеку у прилавка оно не
+ * помогает: он не выбирает между двадцатью именами, он выбирает между пятью
+ * запахами. Поэтому список сгруппирован по ароматическим семьям, у каждой
+ * группы стоит строка «выбирайте здесь, если», а сорт внутри группы отличается
+ * одной фразой от соседей ПО ЭТОЙ ЖЕ ГРУППЕ.
+ *
+ * СОСТАВ ГРУПП ВЫЧИСЛЯЕТСЯ ИЗ НАБОРА ДАННЫХ. `group.families` — идентификаторы
+ * ароматических семей, сорта в них подбирает `getStrainsByFamily()`. Руками
+ * написана только проза; ни один слаг в копирайте не перечислен, поэтому новый
+ * сорт появляется в хабе одновременно с появлением в данных и не может попасть
+ * в две группы сразу.
+ *
+ * Отфильтровано по политике индексации: сорт, не прошедший ворота качества,
+ * остаётся живым URL под `noindex`, но входящей ссылки из хаба не получает.
+ *
+ * Локали без вычитанного носителем текста страницу не получают вовсе — список
+ * берётся из `getAvailableLocales()`, тот же источник, что у переключателя
+ * языка, а остальным пяти отвечает 301 в `vercel.json`.
  */
 export function getStaticPaths() {
   return getAvailableLocales("strains").map((lang) => ({ params: { lang } }));
@@ -29,7 +40,21 @@ const locale = Astro.params.lang as Locale;
 const copy = STRAINS_INDEX_COPY[locale];
 const ui = t(locale);
 const pathSuffix = "strains";
-const items = (copy?.items ?? []).filter((item) => getIndexPolicy(locale, item.suffix).indexable);
+
+const groups = (copy?.groups ?? [])
+  .map((group) => ({
+    ...group,
+    items: group.families
+      .flatMap((family) => getStrainsByFamily(family))
+      .map((profile) => ({
+        suffix: strainPathSuffix(profile.slug),
+        label: profile.linkName ?? profile.name,
+        blurb: copy?.blurbs[profile.slug] ?? "",
+      }))
+      .filter((item) => item.blurb && getIndexPolicy(locale, item.suffix).indexable),
+  }))
+  .filter((group) => group.items.length > 0);
+
 const breadcrumbs = copy
   ? [
       { name: ui.nav.home, pathSuffix: "" },
@@ -56,21 +81,31 @@ const breadcrumbs = copy
 
         <section class="mt-8" aria-labelledby="strains-list-title">
           <h2 id="strains-list-title" class="text-xl font-bold text-emerald-dim">{copy.itemsTitle}</h2>
-          <ul class="mt-4 grid gap-4">
-            {items.map((item) => (
-              <li class="card-surface p-4">
-                <a
-                  href={localePath(locale, item.suffix)}
-                  class="text-base font-bold text-emerald-dim hover:underline"
-                  data-track="nav_click"
-                  data-placement="strain"
-                  data-target={item.suffix}
-                  data-seo-context-link
-                >{item.label}</a>
-                <p class="mt-2 text-base leading-relaxed text-text-muted">{item.blurb}</p>
-              </li>
-            ))}
-          </ul>
+
+          {groups.map((group) => (
+            <section class="mt-8">
+              <h3 class="text-lg font-bold">{group.h2}</h3>
+              {group.body.map((paragraph) => (
+                <p class="mt-2 text-base leading-relaxed text-text-muted">{paragraph}</p>
+              ))}
+              <p class="mt-3 text-base font-semibold leading-relaxed text-emerald-dim">{group.chooseIf}</p>
+              <ul class="mt-4 grid gap-4">
+                {group.items.map((item) => (
+                  <li class="card-surface p-4">
+                    <a
+                      href={localePath(locale, item.suffix)}
+                      class="text-base font-bold text-emerald-dim hover:underline"
+                      data-track="nav_click"
+                      data-placement="strain"
+                      data-target={item.suffix}
+                      data-seo-context-link
+                    >{item.label}</a>
+                    <p class="mt-2 text-base leading-relaxed text-text-muted">{item.blurb}</p>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))}
         </section>
 
         {copy.sections.map((section) => (

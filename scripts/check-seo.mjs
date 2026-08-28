@@ -1,12 +1,26 @@
-import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
+import { execFileSync } from "node:child_process";
 import {
   EXPECTED_INDEXABLE_PAGE_COUNT,
+  FACTORY_INDEXABLE_PAGE_COUNT,
   INDEX_LOCALES,
   INDEX_POLICY_RULES,
+  MANUAL_INDEXABLE_PAGE_COUNT,
+  MAX_FACTORY_ADMITTED,
+  MAX_TOTAL_INDEXABLE,
   getIndexPolicy,
+  getIndexPolicyForPathname,
+  getXDefaultLocale,
   localePathname,
 } from "../src/lib/index-policy.mjs";
+import {
+  FACTORY_CANDIDATES,
+  FACTORY_VERDICTS,
+  summarizeFactory,
+} from "../src/content-factory/registry.mjs";
+import { describeThresholds, evaluateCandidates, formatVerdict } from "./lib/quality-gate.mjs";
+import { GATE_FIXTURES, runGateFixtures } from "./lib/quality-gate-fixtures.mjs";
 import { findComplianceViolations } from "./lib/compliance-lexicon.mjs";
 import {
   buildShingles,
@@ -15,6 +29,7 @@ import {
   measureMainText,
   stripBoilerplate,
   topSimilarPairs,
+  usesCharNgrams,
 } from "./lib/text-similarity.mjs";
 
 const DIST_DIR = path.resolve("dist");
@@ -274,6 +289,163 @@ function validateRedirectDestinations() {
   }
 }
 
+/**
+ * Регулярка по шаблону источника редиректа Vercel.
+ *
+ * Поддерживается ровно то, что встречается в `vercel.json`: `:name`,
+ * `:name(alt|alt)` и `:name*`. Ничего больше в этом файле нет, и добавлять сюда
+ * поддержку неизвестного синтаксиса вслепую нельзя: молча не совпавший шаблон
+ * означает молча пропущенную проверку.
+ *
+ * @param {string} source
+ */
+function redirectSourcePattern(source) {
+  const escape = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  let pattern = "";
+  let index = 0;
+  while (index < source.length) {
+    const named = /^:([A-Za-z_][A-Za-z0-9_]*)/.exec(source.slice(index));
+    if (!named) {
+      pattern += escape(source[index]);
+      index += 1;
+      continue;
+    }
+    index += named[0].length;
+    if (source[index] === "(") {
+      let depth = 1;
+      let end = index + 1;
+      while (end < source.length && depth > 0) {
+        if (source[end] === "(") depth += 1;
+        else if (source[end] === ")") depth -= 1;
+        end += 1;
+      }
+      const group = source.slice(index + 1, end - 1);
+      pattern += `(?:${group.split("|").map(escape).join("|")})`;
+      index = end;
+    } else if (source[index] === "*") {
+      pattern += "[^]*";
+      index += 1;
+    } else {
+      pattern += "[^/]+";
+    }
+  }
+  return new RegExp(`^${pattern}$`);
+}
+
+/**
+ * НИ ОДИН РЕДИРЕКТ НЕ ИМЕЕТ ПРАВА ПЕРЕКРЫВАТЬ INDEXABLE-СТРАНИЦУ.
+ *
+ * Зачем это блокирует сборку. Редирект на границе сети срабатывает раньше, чем
+ * отдаётся статический файл. Поэтому запись в `vercel.json`, совпавшая с
+ * адресом страницы, которую политика индексации объявила indexable, даёт
+ * худшее из возможных состояний: URL стоит в sitemap, на него ведут hreflang
+ * соседних локалей и внутренние ссылки, canonical на нём указывает на самого
+ * себя, а сервер отвечает 301 на посторонний раздел. Ни один из уже
+ * существовавших чекеров этого не видел: `validateRedirectDestinations()`
+ * проверяет, КУДА ведёт редирект, и ничего не знает о том, ОТКУДА.
+ *
+ * Дефект не гипотетический. На момент введения этой проверки `vercel.json`
+ * закрывал 301-м семь слагов сортов на en и ru (`northern-lights`,
+ * `jack-herer`, `amnesia-haze`, `gelato`, `sour-diesel`, `granddaddy-purple`,
+ * `pineapple-express`) — четырнадцать URL, которые сборка отдавала в sitemap и
+ * которые прод отдавать не мог. Список был написан тогда, когда этих страниц
+ * ещё не существовало, и разъехался с набором данных молча.
+ *
+ * @param {ReadonlySet<string>} indexableUrls
+ */
+function validateRedirectShadowing(indexableUrls) {
+  let redirects;
+  try {
+    redirects = JSON.parse(readFileSync(VERCEL_CONFIG_PATH, "utf8")).redirects;
+  } catch {
+    return;
+  }
+  if (!Array.isArray(redirects)) return;
+
+  // Проверяются обе формы адреса. Каноническая — со слэшем на конце, и
+  // редирект, совпавший с ней, просто уводит с проиндексированной страницы.
+  // Форма без слэша тоже обязана вести на саму страницу: попав под редирект,
+  // она отправит краулера в посторонний раздел вместо 301 на канонический вид.
+  const pathnames = [
+    ...new Set(
+      [...indexableUrls].flatMap((url) => {
+        const { pathname } = new URL(url);
+        const withoutSlash = pathname.replace(/\/$/, "");
+        return withoutSlash ? [pathname, withoutSlash] : [pathname];
+      }),
+    ),
+  ].sort();
+  for (const redirect of redirects) {
+    if (typeof redirect?.source !== "string") continue;
+    // Записи с `has` действуют только на другом хосте (склейка домена
+    // labscannabis.com) и канонический хост не затрагивают.
+    if (Array.isArray(redirect.has) && redirect.has.length > 0) continue;
+    const pattern = redirectSourcePattern(redirect.source);
+    for (const pathname of pathnames) {
+      if (!pattern.test(pathname)) continue;
+      fail(
+        `Redirect ${redirect.source} shadows indexable page ${pathname} ` +
+          `(sitemap and hreflang announce it, the edge would answer 301 to ${redirect.destination})`,
+      );
+    }
+  }
+}
+
+/**
+ * СЛАГ БЕЗ СТРАНИЦЫ НА ЛОКАЛИ ОБЯЗАН БЫТЬ ЗАКРЫТ РЕДИРЕКТОМ.
+ *
+ * Обратная задача к `validateRedirectShadowing()`. Та следит, чтобы редирект не
+ * перекрыл существующую страницу; эта — чтобы удаление редиректа не оставило
+ * 404 там, где раньше отвечал 301.
+ *
+ * Конкретный случай, ради которого проверка написана. В `vercel.json` стояло
+ * широкое правило `/:lang(th|ar|zh|ko|ja)/strains/:slug → /:lang/locations/`.
+ * Снять его пришлось: три сорта открылись на всех семи локалях и попали бы под
+ * собственный редирект. Но сняли шире, чем требовалось, и семнадцать слагов ×
+ * пять локалей = 85 адресов сменили 301 на 404 молча. Внутренних ссылок на них
+ * нет и hreflang их не объявляет, поэтому ни одна проверка не сработала.
+ *
+ * Правило теперь узкое и перечислительное, а значит, обязано сверяться с
+ * данными — иначе оно разъедется с ними ровно так же, только в другую сторону.
+ *
+ * @param {readonly {locale: string, suffix: string}[]} builtPages
+ */
+function validateStrainSlugRedirects(builtPages) {
+  let redirects;
+  try {
+    redirects = JSON.parse(readFileSync(VERCEL_CONFIG_PATH, "utf8")).redirects;
+  } catch {
+    return;
+  }
+  if (!Array.isArray(redirects)) return;
+
+  const builtBySlug = new Map();
+  for (const page of builtPages) {
+    const match = /^strains\/([^/]+)$/.exec(page.suffix);
+    if (!match) continue;
+    if (!builtBySlug.has(match[1])) builtBySlug.set(match[1], new Set());
+    builtBySlug.get(match[1]).add(page.locale);
+  }
+
+  const patterns = redirects
+    .filter((redirect) => typeof redirect?.source === "string")
+    .filter((redirect) => !(Array.isArray(redirect.has) && redirect.has.length > 0))
+    .map((redirect) => redirectSourcePattern(redirect.source));
+
+  for (const [slug, locales] of [...builtBySlug].sort()) {
+    for (const locale of INDEX_LOCALES) {
+      if (locales.has(locale)) continue;
+      for (const pathname of [`/${locale}/strains/${slug}/`, `/${locale}/strains/${slug}`]) {
+        if (patterns.some((pattern) => pattern.test(pathname))) continue;
+        fail(
+          `${pathname}: страницы сорта на этой локали нет, и редиректа на неё в vercel.json тоже — ` +
+            "адрес отдаёт 404. Слаг без страницы обязан быть перечислен в узком правиле редиректа",
+        );
+      }
+    }
+  }
+}
+
 function expectedSitemapUrls() {
   const urls = new Set();
   for (const rule of INDEX_POLICY_RULES) {
@@ -303,7 +475,8 @@ function sitemapEntries() {
       for (const link of block[0].matchAll(/<xhtml:link\b[^>]*>/gi)) {
         alternates.push(getAttrs(link[0]));
       }
-      if (loc) entries.push({ loc, alternates, file });
+      const lastmod = block[0].match(/<lastmod>([\s\S]*?)<\/lastmod>/i)?.[1]?.trim() ?? null;
+      if (loc) entries.push({ loc, alternates, lastmod, file });
     }
   }
   return entries;
@@ -524,6 +697,13 @@ function splitSectionsByH2(html) {
   return sections;
 }
 
+/** Лид страницы: видимый текст до первого H2, без обвеса. */
+function extractLeadText(html) {
+  const stripped = stripBoilerplate(html);
+  const head = stripped.split(/<h2\b[^>]*>/i)[0] ?? "";
+  return decodeHtml(head.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ").trim();
+}
+
 /** Пары вопрос-ответ из FAQPage JSON-LD. */
 function extractFaqPairs(html) {
   const pairs = [];
@@ -558,6 +738,73 @@ function extractFaqPairs(html) {
  */
 const INTRA_PAGE_DUPLICATE_SCORE = 0.2;
 const MAX_SHARED_FAQ_PAGES = 2;
+
+/**
+ * ПЕРЕСКАЗ ВНУТРИ СТРАНИЦЫ.
+ *
+ * Зачем отдельная метрика. Жаккар по 5-словным шинглам (`INTRA_PAGE_DUPLICATE_SCORE`)
+ * ловит дословный повтор и НЕ видит пересказ: FAQ, который другими словами
+ * повторяет раздел выше, даёт по нему 0.00, и отчёт честно печатал «повторов
+ * нет» на странице, треть которой — пересказ. При этом пересказанные слова
+ * идут в зачёт порога объёма, то есть страница выглядит длиннее, чем она есть.
+ *
+ * Что считается. Доля ЗНАМЕНАТЕЛЬНЫХ слов (длиннее трёх букв, без стоп-слов)
+ * лида и FAQ, которые уже встречаются в разделах по H2. Метрика словарная, а не
+ * позиционная, поэтому перестановка слов её не сбивает.
+ *
+ * Порог 0.50 — это «половина слов блока уже сказана выше». Он отчётный, а не
+ * блокирующий: решение «вопрос добавляет факт или пересказывает раздел»
+ * остаётся за человеком, метрика лишь не даёт ему проехать незамеченным.
+ *
+ * Локали без пробелов между словами (th/zh/ja/ko) пропускаются: знаменательные
+ * слова там не выделить, а посимвольная версия меряла бы алфавит.
+ */
+const MAX_RESTATEMENT_SHARE = 0.5;
+
+/** Слова, которые есть в любом тексте и потому ничего не говорят о пересказе. */
+const RESTATEMENT_STOPWORDS = new Set([
+  // en
+  "that", "this", "with", "from", "your", "they", "them", "then", "than", "what",
+  "when", "where", "which", "will", "would", "there", "these", "those", "have",
+  "here", "into", "just", "like", "more", "most", "much", "over", "same", "some",
+  "such", "take", "takes", "very", "well", "were", "been", "being", "does", "doing",
+  "about", "after", "again", "because", "before", "between", "both", "each", "even",
+  "every", "only", "other", "should", "still", "thing", "things", "through", "under",
+  "until", "while", "your",
+  // ru
+  "который", "которая", "которое", "которые", "которых", "которым", "чтобы",
+  "потому", "поэтому", "этого", "этому", "этом", "этих", "тогда", "когда",
+  "если", "хотя", "либо", "тоже", "также", "здесь", "туда", "сюда", "того",
+  "тому", "тем", "уже", "ещё", "есть", "быть", "было", "были", "будет",
+  "может", "можно", "нужно", "надо", "самый", "самая", "самое", "свой", "своя",
+  "своё", "свои", "него", "неё", "них", "вами", "вами", "себя", "всё", "все",
+]);
+
+function significantWords(text) {
+  const words = text
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .split(" ")
+    .filter((word) => word.length > 3 && !RESTATEMENT_STOPWORDS.has(word));
+  return new Set(words);
+}
+
+/**
+ * Доля знаменательных слов `part`, уже встречающихся в `whole`.
+ *
+ * @param {string} part
+ * @param {string} whole
+ */
+function restatementShare(part, whole) {
+  const partWords = significantWords(part);
+  if (partWords.size === 0) return null;
+  const wholeWords = significantWords(whole);
+  let repeated = 0;
+  for (const word of partWords) {
+    if (wholeWords.has(word)) repeated += 1;
+  }
+  return repeated / partWords.size;
+}
 
 function reportDuplication() {
   const intra = [];
@@ -626,14 +873,59 @@ function reportDuplication() {
     if (worst) shared.push({ locale, ...worst });
   }
 
+  /**
+   * Пересказ: сколько indexable-страниц повторяют в лиде или в FAQ больше
+   * половины знаменательных слов из разделов выше.
+   */
+  const restated = [];
+  for (const page of uniquenessPages) {
+    if (!page.indexable || page.sections.length < 2) continue;
+    if (usesCharNgrams(page.locale)) continue;
+    // Сам блок FAQ стоит под своим H2, поэтому в «разделы» он попадать не
+    // должен: иначе FAQ сравнивался бы сам с собой и всегда давал 100%.
+    const questions = page.faqPairs.map((pair) => pair.split("\u0000")[0]).filter(Boolean);
+    const body = page.sections
+      .filter(
+        (section) =>
+          !questions.some(
+            (question) => section.body.includes(question) || section.heading === question,
+          ),
+      )
+      .map((section) => `${section.heading} ${section.body}`)
+      .join(" ");
+    if (!body.trim()) continue;
+    const faqText = page.faqPairs.map((pair) => pair.split("\u0000").join(" ")).join(" ");
+    const leadShare = restatementShare(page.lead, body);
+    const faqShare = restatementShare(faqText, body);
+    const worst = Math.max(leadShare ?? 0, faqShare ?? 0);
+    if (worst > MAX_RESTATEMENT_SHARE) {
+      restated.push({
+        id: `${page.locale}/${page.suffix || "/"}`,
+        lead: leadShare,
+        faq: faqShare,
+        worst,
+      });
+    }
+  }
+  restated.sort((a, b) => b.worst - a.worst);
+
   console.log(
-    `Повтор внутри страницы (Жаккар > ${INTRA_PAGE_DUPLICATE_SCORE}): ${intra.length}; ` +
+    `Пересказ разделов в лиде или FAQ (знаменательные слова > ${Math.round(MAX_RESTATEMENT_SHARE * 100)}%): ` +
+      `${restated.length} indexable-страниц; ` +
+      `повтор внутри страницы (Жаккар > ${INTRA_PAGE_DUPLICATE_SCORE}): ${intra.length}; ` +
       `пары вопрос-ответ FAQPage более чем на ${MAX_SHARED_FAQ_PAGES} indexable-страницах локали: ${sharedFaq.length}; ` +
       "макс. доля текста, дословно повторённого ещё на ≥3 indexable-страницах локали: " +
       shared
         .map((item) => `${item.locale} ${(item.share * 100).toFixed(0)}% (${item.id})`)
         .join(", "),
   );
+  for (const item of restated.slice(0, REPORT_MODE ? restated.length : SIMILARITY_REPORT_PAIRS)) {
+    console.log(
+      `      ${(item.worst * 100).toFixed(0)}%  ${item.id}` +
+        ` (лид ${item.lead === null ? "—" : `${(item.lead * 100).toFixed(0)}%`},` +
+        ` FAQ ${item.faq === null ? "—" : `${(item.faq * 100).toFixed(0)}%`})`,
+    );
+  }
   for (const item of intra.slice(0, SIMILARITY_REPORT_PAIRS)) {
     console.log(`      ${item.score.toFixed(2)}  ${item.id}: «${item.a}» ↔ «${item.b}»`);
   }
@@ -723,7 +1015,8 @@ function validateAlternateSet(label, alternates, policy, sitemapUrls) {
     }
   }
 
-  const expectedXDefault = localeUrl("en", policy.suffix);
+  const xDefaultLocale = getXDefaultLocale(policy.locales);
+  const expectedXDefault = xDefaultLocale ? localeUrl(xDefaultLocale, policy.suffix) : undefined;
   if (alternateByLang.get("x-default") !== expectedXDefault) {
     fail(`${label}: x-default points to ${alternateByLang.get("x-default")}, expected ${expectedXDefault}`);
   }
@@ -731,6 +1024,23 @@ function validateAlternateSet(label, alternates, policy, sitemapUrls) {
   for (const hreflang of alternateByLang.keys()) {
     if (!expectedLanguages.includes(hreflang)) {
       fail(`${label}: unexpected hreflang ${hreflang}`);
+    }
+  }
+
+  /**
+   * Каждый адрес в наборе альтернатив обязан вести на indexable-страницу.
+   *
+   * Раньше `x-default` брался безусловно из en, поэтому отказ ворот на
+   * английском объявлял noindex-URL как x-default и в `<head>`, и в сайтмапе —
+   * при том что `hreflang="en"` из набора при этом исчезал. Проверка блокирующая
+   * и покрывает ОБА источника (HTML и `<xhtml:link>`), потому что расхождение
+   * между ними как раз и было симптомом.
+   */
+  for (const [hreflang, href] of alternateByLang) {
+    if (!href) continue;
+    const target = getIndexPolicyForPathname(new URL(href).pathname);
+    if (!target.indexable) {
+      fail(`${label}: hreflang ${hreflang} ведёт на noindex-страницу ${href}`);
     }
   }
 }
@@ -748,9 +1058,29 @@ validateRedirectDestinations();
 
 const entries = sitemapEntries();
 const expectedUrls = expectedSitemapUrls();
+validateRedirectShadowing(expectedUrls);
 const sitemapUrls = new Set(entries.map((entry) => entry.loc));
 const entryByUrl = new Map(entries.map((entry) => [entry.loc, entry]));
 
+/**
+ * Сверка политики с самой собой тавтологична (обе стороны считаются из
+ * `INDEX_POLICY_RULES`, а дубль `suffix+locale` ловит `throw` в
+ * `index-policy.mjs`), поэтому содержательны здесь две другие проверки:
+ * политика против сайтмапа — ниже, и потолок набора — вот он. Потолок
+ * человеко-правимый и живёт рядом с вычисляемым значением, чтобы прирост
+ * набора нельзя было не заметить.
+ */
+if (EXPECTED_INDEXABLE_PAGE_COUNT > MAX_TOTAL_INDEXABLE) {
+  fail(
+    `Индексируемый набор вырос до ${EXPECTED_INDEXABLE_PAGE_COUNT} при потолке ${MAX_TOTAL_INDEXABLE} ` +
+      "— поднимать MAX_TOTAL_INDEXABLE в src/lib/index-policy.mjs руками",
+  );
+}
+if (FACTORY_INDEXABLE_PAGE_COUNT > MAX_FACTORY_ADMITTED) {
+  fail(
+    `Ворота пропустили ${FACTORY_INDEXABLE_PAGE_COUNT} заводских URL при потолке ${MAX_FACTORY_ADMITTED}`,
+  );
+}
 if (expectedUrls.size !== EXPECTED_INDEXABLE_PAGE_COUNT) {
   fail(`Index policy resolves to ${expectedUrls.size} unique URLs, expected ${EXPECTED_INDEXABLE_PAGE_COUNT}`);
 }
@@ -787,6 +1117,7 @@ for (const entry of entries) {
 }
 
 const builtPages = builtLocalizedPages();
+validateStrainSlugRedirects(builtPages);
 const builtUrls = new Set(builtPages.map((page) => page.url));
 const seenTitles = new Map();
 const seenH1s = new Map();
@@ -808,16 +1139,22 @@ for (const page of builtPages) {
   const pageLabel = path.relative(DIST_DIR, page.file);
   const html = readFileSync(page.file, "utf8");
   const headHtml = html.match(/<head\b[^>]*>([\s\S]*?)<\/head>/i)?.[1] ?? "";
-  uniquenessPages.push({
+  const pageRecord = {
     locale: page.locale,
     suffix: page.suffix,
     indexable: policy.indexable,
     text: extractMainText(html),
+    /** Заполняются ниже, когда `<title>` и H1 уже разобраны. */
+    title: "",
+    h1: "",
     /** Разделы по H2 — для замера повтора ВНУТРИ страницы. */
     sections: splitSectionsByH2(html),
     /** Пары вопрос-ответ из FAQPage — для замера дублей FAQ между страницами. */
     faqPairs: extractFaqPairs(html),
-  });
+    /** Лид — текст до первого H2. Нужен для замера пересказа (`reportRestatement`). */
+    lead: extractLeadText(html),
+  };
+  uniquenessPages.push(pageRecord);
 
   if (policy.indexable) {
     for (const anchor of tags(html, "a")) {
@@ -898,6 +1235,8 @@ for (const page of builtPages) {
   const h1s = elementTexts(html, "h1");
   const title = titles[0] ?? "";
   const h1 = h1s[0] ?? "";
+  pageRecord.title = title;
+  pageRecord.h1 = h1;
   if (titles.length !== 1 || !title) {
     fail(`${pageLabel}: expected exactly one non-empty title, found ${titles.length}`);
   }
@@ -1202,6 +1541,207 @@ function checkUnreferencedBinaryAssets() {
 }
 
 /**
+ * `lastmod` обязан быть ДЕТЕРМИНИРОВАННЫМ: две сборки одного коммита должны
+ * давать побайтово одинаковый sitemap.
+ *
+ * Почему это блокирующая проверка, а не «и так же работает». `new Date()` в
+ * `serialize()` объявлял поисковику, что изменились ВСЕ страницы, при каждой
+ * пересборке того же кода — при ретрае деплоя, правке переменной окружения,
+ * коммите в другую часть репозитория. Google документированно перестаёт
+ * учитывать `lastmod`, который систематически не соответствует
+ * действительности: сигнал срабатывает один раз, а дальше обесценивается
+ * навсегда, и вернуть доверие к нему нельзя. Регрессия сюда возвращается одной
+ * строкой и глазами не видна — в собранном XML дата выглядит правдоподобно
+ * в обоих случаях.
+ *
+ * Проверяется ровно то, что делает `astro.config.mjs`: дата берётся из коммита
+ * (`VERCEL_GIT_COMMIT_DATE`, иначе `git log -1 --format=%cs`), одна на всю
+ * сборку. Если дату получить неоткуда — `lastmod` не должно быть вовсе:
+ * отсутствующий сигнал честнее устаревшего.
+ */
+function resolveExpectedLastmod() {
+  const isIsoDate = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value);
+  const fromEnv = (process.env.VERCEL_GIT_COMMIT_DATE || "").slice(0, 10);
+  if (isIsoDate(fromEnv)) return fromEnv;
+  try {
+    const committed = execFileSync("git", ["log", "-1", "--format=%cs"], {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (isIsoDate(committed)) return committed;
+  } catch {
+    // Сборка вне git-дерева — тот же случай, что и в astro.config.mjs.
+  }
+  return null;
+}
+
+function checkSitemapLastmod(sitemapUrlEntries) {
+  const expectedDate = resolveExpectedLastmod();
+  const values = new Set(sitemapUrlEntries.map((entry) => entry.lastmod));
+
+  if (expectedDate === null) {
+    const withLastmod = sitemapUrlEntries.filter((entry) => entry.lastmod);
+    if (withLastmod.length > 0) {
+      fail(
+        `sitemap: дату коммита получить неоткуда, но у ${withLastmod.length} URL стоит lastmod ` +
+          `(${withLastmod[0].lastmod}) — значит, она взята из часов сборки и меняется при каждой пересборке`,
+      );
+    }
+    return;
+  }
+
+  const missing = sitemapUrlEntries.filter((entry) => !entry.lastmod).length;
+  if (missing > 0) {
+    fail(`sitemap: у ${missing} URL нет lastmod, хотя дата коммита известна (${expectedDate})`);
+  }
+  if (values.size > 1) {
+    fail(
+      `sitemap: lastmod принимает ${values.size} разных значений (${[...values].slice(0, 3).join(", ")}…), ` +
+        "а отметка одна на всю сборку — сайт статический и пересобирается целиком из одного коммита",
+    );
+  }
+  for (const value of values) {
+    if (!value) continue;
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.valueOf())) {
+      fail(`sitemap: lastmod "${value}" не разбирается как дата`);
+      continue;
+    }
+    if (parsed.toISOString().slice(0, 10) !== expectedDate) {
+      fail(
+        `sitemap: lastmod "${value}" не совпадает с датой коммита ${expectedDate} — ` +
+          "отметка взята не из коммита, и две сборки одного кода разойдутся",
+      );
+    }
+    if (!parsed.toISOString().endsWith("T00:00:00.000Z")) {
+      fail(
+        `sitemap: lastmod "${value}" содержит время суток — при пересборке того же коммита оно ` +
+          "изменится, и sitemap перестанет быть побайтово воспроизводимым",
+      );
+    }
+  }
+}
+
+/**
+ * Файл в `content-cache/`, который не рендерится ни одной страницей.
+ *
+ * ЭТО НЕ ГИГИЕНА, А ЗАЩИТА ОТ ПОВТОРА АВАРИИ. До этого раунда в кэше лежали
+ * 126 таких файлов — 18 слагов × 7 локалей: страницы весов (`1g`, `10g`, `30g`,
+ * `100g`, `1kg`), опт по Джомтьену, два слага «Soi Hollywood», районы без
+ * авторского маршрута, `white-widow-pattaya` рядом с живым `strains/white-widow`.
+ * Ни один из них не читала ни одна строка `src/`, поэтому ни ворота качества,
+ * ни отчёт похожести их не видели — а лежали они в том же каталоге и в том же
+ * формате, что и живой контент. Включались одной строкой в allowlist.
+ *
+ * Замер, ради которого проверка и стоит: у пары
+ * `cannabis-delivery-pattaya` / `weed-delivery-jomtien` Жаккар по 4-словным
+ * шинглам был 0.91 — одна и та же страница с подменённым названием района.
+ * Ровно такие URL и набрали 149 отказов «Обнаружена, не проиндексирована».
+ *
+ * Правило простое: текст в кэше существует только для страницы, которая
+ * собирается. Нужен текст под новый слаг — сначала маршрут и страница, потом
+ * текст, и тогда его сразу видят и ворота, и линтер, и отчёт похожести.
+ */
+function checkOrphanContentCache() {
+  const orphans = [];
+  for (const file of walkFiles(CONTENT_CACHE_DIR, ".json")) {
+    const locale = path.basename(path.dirname(file));
+    const slug = path.basename(file, ".json");
+    if (existsSync(path.join(DIST_DIR, locale, slug, "index.html"))) continue;
+    orphans.push(`${locale}/${slug}`);
+  }
+  if (orphans.length === 0) return;
+  const shown = orphans.slice(0, 8).join(", ");
+  fail(
+    `content-cache: ${orphans.length} файл(ов) не рендерятся ни одной страницей (${shown}` +
+      `${orphans.length > 8 ? ", …" : ""}) — мёртвый текст в живом каталоге. ` +
+      "Либо заведите для слага страницу, либо удалите файлы: включить их обратно " +
+      "одной строкой в allowlist не должно быть возможно",
+  );
+}
+
+/**
+ * Картинка карточки ссылки обязана быть РАСТРОМ, лежать в сборке и совпадать
+ * по размеру с тем, что объявлено в мете.
+ *
+ * До этого раунда в `og:image` стоял SVG. Facebook, WhatsApp, Telegram, LINE и
+ * X не рисуют SVG в превью — ни один из них: пересланная ссылка приходила
+ * получателю вообще без картинки. Отказ молчаливый, в браузере ничего не
+ * видно, а весь этот раунд целится в обращения именно из мессенджеров, то есть
+ * каждая пересылка теряла самый заметный элемент карточки.
+ *
+ * Заметить такую регрессию глазами нельзя, поэтому она проверяется машиной:
+ * достаточно кому-то поправить одну строку в `PageLayout.astro` обратно на
+ * `/og-image.svg` — и сайт снова полгода ходит по мессенджерам без картинки.
+ * Размеры читаются из IHDR самого файла, а не из мета-тега: разъехавшиеся
+ * ширина и высота Facebook кэширует надолго.
+ */
+const RASTER_SHARE_IMAGE_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp"]);
+/** Верхняя граница у Facebook и Telegram — 8 МБ; берём с запасом. */
+const MAX_SHARE_IMAGE_BYTES = 5 * 1024 * 1024;
+
+/** Ширина и высота из IHDR — первого чанка PNG. Без зависимостей и без async. */
+function readPngSize(file) {
+  const head = readFileSync(file).subarray(0, 24);
+  if (head.length < 24) return null;
+  if (head.toString("latin1", 1, 4) !== "PNG") return null;
+  if (head.toString("latin1", 12, 16) !== "IHDR") return null;
+  return { width: head.readUInt32BE(16), height: head.readUInt32BE(20) };
+}
+
+function checkShareImage() {
+  const sample = path.join(DIST_DIR, "en", "index.html");
+  if (!existsSync(sample)) return;
+  const html = readFileSync(sample, "utf8");
+
+  const pick = (property) =>
+    html.match(new RegExp(`<meta\\s+property="${property}"\\s+content="([^"]+)"`))?.[1] ??
+    html.match(new RegExp(`<meta\\s+name="${property}"\\s+content="([^"]+)"`))?.[1] ??
+    null;
+
+  const image = pick("og:image");
+  if (!image) {
+    fail("dist/en/index.html: нет og:image — пересланная ссылка придёт без картинки");
+    return;
+  }
+  if (pick("twitter:image") !== image) {
+    fail(`og:image и twitter:image разошлись: ${image} против ${pick("twitter:image")}`);
+  }
+
+  const pathname = new URL(image, `${SITE_URL}/`).pathname;
+  const extension = path.extname(pathname).toLowerCase();
+  if (!RASTER_SHARE_IMAGE_EXTENSIONS.has(extension)) {
+    fail(
+      `og:image = ${image}: формат "${extension}" не растровый. Facebook, WhatsApp, Telegram, ` +
+        "LINE и X не рисуют SVG в карточке ссылки — превью просто не будет. " +
+        "Растр собирается через node scripts/gen-og-image.mjs",
+    );
+    return;
+  }
+
+  const file = path.join(DIST_DIR, pathname.replace(/^\/+/, ""));
+  if (!existsSync(file)) {
+    fail(`og:image = ${image}: файла ${repoRelative(file)} нет в сборке — карточка отдаст 404`);
+    return;
+  }
+
+  const bytes = statSync(file).size;
+  if (bytes > MAX_SHARE_IMAGE_BYTES) {
+    fail(`${repoRelative(file)}: ${bytes} Б — превью тяжелее лимита ${MAX_SHARE_IMAGE_BYTES} Б`);
+  }
+
+  const declaredWidth = Number(pick("og:image:width"));
+  const declaredHeight = Number(pick("og:image:height"));
+  const actual = extension === ".png" ? readPngSize(file) : null;
+  if (actual && (actual.width !== declaredWidth || actual.height !== declaredHeight)) {
+    fail(
+      `${repoRelative(file)}: в мете объявлено ${declaredWidth}x${declaredHeight}, ` +
+        `в файле ${actual.width}x${actual.height} — Facebook кэширует расхождение надолго`,
+    );
+  }
+}
+
+/**
  * Рукописные метры и минуты в копирайте.
  *
  * Все расстояния до ориентиров считаются гаверсинусом в `src/lib/geo.ts` и
@@ -1215,19 +1755,169 @@ const DISTANCE_SCAN_TARGETS = [
   { dir: path.resolve("src", "data"), extension: ".ts" },
   { dir: path.resolve("src", "lib"), extension: ".ts" },
   { dir: path.resolve("content-cache"), extension: ".json" },
+  /**
+   * Каталог-источник гео-кластера и вся вёрстка. Раньше страж их не видел:
+   * покрытие кончалось на `src/data` и `src/lib`, а раунд добавил 239 строк
+   * кластера в `src/content-factory` и два новых шаблона в `src/components`,
+   * то есть три места, откуда цифра могла попасть в прозу мимо проверки.
+   */
+  { dir: path.resolve("src", "content-factory"), extension: ".mjs" },
+  { dir: path.resolve("src", "components"), extension: ".astro" },
+  { dir: path.resolve("src", "pages"), extension: ".astro" },
 ];
 
-/** Число + единица расстояния или времени ходьбы. `{walkingStreet}` не число. */
-const HAND_WRITTEN_DISTANCE =
-  /\d[\d\s.,]*\s*(?:m\b|metres|meters|м(?![а-яё])|метр\p{L}*|เมตร|米|미터|メートル)[^.!?\n]{0,60}(?:walk|on foot|пешком|เดิน|步行|도보|徒歩)|(?:walk|on foot|пешком|เดิน|步行|도보|徒歩)[^.!?\n]{0,60}\d[\d\s.,–-]*\s*(?:min\b|minute|минут\p{L}*|นาที|分钟|분|分)/giu;
+/* Кусочки регекспа ниже собраны отдельно: одной строкой он нечитаем. */
+const WALK_VERB = "walk|on foot|пешком|เดิน|步行|도보|徒歩";
+const UNIT_METRES = "m\\b|metres|meters|м(?![а-яё])|метр\\p{L}*|เมตร|米|미터|メートル";
+const UNIT_MINUTES = "min\\b|minute|минут\\p{L}*|นาที|分钟|분|分";
+/**
+ * Километры в регекспе не было вовсе — ни одной единицы ни на одном языке.
+ * «it is 2.4 km away» и «около 2,4 км» проезжали мимо стража, при том что
+ * километры в прозе этого сайта ВСЕГДА вычисляются: писать их руками нечем.
+ */
+const UNIT_KM = "km\\b|км(?![а-яё])|киломе\\p{L}*|กม\\.?|กิโลเมตร|公里|킬로미터|キロメートル";
+
+/**
+ * Число + единица расстояния или времени ходьбы. `{walkingStreet}` не число.
+ *
+ * Четыре ветви, а не одна: прежний регексп поддерживал единственный порядок
+ * слов («глагол → число») и пропускал зеркальный («число → единица → глагол»),
+ * то есть самые частые формулировки — «a 12 minute walk», «примерно 15 минут
+ * пешком», «5 minute walk». Километровая ветвь срабатывает и без глагола:
+ * расстояние в километрах в прозе не пишут вовсе, его печатает
+ * `describeLandmarkWalk()`.
+ */
+const HAND_WRITTEN_DISTANCE = new RegExp(
+  [
+    // 1. километры — сами по себе
+    `\\d[\\d\\s.,–-]*\\s*(?:${UNIT_KM})`,
+    // 2. метры → глагол ходьбы
+    `\\d[\\d\\s.,–-]*\\s*(?:${UNIT_METRES})[^.!?\\n]{0,60}(?:${WALK_VERB})`,
+    // 3. минуты → глагол ходьбы (зеркальная ветвь, которой не было)
+    `\\d[\\d\\s.,–-]*\\s*(?:${UNIT_MINUTES})[^.!?\\n]{0,60}(?:${WALK_VERB})`,
+    // 4. глагол ходьбы → число с единицей
+    `(?:${WALK_VERB})[^.!?\\n]{0,60}\\d[\\d\\s.,–-]*\\s*(?:${UNIT_MINUTES}|${UNIT_METRES})`,
+  ].join("|"),
+  "giu",
+);
+
+/**
+ * Формулировки, которые страж ОБЯЗАН ловить, и те, которые он ловить не должен.
+ *
+ * Регексп — единственная блокирующая защита от выдуманного расстояния, и он
+ * уже один раз молча пропускал половину частотных формулировок. Поэтому у него
+ * есть собственный регресс-набор: прогоняется на каждом `check:seo`, до обхода
+ * файлов, и валит сборку, если ветвь сломали.
+ */
+const DISTANCE_REGEX_FIXTURES = Object.freeze({
+  caught: Object.freeze([
+    "roughly 800 m walk",
+    "the walk takes about 12 minutes",
+    "пешком примерно 15 минут",
+    "около 800 метров пешком",
+    "about a 12 minute walk from the shop",
+    "5 minute walk",
+    "примерно 15 минут пешком",
+    "it is 2.4 km away",
+    "it is 7.1 km from Big Buddha to the shop",
+    "около 2,4 км",
+    "ห่างประมาณ 2.4 กม.",
+  ]),
+  ignored: Object.freeze([
+    "{walkingStreet}",
+    "the alley is a short way south of the junction",
+    "class=\"mt-9 mb-3 p-4 text-3xl\"",
+    "Pattaya 13 Alley, South Pattaya, Chon Buri 20150",
+    "lat: 12.9233467, lng: 100.8771557",
+  ]),
+});
+
+function checkDistanceRegexFixtures() {
+  for (const phrase of DISTANCE_REGEX_FIXTURES.caught) {
+    HAND_WRITTEN_DISTANCE.lastIndex = 0;
+    if (!HAND_WRITTEN_DISTANCE.test(phrase)) {
+      fail(`Страж расстояний: формулировка ${JSON.stringify(phrase)} больше не ловится — ветвь регекспа сломана`);
+    }
+  }
+  for (const phrase of DISTANCE_REGEX_FIXTURES.ignored) {
+    HAND_WRITTEN_DISTANCE.lastIndex = 0;
+    if (HAND_WRITTEN_DISTANCE.test(phrase)) {
+      fail(`Страж расстояний: ложное срабатывание на ${JSON.stringify(phrase)}`);
+    }
+  }
+  HAND_WRITTEN_DISTANCE.lastIndex = 0;
+}
+
+/**
+ * Комментарии из исходника вырезаются перед проверкой.
+ *
+ * Страж защищает ПРОЗУ, а не документацию: в трёх файлах комментарий словами
+ * объясняет, почему обещание «5 минут пешком» писать нельзя, — и после
+ * расширения покрытия страж начал валить сборку на собственных объяснениях.
+ * Раньше это лечилось исключением для одного файла целиком, что снимало
+ * защиту и с его строк тоже.
+ *
+ * Разбор простой: строковые литералы уважаются, всё остальное между
+ * `//`…конца строки, `/*`…`*` + `/` и `<!--`…`-->` заменяется пробелами.
+ *
+ * @param {string} source
+ * @param {string} extension
+ */
+function stripCodeComments(source, extension) {
+  if (extension === ".json") return source;
+  let out = "";
+  let i = 0;
+  let quote = null;
+  while (i < source.length) {
+    const ch = source[i];
+    const next = source[i + 1];
+    if (quote) {
+      out += ch;
+      if (ch === "\\") {
+        out += next ?? "";
+        i += 2;
+        continue;
+      }
+      if (ch === quote) quote = null;
+      i += 1;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") {
+      quote = ch;
+      out += ch;
+      i += 1;
+      continue;
+    }
+    if (ch === "/" && next === "/") {
+      while (i < source.length && source[i] !== "\n") i += 1;
+      continue;
+    }
+    if (ch === "/" && next === "*") {
+      i += 2;
+      while (i < source.length && !(source[i] === "*" && source[i + 1] === "/")) i += 1;
+      i += 2;
+      out += " ";
+      continue;
+    }
+    if (source.startsWith("<!--", i)) {
+      const end = source.indexOf("-->", i);
+      i = end === -1 ? source.length : end + 3;
+      out += " ";
+      continue;
+    }
+    out += ch;
+    i += 1;
+  }
+  return out;
+}
 
 function checkHandWrittenDistances() {
   for (const target of DISTANCE_SCAN_TARGETS) {
     for (const file of walkFiles(target.dir, target.extension)) {
       const relative = repoRelative(file);
-      // `geo.ts` и есть источник этих чисел, а в комментариях они объясняются.
+      // `geo.ts` и есть источник этих чисел: в нём они вычисляются.
       if (relative.endsWith("src/lib/geo.ts")) continue;
-      const text = readFileSync(file, "utf8");
+      const text = stripCodeComments(readFileSync(file, "utf8"), target.extension);
       const match = HAND_WRITTEN_DISTANCE.exec(text);
       HAND_WRITTEN_DISTANCE.lastIndex = 0;
       if (!match) continue;
@@ -1239,11 +1929,134 @@ function checkHandWrittenDistances() {
   }
 }
 
+
+/**
+ * ВТОРАЯ СТУПЕНЬ ОТК: те же ворота, но по отрисованному `dist/` и против всего
+ * indexable-корпуса локали.
+ *
+ * Первая ступень (`src/content-factory/registry.mjs`) работает во время
+ * сборки и видит только текст кластеров: копирайт страниц-личностей лежит в
+ * `.ts`-модулях вёрстки и в тот момент недоступен. Поэтому она может пропустить
+ * заводскую страницу, дублирующую написанную руками, — и вот здесь это
+ * ловится: корпус берётся из готового HTML всех indexable-страниц локали, а
+ * текст кандидата — из той же самой страницы после `extractMainText()`.
+ *
+ * Функция `evaluateCandidates()` та же, что и на первой ступени: разъехаться
+ * пороги не могут физически.
+ *
+ * Что здесь ошибка, а что нет:
+ * • допущенная страница провалила ворота по `dist` — ОШИБКА, сборка падает.
+ *   В индексе оказался бы дубль или тонкая страница;
+ * • отклонённая страница по `dist` выглядит проходной — не ошибка, а строка
+ *   отчёта: ворота на данных консервативнее, и это безопасная сторона;
+ * • у кандидата нет собранной страницы — ОШИБКА: шаблон не собрал URL, на
+ *   который уже могут стоять ссылки. Отклонённая ворота́ми страница обязана
+ *   существовать под `noindex`, а не исчезать в 404.
+ */
+/**
+ * Ворота обязаны отклонять заведомо плохое.
+ *
+ * Прогон синтетических фикстур на каждом `npm run check:seo`. Без него зелёный
+ * отчёт «допущено 87 из 87» одинаково выглядит и когда ворота работают, и
+ * когда они сломаны или порог ослаблен.
+ */
+function checkGateFixtures() {
+  const problems = runGateFixtures();
+  for (const problem of problems) {
+    fail(`Ворота качества: ${problem}`);
+  }
+  if (problems.length === 0) {
+    console.log(`Ворота качества: регресс-фикстуры (${GATE_FIXTURES.length}) отклонены по своим кодам.`);
+  }
+}
+
+function auditContentFactory() {
+  if (FACTORY_CANDIDATES.length === 0) return;
+
+  const byId = new Map(uniquenessPages.map((page) => [`${page.locale}/${page.suffix}`, page]));
+  const corpusByLocale = new Map();
+  for (const page of uniquenessPages) {
+    if (!page.indexable) continue;
+    if (!corpusByLocale.has(page.locale)) corpusByLocale.set(page.locale, []);
+    corpusByLocale.get(page.locale).push({
+      locale: page.locale,
+      suffix: page.suffix,
+      title: page.title,
+      h1: page.h1,
+      text: page.text,
+    });
+  }
+
+  const rechecked = [];
+  for (const verdict of FACTORY_VERDICTS.values()) {
+    const built = byId.get(verdict.id);
+    if (!built) {
+      fail(
+        `Контент-завод: кандидат ${verdict.id} не собран в dist/ — ` +
+          "страница обязана существовать даже когда ворота её не пропустили (noindex, не 404)",
+      );
+      continue;
+    }
+    if (!verdict.admitted) continue;
+
+    const corpus = (corpusByLocale.get(verdict.locale) ?? []).filter(
+      (entry) => `${entry.locale}/${entry.suffix}` !== verdict.id,
+    );
+    const audited = evaluateCandidates(
+      [
+        {
+          clusterId: verdict.clusterId,
+          locale: built.locale,
+          suffix: built.suffix,
+          title: built.title,
+          h1: built.h1,
+          text: built.text,
+        },
+      ],
+      { corpus },
+    ).get(verdict.id);
+    rechecked.push(audited);
+
+    if (audited && !audited.admitted) {
+      for (const failure of audited.failures) {
+        fail(
+          `Контент-завод: ${verdict.id} допущена в индекс воротами по данным, ` +
+            `но провалила проверку по dist/ — ${failure.code}: ${failure.hint}`,
+        );
+      }
+    }
+  }
+
+  const summary = summarizeFactory();
+  console.log(
+    `Контент-завод: кластеров ${summary.clusters}, кандидатов ${summary.candidates}, ` +
+      `допущено воротами ${summary.admitted}, оставлено noindex ${summary.candidates - summary.admitted}. ` +
+      `Пороги: ${describeThresholds()}.`,
+  );
+  console.log(
+    `  Индексируемых URL всего ${EXPECTED_INDEXABLE_PAGE_COUNT} при потолке ${MAX_TOTAL_INDEXABLE}: ` +
+      `${MANUAL_INDEXABLE_PAGE_COUNT} страниц-личностей + ${summary.admitted} от завода ` +
+      `(потолок завода ${MAX_FACTORY_ADMITTED}).`,
+  );
+  for (const verdict of summary.rejected) {
+    console.log(`  ${formatVerdict(verdict)}`);
+  }
+  if (REPORT_MODE) {
+    for (const verdict of rechecked) console.log(`  dist  ${formatVerdict(verdict)}`);
+  }
+}
+
 runComplianceLint();
 checkUnusedComponents();
+checkDistanceRegexFixtures();
 checkHandWrittenDistances();
 checkQuarantinedMedia();
 checkUnreferencedBinaryAssets();
+checkOrphanContentCache();
+checkShareImage();
+checkSitemapLastmod(entries);
+checkGateFixtures();
+auditContentFactory();
 
 if (REPORT_MODE) reportIndexMatrix();
 

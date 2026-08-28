@@ -1,0 +1,31 @@
+---
+import QuestionArticle from "@/components/QuestionArticle.astro";
+import { LOCALES, type Locale } from "@/lib/i18n";
+import { QUESTION_PAGES, getQuestionPage } from "@/data/question-pages";
+
+/**
+ * Маршрут вопросных страниц.
+ *
+ * Пути берутся из ДАННЫХ, а не из политики индексации: страница, которую не
+ * пропустили ворота качества, обязана остаться живой под `noindex, follow`, а
+ * не превратиться в 404 на уже существующей ссылке. Локаль, для которой темы
+ * не написано, страницы не получает вовсе — `getQuestionPage()` возвращает
+ * `null`, и `getStaticPaths()` такой путь не создаёт.
+ */
+export function getStaticPaths() {
+  const paths = [];
+  for (const page of QUESTION_PAGES) {
+    for (const lang of LOCALES) {
+      if (!getQuestionPage(page.slug, lang)) continue;
+      paths.push({ params: { lang, topic: page.slug } });
+    }
+  }
+  return paths;
+}
+
+const locale = Astro.params.lang as Locale;
+const topic = Astro.params.topic as string;
+const page = getQuestionPage(topic, locale)!;
+---
+
+<QuestionArticle locale={locale} page={page} />

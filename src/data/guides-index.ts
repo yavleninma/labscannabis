@@ -35,18 +35,33 @@ const SUFFIX = {
   prescription: "guides/prescription-pattaya",
   firstVisit: "guides/first-visit-pattaya",
   choosing: "guides/choosing-flower-pattaya",
+  /**
+   * Вопросные темы (кластер `questions/*`, `src/data/question-pages.ts`).
+   * Их хаб — этот же хаб: читатель не различает «гид» и «вопросы», а второй
+   * хаб на шесть ссылок был бы тонкой страницей. Список фильтруется
+   * `getIndexPolicy`, поэтому на локали, где темы ещё не написаны, ссылки
+   * не появятся.
+   */
+  qRules: "questions/rules-and-prescription",
+  qBuying: "questions/buying-in-person",
+  qUse: "questions/where-you-can-use",
+  qLeaving: "questions/taking-it-home",
+  qShopCheck: "questions/checking-a-shop",
+  qMyths: "questions/common-myths",
+  qStorage: "questions/keeping-flower-in-the-tropics",
+  qArriving: "questions/arriving-with-cannabis",
 } as const;
 
 export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
   en: {
     title: "Cannabis guides for visitors to Pattaya | Labs Cannabis",
     description:
-      "Four guides for visitors to Pattaya: the rules as the official notices state them, the prescription question, a first visit, and how to judge flower yourself.",
+      "Guides and answer pages for visitors to Pattaya: what the official notices state, the prescription, a first visit, and the questions asked at the counter.",
     h1: "Cannabis guides for visitors to Pattaya",
     kicker: "Knowledge base",
     lead:
-      "Four questions come up so often at the counter that writing them down properly was easier than answering them one at a time. None of these pages sells anything; between them they cover what the law says, what document you need, what happens on a first visit, and how to judge what is in the jar.",
-    itemsTitle: "The guides",
+      "Some questions come up so often at the counter that writing them down properly was easier than answering them one at a time. The long-form guides take a subject each; the answer pages below them collect the short questions by theme, with every answer marked as an official source, as practical caution, or as something we cannot confirm. None of these pages sells anything.",
+    itemsTitle: "Guides and answer pages",
     items: [
       {
         suffix: SUFFIX.legal,
@@ -71,6 +86,54 @@ export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
         label: "How to choose flower",
         blurb:
           "Indica and sativa as shorthand rather than specification, what a lab report actually covers, how well-cured flower looks and feels, and the questions worth asking.",
+      },
+      {
+        suffix: SUFFIX.qRules,
+        label: "Prescription and eligibility questions",
+        blurb:
+          "Nine short answers about the document itself: what ภ.ท.33 is, who may write it, the age line, the thirty-day figure and what the 2026 regulation changed.",
+      },
+      {
+        suffix: SUFFIX.qBuying,
+        label: "Questions about buying in person",
+        blurb:
+          "What to carry, whether a local phone number matters, why nothing is arranged in advance, what happens on a second visit and what a message will never contain.",
+      },
+      {
+        suffix: SUFFIX.qUse,
+        label: "Where you may and may not use it",
+        blurb:
+          "The beach, a hotel room, a rented condo, a bar terrace, a scooter. The page that decides whether a lawful purchase stays uneventful.",
+      },
+      {
+        suffix: SUFFIX.qLeaving,
+        label: "Leaving Thailand and the airport",
+        blurb:
+          "Why nothing goes in the luggage, what a Thai document is worth at another border, why a layover counts, and the questions we refuse to answer for you.",
+      },
+      {
+        suffix: SUFFIX.qShopCheck,
+        label: "Checking a shop before you buy",
+        blurb:
+          "The checks a visitor can make personally at the door — the licence, the order of the questions, the frontage that proves nothing, the offer to bring some to your room.",
+      },
+      {
+        suffix: SUFFIX.qMyths,
+        label: "What visitors still get wrong",
+        blurb:
+          "Nine beliefs people arrive with, each set against what the notice says: «everything is legal», «a passport is enough», «thirty grams a month», «a small amount is fine to take home».",
+      },
+      {
+        suffix: SUFFIX.qStorage,
+        label: "Keeping flower in this heat",
+        blurb:
+          "The only page here with no rule behind it, because there is no rule: what tropical heat and humidity do to what you already own, and the nine practical answers that follow from it.",
+      },
+      {
+        suffix: SUFFIX.qArriving,
+        label: "Arriving with it, rather than leaving with it",
+        blurb:
+          "The mirror of the departure page, and the honest one: what the notices settle about visitors, and the four questions where we have no verifiable source and say so.",
       },
     ],
     sections: [
@@ -115,12 +178,12 @@ export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
   ru: {
     title: "Гиды по каннабису в Паттайе для туристов | Labs Cannabis",
     description:
-      "Четыре гида для гостей Паттайи: что говорят официальные уведомления, вопрос про рецепт, как проходит первый визит и как самому оценить цветок.",
+      "Гиды и страницы ответов для гостей Паттайи: что говорят официальные уведомления, вопрос про рецепт, первый визит и то, о чём спрашивают у прилавка.",
     h1: "Гиды по каннабису в Паттайе",
     kicker: "База знаний",
     lead:
-      "Четыре вопроса звучат у прилавка так часто, что записать их толком оказалось проще, чем отвечать по одному. Ни одна из этих страниц ничего не продаёт: вместе они закрывают то, что говорит закон, какой документ нужен, что происходит в первый визит и как понять, что лежит в банке.",
-    itemsTitle: "Гиды",
+      "Часть вопросов звучит у прилавка так часто, что записать их толком оказалось проще, чем отвечать по одному. Длинные гиды берут по предмету на каждый; страницы ответов под ними собирают короткие вопросы по темам, и над каждым ответом стоит его основание: официальный источник, практическая осторожность или прямое «подтвердить не можем». Ни одна из этих страниц ничего не продаёт.",
+    itemsTitle: "Гиды и страницы ответов",
     items: [
       {
         suffix: SUFFIX.legal,
@@ -145,6 +208,54 @@ export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
         label: "Как выбрать цветок",
         blurb:
           "Индика и сатива как сокращение, а не спецификация; что на самом деле охватывает лабораторный отчёт, как выглядит вылежанный цветок и о чём спрашивать.",
+      },
+      {
+        suffix: SUFFIX.qRules,
+        label: "Вопросы про рецепт и допуск",
+        blurb:
+          "Девять коротких ответов про сам документ: что такое ภ.ท.33, кто вправе его выписать, возрастная граница, цифра тридцати дней и что изменило постановление 2026 года.",
+      },
+      {
+        suffix: SUFFIX.qBuying,
+        label: "Вопросы про покупку на месте",
+        blurb:
+          "Что взять с собой, нужен ли местный номер, почему ничего не оформляется заранее, что происходит на втором визите и чего никогда не будет в переписке.",
+      },
+      {
+        suffix: SUFFIX.qUse,
+        label: "Где можно и нельзя употреблять",
+        blurb:
+          "Пляж, номер отеля, съёмное кондо, терраса бара, байк. Страница, от которой зависит, останется ли законная покупка без последствий.",
+      },
+      {
+        suffix: SUFFIX.qLeaving,
+        label: "Отъезд и аэропорт",
+        blurb:
+          "Почему ничего не кладут в багаж, чего стоит тайский документ на чужой границе, почему пересадка считается и на какие вопросы мы отвечать отказываемся.",
+      },
+      {
+        suffix: SUFFIX.qShopCheck,
+        label: "Как проверить магазин до покупки",
+        blurb:
+          "Проверки, которые приезжий делает сам у двери: лицензия, порядок вопросов, фасад, который ничего не доказывает, предложение принести в номер.",
+      },
+      {
+        suffix: SUFFIX.qMyths,
+        label: "В чём приезжие ошибаются",
+        blurb:
+          "Девять убеждений, с которыми приходят, и то, что на это отвечает уведомление: «всё легально», «хватит паспорта», «тридцать граммов в месяц», «немного увезти можно».",
+      },
+      {
+        suffix: SUFFIX.qStorage,
+        label: "Хранение в этой жаре",
+        blurb:
+          "Единственная страница раздела, за которой не стоит норма, потому что нормы нет: что тропическая жара и влажность делают с уже купленным и какие девять практических ответов из этого следуют.",
+      },
+      {
+        suffix: SUFFIX.qArriving,
+        label: "Прилететь с этим, а не улететь",
+        blurb:
+          "Зеркало страницы об отъезде и самая честная из них: что уведомления решают о приезжих и четыре вопроса, по которым проверяемого источника у нас нет, о чём мы прямо и пишем.",
       },
     ],
     sections: [

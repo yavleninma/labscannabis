@@ -1,4 +1,5 @@
 import { getIndexPolicy, normalizePathSuffix } from "@/lib/index-policy.mjs";
+import { getFactoryLinkLabelKeys, getFactoryRelatedSuffixes } from "@/content-factory/registry.mjs";
 import { localePath, type Locale } from "@/lib/i18n";
 import type { UiStrings } from "@/lib/ui";
 
@@ -48,7 +49,7 @@ type SeoLinkLabelKey = keyof UiStrings["footerSeo"];
  * Якорь обязан называть интент («От чего зависит цена»), а не место
  * («Паттайя»): иначе он не несёт смысла ни человеку, ни краулеру.
  */
-export const SEO_LINK_LABEL_KEYS: Readonly<Record<string, SeoLinkLabelKey>> = {
+const HAND_WRITTEN_LABEL_KEYS: Readonly<Record<string, SeoLinkLabelKey>> = {
   "": "homePage",
   contact: "contactPage",
   "cannabis-near-me-pattaya": "nearMe",
@@ -67,11 +68,23 @@ export const SEO_LINK_LABEL_KEYS: Readonly<Record<string, SeoLinkLabelKey>> = {
   "guides/first-visit-pattaya": "firstVisitGuide",
   "guides/choosing-flower-pattaya": "choosingGuide",
   strains: "strainsHub",
-  "strains/white-widow": "whiteWidowStrain",
-  "strains/blue-dream": "blueDreamStrain",
-  "strains/og-kush": "ogKushStrain",
+  // Подписи страниц сортов приходят из кластера завода — см. слияние ниже.
   about: "aboutUs",
   locations: "allPages",
+};
+
+/**
+ * Подписи ссылок: ручные плюс объявленные кластерами контент-завода.
+ *
+ * Ключ, объявленный руками, побеждает: так можно переопределить подпись
+ * заводской страницы, не трогая кластер. Слаг без ключа не получит ни одной
+ * входящей контекстной ссылки, а `check-seo` считает indexable-страницу без
+ * входящих ссылок сиротой и валит сборку, — поэтому у кластера объявление
+ * подписи входит в контракт (`docs/growth/CONTENT-FACTORY.md`).
+ */
+export const SEO_LINK_LABEL_KEYS: Readonly<Record<string, SeoLinkLabelKey>> = {
+  ...(getFactoryLinkLabelKeys() as Record<string, SeoLinkLabelKey>),
+  ...HAND_WRITTEN_LABEL_KEYS,
 };
 
 export interface SeoLink {
@@ -139,7 +152,7 @@ const SPILLOVER_SUFFIXES: readonly string[] = [
  * чтобы у коммерческой страницы источники были разного типа: соседняя
  * коммерческая, гео-маршрут и гайд, а не три одинаковых.
  */
-const RELATED_SUFFIXES: Readonly<Record<string, readonly string[]>> = {
+const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   // Главная — хаб первого уровня: с неё в один клик достижим весь горячий набор.
   "": [
     "cannabis-near-me-pattaya",
@@ -259,20 +272,20 @@ const RELATED_SUFFIXES: Readonly<Record<string, readonly string[]>> = {
     "guides/first-visit-pattaya",
     "best-cannabis-shop-pattaya",
   ],
+  // Хаб кластера ссылается по ОДНОМУ представителю от каждой ароматической
+  // группы, а не на все двадцать сортов: полный список уже стоит в теле
+  // страницы, сгруппированный по запаху, и дублировать его в блоке соседних
+  // ссылок значит показать те же двадцать имён второй раз без порядка.
   strains: [
     "strains/white-widow",
-    "strains/blue-dream",
     "strains/og-kush",
+    "strains/blue-dream",
+    "strains/girl-scout-cookies",
+    "strains/zkittlez",
     "guides/choosing-flower-pattaya",
   ],
-  "strains/white-widow": [
-    "strains/blue-dream",
-    "strains/og-kush",
-    "guides/choosing-flower-pattaya",
-    "strains",
-  ],
-  "strains/blue-dream": ["strains/og-kush", "strains/white-widow", "guides/choosing-flower-pattaya", "strains"],
-  "strains/og-kush": ["strains/white-widow", "strains/blue-dream", "guides/choosing-flower-pattaya", "strains"],
+  // Соседи страниц сортов объявлены в кластере завода
+  // (`src/content-factory/clusters/strains.mjs`) и подмешиваются ниже.
   "areas/walking-street": [
     "areas/soi-buakhao",
     "areas/central-pattaya",
@@ -305,9 +318,18 @@ const RELATED_SUFFIXES: Readonly<Record<string, readonly string[]>> = {
 };
 
 /**
- * Для страниц, у которых собственного списка соседей нет — гео-сетка, сорта,
- * вес, опт. Все они noindex, но человек на них попадает, и уводить его надо в
- * то, что живо.
+ * Соседи: объявленные кластерами контент-завода плюс ручные. Ручной список
+ * побеждает — им можно перекрыть заводской, не трогая кластер.
+ */
+const RELATED_SUFFIXES: Readonly<Record<string, readonly string[]>> = {
+  ...(getFactoryRelatedSuffixes() as Record<string, readonly string[]>),
+  ...HAND_WRITTEN_RELATED,
+};
+
+/**
+ * Для страниц, у которых собственного списка соседей нет — гео-сетка, вес, опт.
+ * Все они noindex, но человек на них попадает, и уводить его надо в то, что
+ * живо.
  */
 const DEFAULT_RELATED: readonly string[] = [
   "cannabis-near-me-pattaya",

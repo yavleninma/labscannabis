@@ -4,7 +4,7 @@ import { defineConfig } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import vercel from "@astrojs/vercel";
 import tailwindcss from "@tailwindcss/vite";
-import { getIndexPolicyForPathname, localePathname } from "./src/lib/index-policy.mjs";
+import { getIndexPolicyForPathname, getXDefaultLocale, localePathname } from "./src/lib/index-policy.mjs";
 
 const site = (process.env.PUBLIC_SITE_URL || "https://labscannabis.boutique").replace(/\/+$/, "");
 const sitemapHreflangs = {
@@ -93,20 +93,18 @@ export default defineConfig({
     inlineStylesheets: "auto",
   },
   /**
-   * Vercel Web Analytics выключен.
+   * Vercel Web Analytics включён.
    *
-   * Загрузчик дотягивал `/_vercel/insights/script.js` на каждой странице, при
-   * том что на сайте нет ни страницы о данных и cookie, ни упоминания
-   * аналитики ни на одной из семи локалей. Сайт, который на семи языках
-   * объясняет, чего он про себя не утверждает без подтверждения, не может
-   * молча собирать статистику посетителей. Слушатель кликов вызывает
-   * `window.va?.(...)` через optional chaining, поэтому включается это обратно
-   * одним флагом — после того как владелец решит вопрос с уведомлением о
-   * данных (O-11).
+   * Счётчик не ставит cookie и не строит кросс-сайтовый профиль, поэтому
+   * работает до появления страницы об обработке данных, а не после неё:
+   * единственная альтернатива — не считать посетителей вообще, а сайт,
+   * который делается ради замеримой конверсии, не может остаться без
+   * единственного работающего счётчика просмотров.
+   *
+   * Цели по каналам связи (WhatsApp, LINE, Telegram, звонок, карта, маршрут)
+   * считает Метрика — см. src/components/Analytics.astro. Она ждёт
+   * PUBLIC_YM_ID и без него молча не рендерится.
    */
-  // Web Analytics считает просмотры без cookie и без кросс-сайтового профиля, поэтому
-  // остаётся включённым до появления страницы об обработке данных. Цели по каналам
-  // связи считает Метрика (src/components/Analytics.astro), она ждёт PUBLIC_YM_ID.
   adapter: vercel({
     webAnalytics: {
       enabled: true,
@@ -123,10 +121,16 @@ export default defineConfig({
           lang: sitemapHreflangs[locale],
           url: new URL(localePathname(locale, policy.suffix), site).href,
         }));
-        links.push({
-          lang: "x-default",
-          url: new URL(localePathname("en", policy.suffix), site).href,
-        });
+        // x-default — из допущенных локалей (см. `getXDefaultLocale`), а не
+        // безусловно en: иначе отказ ворот на английском объявляет noindex-URL
+        // как x-default в `<xhtml:link>` сайтмапа.
+        const xDefaultLocale = getXDefaultLocale(policy.locales);
+        if (xDefaultLocale) {
+          links.push({
+            lang: "x-default",
+            url: new URL(localePathname(xDefaultLocale, policy.suffix), site).href,
+          });
+        }
 
         const { links: _links, ...withoutLinks } = item;
         const isHome = policy.suffix === "";

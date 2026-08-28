@@ -1,4 +1,13 @@
-# Пинг IndexNow после успешного деплоя.
+# Оповещение поисковиков после успешного деплоя.
+#
+# Два независимых канала, потому что поисковики не общие:
+#   - IndexNow (`scripts/ping-indexnow.mjs`) — Bing, Яндекс, Naver, Seznam, Yep.
+#     Работает всегда, ключ лежит в `public/<key>.txt`.
+#   - Search Console API (`scripts/gsc-submit.mjs`) — ТОЛЬКО Google, который в
+#     IndexNow не участвует. Включается сам в тот день, когда владелец положит
+#     ключ сервисного аккаунта в секрет GSC_SERVICE_ACCOUNT_JSON; пока секрета
+#     нет, шаг честно печатает «не настроен» и выходит нулём.
+#     Инструкция: docs/growth/ops/04-search-console-api.md
 #
 # Почему отдельный workflow, а не шаг в main.yml: main.yml ничего не деплоит —
 # он делает checkout, npm ci, build, check:seo и git diff. Деплоит Vercel через
@@ -9,7 +18,7 @@
 # Участники IndexNow: Bing, Яндекс, Naver, Seznam, Yep. Google протокол НЕ
 # поддерживает — этот workflow не ускоряет индексацию в Google и не заменяет
 # Search Console.
-name: IndexNow
+name: Notify search engines
 
 on:
   deployment_status:
@@ -33,10 +42,16 @@ jobs:
   ping:
     # deployment_status приходит на каждое изменение статуса, включая pending,
     # error и preview-деплои веток. Пингуем только успешный production.
+    # Сравнение строк в выражениях GitHub Actions регистронезависимо, поэтому
+    # 'Production' матчит и 'production'. Второй признак — булев флаг самого
+    # деплоя: если Vercel когда-нибудь переименует окружение, условие не
+    # развалится молча (а молча — это здесь единственный опасный режим:
+    # workflow просто перестанет запускаться, и заметить это нечем).
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event.deployment_status.state == 'success' &&
-       github.event.deployment_status.environment == 'Production')
+       (github.event.deployment_status.environment == 'Production' ||
+        github.event.deployment.production_environment))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,5 +71,25 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Ping IndexNow
+      # Видно в логе, что именно приехало: без этой строки «workflow не
+      # запускается» отлаживается только гаданием.
+      - name: Show trigger
+        run: |
+          echo "event=${{ github.event_name }}"
+          echo "state=${{ github.event.deployment_status.state }}"
+          echo "environment=${{ github.event.deployment_status.environment }}"
+          echo "production=${{ github.event.deployment.production_environment }}"
+          echo "url=${{ github.event.deployment_status.environment_url }}"
+
+      - name: Ping IndexNow (Bing, Yandex, Naver, Seznam, Yep)
         run: node scripts/ping-indexnow.mjs ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
+
+      # Google. Без секрета шаг печатает «не настроен» и выходит нулём —
+      # добавлять его сюда позже не придётся, достаточно завести секрет.
+      # `--soft` — чтобы истёкший ключ или лежащий API красил лог жёлтым, а не
+      # ронял workflow: деплой уже выложен, и переобход придёт своим чередом.
+      - name: Submit sitemap to Google Search Console
+        env:
+          GSC_SERVICE_ACCOUNT_JSON: ${{ secrets.GSC_SERVICE_ACCOUNT_JSON }}
+          GSC_PROPERTY: ${{ vars.GSC_PROPERTY }}
+        run: node scripts/gsc-submit.mjs --soft ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}

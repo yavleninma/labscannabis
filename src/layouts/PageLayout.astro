@@ -3,7 +3,7 @@ import "@/styles/global.css";
 import type { Locale } from "@/lib/i18n";
 import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
-import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { getIndexPolicy, getXDefaultLocale } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
 import { getFontStylesheetHref } from "@/lib/fonts";
 import { ADDRESS, GOOGLE } from "@/data/site";
@@ -65,7 +65,13 @@ const indexPolicy = getIndexPolicy(locale, pathSuffix);
 const hreflangs = indexPolicy.indexable
   ? getHreflangs(pathSuffix, indexPolicy.locales as readonly Locale[])
   : [];
-const xDefault = indexPolicy.indexable ? getCanonical("en", pathSuffix) : null;
+/**
+ * `x-default` берётся из ДОПУЩЕННЫХ локалей, а не безусловно из en: страница,
+ * отклонённая воротами на английском, но допущенная на другой локали, иначе
+ * объявляла бы noindex-URL как x-default, потеряв при этом hreflang="en".
+ */
+const xDefaultLocale = indexPolicy.indexable ? getXDefaultLocale(indexPolicy.locales) : null;
+const xDefault = xDefaultLocale ? getCanonical(xDefaultLocale as Locale, pathSuffix) : null;
 const dir = isRtl(locale) ? "rtl" : "ltr";
 const ogLocale = LOCALE_HREFLANG[locale].replace("-", "_");
 const siteUrl = getSiteUrl();

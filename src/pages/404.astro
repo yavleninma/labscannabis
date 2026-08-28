@@ -1,0 +1,77 @@
+---
+import "@/styles/global.css";
+import { LOCALES, LOCALE_NAMES, LOCALE_HREFLANG, localePath } from "@/lib/i18n";
+import { t } from "@/lib/ui";
+import { GOOGLE } from "@/data/site";
+
+/**
+ * СТРАНИЦА 404 — ОДНА НА ВЕСЬ САЙТ, БЕЗ ЛОКАЛИ.
+ *
+ * Зачем она появилась. У сайта не было собственной 404 вовсе: ни
+ * `src/pages/404.astro`, ни `dist/404.html`, поэтому на любой несуществующий
+ * адрес Vercel отдавал свою типовую заглушку — без навигации, без языка и без
+ * единой ссылки обратно. Дыр при этом хватает и они закономерные: голые
+ * сегменты пространств имён `/:lang/getting-here/`, `/:lang/questions/`,
+ * `/:lang/areas/`, `/:lang/delivery/` страницами не являются — хабом каждому
+ * из них служит написанная руками `locations` или `guides`, а промежуточный
+ * сегмент не существует и в хлебных крошках не упоминается.
+ *
+ * Плодить под каждый такой сегмент по 301 значило бы вести список руками и
+ * ждать, пока он разъедется с данными (ровно то, от чего защищает
+ * `validateRedirectShadowing`). Одна страница закрывает их все разом и заодно
+ * все опечатки в адресах.
+ *
+ * ПОЧЕМУ БЕЗ ЛОКАЛИ И БЕЗ `PageLayout`. Заголовок `Accept-Language` статике
+ * недоступен, а угадывать язык по URL, которого не существует, не по чему.
+ * Поэтому страница не выбирает за посетителя: она предлагает все семь входов
+ * подряд, каждый подписан на своём языке. `PageLayout` здесь не используется
+ * намеренно — он строит canonical, hreflang и JSON-LD от политики индексации,
+ * а у 404 нет ни канонического адреса, ни альтернатив на других локалях.
+ *
+ * `noindex` стоит явно: страница обязана существовать и обязана не
+ * индексироваться.
+ */
+const ui = t("en");
+const entries = LOCALES.map((locale) => ({
+  locale,
+  href: localePath(locale),
+  name: LOCALE_NAMES[locale],
+  hreflang: LOCALE_HREFLANG[locale],
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex, follow" />
+    <title>Page not found — {GOOGLE.listingName}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  </head>
+  <body class="bg-bg text-text">
+    <main class="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-12">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">404</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">This address does not exist</h1>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">
+        The page you asked for is not here. Nothing was moved and nothing is wrong on your side —
+        the address simply has no page behind it. Pick a language below and start from the front
+        page.
+      </p>
+      <nav class="mt-8 grid gap-3" aria-label={ui.langSwitcher.label}>
+        {entries.map((entry) => (
+          <a
+            href={entry.href}
+            hreflang={entry.hreflang}
+            lang={entry.hreflang}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+          >{entry.name}</a>
+        ))}
+      </nav>
+      <p class="mt-8 text-sm leading-relaxed text-text-muted">
+        {GOOGLE.listingName} · {ui.location.address}
+      </p>
+    </main>
+  </body>
+</html>

@@ -1,3 +1,8 @@
+import {
+  getFactoryIndexRules,
+  getFactoryRouteLocales,
+} from "../content-factory/registry.mjs";
+
 /** @typedef {"en" | "ru" | "th" | "ar" | "zh" | "ko" | "ja"} IndexLocale */
 
 /** @type {readonly IndexLocale[]} */
@@ -10,8 +15,19 @@ const allLocales = INDEX_LOCALES;
 const enRuLocales = EN_RU_INDEX_LOCALES;
 
 /**
- * This is the single allowlist for pages that may be indexed. Every generated
- * route not listed here remains available to visitors but must be noindex.
+ * РУЧНОЙ СПИСОК — только страницы-личности.
+ *
+ * Здесь остаётся то, у чего нет источника данных, по которому машина могла бы
+ * посчитать вердикт, и чьё количество не растёт: главная, контакты, `about`,
+ * правовой гид, хабы кластеров (`guides`, `strains`), брендовая страница,
+ * коммерческая тройка и четыре гео-маршрута. Каждая из них написана отдельно,
+ * прочитана человеком и попала сюда решением человека.
+ *
+ * Всё, что порождает КОНТЕНТ-ЗАВОД, сюда НЕ добавляется. Заводские страницы
+ * попадают в allowlist по результату ворот качества
+ * (`scripts/lib/quality-gate.mjs`), см. `INDEX_POLICY_RULES` ниже. Если новый
+ * кластер приходится дописывать руками в этот массив — значит, он собран не по
+ * контракту завода; контракт в `docs/growth/CONTENT-FACTORY.md`.
  *
  * Условие возврата слага (W1-14): у страницы есть собственный связный текст
  * после чистки `content-cache` (W1-10) и его подключения (W1-11), у неё
@@ -27,13 +43,20 @@ const enRuLocales = EN_RU_INDEX_LOCALES;
  * - `how-to-buy-cannabis-pattaya` — контента нет ни в `PAGE_COPY`, ни в
  *   `content-cache`; `loadSeoContent` на нём упадёт, и это правильно;
  * - страницы весов (`1g`, `10g`, `30g`, `100g`, `1kg`) — это прайс без цифр;
- * - сорта сверх трёх описанных (`white-widow`, `blue-dream`, `og-kush`) — на
- *   остальные названия нет материала на 600 слов собственного текста, а карточка
- *   на 150 слов с Leafly это второй заход на грабли раунда 1.
+ *   текста под них в `content-cache` больше нет вовсе: он был удалён вместе с
+ *   остальными 18 слагами-сиротами, за которыми не стояло ни одной собранной
+ *   страницы (`docs/growth/ops/05-content-cache-orphans.md`). Дописать сюда
+ *   строчку и получить готовую страницу теперь физически нечем, и это и есть
+ *   цель: `checkOrphanContentCache()` в `scripts/check-seo.mjs` валит сборку на
+ *   любом файле кэша без страницы;
+ * - сорта: они больше не перечисляются здесь вообще. Список страниц сортов,
+ *   допущенных в индекс, вычисляют ворота качества по тексту в
+ *   `src/data/strain-pages.ts` — добавить сорт значит написать текст, а не
+ *   дописать строчку в этот файл.
  *
  * @type {readonly Readonly<{ suffix: string, locales: readonly IndexLocale[] }>[]}
  */
-export const INDEX_POLICY_RULES = Object.freeze([
+const MANUAL_INDEX_POLICY_RULES = Object.freeze([
   Object.freeze({ suffix: "", locales: allLocales }),
   Object.freeze({ suffix: "contact", locales: allLocales }),
   Object.freeze({ suffix: "locations", locales: allLocales }),
@@ -57,15 +80,22 @@ export const INDEX_POLICY_RULES = Object.freeze([
   Object.freeze({ suffix: "guides", locales: allLocales }),
   Object.freeze({ suffix: "guides/prescription-pattaya", locales: allLocales }),
   Object.freeze({ suffix: "guides/first-visit-pattaya", locales: allLocales }),
-  // Гид по выбору и кластер сортов — пока en+ru: на остальных локалях эти
-  // страницы отдают заглушку и остаются noindex, потому что вычитанного
-  // носителем текста нет, а машинный перевод описания сорта — та самая тонкая
-  // страница, которая вредит.
-  Object.freeze({ suffix: "guides/choosing-flower-pattaya", locales: enRuLocales }),
-  Object.freeze({ suffix: "strains", locales: enRuLocales }),
-  Object.freeze({ suffix: "strains/white-widow", locales: enRuLocales }),
-  Object.freeze({ suffix: "strains/blue-dream", locales: enRuLocales }),
-  Object.freeze({ suffix: "strains/og-kush", locales: enRuLocales }),
+  // Гид по выбору и хаб кластера сортов — на всех семи локалях.
+  //
+  // До третьего раунда здесь стояло en+ru с формулировкой «машинный перевод
+  // описания цветка — та самая тонкая страница, которая вредит». Она верна и
+  // остаётся в силе: перевода здесь и нет. Пять локалей закрыты СВОИМ текстом
+  // (`strain-pages-open-locales.ts`, `guide-choosing-flower-open-locales.ts`) —
+  // у каждой свой набор разделов, потому что вопрос у японского и арабского
+  // читателя разный, и это видно замером: похожесть внутри локали 0.00-0.05
+  // при пороге 0.35, то есть один шаблон, прогнанный через переводчик, ворота
+  // бы не прошёл.
+  //
+  // Хаб и гид написаны руками, поэтому решение об их индексации принимает
+  // человек и оно стоит здесь. Сами страницы сортов сюда по-прежнему НЕ
+  // вписаны: локали, на которых они indexable, вычисляют ворота качества.
+  Object.freeze({ suffix: "guides/choosing-flower-pattaya", locales: allLocales }),
+  Object.freeze({ suffix: "strains", locales: allLocales }),
   // Гео: индексируются ровно те районы, для которых написан авторский маршрут в
   // `AREA_ROUTES`. Район без маршрута шаблон вообще не генерирует — см.
   // `src/pages/[lang]/areas/[area].astro`.
@@ -74,6 +104,41 @@ export const INDEX_POLICY_RULES = Object.freeze([
   Object.freeze({ suffix: "areas/central-pattaya", locales: enRuLocales }),
   Object.freeze({ suffix: "areas/jomtien", locales: enRuLocales }),
 ]);
+
+/**
+ * ЕДИНЫЙ allowlist = страницы-личности + то, что ПРОПУСТИЛИ ВОРОТА КАЧЕСТВА.
+ *
+ * Вторая половина списка не написана человеком: она вычисляется при каждом
+ * импорте этого модуля из текста кластеров (`src/content-factory/`) прогоном
+ * `evaluateCandidates()` из `scripts/lib/quality-gate.mjs`. Страница завода,
+ * не прошедшая ворота, сюда не попадает — значит, `PageLayout` поставит ей
+ * `noindex, follow`, фильтр в `astro.config.mjs` не пустит её в sitemap, а
+ * `resolveLinks()` в `src/data/footer-seo-links.ts` перестанет на неё
+ * ссылаться. Ни одной ручной правки для этого делать не нужно, и в этом весь
+ * смысл: 149 отказов «Обнаружена, не проиндексирована» в Search Console
+ * набрались ровно потому, что раньше решение принимал генератор, а не проверка.
+ *
+ * НИЧЕГО НЕ ЗАПИСЫВАЕТСЯ НА ДИСК. Сборке запрещено менять рабочее дерево
+ * (CI делает `git diff --exit-code`), поэтому вердикт живёт только в памяти
+ * процесса сборки — и потому не может разойтись с текстом страниц.
+ *
+ * @type {readonly Readonly<{ suffix: string, locales: readonly IndexLocale[] }>[]}
+ */
+export const INDEX_POLICY_RULES = Object.freeze([
+  ...MANUAL_INDEX_POLICY_RULES,
+  .../** @type {readonly Readonly<{ suffix: string, locales: readonly IndexLocale[] }>[]} */ (
+    getFactoryIndexRules()
+  ),
+]);
+
+/**
+ * Сколько URL допущено вручную и сколько — воротами. Печатается в отчёте
+ * `check-seo`: если заводская половина внезапно скакнула, это видно сразу.
+ */
+export const MANUAL_INDEXABLE_PAGE_COUNT = MANUAL_INDEX_POLICY_RULES.reduce(
+  (total, rule) => total + rule.locales.length,
+  0,
+);
 
 /**
  * Локали, на которых у маршрута есть НАСТОЯЩАЯ страница.
@@ -96,16 +161,28 @@ const ROUTE_LOCALES = new Map([
   ["buy-cannabis-pattaya", enRuLocales],
   ["best-cannabis-shop-pattaya", enRuLocales],
   ["cheap-weed-pattaya", enRuLocales],
-  ["strains", enRuLocales],
-  ["strains/white-widow", enRuLocales],
-  ["strains/blue-dream", enRuLocales],
-  ["strains/og-kush", enRuLocales],
-  ["guides/choosing-flower-pattaya", enRuLocales],
+  // `strains` и `guides/choosing-flower-pattaya` записей здесь БОЛЬШЕ НЕТ: у них
+  // есть настоящая страница на всех семи локалях, поэтому они попадают в ветку
+  // «по умолчанию все семь». Вместе с этими двумя строками из `vercel.json`
+  // убраны три 301, которые перекрывали эти же URL на th/ar/zh/ko/ja: редирект
+  // на границе сети побеждает статический файл, и оставить их значило бы
+  // объявить страницу в sitemap и hreflang, а отдавать по ней 301.
   ["areas/walking-street", enRuLocales],
   ["areas/soi-buakhao", enRuLocales],
   ["areas/central-pattaya", enRuLocales],
   ["areas/jomtien", enRuLocales],
 ]);
+
+/**
+ * Маршруты завода добавляются сюда автоматически: локаль, на которой у кластера
+ * есть кандидат, — это локаль, на которой страница СОБИРАЕТСЯ, даже если ворота
+ * её не пропустили. Ручная запись, если она есть, имеет приоритет: так можно
+ * закрыть маршрут редиректом, не трогая кластер.
+ */
+for (const [suffix, locales] of getFactoryRouteLocales()) {
+  if (ROUTE_LOCALES.has(suffix)) continue;
+  ROUTE_LOCALES.set(suffix, /** @type {readonly IndexLocale[]} */ (locales));
+}
 
 /**
  * Локали, для которых страница по этому суффиксу действительно существует.
@@ -133,8 +210,80 @@ export const EXPECTED_INDEXABLE_PAGE_COUNT = INDEX_POLICY_RULES.reduce(
   0,
 );
 
+export const FACTORY_INDEXABLE_PAGE_COUNT =
+  EXPECTED_INDEXABLE_PAGE_COUNT - MANUAL_INDEXABLE_PAGE_COUNT;
+
+/* ------------------------------------------------------------------------- *
+ * ПОТОЛОК НАБОРА — РУЧНОЙ ЗАМОК
+ *
+ * Сверка `EXPECTED_INDEXABLE_PAGE_COUNT` с ожиданиями в `check-seo` была
+ * тавтологичной: обе стороны считались из одних и тех же правил, поэтому
+ * условие могло сработать только на дубле `suffix+locale`, а его и так ловит
+ * `throw` выше. Содержательной оставалась одна сверка — политика против
+ * сайтмапа. В результате набор indexable-URL вырос за раунд с 96 до 187
+ * (+95%), и ни одна проверка этого не заметила и не должна была заметить:
+ * кластер, случайно отдавший пятьсот кандидатов, прошёл бы молча, если бы их
+ * пропустили ворота.
+ *
+ * Именно от этого риска строились ворота: 149 отказов «Обнаружена, не
+ * проиндексирована» в Search Console набрались от массового прироста
+ * шаблонных страниц. Поэтому рядом с вычисляемым значением стоит потолок,
+ * который МЕНЯЕТСЯ РУКАМИ и попадает в ревью одной строкой.
+ *
+ * Как поднимать: осознанно, вместе с объяснением, почему прирост нужен.
+ * Не «чтобы сборка позеленела».
+ * ------------------------------------------------------------------------- */
+
+/** Потолок всего indexable-набора. Текущее значение — 187. */
+export const MAX_TOTAL_INDEXABLE = 200;
+
+/** Потолок того, что пропускают ворота завода. Текущее значение — 87. */
+export const MAX_FACTORY_ADMITTED = 100;
+
+if (EXPECTED_INDEXABLE_PAGE_COUNT > MAX_TOTAL_INDEXABLE) {
+  throw new Error(
+    `Индексируемый набор вырос до ${EXPECTED_INDEXABLE_PAGE_COUNT} при потолке ${MAX_TOTAL_INDEXABLE}. ` +
+      "Либо это осознанный рост — и потолок MAX_TOTAL_INDEXABLE поднимают руками в " +
+      "src/lib/index-policy.mjs, — либо кластер сорвался и отдал больше кандидатов, чем должен был.",
+  );
+}
+
+if (FACTORY_INDEXABLE_PAGE_COUNT > MAX_FACTORY_ADMITTED) {
+  throw new Error(
+    `Ворота пропустили ${FACTORY_INDEXABLE_PAGE_COUNT} заводских URL при потолке ${MAX_FACTORY_ADMITTED}. ` +
+      "Поднимать MAX_FACTORY_ADMITTED руками и только вместе с ответом на вопрос, " +
+      "почему кластер вырос.",
+  );
+}
+
 export function normalizePathSuffix(pathSuffix = "") {
   return pathSuffix.replace(/^\/+|\/+$/g, "");
+}
+
+/**
+ * Локаль, на которую обязан указывать `x-default`.
+ *
+ * НЕ «всегда en». Раньше здесь безусловно стоял английский, и отказ ворот
+ * качества ломал кластер альтернатив: страница, отклонённая на en, но
+ * допущенная на ru, продолжала объявлять noindex-URL как `x-default` и в
+ * `<head>`, и в `<xhtml:link>` сайтмапа, а `hreflang="en"` из набора при этом
+ * исчезал. Google получал противоречивый сигнал ровно про ту страницу, которую
+ * ворота защищали. Баг был латентным только потому, что в проде ворота ещё ни
+ * разу никого не отклонили — то есть путь отказа был непроверен целиком.
+ *
+ * Правило: `x-default` берётся ИЗ ДОПУЩЕННЫХ локалей, в фиксированном порядке
+ * `INDEX_LOCALES` (en первый, поэтому в обычном случае поведение не меняется).
+ * Допущенных нет вовсе — тега нет: указывать `x-default` на noindex-URL хуже,
+ * чем не указывать его совсем.
+ *
+ * @param {readonly IndexLocale[]} locales
+ * @returns {IndexLocale | null}
+ */
+export function getXDefaultLocale(locales = EMPTY_LOCALES) {
+  for (const locale of INDEX_LOCALES) {
+    if (locales.includes(locale)) return locale;
+  }
+  return null;
 }
 
 /**

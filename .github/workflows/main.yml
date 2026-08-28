@@ -32,5 +32,17 @@ jobs:
       - name: Check SEO
         run: npm run check:seo
 
+      # Сверяет вывод linkLabelKey() со словарями всех семи локалей. Без него
+      # ошибка в ключе проявляется как непонятное падение про страницу-сироту,
+      # а не как сообщение про отсутствующий ключ.
+      - name: Check strain link labels
+        run: npm run check:strains
+
+      # Отчёт завода в лог сборки: в истории CI видно, кого и почему ворота
+      # отклонили в каждом коммите. Без --strict — инструмент отвечает на
+      # вопрос «почему моя страница noindex», а блокирует сборку check:seo.
+      - name: Content factory report
+        run: npm run check:factory
+
       - name: Verify clean worktree
         run: git diff --exit-code

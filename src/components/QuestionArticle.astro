@@ -1,0 +1,151 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import Footer from "@/components/Footer.astro";
+import { localePath, type Locale } from "@/lib/i18n";
+import type { ResolvedQuestionPage } from "@/data/question-pages";
+import { GUIDES_PUBLISHED_ON, GUIDES_UPDATED_ON } from "@/data/guides";
+import { LEGAL_GUIDE_COPY, LEGAL_GUIDE_SOURCES } from "@/data/legal-guide";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { t } from "@/lib/ui";
+import { formatUpdatedLabel } from "@/lib/updated-date";
+
+/**
+ * Каркас вопросной страницы (кластер `questions/*`).
+ *
+ * Шаблон НЕ подставляет ни одной переменной в прозу: он раскладывает готовые
+ * абзацы из `src/data/question-pages.ts`. Именно подстановка в общий текст
+ * дала гео-страницам похожесть 0.81, и повторять этот приём здесь нельзя.
+ *
+ * Что шаблон делает обязательным:
+ * • каждый вопрос — отдельный H2, а ответ под ним; это форма, которую цитируют
+ *   ИИ-поиски, и она же даёт человеку оглавление глазами;
+ * • над каждым ответом ВИДИМАЯ пометка основания: официальный источник,
+ *   практическая осторожность или «не подтверждено»;
+ * • ссылки на первоисточники печатаются ТОЛЬКО те, на которые реально
+ *   ссылаются ответы этой страницы (`sourceKeys`) — сноска на закон под
+ *   страницей, где нет ни одного `official`, была бы подлогом;
+ * • `FAQPage` собирается из тех же пар вопрос-ответ, что видит читатель.
+ */
+interface Props {
+  locale: Locale;
+  page: ResolvedQuestionPage;
+}
+
+const { locale, page } = Astro.props;
+const ui = t(locale);
+const legalCopy = LEGAL_GUIDE_COPY[locale];
+const guidesHubSuffix = "guides";
+const legalSuffix = "guides/legal-cannabis-tourists";
+const showHubLink = getIndexPolicy(locale, guidesHubSuffix).indexable;
+const showLegalLink = getIndexPolicy(locale, legalSuffix).indexable;
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.footerSeo.guidesHub, pathSuffix: guidesHubSuffix },
+  { name: page.meta.kicker, pathSuffix: page.suffix },
+];
+const updatedLabel = formatUpdatedLabel(locale, GUIDES_UPDATED_ON);
+/**
+ * `FAQPage` из видимого текста: ответ склеивается из тех же абзацев, что
+ * стоят на странице. Разметка, расходящаяся с текстом, — ровно то, за что
+ * Google снимает rich-результат.
+ */
+const faq = page.items.map((item) => ({ q: item.q, a: item.a.join(" ") }));
+const SOURCE_LABELS: Record<string, string> = {
+  thaiGovernment: legalCopy.governmentSourceCta,
+  touristNotice: legalCopy.touristSourceCta,
+  ministerialRegulation2026: legalCopy.ministerialSourceCta,
+};
+const article = {
+  headline: page.meta.h1,
+  datePublished: GUIDES_PUBLISHED_ON,
+  dateModified: GUIDES_UPDATED_ON,
+  author: "Labs Cannabis",
+};
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={page.suffix}
+  title={page.meta.title}
+  description={page.meta.description}
+  faq={faq}
+  pageType="guide"
+  breadcrumbs={breadcrumbs}
+  article={article}
+>
+  <article class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{page.meta.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{page.meta.h1}</h1>
+      <p class="mt-2 text-sm text-text-muted">
+        <time datetime={GUIDES_UPDATED_ON}>{updatedLabel}</time>
+      </p>
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{page.meta.lead}</p>
+
+      {page.items.map((item) => (
+        <section class="mt-9" id={item.id}>
+          <h2 class="text-xl font-bold text-emerald-dim">{item.q}</h2>
+          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-text-muted">
+            {page.basisLabels[item.basis]}
+          </p>
+          {item.a.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      {page.sourceKeys.length > 0 && (
+        <section class="mt-9" aria-labelledby="question-sources-title">
+          <h2 id="question-sources-title" class="text-xl font-bold">{page.sourcesTitle}</h2>
+          {/*
+            Сноски, а не кнопки: зелёная кнопка на тайскоязычный сайт
+            правительства уводит посетителя и не возвращает.
+          */}
+          <p class="mt-3 flex flex-wrap gap-x-5 gap-y-2 text-sm text-text-muted">
+            {page.sourceKeys.map((key) => (
+              <a
+                href={LEGAL_GUIDE_SOURCES[key]}
+                target="_blank"
+                rel="nofollow noopener noreferrer"
+                class="underline hover:text-emerald-dim"
+              >{SOURCE_LABELS[key]}</a>
+            ))}
+          </p>
+        </section>
+      )}
+
+      <aside class="card-surface mt-8 border border-border px-4 py-4" aria-labelledby="question-caution-title">
+        <h2 id="question-caution-title" class="text-xl font-bold">{page.cautionTitle}</h2>
+        <p class="mt-2 text-base leading-relaxed text-text-muted">{page.meta.caution}</p>
+      </aside>
+
+      <nav class="mt-8 grid gap-3" aria-label={page.meta.kicker}>
+        {showLegalLink && (
+          <a
+            href={localePath(locale, legalSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement="guides"
+            data-target={legalSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.legalGuide}</a>
+        )}
+        {showHubLink && (
+          <a
+            href={localePath(locale, guidesHubSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement="guides"
+            data-target={guidesHubSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.guidesHub}</a>
+        )}
+      </nav>
+    </div>
+    <ContactRail locale={locale} intent={page.intent} placement="guides" />
+  </article>
+  <RelatedLinks locale={locale} pathSuffix={page.suffix} placement="guides" />
+  <Footer locale={locale} pathSuffix={page.suffix} />
+</PageLayout>

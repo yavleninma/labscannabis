@@ -1,0 +1,174 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import ContactRail from "@/components/ContactRail.astro";
+import RelatedLinks from "@/components/RelatedLinks.astro";
+import MapBlock from "@/components/MapBlock.astro";
+import Footer from "@/components/Footer.astro";
+import { localePath, type Locale } from "@/lib/i18n";
+import { describeLandmarkWalk, getLandmark } from "@/lib/geo";
+import type { LandmarkTravel } from "@/data/landmarks";
+import { GEO_ROUTE_LABELS, geoRouteSuffix, getGeoRoute } from "@/data/geo-routes";
+import { getIndexPolicy } from "@/lib/index-policy.mjs";
+import { t } from "@/lib/ui";
+
+/**
+ * Каркас страницы «как добраться до нас от <ориентир>».
+ *
+ * ЕДИНСТВЕННОЕ ЧИСЛО НА СТРАНИЦЕ ВЫЧИСЛЯЕТСЯ. Строку с расстоянием и временем
+ * печатает `describeLandmarkWalk(slug, locale)` — гаверсинус от пина магазина
+ * до координаты ориентира, время диапазоном (прямая всегда короче улиц). В
+ * данных маршрута (`src/data/geo-routes.ts`) и в фактуре ориентира
+ * (`src/data/landmarks.ts`) цифр расстояния и минут нет вовсе: обещание
+ * «пять минут пешком» до точки, до которой идти вдвое дольше, возвращается
+ * однозвёздочным отзывом.
+ *
+ * ШАБЛОН НЕ ПОДСТАВЛЯЕТ НИ ОДНОЙ ПЕРЕМЕННОЙ В ПРОЗУ. Он раскладывает готовые
+ * абзацы: фактуру маршрута из набора ориентиров и авторские разделы из
+ * копирайта. Именно подстановка названия в общий текст дала прежней гео-сетке
+ * попарную похожесть 0.81 — повторять этот приём нельзя.
+ *
+ * ПОРЯДОК ВЫВОДА ЗНАЧИМ. Он обязан совпадать с `ownText()` в
+ * `src/content-factory/clusters/geo-routes.mjs`: ворота меряют текст по
+ * данным, вторая ступень ОТК — по отрисованному `dist/`, и если порядок
+ * разъедется, они начнут мерить разные страницы.
+ */
+interface Props {
+  locale: Locale;
+  slug: string;
+}
+
+const { locale, slug } = Astro.props;
+const copy = getGeoRoute(slug, locale)!;
+const landmark = getLandmark(slug)!;
+const travel = landmark.travel[locale] as LandmarkTravel;
+const labels = GEO_ROUTE_LABELS[locale]!;
+const ui = t(locale);
+
+/** Вычисленная строка. `null` невозможен — слаг пришёл из `LANDMARKS`. */
+const walkLine = describeLandmarkWalk(slug, locale);
+const landmarkName = landmark.name[locale];
+const pathSuffix = geoRouteSuffix(slug);
+
+const hubSuffix = "locations";
+const showHubLink = getIndexPolicy(locale, hubSuffix).indexable;
+
+const breadcrumbs = [
+  { name: ui.nav.home, pathSuffix: "" },
+  { name: ui.footerSeo.allPages, pathSuffix: hubSuffix },
+  { name: copy.kicker, pathSuffix },
+];
+
+/** `FAQPage` собирается из тех же пар, что видит читатель. */
+const faq = copy.faq.map((item) => ({ q: item.q, a: item.a }));
+---
+
+<PageLayout
+  locale={locale}
+  pathSuffix={pathSuffix}
+  title={copy.title}
+  description={copy.description}
+  pageType="area"
+  breadcrumbs={breadcrumbs}
+  faq={faq}
+  serviceAreaName={landmarkName}
+>
+  <article class="px-4 pt-8 pb-6">
+    <div class="mx-auto max-w-lg">
+      <p class="text-sm font-semibold uppercase tracking-wide text-emerald-dim">{copy.kicker}</p>
+      <h1 class="mt-1 text-3xl font-bold leading-tight">{copy.h1}</h1>
+      {walkLine && <p class="mt-2 text-sm font-semibold text-emerald-dim">{walkLine}</p>}
+      <p class="mt-4 text-base leading-relaxed text-text-muted">{copy.lead}</p>
+
+      <section class="mt-9">
+        <h2 class="text-xl font-bold text-emerald-dim">{labels.arrivalTitle}</h2>
+        <ul class="mt-4 grid gap-4">
+          {travel.legs.map((leg) => (
+            <li class="card-surface p-4">
+              <h3 class="text-base font-bold text-text">{labels.modes[leg.mode]}</h3>
+              <p class="mt-2 text-base leading-relaxed text-text-muted">{leg.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section class="mt-9">
+        <h2 class="text-xl font-bold text-emerald-dim">{labels.waypointsTitle}</h2>
+        <ol class="mt-3 grid gap-2 pl-5 list-decimal">
+          {travel.waypoints.map((point) => (
+            <li class="text-base leading-relaxed text-text-muted">{point}</li>
+          ))}
+        </ol>
+      </section>
+
+      <section class="mt-9">
+        <h2 class="text-xl font-bold text-emerald-dim">{labels.wrongTurnTitle}</h2>
+        <p class="mt-3 text-base leading-relaxed text-text-muted">{travel.wrongTurn}</p>
+      </section>
+
+      <section class="mt-9">
+        <h2 class="text-xl font-bold text-emerald-dim">{labels.dayEveningTitle}</h2>
+        <p class="mt-3 text-base leading-relaxed text-text-muted">{travel.dayAndEvening}</p>
+      </section>
+
+      {copy.sections.map((section) => (
+        <section class="mt-9">
+          <h2 class="text-xl font-bold text-emerald-dim">{section.h2}</h2>
+          {section.body.map((paragraph) => (
+            <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+          ))}
+        </section>
+      ))}
+
+      {/*
+        Происхождение координаты стоит на самой странице, а не в комментарии к
+        данным: расстояние здесь — обещание, и читатель имеет право знать, чем
+        оно обеспечено и чего оно не обещает.
+      */}
+      <aside class="card-surface mt-9 border border-border px-4 py-4" aria-labelledby="geo-route-provenance">
+        <h2 id="geo-route-provenance" class="text-xl font-bold">{labels.provenanceTitle}</h2>
+        {copy.provenance.map((paragraph) => (
+          <p class="mt-3 text-base leading-relaxed text-text-muted">{paragraph}</p>
+        ))}
+        {/*
+          Происхождение ФАКТУРЫ МАРШРУТА, а не только координаты. Координата
+          несла источники с самого начала, а совет «выходите к дороге, машины
+          тут не стоят» — ничего; это поле говорит, на чём он держится и чего
+          не утверждает. Обязательность проверяет `assertLandmarkDataIntegrity()`.
+        */}
+        <p class="mt-3 text-base leading-relaxed text-text-muted">{travel.basis}</p>
+      </aside>
+
+      <section class="mt-9">
+        <h2 class="mb-3 text-xl font-bold">{labels.faqTitle}</h2>
+        {copy.faq.map((item) => (
+          <details class="card-surface mb-3 p-4">
+            <summary class="cursor-pointer text-base font-semibold">{item.q}</summary>
+            <p class="mt-2 text-base leading-relaxed text-text-muted">{item.a}</p>
+          </details>
+        ))}
+      </section>
+
+      {showHubLink && (
+        <nav class="mt-8 grid gap-3" aria-label={copy.kicker}>
+          <a
+            href={localePath(locale, hubSuffix)}
+            class="card-surface px-4 py-3.5 text-center text-base font-semibold text-emerald-dim"
+            data-track="nav_click"
+            data-placement="area"
+            data-target={hubSuffix}
+            data-seo-context-link
+          >{ui.footerSeo.allPages}</a>
+        </nav>
+      )}
+    </div>
+    {/*
+      Контактный CTA внутри содержимого, а не только в сквозном футере:
+      человек, дочитавший маршрут, стоит в конкретной точке — префилл
+      мессенджера называет её.
+    */}
+    <ContactRail locale={locale} intent="area" placement="area" area={landmarkName} />
+  </article>
+  <RelatedLinks locale={locale} pathSuffix={pathSuffix} placement="area" />
+  <MapBlock locale={locale} />
+  <Footer locale={locale} pathSuffix={pathSuffix} />
+</PageLayout>

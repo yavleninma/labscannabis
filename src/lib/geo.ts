@@ -1,5 +1,7 @@
 import { ADDRESS } from "@/data/site";
 import { renderCopy } from "@/data/area-copy";
+import { LANDMARKS } from "@/data/landmarks";
+import type { Landmark } from "@/data/landmarks";
 import type { Locale } from "@/lib/i18n";
 
 /**
@@ -32,123 +34,16 @@ export interface Coordinates {
   lng: number;
 }
 
-export interface Landmark extends Coordinates {
-  slug: string;
-  name: Record<Locale, string>;
-}
-
 /**
- * Landmark coordinates are public reference points (Wikipedia / OpenStreetMap level
- * of precision, ±100 m), rounded to five decimals. Where a landmark is a street or a
- * beach rather than a point, the coordinate is the end nearest the shop, so the
- * resulting distance is the one a visitor experiences.
+ * Ориентиры и их координаты живут в `src/data/landmarks.ts`: там же лежат
+ * источник каждой координаты, оценка доверия к ней и фактура маршрута, которой
+ * страница отличается от соседней. Здесь остаётся только арифметика.
+ *
+ * Где ориентир — улица или пляж, а не точка, координата взята с ближайшего к
+ * магазину конца: расстояние должно совпадать с тем, которое человек проходит.
  */
-export const LANDMARKS: Landmark[] = [
-  {
-    // North entrance, at Beach Road — where a visitor standing "on Walking Street" starts.
-    slug: "walking-street",
-    lat: 12.9257,
-    lng: 100.87,
-    name: {
-      en: "Walking Street",
-      ru: "Walking Street",
-      th: "Walking Street",
-      ar: "Walking Street",
-      zh: "Walking Street",
-      ko: "Walking Street",
-      ja: "Walking Street",
-    },
-  },
-  {
-    // South end of Beach Road, the closest point of the beachfront to the shop.
-    slug: "beach-road",
-    lat: 12.9265,
-    lng: 100.8699,
-    name: {
-      en: "Beach Road",
-      ru: "Бич Роуд",
-      th: "ถนนเลียบชายหาด",
-      ar: "شارع الشاطئ",
-      zh: "海滩路",
-      ko: "비치로드",
-      ja: "ビーチロード",
-    },
-  },
-  {
-    // Южный конец Soi Buakhao, там где переулок выходит на South Pattaya Road —
-    // ближайшая к магазину точка улицы, и именно её проходит пешеход.
-    slug: "soi-buakhao",
-    lat: 12.9266,
-    lng: 100.8812,
-    name: {
-      en: "Soi Buakhao",
-      ru: "Сой Буакхао",
-      th: "ซอยบัวขาว",
-      ar: "سوي بواخاو",
-      zh: "Soi Buakhao",
-      ko: "소이 부아카오",
-      ja: "ソイ・ブアカオ",
-    },
-  },
-  {
-    slug: "central-festival",
-    lat: 12.93444,
-    lng: 100.88389,
-    name: {
-      en: "Central Festival",
-      ru: "Central Festival",
-      th: "เซ็นทรัลเฟสติวัล พัทยาบีช",
-      ar: "سنترال فيستيفال",
-      zh: "尚泰海滩购物中心",
-      ko: "센트럴 페스티벌",
-      ja: "セントラルフェスティバル",
-    },
-  },
-  {
-    // Wat Phra Yai on Khao Phra Tamnak — the Pratumnak reference point.
-    slug: "big-buddha",
-    lat: 12.91694,
-    lng: 100.8675,
-    name: {
-      en: "Big Buddha Hill",
-      ru: "Большой Будда",
-      th: "วัดพระใหญ่",
-      ar: "بوذا الكبير",
-      zh: "大佛山",
-      ko: "빅 붓다",
-      ja: "ビッグブッダ",
-    },
-  },
-  {
-    slug: "jomtien-beach",
-    lat: 12.89583,
-    lng: 100.87306,
-    name: {
-      en: "Jomtien Beach",
-      ru: "Пляж Джомтьен",
-      th: "หาดจอมเทียน",
-      ar: "شاطئ جومتين",
-      zh: "乔木提恩海滩",
-      ko: "좀티엔 해변",
-      ja: "ジョムティエンビーチ",
-    },
-  },
-  {
-    // Wong Amat — the Naklua reference point.
-    slug: "wong-amat-beach",
-    lat: 12.96,
-    lng: 100.88472,
-    name: {
-      en: "Wong Amat Beach",
-      ru: "Пляж Вонгамат",
-      th: "หาดวงศ์อมาตย์",
-      ar: "شاطئ ونغ أمات",
-      zh: "翁阿玛海滩",
-      ko: "웡아맛 해변",
-      ja: "ウォンアマットビーチ",
-    },
-  },
-];
+export { LANDMARKS } from "@/data/landmarks";
+export type { Landmark } from "@/data/landmarks";
 
 export interface LandmarkWalk {
   landmark: Landmark;
@@ -200,6 +95,104 @@ export function getWalkFromShop(slug: string): LandmarkWalk | null {
     walkable: meters <= WALKABLE_MAX_M,
   };
 }
+
+/**
+ * Расхождение между всеми числами, которые нашлись по ориентиру, включая
+ * принятую координату: максимальное попарное расстояние, метры.
+ *
+ * Считается, а не хранится, ровно по той же причине, по которой считаются
+ * расстояния до магазина: записанное руками число разъедется с данными.
+ */
+export function landmarkSourceSpreadMeters(landmark: Landmark): number {
+  const points: Coordinates[] = [{ lat: landmark.lat, lng: landmark.lng }, ...landmark.sources];
+  let spread = 0;
+  for (let i = 0; i < points.length; i += 1) {
+    for (let j = i + 1; j < points.length; j += 1) {
+      spread = Math.max(spread, haversineMeters(points[i].lat, points[i].lng, points[j].lat, points[j].lng));
+    }
+  }
+  return spread;
+}
+
+/** Расхождение источников, выше которого точечный ориентир не считается проверенным. */
+export const MAX_SOURCE_SPREAD_M = 150;
+
+/**
+ * ОТК набора ориентиров, срабатывающий на СБОРКЕ.
+ *
+ * Проверяются не тексты, а те инварианты, нарушение которых означает
+ * выдуманное расстояние на странице: дубль слага, ориентир без единого
+ * источника, «подтверждённая» координата с одним источником или с разбросом
+ * больше допустимого, и линейный ориентир без оговорки о погрешности.
+ * Линейным (`anchor`) порог разброса не применяется — у улицы нет одной
+ * правильной точки, — но оговорка для них обязательна.
+ *
+ * Бросает при импорте: страница с непроверенной координатой не должна
+ * собраться вовсе.
+ */
+export function assertLandmarkDataIntegrity(landmarks: readonly Landmark[] = LANDMARKS): void {
+  const seen = new Set<string>();
+  for (const landmark of landmarks) {
+    const id = landmark.slug;
+    if (!id) throw new Error("Landmark data: запись без слага");
+    if (seen.has(id)) throw new Error(`Landmark data: слаг ${id} объявлен дважды`);
+    seen.add(id);
+    if (landmark.sources.length === 0) {
+      throw new Error(`Landmark data: ${id} — координата без источника`);
+    }
+    const spread = landmarkSourceSpreadMeters(landmark);
+    if (landmark.confidence === "corroborated") {
+      if (landmark.sources.length < 2) {
+        throw new Error(`Landmark data: ${id} помечен corroborated, но источник один`);
+      }
+      if (spread > MAX_SOURCE_SPREAD_M) {
+        throw new Error(
+          `Landmark data: ${id} — источники расходятся на ${Math.round(spread)} м при пороге ${MAX_SOURCE_SPREAD_M} м`,
+        );
+      }
+    }
+    if (landmark.confidence === "single-source" && spread > MAX_SOURCE_SPREAD_M) {
+      throw new Error(`Landmark data: ${id} — координата отличается от своего источника на ${Math.round(spread)} м`);
+    }
+    if (landmark.confidence === "anchor" && !landmark.caveat) {
+      throw new Error(`Landmark data: ${id} — точка на линейном объекте обязана нести caveat с погрешностью`);
+    }
+    /**
+     * Линейный объект остаётся линейным независимо от того, сколько источников
+     * дали его координату. Требование caveat висело только на `anchor`, поэтому
+     * `wong-amat-beach` — километровая полоса берега — проходил проверку как
+     * `single-source` вообще без оговорки: инвариант удовлетворялся записью,
+     * которая описывает линию точкой. Честная оговорка была только в прозе
+     * `geo-routes.ts`, и её удаление не уронило бы ни одной проверки.
+     */
+    /**
+     * Фактура маршрута обязана называть, на чём она держится.
+     *
+     * У координат это `sources` с цитатой и `confidence`; у операционного
+     * совета («машины у платформы не стоят», «после темноты тут тихо») до
+     * третьего раунда не было ничего — а неподтверждённое расписание в тексте
+     * того же класса риска, что неподтверждённые часы работы. `basis` без
+     * текста — то же самое, что координата без источника.
+     */
+    for (const [locale, travel] of Object.entries(landmark.travel)) {
+      if (!travel) continue;
+      if (!travel.basis?.trim()) {
+        throw new Error(
+          `Landmark data: ${id}/${locale} — фактура маршрута без basis: ` +
+            "operational advice must say what it rests on and what it does not claim",
+        );
+      }
+    }
+    if ((landmark.kind === "beach" || landmark.kind === "street") && !landmark.caveat) {
+      throw new Error(
+        `Landmark data: ${id} — ${landmark.kind} это протяжённый объект, ` +
+          "у его координаты обязан быть caveat: что именно она обозначает и чего не обещает",
+      );
+    }
+  }
+}
+
+assertLandmarkDataIntegrity();
 
 const UNIT_METERS: Record<Locale, string> = {
   en: "m",

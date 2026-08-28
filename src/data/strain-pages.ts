@@ -1,5 +1,17 @@
 import type { Locale } from "@/lib/i18n";
 import type { CopySection, FaqItem } from "@/data/visit-copy";
+import type { AromaFamilyId } from "@/data/strain-catalog";
+// Значимые импорты — только относительные и с расширением: этот модуль читает
+// и Vite, и голый Node (`npm run check:factory`), а алиас `@/` Node не
+// резолвит. См. `docs/growth/CONTENT-FACTORY.md` §3.
+import { FUEL_STRAIN_PAGES } from "./strain-pages-fuel.ts";
+import { HAZE_STRAIN_PAGES } from "./strain-pages-haze.ts";
+import { DESSERT_STRAIN_PAGES } from "./strain-pages-dessert.ts";
+import { FRUIT_STRAIN_PAGES } from "./strain-pages-fruit.ts";
+import {
+  OPEN_LOCALE_STRAINS_INDEX_COPY,
+  OPEN_LOCALE_STRAIN_PAGES,
+} from "./strain-pages-open-locales.ts";
 
 /**
  * Описательные страницы сортов (T-11).
@@ -44,7 +56,15 @@ export interface StrainPageCopy {
 
 export type StrainPages = Record<string, Partial<Record<Locale, StrainPageCopy>>>;
 
-export const STRAIN_PAGES: StrainPages = {
+/**
+ * Три сорта, написанные в первом раунде и уже стоящие на проде.
+ *
+ * Их блок фактов набран руками и содержит строки, которых нет в наборе данных
+ * (внешний вид, откуда взялось название). Переводить их на `buildStrainFacts()`
+ * значило бы переписать продовый текст ради единообразия — а единообразие
+ * блока фактов не является ценностью само по себе.
+ */
+const HAND_WRITTEN_STRAIN_PAGES: StrainPages = {
   "white-widow": {
     en: {
       thingName: "White Widow",
@@ -109,20 +129,8 @@ export const STRAIN_PAGES: StrainPages = {
       faqTitle: "White Widow: common questions",
       faq: [
         {
-          q: "What is White Widow?",
-          a: "A balanced hybrid bred in the Netherlands in the early 1990s, usually credited to a Brazilian sativa landrace crossed with a South Indian indica. The name refers to its heavy white resin coat.",
-        },
-        {
-          q: "What does White Widow smell like?",
-          a: "Pine and damp earth first, then a peppery sharpness, with a thin citrus edge on a well-kept example. It is not a sweet or fruity profile.",
-        },
-        {
           q: "Is White Widow indica or sativa?",
           a: "Neither cleanly — it is a cross of both and it sits in the middle, which is why it is so often used as a reference point rather than as an extreme.",
-        },
-        {
-          q: "Why does White Widow vary so much between shops?",
-          a: "Because the name is thirty years old and nobody owns it. Hundreds of growers have re-selected it, so two honest jars under the same name can differ substantially.",
         },
         {
           q: "How can I tell whether a White Widow jar is fresh?",
@@ -204,10 +212,6 @@ export const STRAIN_PAGES: StrainPages = {
           a: "Сбалансированный гибрид, выведенный в Нидерландах в начале девяностых; родословную обычно возводят к бразильской сативе-ландрейсу и южноиндийской индике. Название отсылает к густому белёсому слою смолы.",
         },
         {
-          q: "Как пахнет White Widow?",
-          a: "Сначала сосна и влажная земля, затем перечная резкость, у хорошо сохранённого образца — тонкий цитрусовый край. Это не сладкий и не фруктовый профиль.",
-        },
-        {
           q: "White Widow — это индика или сатива?",
           a: "Ни то ни другое в чистом виде: это скрещивание обоих, и он сидит посередине. Поэтому его чаще используют как точку отсчёта, а не как крайность.",
         },
@@ -285,20 +289,8 @@ export const STRAIN_PAGES: StrainPages = {
       faqTitle: "Blue Dream: common questions",
       faq: [
         {
-          q: "What is Blue Dream?",
-          a: "A sativa-leaning hybrid from Northern California, usually given as Blueberry crossed with a Haze. It became the default menu hybrid across the 2010s.",
-        },
-        {
-          q: "What does Blue Dream smell like?",
-          a: "Sweet blueberry or generic sweet fruit over a brighter, faintly incense-like haze note. If a jar smells only of hay, the aroma has already gone.",
-        },
-        {
           q: "Why is Blue Dream on so many menus?",
           a: "It yields well, is forgiving to grow and suits a wide range of people. That combination makes it a natural house default rather than a specialist choice.",
-        },
-        {
-          q: "Is a Blue Dream jar in Thailand the same plant as in California?",
-          a: "Not necessarily. It is one of the most copied names in the world, so ask who grew it and where — a specific answer is the useful signal.",
         },
         {
           q: "Is Blue Dream a good first choice?",
@@ -372,16 +364,8 @@ export const STRAIN_PAGES: StrainPages = {
           a: "Гибрид с уклоном в сативу из Северной Калифорнии; родословную обычно указывают как Blueberry, скрещённый с хейзом. В 2010-е он стал гибридом по умолчанию в меню.",
         },
         {
-          q: "Как пахнет Blue Dream?",
-          a: "Сладкая черника или просто сладкий фрукт поверх более светлой, слегка благовонной хейзовой ноты. Если банка пахнет только сеном, аромат уже ушёл.",
-        },
-        {
           q: "Почему Blue Dream есть почти везде?",
           a: "Он хорошо родит, прощает ошибки в выращивании и подходит очень разным людям. Это делает его естественным «домашним вариантом», а не выбором для знатока.",
-        },
-        {
-          q: "Банка Blue Dream в Таиланде — то же растение, что в Калифорнии?",
-          a: "Не обязательно. Это одно из самых копируемых названий в мире, поэтому спрашивайте, кто и где вырастил: полезен именно конкретный ответ.",
         },
         {
           q: "Подходит ли Blue Dream для первого выбора?",
@@ -453,16 +437,8 @@ export const STRAIN_PAGES: StrainPages = {
       faqTitle: "OG Kush: common questions",
       faq: [
         {
-          q: "What is OG Kush?",
-          a: "A hybrid that emerged in Southern California in the 1990s, commonly linked to the Chemdawg line crossed with a Hindu Kush type. Its lineage has never been definitively settled.",
-        },
-        {
           q: "What does OG stand for?",
           a: "It is disputed. Ocean Grown and Original Gangster are the two readings you will hear, and neither has ever been conclusively established.",
-        },
-        {
-          q: "What does OG Kush smell like?",
-          a: "Fuel or solvent first, then sharp pine and lemon peel, over an earthy, musky base. It is a low, dense aroma rather than a bright one.",
         },
         {
           q: "How is it different from Blue Dream?",
@@ -544,10 +520,6 @@ export const STRAIN_PAGES: StrainPages = {
           a: "Единого мнения нет. Обычно называют Ocean Grown или Original Gangster, и ни одна версия не доказана.",
         },
         {
-          q: "Как пахнет OG Kush?",
-          a: "Сначала топливо или растворитель, затем резкая хвоя и лимонная корка поверх землистой мускусной основы. Запах низкий и плотный, а не светлый.",
-        },
-        {
           q: "Чем он отличается от Blue Dream?",
           a: "Почти всем, если говорить об аромате. Blue Dream лёгкий, сладкий и ягодный; OG Kush тяжёлый, топливный и землистый. Понюхать их подряд — самый быстрый способ понять своё предпочтение.",
         },
@@ -567,6 +539,57 @@ export const STRAIN_PAGES: StrainPages = {
   },
 };
 
+/**
+ * ВЕСЬ ТЕКСТ КЛАСТЕРА СОРТОВ.
+ *
+ * Собирается из пяти модулей: три страницы первого раунда и четыре файла,
+ * сгруппированные по ароматическим семьям. Группировка по семьям, а не по
+ * алфавиту, — рабочий приём против шаблона: сорта, которые проще всего описать
+ * одинаково, лежат в одном файле, и автор видит соседний текст, пока пишет.
+ *
+ * Порядок слияния значения не имеет — слаги не пересекаются, и `check:strains`
+ * это проверяет. Ворота качества сортируют кандидатов сами.
+ */
+/**
+ * Слияние ПО ЛОКАЛЯМ, а не по слагам.
+ *
+ * Обычный `{...a, ...b}` затирает слаг целиком: файл, добавляющий японскую
+ * версию `white-widow`, снёс бы английскую и русскую, и обе страницы молча
+ * исчезли бы из сборки вместе со своими URL. Модули, сгруппированные по
+ * ароматическим семьям, слагами не пересекаются и такого не делают, а вот
+ * `strain-pages-open-locales.ts` пересекается с ними намеренно: он дописывает
+ * пять локалей к трём уже существующим слагам.
+ *
+ * Поэтому слияние здесь двухуровневое, и это единственное место, где такое
+ * знание нужно. Конфликт «одна и та же пара слаг+локаль объявлена дважды» —
+ * ошибка сборки, а не тихое затирание: `check:strains` сверяет набор слагов, но
+ * пару слаг+локаль не видит никто, кроме этой функции.
+ */
+function mergeStrainPages(...sources: StrainPages[]): StrainPages {
+  const merged: StrainPages = {};
+  for (const source of sources) {
+    for (const [slug, byLocale] of Object.entries(source)) {
+      const target = merged[slug] ?? (merged[slug] = {});
+      for (const [locale, copy] of Object.entries(byLocale)) {
+        if (target[locale as Locale]) {
+          throw new Error(`Strain copy declared twice for ${slug}/${locale}`);
+        }
+        target[locale as Locale] = copy;
+      }
+    }
+  }
+  return merged;
+}
+
+export const STRAIN_PAGES: StrainPages = mergeStrainPages(
+  HAND_WRITTEN_STRAIN_PAGES,
+  FUEL_STRAIN_PAGES,
+  HAZE_STRAIN_PAGES,
+  DESSERT_STRAIN_PAGES,
+  FRUIT_STRAIN_PAGES,
+  OPEN_LOCALE_STRAIN_PAGES,
+);
+
 export function getStrainPage(slug: string, locale: Locale): StrainPageCopy | null {
   return STRAIN_PAGES[slug]?.[locale] ?? null;
 }
@@ -580,10 +603,32 @@ export function getStrainPage(slug: string, locale: Locale): StrainPageCopy | nu
  * сорта — не спецификация, и человек, который ищет по названию, обычно ищет не
  * то, что думает.
  */
-export interface StrainIndexItem {
-  suffix: string;
-  label: string;
-  blurb: string;
+
+/**
+ * Группа хаба — это ВОПРОС К ЧИТАТЕЛЮ, а не раздел каталога.
+ *
+ * Хаб на двадцать ссылок, перечисленных по алфавиту, помогает ровно настолько,
+ * насколько помогает алфавит: никак. Человек у прилавка не выбирает между
+ * двадцатью именами — он выбирает между пятью запахами, и только потом внутри
+ * запаха. Поэтому страница сгруппирована по ароматическим семьям, у каждой
+ * группы стоит строка «выбирайте эту группу, если», и сорта внутри группы
+ * различаются одной фразой.
+ *
+ * СОСТАВ ГРУППЫ ВЫЧИСЛЯЕТСЯ. `families` — это идентификаторы из
+ * `strain-catalog.ts`, и список сортов внутри группы собирает
+ * `getStrainsByFamily()`. Значит, новый сорт попадает в хаб в тот же момент,
+ * когда попадает в набор данных, и не может оказаться написанным в двух
+ * группах сразу или ни в одной. Руками пишется только проза: заголовок,
+ * объяснение семьи и однострочная подпись каждого сорта.
+ */
+export interface StrainsIndexGroup {
+  /** Ароматические семьи набора данных, из которых собирается группа. */
+  families: AromaFamilyId[];
+  h2: string;
+  /** Чем пахнет эта группа и откуда она взялась. */
+  body: string[];
+  /** Строка выбора: кому эта группа подходит. Печатается отдельным стилем. */
+  chooseIf: string;
 }
 
 export interface StrainsIndexCopy {
@@ -593,42 +638,98 @@ export interface StrainsIndexCopy {
   kicker: string;
   lead: string;
   itemsTitle: string;
-  items: StrainIndexItem[];
+  groups: StrainsIndexGroup[];
+  /** Слаг → одна фраза, отличающая сорт от соседей ПО ТОЙ ЖЕ ГРУППЕ. */
+  blurbs: Record<string, string>;
   sections: CopySection[];
   faqTitle: string;
   faq: FaqItem[];
 }
 
-export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
+const EN_RU_STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
   en: {
-    title: "Cannabis strain notes: what the names mean | Pattaya",
+    title: "Cannabis strain notes: choosing by aroma, not by name | Pattaya",
     description:
-      "Descriptive notes on three cultivars you will meet on almost any Pattaya menu, and an honest account of how little a strain name guarantees.",
-    h1: "Strain notes: what a name on a jar tells you",
+      "Twenty cultivars grouped by what they actually smell like, with the one line that separates each from its neighbours — and an honest account of how little a strain name guarantees.",
+    h1: "Strain notes: start from the smell, not from the label",
     kicker: "Strain notes",
     lead:
-      "A strain name is a family resemblance, not a specification. These pages describe where three widely sold cultivars came from, how they smell, what they look like and what people have reported for decades — and they are equally clear about the part nobody can promise.",
-    itemsTitle: "The pages",
-    items: [
+      "Nobody chooses between twenty names. People choose between about five smells, and then within one of them. So this page is arranged the way the decision actually happens: five aroma groups, a line explaining who each group suits, and one sentence per cultivar saying how it differs from its immediate neighbours. Pick the group first and the individual pages will make sense.",
+    itemsTitle: "Five groups, twenty pages",
+    groups: [
       {
-        suffix: "strains/white-widow",
-        label: "White Widow",
-        blurb:
-          "A Dutch hybrid from the early 1990s with a pine-and-pepper aroma and a resin coat that gave it its name. The most useful reference point on most shelves.",
+        families: ["pine-earth", "skunk-earth"],
+        h2: "Pine, earth and pepper",
+        body: [
+          "The plainest corner of a shelf and the oldest. These are plants bred before fruit became a selling point, and their aroma vocabulary is forest floor, resin, dry wood and black pepper — nothing sweet, nothing baked.",
+          "That plainness is why they work as reference points. If you know how one of these reads to you, everything else on a menu can be described as a distance from it.",
+        ],
+        chooseIf:
+          "Choose here if sweet smells put you off, or if you want a baseline to judge everything else against.",
       },
       {
-        suffix: "strains/blue-dream",
-        label: "Blue Dream",
-        blurb:
-          "The Californian hybrid that became a house default across the 2010s: sweet berry over a bright haze backbone, even rather than dramatic.",
+        families: ["kush-fuel"],
+        h2: "Fuel, solvent and lemon",
+        body: [
+          "The register people mean when they say a jar smells strong before they have opened it properly. Solvent and petrol notes sit over an earthy floor, and what separates the four plants here is what else is in the room: lemon, sourness, roasted cocoa or berry.",
+          "Almost every dessert cultivar of the last fifteen years has one of these somewhere upstream, which makes this group the most useful family tree on the site.",
+        ],
+        chooseIf:
+          "Choose here if you like a sharp, chemical top note, and use the four descriptions to decide how heavy you want it.",
       },
       {
-        suffix: "strains/og-kush",
-        label: "OG Kush",
-        blurb:
-          "Fuel, pine and lemon peel over an earthy base, from a disputed lineage that half of modern western cannabis descends from.",
+        families: ["haze-citrus", "berry-haze"],
+        h2: "Citrus, incense and resin",
+        body: [
+          "The haze corner. Lemon and citrus peel over incense, green herbs and pine, with no sugar anywhere in it. Three of these four take ten weeks or more to flower, which is why the names appear on far more menus than the plants can be on.",
+          "Blue Dream is included here because its structure is the same: a berry note laid over a haze backbone rather than a sweet plant in its own right.",
+        ],
+        chooseIf:
+          "Choose here if you want bright and dry rather than sweet, and read the flowering times before believing a label.",
+      },
+      {
+        families: ["dessert-cookie"],
+        h2: "Bakery, cream and vanilla",
+        body: [
+          "Everything in this group descends from one Bay Area cross of the early 2010s, and between them these four changed what a menu sounds like everywhere in the world. The impression of dough and frosting comes from terpenes, not from anything sugary.",
+          "They are close relatives, so the differences are specific and small: mint, cream, vanilla or florals, over floors that range from earthy to gassy.",
+        ],
+        chooseIf:
+          "Choose here if you want the register that dominates modern menus, and pick by which of the four notes you want on top.",
+      },
+      {
+        families: ["candy-fruit", "grape-purple", "tropical"],
+        h2: "Fruit, candy and grape",
+        body: [
+          "Sweetness that is genuinely in the aroma rather than in the marketing — at least in the plants that started these lines. Grape, tropical fruit and confectionery, with weights ranging from almost none to considerable.",
+          "This is also where colour gets used as a sales argument, and where it is worth knowing that purple is a pigment expressed by cool nights and not a grade.",
+        ],
+        chooseIf:
+          "Choose here if fruit is what you want, and decide how much weight you want underneath it.",
       },
     ],
+    blurbs: {
+      "white-widow": "Pine and pepper with a citrus edge; a Dutch classic that sits squarely in the middle and is the easiest reference point on this list.",
+      "northern-lights": "Earth, pine and hash depth, with no fruit at all. Six to seven weeks of bloom — the short schedule that made indoor growing practical.",
+      "ak-47": "Earth, skunk and dry wood. Four ancestral regions, one of them Thai, documented by the breeder himself.",
+      "og-kush": "Lemon over fuel and earth, from a disputed lineage that half of modern western cannabis descends from.",
+      "gorilla-glue-4": "Solvent with roasted cocoa and coffee underneath. Exists because of an accidental pollination, and renamed after a 2017 lawsuit.",
+      "sour-diesel": "The sharp, sour version of fuel rather than the heavy one. Ten to eleven weeks of bloom, and a second parent nobody has settled.",
+      "bruce-banner": "Berry laid over OG Kush fuel. The name is a comic-book reference and tells you nothing; the phenotype number tells you everything.",
+      "amnesia-haze": "Lemon over incense, with ancestry in the same equatorial material Thai landraces come from. Ten to twelve weeks, sometimes fourteen.",
+      "super-silver-haze": "Citrus and incense with a skunk backing. A documented cross built to make haze growable, and the winner of three consecutive Cups.",
+      "jack-herer": "Pine and lemon with a floral lift from ocimene. Named after a person, and split into phenotypes that finish a week apart.",
+      "blue-dream": "Sweet berry over a bright haze backbone; the Californian clone that became a house default across the 2010s.",
+      "girl-scout-cookies": "Dough and mint over an earthy floor. The plant the entire dessert era descends from, and a classification catalogues still argue about.",
+      gelato: "Cream and citrus rather than dough and mint. A family of numbered selections, not one plant.",
+      "wedding-cake": "Vanilla and lemon over a gassy Kush floor. A clone-only selection that growers, not breeders, named.",
+      "do-si-dos": "Citrus and dough with a floral line underneath from linalool. The heavy, slow end of the dessert group.",
+      zkittlez: "Clean fruit candy and grape with almost no weight beneath it, and a third parent the breeders have never named.",
+      runtz: "Candy on top, cream and gas underneath. The most copied name of the current era, prefixes and all.",
+      "purple-punch": "Grape and vanilla, candied rather than perfumed, and fast — seven to eight weeks in a family that usually takes longer.",
+      "granddaddy-purple": "Grape and florals over damp earth. The plant that made colour a selling point, with two competing accounts of its own parentage.",
+      "pineapple-express": "Pineapple and tropical fruit over dry wood — fruit rather than sweets. Its origin story is contradicted by the film that made it famous.",
+    },
     sections: [
       {
         h2: "Why a strain name guarantees less than people think",
@@ -639,10 +740,11 @@ export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
         ],
       },
       {
-        h2: "Why only three pages",
+        h2: "What each page actually contains",
         body: [
-          "These three are the names that turn up on the shelf most often, and between them they cover the whole aromatic range a visitor has to choose inside: pine and pepper, sweet berry, and fuel.",
-          "Learn where your own preference sits among those three and you can navigate any shelf in the city, including the parts of it carrying names none of us have seen before. A fourth page would tell you less about the jar in front of you than a minute of smelling it does.",
+          "A facts block that is computed rather than written: parentage, where and when the plant appeared, who it is credited to, flowering time, the terpenes laboratories usually report, and the aroma descriptors. Every one of those rows carries a visible mark saying how firmly it stands — documented, commonly given, or disputed.",
+          "Then prose about the thing that makes that cultivar different from its neighbours: a lawsuit, a withheld parent, a phenotype split, a bloom too long to be commercial, a name that arrived before the plant. Where two published accounts disagree, both are printed and neither is chosen.",
+          "The comparison rows are not decorative. Each page names the two or three cultivars it is worth holding against, and those names are links, which is how you walk the shelf without reading all twenty pages.",
         ],
       },
       {
@@ -664,40 +766,98 @@ export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
         a: "Aroma. Describe the family you like — pine, sweet fruit, fuel, citrus — and a counter can match it from whatever arrived this week.",
       },
       {
+        q: "Which group should I start with if I have no idea?",
+        a: "Pine and earth. It is the plainest register on a shelf, which makes it the easiest thing to measure everything else against once you know how it reads to you.",
+      },
+      {
         q: "Why are there no cannabinoid percentages on these pages?",
         a: "Those figures describe a specific tested batch, not a cultivar in general, and they say nothing about aroma or curing. Ask to see the lab report for the batch in the jar.",
       },
     ],
   },
   ru: {
-    title: "Заметки о сортах каннабиса: что означают названия",
+    title: "Заметки о сортах каннабиса: выбор по аромату, а не по названию",
     description:
-      "Описательные заметки о трёх сортах, которые встречаются почти в любом меню Паттайи, и честный разбор того, как мало гарантирует название сорта.",
-    h1: "Заметки о сортах: что говорит название на банке",
+      "Двадцать сортов, сгруппированных по тому, чем они действительно пахнут, с одной фразой, отличающей каждый от соседей, и честный разбор того, как мало гарантирует название.",
+    h1: "Заметки о сортах: начинайте с запаха, а не с ярлыка",
     kicker: "Заметки о сортах",
     lead:
-      "Название сорта — это семейное сходство, а не спецификация. Эти страницы рассказывают, откуда взялись три широко продаваемых сорта, как они пахнут, как выглядят и что люди описывают десятилетиями, — и так же прямо говорят о том, чего никто обещать не может.",
-    itemsTitle: "Страницы",
-    items: [
+      "Между двадцатью названиями не выбирает никто. Люди выбирают между примерно пятью запахами, а потом внутри одного из них. Поэтому страница устроена так, как решение принимается на самом деле: пять ароматических групп, строка о том, кому подходит каждая, и одна фраза на сорт о том, чем он отличается от ближайших соседей. Сначала выберите группу — и отдельные страницы станут осмысленными.",
+    itemsTitle: "Пять групп, двадцать страниц",
+    groups: [
       {
-        suffix: "strains/white-widow",
-        label: "White Widow",
-        blurb:
-          "Голландский гибрид начала девяностых с сосново-перечным ароматом и слоем смолы, давшим ему имя. Самая полезная точка отсчёта на большинстве полок.",
+        families: ["pine-earth", "skunk-earth"],
+        h2: "Хвоя, земля и перец",
+        body: [
+          "Самый простой угол полки и самый старый. Это растения, выведенные до того, как фрукт стал аргументом продажи, и их ароматический словарь — лесная подстилка, смола, сухое дерево и чёрный перец. Ничего сладкого, ничего печёного.",
+          "Именно эта простота делает их точками отсчёта. Если вы знаете, как один из них читается лично для вас, всё остальное в меню можно описать как расстояние от него.",
+        ],
+        chooseIf:
+          "Выбирайте здесь, если сладкие запахи вам не нравятся или если нужна база, к которой можно прикладывать всё остальное.",
       },
       {
-        suffix: "strains/blue-dream",
-        label: "Blue Dream",
-        blurb:
-          "Калифорнийский гибрид, ставший вариантом по умолчанию в 2010-е: сладкая ягода поверх светлой хейзовой основы, ровный, а не драматичный.",
+        families: ["kush-fuel"],
+        h2: "Топливо, растворитель и лимон",
+        body: [
+          "Тот регистр, который имеют в виду, когда говорят, что банка пахнет сильно, ещё толком её не открыв. Ноты растворителя и бензина лежат поверх землистого пола, а различает четыре растения то, что стоит в комнате ещё: лимон, кислота, обжаренное какао или ягода.",
+          "Почти у каждого десертного сорта последних пятнадцати лет один из этих четырёх стоит где-то выше по родословной, поэтому эта группа — самое полезное семейное дерево на сайте.",
+        ],
+        chooseIf:
+          "Выбирайте здесь, если нравится резкая химическая верхняя нота, а четыре описания помогут решить, насколько тяжёлым он должен быть.",
       },
       {
-        suffix: "strains/og-kush",
-        label: "OG Kush",
-        blurb:
-          "Топливо, хвоя и лимонная корка поверх землистой основы; спорная родословная, от которой происходит половина современных западных сортов.",
+        families: ["haze-citrus", "berry-haze"],
+        h2: "Цитрус, благовония и смола",
+        body: [
+          "Хейзовый угол. Лимон и цитрусовая корка поверх благовоний, зелёных трав и хвои, и ни грамма сахара. Трое из четверых цветут десять недель и дольше — поэтому их имена стоят в куда большем числе меню, чем сами растения физически могут.",
+          "Blue Dream включён сюда потому, что структура у него та же: ягодная нота, положенная поверх хейзовой основы, а не самостоятельное сладкое растение.",
+        ],
+        chooseIf:
+          "Выбирайте здесь, если нужно светло и сухо, а не сладко, — и посмотрите сроки цветения, прежде чем верить ярлыку.",
+      },
+      {
+        families: ["dessert-cookie"],
+        h2: "Выпечка, сливки и ваниль",
+        body: [
+          "Всё в этой группе происходит от одного скрещивания начала 2010-х, сделанного в области залива Сан-Франциско, и вчетвером они изменили то, как звучит меню по всему миру. Впечатление теста и глазури создают терпены, а не что-то сахарное.",
+          "Они близкие родственники, поэтому различия конкретны и невелики: мята, сливки, ваниль или цветочность — поверх полов от землистого до газового.",
+        ],
+        chooseIf:
+          "Выбирайте здесь, если нужен регистр, который доминирует в современных меню, а внутри решайте по тому, какая из четырёх нот должна быть сверху.",
+      },
+      {
+        families: ["candy-fruit", "grape-purple", "tropical"],
+        h2: "Фрукт, карамель и виноград",
+        body: [
+          "Сладость, которая по-настоящему находится в аромате, а не в маркетинге, — по крайней мере у растений, с которых эти линии начались. Виноград, тропические фрукты и кондитерская, а веса под ними от почти никакого до заметного.",
+          "Здесь же цвет становится аргументом продажи, и здесь стоит знать, что пурпур — это пигмент, который вытягивают прохладные ночи, а не сорт качества.",
+        ],
+        chooseIf:
+          "Выбирайте здесь, если хочется фрукта, и решайте, сколько веса нужно под ним.",
       },
     ],
+    blurbs: {
+      "white-widow": "Хвоя и перец с цитрусовым краем; голландская классика, сидящая ровно посередине и самая простая точка отсчёта в списке.",
+      "northern-lights": "Земля, хвоя и гашишная глубина, без фрукта вовсе. Шесть-семь недель цветения — короткий график, сделавший индор практичным.",
+      "ak-47": "Земля, скунс и сухое дерево. Четыре региона в предках, один из них тайский, и это задокументировал сам селекционер.",
+      "og-kush": "Лимон поверх топлива и земли; спорная родословная, от которой происходит половина современных западных сортов.",
+      "gorilla-glue-4": "Растворитель, под которым обжаренные какао и кофе. Существует из-за случайного опыления и переименован после суда 2017 года.",
+      "sour-diesel": "Резкая и кислая версия топлива, а не тяжёлая. Десять-одиннадцать недель цветения и второй родитель, о котором так и не договорились.",
+      "bruce-banner": "Ягода, положенная поверх кушевого топлива. Имя из комикса не говорит ничего, номер фенотипа говорит всё.",
+      "amnesia-haze": "Лимон поверх благовоний, с предками из того же экваториального материала, откуда тайские ландрейсы. Десять-двенадцать недель, иногда четырнадцать.",
+      "super-silver-haze": "Цитрус и благовония со скунсовой подложкой. Задокументированное скрещивание, сделанное ради выращиваемости хейза, и три кубка подряд.",
+      "jack-herer": "Хвоя и лимон с цветочным подъёмом от оцимена. Назван в честь человека и расщеплён на фенотипы, доходящие с разницей в неделю.",
+      "blue-dream": "Сладкая ягода поверх светлой хейзовой основы; калифорнийский клон, ставший вариантом по умолчанию в 2010-е.",
+      "girl-scout-cookies": "Тесто и мята поверх землистого пола. Растение, от которого происходит вся десертная эпоха, и классификация, о которой каталоги до сих пор спорят.",
+      gelato: "Сливки и цитрус вместо теста и мяты. Семья пронумерованных отборов, а не одно растение.",
+      "wedding-cake": "Ваниль и лимон поверх газового кушевого пола. Клоновый отбор, названный гроверами, а не селекционерами.",
+      "do-si-dos": "Цитрус и тесто с цветочной линией снизу от линалоола. Тяжёлый и медленный край десертной группы.",
+      zkittlez: "Чистая фруктовая карамель и виноград, под которыми почти нет веса, и третий родитель, которого селекционеры так и не назвали.",
+      runtz: "Карамель сверху, сливки и газ снизу. Самое копируемое имя нынешней эпохи, со всеми приставками.",
+      "purple-punch": "Виноград и ваниль, засахаренные, а не парфюмерные, и быстрый — семь-восемь недель в семье, которой обычно нужно дольше.",
+      "granddaddy-purple": "Виноград и цветочность поверх влажной земли. Растение, сделавшее цвет аргументом продажи, и две конкурирующие версии его собственной родословной.",
+      "pineapple-express": "Ананас и тропические фрукты поверх сухого дерева — фрукт, а не конфеты. Его историю происхождения опровергает фильм, который его и прославил.",
+    },
     sections: [
       {
         h2: "Почему название сорта гарантирует меньше, чем принято думать",
@@ -708,10 +868,11 @@ export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
         ],
       },
       {
-        h2: "Почему страниц только три",
+        h2: "Что на самом деле лежит на каждой странице",
         body: [
-          "Потому что о трёх мы можем честно написать в таком объёме. Страница на каждое название, раздутая до вида содержательной, была бы ровно тем тонким дублем, который никому не помогает и на удаление которого этот сайт уже потратил один раунд.",
-          "Выбраны те три, что чаще всего звучат у прилавка и вместе покрывают ароматическую территорию: хвоя и перец, сладкая ягода, топливо. Поймите, где среди этих трёх находитесь вы, — и вы сориентируетесь в любом меню города, включая те его части, где стоят названия, которых никто из нас раньше не видел.",
+          "Блок фактов, который вычисляется, а не пишется: родители, где и когда сорт появился, кому его приписывают, сроки цветения, терпены, которые обычно называют лаборатории, и ароматические дескрипторы. У каждой строки стоит видимая пометка о том, насколько твёрдо она держится: задокументировано, обычно приводят или версии расходятся.",
+          "Дальше — проза о том, что отличает этот сорт от соседей: судебный процесс, придержанный родитель, расщепление фенотипов, цветение, слишком долгое для коммерции, имя, появившееся раньше растения. Там, где две опубликованные версии не сходятся, печатаются обе и не выбирается ни одна.",
+          "Строки сравнения — не украшение. Каждая страница называет два-три сорта, к которым её стоит приложить, и эти имена кликабельны: так полка обходится без чтения всех двадцати страниц.",
         ],
       },
       {
@@ -733,9 +894,25 @@ export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
         a: "Аромат. Опишите семью, которая вам нравится, — хвоя, сладкий фрукт, топливо, цитрус, — и у прилавка подберут соответствие из того, что пришло на этой неделе.",
       },
       {
+        q: "С какой группы начать, если непонятно вообще ничего?",
+        a: "С хвойно-землистой. Это самый простой регистр на полке, и потому к нему удобнее всего прикладывать всё остальное, когда вы поймёте, как он читается лично для вас.",
+      },
+      {
         q: "Почему на этих страницах нет процентов по каннабиноидам?",
         a: "Эти цифры описывают конкретную проверенную партию, а не сорт вообще, и ничего не говорят ни об аромате, ни о вылёживании. Просите лабораторный отчёт на партию из той банки.",
       },
     ],
   },
+};
+
+/**
+ * Хаб кластера на всех семи локалях.
+ *
+ * en+ru написаны в первом раунде, остальные пять — в
+ * `strain-pages-open-locales.ts`. Слияние поверхностное и это правильно:
+ * ключом здесь является локаль, а не слаг, и пересечения быть не может.
+ */
+export const STRAINS_INDEX_COPY: Partial<Record<Locale, StrainsIndexCopy>> = {
+  ...EN_RU_STRAINS_INDEX_COPY,
+  ...OPEN_LOCALE_STRAINS_INDEX_COPY,
 };

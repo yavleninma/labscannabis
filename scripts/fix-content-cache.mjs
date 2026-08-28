@@ -71,13 +71,18 @@ const LOCALES = ["en", "ru", "th", "ar", "zh", "ko", "ja"];
  * но слово `price` роняет её под то же правило.
  *
  * Ключ — пара `локаль/слаг`, а не слаг: вычитан именно файл, а не тема. Здесь
- * стоят все файлы за indexable-страницами (`src/lib/index-policy.mjs`) и оба
- * слага про доставку, переписанные по образцу
- * `src/pages/[lang]/delivery/[area].astro`. Добавлять сюда файл можно только
- * после ручной вычитки: compliance-линтер по `content-cache` продолжает
- * проверять его в `npm run check:seo` наравне со всеми.
+ * стоят все файлы за indexable-страницами (`src/lib/index-policy.mjs`).
+ * Добавлять сюда файл можно только после ручной вычитки: compliance-линтер по
+ * `content-cache` продолжает проверять его в `npm run check:seo` наравне со
+ * всеми.
+ *
+ * Отсюда убраны `cannabis-delivery-pattaya` и `weed-delivery-jomtien`: обоих
+ * слагов в кэше больше нет. Они не рендерились ни одной страницей, а между
+ * собой совпадали на 0.91 по 4-словным шинглам — одна страница с подменённым
+ * названием района. Вместе с ними удалены остальные 16 слагов-сирот; см.
+ * `docs/growth/ops/05-content-cache-orphans.md`.
  */
-const ALL_LOCALE_SLUGS = ["labs-dispensary-pattaya", "cannabis-near-me-pattaya", "cannabis-delivery-pattaya", "weed-delivery-jomtien"];
+const ALL_LOCALE_SLUGS = ["labs-dispensary-pattaya", "cannabis-near-me-pattaya"];
 const EN_RU_SLUGS = ["buy-cannabis-pattaya", "best-cannabis-shop-pattaya", "cheap-weed-pattaya"];
 const HAND_REVIEWED = new Set([
   ...LOCALES.flatMap((locale) => ALL_LOCALE_SLUGS.map((slug) => `${locale}/${slug}`)),

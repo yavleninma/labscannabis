@@ -70,6 +70,22 @@ const intentLinks = [
   { suffix: "about", label: ui.footerSeo.aboutUs },
   { suffix: "guides", label: ui.footerSeo.guidesHub },
   { suffix: "strains", label: ui.footerSeo.strainsHub },
+  /*
+    Кластер маршрутов от ориентиров (`getting-here/*`). `locations` объявлен его
+    хабом, а хаб на этом сайте ведётся руками — поэтому слаги перечислены здесь,
+    а не подмешиваются из кластера. Ручной остаётся только СТРОКА: попадёт ли
+    ссылка на страницу, решает `getIndexPolicy` ниже, то есть ворота качества.
+    Не прошедший ворота маршрут исчезает отсюда сам, и его страница перестаёт
+    быть целью контекстной ссылки, оставаясь живым URL под noindex.
+  */
+  { suffix: "getting-here/terminal-21", label: ui.footerSeo.routeTerminal21 },
+  { suffix: "getting-here/central-marina", label: ui.footerSeo.routeCentralMarina },
+  { suffix: "getting-here/north-pattaya-bus-terminal", label: ui.footerSeo.routeBusTerminal },
+  { suffix: "getting-here/pattaya-railway-station", label: ui.footerSeo.routeRailwayStation },
+  { suffix: "getting-here/u-tapao-airport", label: ui.footerSeo.routeUTapao },
+  { suffix: "getting-here/sanctuary-of-truth", label: ui.footerSeo.routeSanctuary },
+  { suffix: "getting-here/wong-amat-beach", label: ui.footerSeo.routeWongAmat },
+  { suffix: "getting-here/big-buddha", label: ui.footerSeo.routeBigBuddha },
 ].filter((link) => getIndexPolicy(locale, link.suffix).indexable);
 ---
 
