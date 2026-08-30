@@ -1,0 +1,189 @@
+---
+import type { Locale } from "@/lib/i18n";
+import { LOCALES } from "@/lib/i18n";
+import { getAvailableLocales } from "@/lib/index-policy.mjs";
+
+/**
+ * Ненавязчивая подсказка «эта страница есть на твоём языке» (W2-12).
+ *
+ * Зачем она существует: корень `/` жёстко 301-ит на `/en/`, а из выдачи и по
+ * пересланным ссылкам русско-, тайско- и китаеязычные посетители регулярно
+ * приземляются на английскую версию — гео-IP у всех один (Таиланд), и Google
+ * не всегда подставляет языковую альтернативу. Переключатель в шапке есть, но
+ * его нужно заметить. Подсказка делает переход в один тап.
+ *
+ * Что она сознательно НЕ делает:
+ * - не редиректит сама — только предлагает (авторедирект по языку браузера
+ *   ломает и краулеры, и людей с чужих устройств);
+ * - не рендерит ни одного узла в статический HTML — весь DOM строится клиентом,
+ *   поэтому замеры уникальности контента, проверка непереведённых фраз и
+ *   размер страницы не меняются ни на байт;
+ * - не перекрывает контент — плашка фиксирована у нижнего края и подвигается
+ *   вверх, когда появляется sticky-панель CTA;
+ * - не спорит с явным выбором человека: закрытие плашки и любой клик по
+ *   переключателю языков записывают отказ в localStorage, и подсказка больше
+ *   не появляется нигде.
+ *
+ * Текст плашки — на ЦЕЛЕВОМ языке («Читать по-русски», не «Read in Russian»):
+ * человек, которому она адресована, английского может не понимать вовсе.
+ */
+interface Props {
+  locale: Locale;
+  pathSuffix?: string;
+}
+
+const { locale, pathSuffix = "" } = Astro.props;
+
+/**
+ * Куда вести: если у текущего URL есть настоящая страница на языке посетителя —
+ * на неё; иначе на корень его локали. Ровно то же правило, что в
+ * `LanguageSwitcher` — вести в 301 или на страницу-надгробие нельзя.
+ */
+const availableLocales = getAvailableLocales(pathSuffix);
+
+/** Подпись ссылки и aria-label кнопки закрытия — на языке ЦЕЛИ подсказки. */
+const HINT_LABELS: Record<Locale, { read: string; hide: string }> = {
+  en: { read: "Read in English", hide: "Hide" },
+  ru: { read: "Читать по-русски", hide: "Скрыть" },
+  th: { read: "อ่านภาษาไทย", hide: "ซ่อน" },
+  ar: { read: "اقرأ بالعربية", hide: "إخفاء" },
+  zh: { read: "查看中文版", hide: "隐藏" },
+  ko: { read: "한국어로 보기", hide: "숨기기" },
+  ja: { read: "日本語で読む", hide: "閉じる" },
+};
+---
+
+<script
+  define:vars={{
+    pageLocale: locale,
+    pathSuffix,
+    supportedLocales: LOCALES,
+    availableLocales,
+    labels: HINT_LABELS,
+  }}
+>
+  (() => {
+    const KEY = "lc-locale-hint";
+
+    // localStorage может кидать (приватный режим, запрет site data). Без него
+    // отказ не запомнить, значит показывать плашку нельзя — иначе она будет
+    // возвращаться на каждой странице.
+    const remember = () => {
+      try {
+        localStorage.setItem(KEY, "off");
+      } catch {
+        /* некуда записать — плашка в этой сессии больше не строится */
+      }
+    };
+    try {
+      if (localStorage.getItem(KEY) === "off") return;
+    } catch {
+      return;
+    }
+
+    // Явный выбор языка через переключатель в шапке — тоже отказ от подсказки:
+    // человек нашёл орган управления сам, дальше не вмешиваемся. Capture, чтобы
+    // запись успела случиться до ухода со страницы.
+    document.addEventListener(
+      "click",
+      (event) => {
+        const target = event.target;
+        if (!(target instanceof Element)) return;
+        if (target.closest('a[data-placement="language"]')) remember();
+      },
+      true,
+    );
+
+    const prefs = Array.isArray(navigator.languages) && navigator.languages.length
+      ? navigator.languages
+      : [navigator.language || ""];
+    let preferred = null;
+    for (const tag of prefs) {
+      const primary = String(tag || "").toLowerCase().split("-")[0];
+      if (supportedLocales.includes(primary)) {
+        preferred = primary;
+        break;
+      }
+    }
+    if (!preferred || preferred === pageLocale) return;
+
+    const suffix = availableLocales.includes(preferred) ? pathSuffix : "";
+    const href = suffix ? `/${preferred}/${suffix}/` : `/${preferred}/`;
+    const label = labels[preferred];
+    if (!label) return;
+
+    const hint = document.createElement("div");
+    hint.id = "locale-hint";
+    hint.dir = preferred === "ar" ? "rtl" : "ltr";
+    hint.style.cssText = [
+      "position:fixed",
+      "left:0",
+      "right:0",
+      "margin:0 auto",
+      "width:fit-content",
+      "max-width:calc(100vw - 1.5rem)",
+      "z-index:49",
+      "display:flex",
+      "align-items:stretch",
+      "border:1px solid var(--color-border)",
+      "border-radius:9999px",
+      "background:var(--color-bg-card)",
+      "box-shadow:0 6px 24px rgba(0,0,0,0.14)",
+      "opacity:0",
+      "transform:translateY(0.5rem)",
+      "transition:opacity .3s ease-out, transform .3s ease-out, bottom .3s ease-out",
+    ].join(";");
+
+    const link = document.createElement("a");
+    link.href = href;
+    // В RTL «вперёд» — налево, поэтому и стрелка смотрит налево.
+    link.textContent = label.read + (preferred === "ar" ? " ←" : " →");
+    // Тот же контракт, что у переключателя: nav_click / language. `-hint` в
+    // target отделяет плашку от выпадашки в отчёте.
+    link.dataset.track = "nav_click";
+    link.dataset.placement = "language";
+    link.dataset.target = preferred + "-hint";
+    link.style.cssText =
+      "display:flex;align-items:center;padding:0.65rem 0.5rem 0.65rem 1.1rem;font-weight:600;font-size:0.95rem;color:var(--color-emerald-dim);text-decoration:none;white-space:nowrap;";
+    link.addEventListener("click", remember);
+
+    const close = document.createElement("button");
+    close.type = "button";
+    close.setAttribute("aria-label", label.hide);
+    close.textContent = "✕";
+    close.style.cssText =
+      "display:flex;align-items:center;justify-content:center;min-width:2.75rem;padding:0 0.9rem 0 0.4rem;border:0;background:none;color:var(--color-text-muted);font-size:0.95rem;cursor:pointer;";
+    close.addEventListener("click", () => {
+      remember();
+      hint.remove();
+    });
+
+    hint.append(link, close);
+
+    // Плашка стоит над sticky-панелью, когда та видна, и у самого края, когда
+    // панель спрятана. Синхронизация — по тому же атрибуту data-visible,
+    // которым StickyCTA управляет собой; наблюдатель не дублирует его логику.
+    const sticky = document.getElementById("sticky-cta");
+    const place = () => {
+      const lifted = sticky !== null && sticky.hasAttribute("data-visible");
+      hint.style.bottom = lifted
+        ? "calc(max(0.75rem, env(safe-area-inset-bottom)) + 4.9rem)"
+        : "calc(max(0.75rem, env(safe-area-inset-bottom)) + 0.25rem)";
+    };
+    place();
+    if (sticky) {
+      new MutationObserver(place).observe(sticky, {
+        attributes: true,
+        attributeFilter: ["data-visible"],
+      });
+    }
+
+    document.body.append(hint);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        hint.style.opacity = "1";
+        hint.style.transform = "translateY(0)";
+      });
+    });
+  })();
+</script>

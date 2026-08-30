@@ -11,6 +11,7 @@ import Analytics from "@/components/Analytics.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import Breadcrumbs from "@/components/Breadcrumbs.astro";
 import StickyCTA from "@/components/StickyCTA.astro";
+import LocaleHint from "@/components/LocaleHint.astro";
 import JsonLd from "@/components/JsonLd.astro";
 import TrackingScript from "@/components/TrackingScript.astro";
 
@@ -162,6 +163,7 @@ const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.lo
     <Breadcrumbs locale={locale} items={breadcrumbs} />
     <slot />
     <StickyCTA locale={locale} />
+    <LocaleHint locale={locale} pathSuffix={pathSuffix} />
     {indexPolicy.indexable && (
       <JsonLd
         locale={locale}
