@@ -39,18 +39,6 @@
     }
   ],
   "redirects": [
-    {
-      "source": "/",
-      "has": [{ "type": "host", "value": "labscannabis.com" }],
-      "destination": "https://labscannabis.boutique/en/",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [{ "type": "host", "value": "labscannabis.com" }],
-      "destination": "https://labscannabis.boutique/:path*",
-      "permanent": true
-    },
     { "source": "/sitemap.xml", "destination": "/sitemap-index.xml", "permanent": true },
     { "source": "/", "destination": "/en/", "permanent": true },
 

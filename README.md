@@ -40,17 +40,20 @@ Vercel auto-detects Astro. Set `PUBLIC_SITE_URL` in project env. Product photos 
 
 ## Redirects
 
-`vercel.json` handles two things at once: the apex domain and the legacy URL set
-left by the previous site.
+`vercel.json` handles the legacy URL set left by the previous site, all of it on
+`labscannabis.boutique`. There are no redirect chains inside the host, and that
+is checked by `scripts/check-seo.mjs`.
 
-The apex rule (`labscannabis.com` → `labscannabis.boutique`) preserves the path,
-so a legacy path arriving on the apex takes **two hops**:
-`labscannabis.com/catalog` → `labscannabis.boutique/catalog` (301) →
-`/en/locations/` (301). This is deliberate, not an oversight. Duplicating every
-legacy rule with an absolute `labscannabis.boutique` destination would double the
-rule list and leave two copies to keep in sync, while Google follows redirect
-chains up to five hops and passes signals through them. Inside a single host
-there are no chains at all — that is the case that matters, and it is checked.
+**There is no apex rule any more, and there should not be one.** Two rules used
+to match `host = labscannabis.com` and forward it here, and this file used to
+explain the two-hop path they produced. They never ran. `labscannabis.com` is
+not ours and never was: it resolves to a Wix site behind Cloudflare and answers
+404 to everything, measured on 2026-08-31. A rule matching a host that will
+never reach this project is not a safety net — it is a claim in the codebase
+that the domain is ours, which is how it survived several audits unquestioned.
+
+If the domain is ever bought, the rules come back in the same commit that points
+its DNS here, and not before.
 
 `vercel.json` is plain JSON and cannot carry a comment, which is why the decision
 is recorded here.

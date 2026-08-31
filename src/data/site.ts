@@ -7,14 +7,47 @@ export const CONTACT = {
   telegram: "https://t.me/+66660806784",
   line: "https://line.me/R/ti/p/660806784",
   tel: "tel:+66660806784",
-  // Channel switches. Both links above are unverified and are kept only so the
-  // owner can replace them in place: `line` holds a truncated phone number where
-  // a LINE ID belongs, so it resolves to an error page, and `telegram` by phone
-  // works only while the account privacy is set to "Everybody". A button that
-  // lands in an error is worse than a missing channel, so neither is rendered
-  // until the owner supplies a LINE Official Account and a Telegram @username.
+  /*
+   * Channel switches. Telegram is ON as of 2026-08-31, LINE stays OFF.
+   *
+   * The owner confirmed both accounts exist on this same phone number, then
+   * opened the Telegram link and reported that it lands in the app on the right
+   * account. That settles Telegram and it is switched on. The same claim about
+   * LINE does not survive a test, and the difference is worth writing down
+   * because it will look identical to the next person who checks.
+   *
+   * TELEGRAM — ON, with one setting the owner has to keep.
+   * `t.me/+<digits>` renders a real contact page: "Chat with +66 6 6080 6784"
+   * with an OPEN CHAT button that hands the number to the app. What the owner's
+   * own test cannot cover is the stranger case: the app resolves a number only
+   * while that account's "Who can find me by my phone number" is set to
+   * Everybody. Change that setting later and every button on the site quietly
+   * stops working, with nothing in this repository noticing.
+   * One residual defect stays even so: `t.me/+<digits>` is ambiguous — Telegram
+   * reads `+` as a private-invite hash first — so the SERVER-SIDE preview of the
+   * link is `og:title = "Join group chat on Telegram"` with an empty
+   * description. That is what people see when our link is forwarded in a
+   * messenger. A @username fixes both the preview and the privacy dependency,
+   * and is the thing to ask for next.
+   *
+   * LINE — OFF, and a phone number cannot fix it.
+   * `line.me/R/ti/p/<token>` takes an identifier: `~<lineId>` for a personal ID
+   * or `@<id>` for an Official Account, or the short form `lin.ee/XXXX`. A phone
+   * number is none of those, and LINE has no add-by-phone URL at all — its phone
+   * book works only inside the app between two people who already saved each
+   * other. The trap is that the desktop page answers HTTP 200 and draws a QR
+   * code, which reads as success. It is not: on 2026-08-31 the page rendered a
+   * byte-identical screen for our token, for the nonsense token
+   * `zzzz-not-a-real-line-id-9999`, and for `~labscannabis`. It never validates
+   * anything, so the QR proves nothing about the account behind it.
+   * NEEDED: the LINE ID with "allow search by ID" enabled, or an Official
+   * Account link.
+   *
+   * A button that lands on an error costs more than a missing channel: it spends
+   * the click the whole page was built to earn.
+   */
   lineEnabled: false as boolean,
-  telegramEnabled: false as boolean,
+  telegramEnabled: true as boolean,
 } as const;
 
 /**
