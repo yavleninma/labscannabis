@@ -41,6 +41,7 @@ const breadcrumbs = [
   pageType="guide"
   breadcrumbs={breadcrumbs}
   faq={copy.faq}
+  itemList={items.map((item) => ({ name: item.label, pathSuffix: item.suffix }))}
 >
   <main class="px-4 pt-8 pb-6">
     <div class="mx-auto max-w-lg">

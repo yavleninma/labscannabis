@@ -108,6 +108,26 @@ const FOOTER_SERVICE_SUFFIXES: readonly string[] = [
   "locations",
   "about",
   "guides/legal-cannabis-tourists",
+  /*
+   * Два хаба кластеров добавлены сюда после замера глубины клика от главной:
+   * {1 клик: 19 страниц, 2: 90, 3: 57, 4: 20} — то есть 77 из 187
+   * indexable-URL лежали в трёх и более кликах от главной на сайте, где ничему
+   * не нужно быть глубже двух. Причина была прямая: сквозной навигации к
+   * кластерам не существовало вовсе. Шапка даёт две настоящие ссылки (две
+   * оставшиеся — якоря на той же странице), футер добавлял три, итого пять
+   * постоянных адресов на весь сайт — а хаб сортов, под которым лежит
+   * двадцать страниц, и хаб гайдов не входили ни в одну из пятёрок.
+   *
+   * Почему именно футер, а не шапка: навигация в шапке скрыта до 768px
+   * (`hidden … md:flex`), а Google индексирует мобильной версией. Ссылка,
+   * которой нет в мобильной разметке, чинит меню на десктопе и не чинит обход.
+   *
+   * Как и остальные три, эти НЕ размечаются `data-seo-context-link`: сквозной
+   * блок не должен считаться тематической связью — иначе граф снова станет
+   * плоским, а `check-seo` именно это и ловит замером min/max источников.
+   */
+  "strains",
+  "guides",
 ];
 
 /**
@@ -197,6 +217,12 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   "best-cannabis-shop-pattaya": [
     "labs-dispensary-pattaya",
     "guides/choosing-flower-pattaya",
+    // Хаб сортов: замер входящих показал, что двадцать страниц кластера кормят
+    // свой же хаб (20 из 24 источников — его собственные дети), а снаружи в него
+    // ведут четыре ссылки. Хаб, который питается детьми, перекладывает вес
+    // внутри кластера вместо того, чтобы вносить его извне. «Лучший магазин» —
+    // это ровно вопрос «что у вас есть», и дверь отсюда в кластер уместна.
+    "strains",
     "cannabis-near-me-pattaya",
     "cheap-weed-pattaya",
     "guides/legal-cannabis-tourists",
@@ -242,6 +268,13 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   guides: [
     "guides/legal-cannabis-tourists",
     "guides/prescription-pattaya",
+    // Дверь в вопросный кластер с хаба знаний. Она нужна не только людям: на
+    // th/ar/zh/ko/ja соседи вопросных страниц объявлены внутри кластера и почти
+    // все указывают на темы, которых на этих локалях нет, — то есть новая
+    // страница осталась бы сиротой, и `check-seo` валит сборку именно за это.
+    // Хаб гайдов indexable на всех семи локалях, поэтому ссылка появляется
+    // ровно там, где цель существует.
+    "questions/rules-and-prescription",
     "guides/first-visit-pattaya",
     "guides/choosing-flower-pattaya",
     "strains",
@@ -249,6 +282,11 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   ],
   "guides/legal-cannabis-tourists": [
     "guides/prescription-pattaya",
+    // Вопрос «накажут ли меня дома» — прямое продолжение правового гида, и на
+    // ar/zh/ko/ja это самый тревожный запрос рынка. На th такой страницы нет
+    // (вопрос для тайского читателя не стоит), и ссылка там просто не
+    // отрисуется: `resolveLinks` фильтрует цели политикой индексации.
+    "questions/taking-it-home",
     "guides/first-visit-pattaya",
     "guides",
     "about",
@@ -264,6 +302,7 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
     "guides/prescription-pattaya",
     "guides/choosing-flower-pattaya",
     "guides/legal-cannabis-tourists",
+    "strains",
     "areas/walking-street",
   ],
   "guides/choosing-flower-pattaya": [
@@ -370,22 +409,39 @@ export function getFooterServiceLinks(locale: Locale, currentSuffix = ""): SeoLi
 
 /**
  * Соседи страницы: сначала собственный список, потом хабы, потом добор.
- * Возвращает не более `limit` ссылок; пустой массив — блок не рендерится.
+ * Пустой массив — блок не рендерится.
  *
  * Добор — это и есть механизм весов. Страница с четырьмя соседями отдаёт два
  * слота хабам, страница с шестью — ни одного, поэтому число источников у разных
  * целей получается разным, а не константой на весь набор.
+ *
+ * `limit` — ПОТОЛОК ДОБОРА, А НЕ ПОТОЛОК СПИСКА.
+ *
+ * Здесь стояло `slice(0, limit)` по всему набору, и это молча резало то, что
+ * человек написал руками. Замер: главная объявляет пятнадцать соседей при
+ * `limit={12}` — три последних не рисовались вообще, и среди них `strains`,
+ * хаб кластера, под которым лежит 29% индексируемого набора. То есть хаб
+ * двадцати страниц не получал ссылки с самой сильной страницы сайта, а увидеть
+ * это можно было только пересчитав отрисованные карточки: список в данных
+ * выглядел полным. Тот же обрез, на одну ссылку, стоял на
+ * `cannabis-near-me-pattaya` (семь соседей при потолке шесть).
+ *
+ * Своё — важнее добора: курируемый список выводится целиком, а `limit`
+ * ограничивает только то, чем добирают хабы и добор. Иначе автоматический
+ * механизм весов вытесняет ручное решение о смысловых связях, хотя задуман был
+ * ровно наоборот.
  */
 export function getRelatedLinks(locale: Locale, currentSuffix = "", limit = 6): SeoLink[] {
   const current = normalizePathSuffix(currentSuffix);
   const seen = new Set<string>();
   const curated = RELATED_SUFFIXES[current] ?? DEFAULT_RELATED;
   const links = resolveLinks(locale, curated, current, seen);
+  const curatedCount = links.length;
   if (links.length < limit) {
     links.push(...resolveLinks(locale, HUB_SUFFIXES, current, seen));
   }
   if (links.length < limit) {
     links.push(...resolveLinks(locale, SPILLOVER_SUFFIXES, current, seen));
   }
-  return links.slice(0, limit);
+  return links.slice(0, Math.max(limit, curatedCount));
 }

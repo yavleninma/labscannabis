@@ -45,7 +45,10 @@ export const AREAS: Area[] = [
   },
   {
     slug: "walking-street",
-    name: { en: "Walking Street", ru: "Walking Street", th: "Walking Street", ar: "Walking Street", zh: "Walking Street", ko: "Walking Street", ja: "Walking Street" },
+    // Тот же пропуск, что был в `LANDMARKS`: соседний `jomtien` локализован на
+    // всех семи, а этот стоял латиницей. Отсюда берутся подписи ссылок на район
+    // и заголовки шаблона доставки.
+    name: { en: "Walking Street", ru: "Уокинг Стрит", th: "ถนนคนเดินพัทยา", ar: "شارع ووكينج", zh: "芭提雅步行街", ko: "워킹스트리트", ja: "ウォーキングストリート" },
   },
   {
     // Название района, а не адрес магазина: сам магазин стоит по `ADDRESS`
@@ -122,7 +125,7 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "near-me",
     area: "pattaya",
     titleTemplate: {
-      en: "Cannabis shop near me in Pattaya | Map and directions | Labs Cannabis",
+      en: "Cannabis shop near me in Pattaya: map and directions",
       ru: "Каннабис рядом со мной в Паттайе | Карта и маршрут",
       th: "ร้านกัญชาใกล้ฉัน พัทยา | แผนที่และเส้นทาง",
       ar: "متجر قنب قريب مني في باتايا",

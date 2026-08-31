@@ -61,7 +61,6 @@ interface ArticleData {
   headline?: string;
   datePublished?: string;
   dateModified?: string;
-  author?: string;
 }
 
 interface Props {
@@ -76,6 +75,8 @@ interface Props {
   article?: ArticleData;
   /** Предмет статьи для страниц сортов: `about: {"@type": "Thing"}`, без Product. */
   aboutThing?: string;
+  /** Состав страницы-списка: что именно собирает хаб. См. `itemListLd` ниже. */
+  itemList?: { name: string; pathSuffix: string }[];
 }
 
 const {
@@ -89,11 +90,33 @@ const {
   serviceAreaName,
   article,
   aboutThing,
+  itemList = [],
 } = Astro.props;
 const baseUrl = getSiteUrl();
 const pageUrl = getCanonical(locale, pathSuffix);
 const businessId = `${baseUrl}/#business`;
-const organizationId = `${baseUrl}/#org`;
+/**
+ * Организация и заведение — ОДИН узел, а не два.
+ *
+ * Здесь стояли два: `#business` (LocalBusiness+Store) и `#org` (Organization),
+ * причём второй был строгим подмножеством первого — то же имя, тот же телефон,
+ * тот же адрес, тот же `sameAs`, тот же `contactPoint`, — а первый объявлял
+ * `parentOrganization: {"@id": "#org"}`. То есть разметка утверждала, что этот
+ * магазин является дочерним предприятием отдельной компании, у которой
+ * случайно совпадают название, улица и телефон. Такой компании нет:
+ * `src/data/business-entity.ts` описывает одно юридическое лицо с одним NAP.
+ *
+ * Форма из двух узлов с `parentOrganization` — не выдумка, её штампуют
+ * SEO-плагины, но осмысленна она у сетей с несколькими точками. У одной точки
+ * два неразличимых узла — это два кандидата на одну сущность в графе там, где
+ * весь смысл страницы `about` в том, чтобы сущность была одна и не склеивалась
+ * с чужим магазином на соседней улице.
+ *
+ * Тип расширен до `["Organization", …]`, поэтому `WebSite.publisher` и
+ * `Article.publisher` по-прежнему указывают на нечто, что действительно
+ * является организацией.
+ */
+const organizationId = businessId;
 const websiteId = `${baseUrl}/#website`;
 const webPageId = `${pageUrl}#webpage`;
 const inLanguage = LOCALE_HREFLANG[locale];
@@ -202,14 +225,23 @@ const contactPoint = {
 
 const localBusiness = {
   "@context": "https://schema.org",
-  "@type": ["LocalBusiness", "Store"],
+  "@type": ["Organization", "LocalBusiness", "Store"],
   "@id": businessId,
   // Имя заведения должно совпадать с карточкой Google посимвольно: по нему
   // поисковик сшивает сайт с карточкой. Название сайта идёт вторым именем,
   // а не заменяет вывеску — оба используются, ни одно не устарело.
   name: GOOGLE.listingName,
   alternateName: BRAND.name,
-  url: `${baseUrl}${localePath(locale)}`,
+  /*
+   * Один URL у одного `@id`, а не семь. Здесь стояло `localePath(locale)`, и
+   * узел `#business` публиковался с `url` = /en/ на английских страницах, /ru/
+   * на русских, /th/ на тайских — при одном и том же идентификаторе. Сущность
+   * в графе одна, значит и адрес у неё один; локаль документа описывает
+   * `WebPage.inLanguage`, а не сущность бизнеса. Берётся `/en/`, а не корень:
+   * корень отвечает 308 на /en/, а ссылаться идентификатором на редирект —
+   * лишний повод для несовпадения.
+   */
+  url: `${baseUrl}${localePath("en")}`,
   telephone: CONTACT.phoneIntl,
   image: { "@id": primaryImageId },
   logo: { "@id": logoId },
@@ -230,26 +262,11 @@ const localBusiness = {
   // сайта, который на семи языках пишет, что никакой торговли онлайн не ведёт;
   // для выдачи он не даёт ничего, а рядом стоят намеренно вычищенные `Offer` и
   // `priceRange`.
-  parentOrganization: { "@id": organizationId },
   contactPoint,
   ...(openingHours ? { openingHoursSpecification: openingHours } : {}),
   ...(staffLanguages ? { knowsLanguage: staffLanguages } : {}),
 };
 
-const organizationLd = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": organizationId,
-  name: GOOGLE.listingName,
-  alternateName: BRAND.name,
-  url: baseUrl,
-  logo: { "@id": logoId },
-  image: { "@id": primaryImageId },
-  telephone: CONTACT.phoneIntl,
-  address: postalAddress,
-  sameAs,
-  contactPoint,
-};
 
 /**
  * `SearchAction` для `WebSite` — механизм есть, эмиссии нет.
@@ -334,6 +351,39 @@ const breadcrumbLd =
       }
     : null;
 
+/**
+ * `ItemList` для страниц-хабов.
+ *
+ * Три суффикса типизированы как `CollectionPage`, и до этого ни один из них не
+ * говорил, ЧТО он собирает: во всей сборке было 0 узлов `ItemList` при 21
+ * объявленном `CollectionPage`. Страница заявляла «я список» и не перечисляла
+ * ничего, хотя сам список у неё уже посчитан — и, что важнее, уже отфильтрован
+ * политикой индексации, то есть содержит ровно то, что допущено воротами.
+ *
+ * Обещания рич-сниппета здесь нет и быть не может: карусели Google собирает
+ * только для Course/Movie/Recipe/Restaurant/Product и ещё пары типов, ни один
+ * из которых сюда не подходит. Смысл узла другой — сделать состав хаба
+ * машиночитаемым в том же виде, в каком его видит человек, и не оставлять в
+ * графе утверждение «я коллекция» без содержимого.
+ */
+const itemListLd =
+  itemList.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "@id": `${pageUrl}#itemlist`,
+        name: title,
+        numberOfItems: itemList.length,
+        itemListOrder: "https://schema.org/ItemListUnordered",
+        itemListElement: itemList.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.name,
+          url: `${baseUrl}${localePath(locale, item.pathSuffix)}`,
+        })),
+      }
+    : null;
+
 const serviceLd =
   pageType === "area"
     ? {
@@ -363,9 +413,15 @@ const articleLd =
         mainEntityOfPage: { "@id": webPageId },
         isPartOf: { "@id": webPageId },
         image: { "@id": primaryImageId },
-        author: article.author
-          ? { "@type": "Organization", name: article.author }
-          : { "@id": organizationId },
+        /*
+         * Автор и издатель одного документа — одна и та же компания, и раньше
+         * разметка говорила, что это две: `author` был анонимным узлом
+         * `{"@type":"Organization","name":"Labs Cannabis"}` без `@id`, а
+         * `publisher` — ссылкой на организацию. Так на 101 странице статьи
+         * заводился третий безымянный кандидат на ту же сущность. Ссылка по
+         * `@id` — более сильное утверждение об авторстве, чем повторённое имя.
+         */
+        author: { "@id": organizationId },
         publisher: { "@id": organizationId },
         datePublished: article.datePublished,
         dateModified: article.dateModified,
@@ -432,6 +488,18 @@ const webPageLd = {
     : describesBusiness
       ? { mainEntity: { "@id": businessId }, about: { "@id": businessId } }
       : {}),
+  /*
+   * `mainEntity` у страницы уже может быть занят — статьёй или самим бизнесом
+   * (`locations` состоит и в `BUSINESS_PAGE_SUFFIXES`, и в
+   * `COLLECTION_PAGE_SUFFIXES`). Два `mainEntity` на одном узле — это не «два
+   * утверждения», это одно противоречивое, поэтому список подвешивается через
+   * `hasPart`, когда слот занят, и через `mainEntity`, когда свободен.
+   */
+  ...(itemListLd
+    ? articleLd || describesBusiness
+      ? { hasPart: { "@id": itemListLd["@id"] } }
+      : { mainEntity: { "@id": itemListLd["@id"] } }
+    : {}),
 };
 
 const faqLd =
@@ -454,12 +522,12 @@ const safeJson = (obj: unknown) => JSON.stringify(obj).replace(/</g, "\\u003c");
 
 const jsonBlocks = [
   localBusiness,
-  organizationLd,
   websiteLd,
   primaryImageLd,
   logoLd,
   webPageLd,
   breadcrumbLd,
+  itemListLd,
   serviceLd,
   articleLd,
   faqLd,

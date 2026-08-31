@@ -1881,13 +1881,48 @@ export function compareStrains(slugA: string, slugB: string): StrainContrast | n
 }
 
 /**
+ * Обратный индекс `compareWith`: кто назвал этот сорт своим соседом.
+ *
+ * `compareWith` — поле односторонее по своей природе: автор описания White
+ * Widow решает, с чем её сравнить, и ничего не знает о том, кто сравнит себя
+ * с ней. Пока связь читалась только вперёд, граф кластера оказывался
+ * несимметричным, и один сорт проваливался целиком: Pineapple Express не назван
+ * НИ ОДНИМ другим сортом, поэтому у его страницы была ровно одна входящая
+ * контекстная ссылка — с хаба — и самый низкий вес во всём indexable-наборе, на
+ * обеих локалях.
+ *
+ * Замер по всем двадцати сортам: вперёд у каждого ровно три соседа, а
+ * объединение с обратными даёт 70 связей вместо 60. То есть у двенадцати сортов
+ * не меняется ничего (обратные уже входят в прямые), а починка достаётся тем
+ * восьми, кому её и не хватало. Это ровно то свойство, которого ждут от
+ * симметрии: она не размазывает связи ровным слоем, она чинит провалы.
+ */
+const REVERSE_COMPARISONS: ReadonlyMap<string, readonly string[]> = (() => {
+  const index = new Map<string, string[]>();
+  for (const slug of STRAIN_SLUGS) {
+    for (const other of STRAIN_CATALOG[slug].compareWith) {
+      const list = index.get(other);
+      if (list) list.push(slug);
+      else index.set(other, [slug]);
+    }
+  }
+  return index;
+})();
+
+/**
  * Смысловые соседи в формате `related` контент-завода: слаги страниц, а не
  * сортов. Хаб и гид по выбору дописывает кластер — здесь только сорта.
+ *
+ * Порядок значим: сначала то, что автор выбрал сам, потом обратные связи. Так
+ * ручное решение остаётся первым в блоке ссылок, а симметрия работает добором.
  */
 export function getStrainNeighbourSuffixes(slug: string): string[] {
   const profile = getStrainProfile(slug);
   if (!profile) return [];
-  return profile.compareWith.map(strainPathSuffix);
+  const neighbours = new Set<string>(profile.compareWith);
+  for (const other of REVERSE_COMPARISONS.get(slug) ?? []) neighbours.add(other);
+  neighbours.delete(slug);
+  return [...neighbours].map(strainPathSuffix);
 }
 
 /** Сорта одной ароматической семьи, кроме самого сорта. */

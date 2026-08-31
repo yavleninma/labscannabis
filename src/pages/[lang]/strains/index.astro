@@ -55,6 +55,11 @@ const groups = (copy?.groups ?? [])
   }))
   .filter((group) => group.items.length > 0);
 
+/** Плоский состав хаба для `ItemList`: уже отфильтрован политикой индексации. */
+const itemList = groups.flatMap((group) =>
+  group.items.map((item) => ({ name: item.label, pathSuffix: item.suffix })),
+);
+
 const breadcrumbs = copy
   ? [
       { name: ui.nav.home, pathSuffix: "" },
@@ -72,6 +77,7 @@ const breadcrumbs = copy
     pageType="strain"
     breadcrumbs={breadcrumbs}
     faq={copy.faq}
+    itemList={itemList}
   >
     <main class="px-4 pt-8 pb-6">
       <div class="mx-auto max-w-lg">

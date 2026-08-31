@@ -45,10 +45,37 @@ const HREFLANGS = {
   ko: "ko",
   ja: "ja",
 };
+/**
+ * ГРАНИЦЫ ЗАГОЛОВКА И ОПИСАНИЯ.
+ *
+ * Здесь стояли 75 и 200 — это границы валидности, а не границы выдачи. Замер по
+ * собранному набору: 24 заголовка длиннее 60 символов, 13 длиннее 62, 5 длиннее
+ * 65 (самый длинный — 74). Google режет заголовок по ширине в пикселях (около
+ * 600 px на десктопе) и тем охотнее переписывает его сам, чем он длиннее, — то
+ * есть у пятёрки самых длинных отрезается ровно хвост, ради которого их
+ * писали: у `/en/cannabis-near-me-pattaya/` уезжало имя бренда, у страниц
+ * сортов — пояснительная часть.
+ *
+ * Блокирующая граница поставлена туда, где ей не нужно чинить существующие
+ * страницы задним числом, и опущена с 75 до 65. Остальное — `reportSerpWidth()`
+ * ниже: список того, что вылезает за 60/160, печатается отчётом, не роняя
+ * сборку. Разница между «сломано» и «можно лучше» здесь принципиальна, и
+ * особенно для описания: Google подменяет авторское описание собственным
+ * пассажем на большинстве запросов, поэтому превращать его длину в красную
+ * сборку значило бы выдать желаемое за механику выдачи.
+ *
+ * Порог единый на все локали, и это проверено, а не допущено: среди 84
+ * indexable-заголовков на th/ar/zh/ko/ja самый длинный — 58 символов. Когда
+ * появится CJK-заголовок под 65 символов (это уже около 900 px), порог придётся
+ * разделить по локалям — до тех пор отдельная машинерия была бы усложнением
+ * ради несуществующего случая.
+ */
 const MIN_TITLE_LENGTH = 8;
-const MAX_TITLE_LENGTH = 75;
+const MAX_TITLE_LENGTH = 65;
+const SERP_TITLE_SOFT_LIMIT = 60;
 const MIN_DESCRIPTION_LENGTH = 40;
 const MAX_DESCRIPTION_LENGTH = 200;
+const SERP_DESCRIPTION_SOFT_LIMIT = 160;
 const MIN_H1_LENGTH = 2;
 const MAX_H1_LENGTH = 140;
 const MIN_BODY_TEXT_LENGTH = 400;
@@ -152,6 +179,8 @@ const MAX_PRINTED_WARNINGS = 5;
 const errors = [];
 const warnings = [];
 const uniquenessPages = [];
+/** Ширина сниппета: собирается на проходе по страницам, печатается отчётом ниже. */
+const serpWidth = [];
 
 function fail(message) {
   errors.push(message);
@@ -1309,6 +1338,21 @@ for (const page of builtPages) {
       `${pageLabel}: meta description length ${description.length} is outside ${MIN_DESCRIPTION_LENGTH}-${MAX_DESCRIPTION_LENGTH}`,
     );
   }
+  /*
+   * Многоточие в конце описания — след машинного реза по счётчику символов, а
+   * не авторское сокращение. Так `seoDescription()` обрывал ровно восемь
+   * описаний, и это были восемь самых коммерческих URL набора: в выдаче они
+   * заканчивались посреди слова. Проверка блокирующая, потому что регрессия
+   * возвращается одной строкой в утилите и глазами по коду не видна — видна
+   * только в собранной разметке.
+   */
+  if (/(\.\.\.|…)\s*$/.test(description)) {
+    fail(
+      `${pageLabel}: meta description ends with an ellipsis — a description cut by character count, ` +
+        "not by sentence. seoDescription() must end on a sentence or word boundary",
+    );
+  }
+  serpWidth.push({ label: pageLabel, title: title.length, description: description.length });
   if (h1.length < MIN_H1_LENGTH || h1.length > MAX_H1_LENGTH) {
     fail(`${pageLabel}: H1 length ${h1.length} is outside ${MIN_H1_LENGTH}-${MAX_H1_LENGTH}`);
   }
@@ -1491,6 +1535,122 @@ function checkQuarantinedMedia() {
   for (const [reference, file] of hits) {
     fail(
       `${file}: страница ссылается на карантинный ${reference} — в media-source/ лежат только макро-снимки товара`,
+    );
+  }
+}
+
+/**
+ * НИ ОДНОГО БЛОКИРУЮЩИХ ОТРИСОВКУ ЗАПРОСА НА ЧУЖОЙ ХОСТ.
+ *
+ * Что здесь защищается. LCP-элемент на всех страницах — заголовок H1: в `dist`
+ * ноль JS-бандлов и ноль `<img>` в основном потоке. Значит LCP ≈ FCP и упирается
+ * ровно в число блокирующих запросов в `<head>`. Их было два, стало ноль:
+ * таблица стилей вклеена (`build.inlineStylesheets`), шрифты забраны на свой
+ * хост (`scripts/fetch-fonts.mjs`) и качаются параллельно разбору HTML.
+ *
+ * Почему это блокирующая проверка. Возврат кросс-доменного шрифтового CSS —
+ * это одна строка `<link href="https://fonts.googleapis.com/...">`, и глазами
+ * регрессия не видна: страница выглядит точно так же. Цена при этом
+ * несимметричная по локалям, и в этом весь смысл замера: сжатый ответ css2 —
+ * 742 B для en/ru, но 93 466 B для zh, 91 745 B для ja и 70 158 B для ko,
+ * потому что CJK-набор режется на три-четыре сотни срезов по `unicode-range`.
+ * Страница целиком весит около 18,5 КБ по проводу — то есть на трёх локалях
+ * отрисовка ждала бы файл в пять раз тяжелее себя, и это ещё до первого байта
+ * самого шрифта.
+ *
+ * Проверяется три вещи: чужих хостов в разметке нет; предзагружаемый шрифт
+ * действительно существует в сборке и объявлен в стилях этой же страницы
+ * (иначе `preload` качает файл, который никто не попросит); и каждый файл в
+ * `public/fonts/` кем-то используется.
+ */
+const RENDER_BLOCKING_HOSTS = ["fonts.googleapis.com", "fonts.gstatic.com"];
+
+/**
+ * ОТЧЁТ О ШИРИНЕ СНИППЕТА. Не блокирует сборку — и это решение, а не мягкость.
+ *
+ * Заголовок Google режет по ширине в пикселях, а описание на большинстве
+ * запросов вообще подменяет собственным пассажем из текста страницы. Значит
+ * «длиннее 60» — это не поломка, а упущенная возможность поставить
+ * различающую часть в видимую половину. Красная сборка за упущенную
+ * возможность обесценивает красную сборку за поломку, поэтому здесь список,
+ * который читает автор, а рядом (`MAX_TITLE_LENGTH`) — граница, которая падает.
+ */
+function reportSerpWidth() {
+  const longTitles = serpWidth
+    .filter((page) => page.title > SERP_TITLE_SOFT_LIMIT)
+    .sort((a, b) => b.title - a.title);
+  const longDescriptions = serpWidth
+    .filter((page) => page.description > SERP_DESCRIPTION_SOFT_LIMIT)
+    .sort((a, b) => b.description - a.description);
+
+  console.log(
+    `Ширина сниппета (отчёт): заголовков длиннее ${SERP_TITLE_SOFT_LIMIT} символов — ` +
+      `${longTitles.length} из ${serpWidth.length}, описаний длиннее ${SERP_DESCRIPTION_SOFT_LIMIT} — ` +
+      `${longDescriptions.length}. Хвост за границей в выдачу не попадает.`,
+  );
+  for (const page of longTitles.slice(0, MAX_PRINTED_WARNINGS)) {
+    console.log(`      title ${page.title}  ${page.label}`);
+  }
+  for (const page of longDescriptions.slice(0, MAX_PRINTED_WARNINGS)) {
+    console.log(`      desc  ${page.description}  ${page.label}`);
+  }
+}
+
+function checkFontDelivery() {
+  const distFonts = path.join(DIST_DIR, "fonts");
+  if (!existsSync(distFonts)) {
+    fail("dist/fonts/ отсутствует — шрифты не попали в сборку, страницы уедут системным шрифтом");
+    return;
+  }
+
+  const shippedFonts = new Set(
+    walkFiles(distFonts, ".woff2").map((file) => `/fonts/${path.basename(file)}`),
+  );
+  const usedFonts = new Set();
+
+  for (const file of walkFiles(DIST_DIR, ".html")) {
+    const html = readFileSync(file, "utf8");
+    const where = repoRelative(file);
+
+    for (const host of RENDER_BLOCKING_HOSTS) {
+      if (html.includes(host)) {
+        fail(
+          `${where}: разметка снова обращается к ${host}. Кросс-доменный запрос за шрифтовым CSS ` +
+            "блокирует первую отрисовку и на zh/ja/ko стоит 70-93 КБ; шрифты забираются " +
+            "на свой хост через `npm run gen:fonts`",
+        );
+        break;
+      }
+    }
+
+    for (const match of html.matchAll(/<link\b[^>]*>/gi)) {
+      const attrs = getAttrs(match[0]);
+      const href = attrs.href ?? "";
+      if (/^https?:\/\//i.test(href) && (attrs.rel === "stylesheet" || attrs.as === "font")) {
+        fail(`${where}: ${attrs.rel} на чужой хост (${href}) — отрисовка снова зависит от третьей стороны`);
+      }
+      if (attrs.rel !== "preload" || attrs.as !== "font") continue;
+      if (!shippedFonts.has(href)) {
+        fail(`${where}: preload шрифта ${href}, которого нет в dist/fonts/`);
+        continue;
+      }
+      if (!html.includes(`url(${href})`)) {
+        fail(
+          `${where}: preload ${href} без объявления @font-face на этой же странице — ` +
+            "браузер скачает файл, которого никто не попросит",
+        );
+      }
+      usedFonts.add(href);
+    }
+
+    for (const match of html.matchAll(/url\((\/fonts\/[^)]+\.woff2)\)/g)) usedFonts.add(match[1]);
+  }
+
+  for (const font of shippedFonts) {
+    if (usedFonts.has(font)) continue;
+    fail(
+      `${font} публикуется, но не объявлен ни на одной странице — либо срез лишний в ` +
+        "scripts/fetch-fonts.mjs, либо потерялось объявление в src/styles/fonts.css",
     );
   }
 }
@@ -2051,6 +2211,8 @@ checkUnusedComponents();
 checkDistanceRegexFixtures();
 checkHandWrittenDistances();
 checkQuarantinedMedia();
+checkFontDelivery();
+reportSerpWidth();
 checkUnreferencedBinaryAssets();
 checkOrphanContentCache();
 checkShareImage();

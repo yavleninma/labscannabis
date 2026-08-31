@@ -357,7 +357,7 @@ export const FRUIT_STRAIN_PAGES: StrainPages = {
     }),
     ru: withFacts("purple-punch", "ru", {
       thingName: "Purple Punch",
-      title: "Сорт Purple Punch: короткое цветение в медленной ароматической семье",
+      title: "Сорт Purple Punch: короткое цветение в медленной семье",
       description:
         "Larry OG, скрещённый с Granddaddy Purple на Гавайях, выпуск семян F2 в 2017 году — и почему семь-восемь недель объясняют скорость распространения имени.",
       h1: "Purple Punch: быстрый в виноградной семье",

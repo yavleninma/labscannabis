@@ -94,7 +94,7 @@ export const DESSERT_STRAIN_PAGES: StrainPages = {
     }),
     ru: withFacts("girl-scout-cookies", "ru", {
       thingName: "GSC",
-      title: "GSC (Girl Scout Cookies): растение, с которого началась десертная эпоха",
+      title: "Сорт GSC (Girl Scout Cookies): начало десертной эпохи",
       description:
         "Как скрещивание OG Kush с Durban Poison в области залива Сан-Франциско дало предка современных меню, почему его теперь пишут GSC и почему каталоги не сходятся в классификации.",
       h1: "GSC: предок, к которому сводится почти каждое десертное имя",
@@ -477,7 +477,7 @@ export const DESSERT_STRAIN_PAGES: StrainPages = {
     }),
     ru: withFacts("do-si-dos", "ru", {
       thingName: "Do-Si-Dos",
-      title: "Сорт Do-Si-Dos: линалоол под цитрусом и печенечная линия, вернувшаяся к OG",
+      title: "Сорт Do-Si-Dos: линалоол под цитрусом и тестом",
       description:
         "Скрещивание OGKB с Face Off OG, почему линалоол в первой тройке необычен для десертной страницы и что делает на крышке банки название фигуры кадрили.",
       h1: "Do-Si-Dos: линия Cookies, скрещённая обратно туда, откуда пришла",

@@ -274,7 +274,7 @@ const ARRIVING_WITH_CANNABIS: QuestionPageData = {
   intent: "prescription",
   meta: {
     en: {
-      title: "Arriving in Thailand with cannabis: what we can and cannot tell you",
+      title: "Arriving in Thailand with cannabis: what we can tell you",
       description:
         "The arrival side of the question, answered honestly: what the notices say about visitors, and the four places where we have no verifiable source and say so.",
       h1: "Bringing it in: the questions we can answer and the ones we cannot",

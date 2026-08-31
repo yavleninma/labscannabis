@@ -792,10 +792,48 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
   },
 };
 
-export function seoDescription(content: SeoContent, max = 160): string {
+/**
+ * Описание страницы для сниппета: рез по границе, а не по счётчику символов.
+ *
+ * ЧТО БЫЛО. `text.slice(0, max - 1) + "..."` — жёсткий рез по символу. Замер по
+ * собранным страницам: ровно восемь описаний заканчивались многоточием, и это
+ * были восемь самых коммерческих URL набора — `buy-`, `best-`, `cheap-` и
+ * брендовая страница на en и ru. В выдаче они обрывались посреди слова:
+ * «…Adults 20+ who hold a Thai prescripti...», «…живую карточку с п...».
+ * Обрыв посреди слова — это не «сокращено», это «страница выглядит сломанной»
+ * ровно там, где решение о клике и принимается. Заодно рез приходился на 162-й
+ * символ при заявленной цели 160: `+ "..."` дописывался ПОСЛЕ среза.
+ *
+ * ЧТО СТАЛО. Сначала пробуем закончить предложение, потом — слово, и никакого
+ * многоточия: незаконченная мысль лучше читается как законченная фраза, чем
+ * как обрыв. Порог 155 — под то, что Google реально рисует в мобильной выдаче.
+ *
+ * Граница предложения ищется и в латинской, и в восточноазиатской пунктуации:
+ * у CJK-локалей пробелов между словами нет, и словесный запасной вариант там
+ * не сработал бы вовсе. Если ни одна граница не нашлась достаточно далеко
+ * (короче 60% лимита описание обрезать бессмысленно — потеряется предмет),
+ * режем по символу, но по-прежнему без многоточия.
+ *
+ * Одно значение уезжает в четыре места сразу: `meta description`,
+ * `og:description`, `twitter:description` и `description` в JSON-LD
+ * (`src/layouts/PageLayout.astro`), поэтому починка здесь чинит все четыре.
+ */
+const SENTENCE_TERMINATORS = [".", "!", "?", "。", "！", "？", "۔", "؟"];
+
+export function seoDescription(content: SeoContent, max = 155): string {
   const text = content.intro.replace(/\s+/g, " ").trim();
   if (text.length <= max) return text;
-  return `${text.slice(0, max - 1).trim()}...`;
+
+  const window = text.slice(0, max);
+  const floor = Math.floor(max * 0.6);
+
+  const sentenceEnd = Math.max(...SENTENCE_TERMINATORS.map((mark) => window.lastIndexOf(mark)));
+  if (sentenceEnd >= floor) return window.slice(0, sentenceEnd + 1).trim();
+
+  const wordEnd = window.lastIndexOf(" ");
+  if (wordEnd >= floor) return window.slice(0, wordEnd).trim();
+
+  return window.trim();
 }
 
 /**

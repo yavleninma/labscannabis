@@ -5,7 +5,7 @@ import { isRtl, LOCALE_HREFLANG, getSiteUrl } from "@/lib/i18n";
 import { getHreflangs, getCanonical } from "@/lib/seo";
 import { getIndexPolicy, getXDefaultLocale } from "@/lib/index-policy.mjs";
 import { t } from "@/lib/ui";
-import { getFontStylesheetHref } from "@/lib/fonts";
+import { getFontPreloads } from "@/lib/fonts";
 import { ADDRESS, GOOGLE } from "@/data/site";
 import Analytics from "@/components/Analytics.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
@@ -39,10 +39,11 @@ interface Props {
     headline?: string;
     datePublished?: string;
     dateModified?: string;
-    author?: string;
   };
   /** Предмет статьи для страниц сортов — уходит в `about: {"@type": "Thing"}`. */
   aboutThing?: string;
+  /** Что собирает страница-хаб — уходит в `ItemList`. */
+  itemList?: { name: string; pathSuffix: string }[];
 }
 
 const {
@@ -57,6 +58,7 @@ const {
   serviceAreaName,
   article,
   aboutThing,
+  itemList = [],
 } = Astro.props;
 const ui = t(locale);
 const pageTitle = title ?? ui.meta.title;
@@ -130,9 +132,26 @@ const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.lo
       грузом. Растр собирается тем же `scripts/gen-og-image.mjs`.
     */}
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href={getFontStylesheetHref(locale)} rel="stylesheet" />
+    {/*
+      Шрифты — со своего хоста. Здесь стояли два `preconnect` и
+      `<link rel="stylesheet">` на fonts.googleapis.com: кросс-доменная таблица
+      стилей, блокирующая первую отрисовку. Её сжатый вес по локалям — 742 B на
+      en/ru, но 93 466 B на zh, 91 745 B на ja и 70 158 B на ko, потому что
+      CJK-набор Google режется на три-четыре сотни срезов по `unicode-range` и
+      манифест этих срезов и есть тело ответа. Страница целиком весит 12,8 КБ по
+      проводу, то есть отрисовка ждала файл в семь раз тяжелее себя — и это ещё
+      до первого байта самого шрифта.
+
+      Теперь `@font-face` приезжает внутри собственной таблицы стилей
+      (`src/styles/fonts.css`), а нужный срез начинает качаться параллельно
+      разбору HTML, а не после него. Список предзагрузки — только то, что
+      страница локали использует наверняка: см. `PRELOAD_SUBSETS` в
+      `src/lib/fonts.ts`. На zh/ko/ja веб-шрифта нет вовсе, кроме латинского
+      среза Inter под название и адрес.
+    */}
+    {getFontPreloads(locale).map((font) => (
+      <link rel="preload" href={font.href} as="font" type={font.type} crossorigin />
+    ))}
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
@@ -176,6 +195,7 @@ const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.lo
         serviceAreaName={serviceAreaName}
         article={article}
         aboutThing={aboutThing}
+        itemList={itemList}
       />
     )}
     <TrackingScript />

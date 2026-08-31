@@ -1,0 +1,9 @@
+Fonts in this directory are redistributed under the SIL Open Font License 1.1.
+
+Inter — Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter)
+Noto Sans Thai, Noto Sans Arabic — Copyright (c) The Noto Project Authors (https://github.com/notofonts)
+
+Full licence text: https://openfontlicense.org/open-font-license-official-text/
+
+Each file was fetched from the Google Fonts CDN by scripts/fetch-fonts.mjs.
+The originating URL of every file is recorded in src/data/font-manifest.json.

@@ -3,6 +3,7 @@ import type { PrefillIntent } from "@/data/cta-copy";
 // Значимый импорт — относительный и с расширением: модуль читает и Vite, и
 // голый Node (`npm run check:factory`), а алиас `@/` Node не резолвит.
 import { EXTRA_QUESTION_PAGES } from "./question-topics-extra.ts";
+import { OPEN_LOCALE_QUESTIONS } from "./question-pages-open-locales.ts";
 
 /**
  * НАБОР ДАННЫХ ВОПРОСНЫХ СТРАНИЦ (кластер `questions/*`).
@@ -1732,7 +1733,51 @@ const COMMON_MYTHS: QuestionPageData = {
  * Все темы кластера. Порядок здесь — порядок в хабе и в перелинковке; на
  * вердикт ворот он не влияет, кандидатов сортируют по `<locale>/<suffix>`.
  */
-export const QUESTION_PAGES: readonly QuestionPageData[] = [
+/**
+ * Вливание текста на пяти остальных языках.
+ *
+ * ПОЧЕМУ СЛИЯНИЕ ЗДЕСЬ, А НЕ В `getQuestionPage()`. Разрешать оверлей в момент
+ * сборки страницы было бы на две строки короче — и вывело бы новый текст
+ * из-под всех инвариантов разом. `assertBasisLabelHonesty()` в
+ * `src/content-factory/clusters/questions.mjs` обходит именно
+ * `QUESTION_PAGES[].questions[].copy`: ответ с ярлыком «практика», разбирающий
+ * содержание уведомления, роняет импорт. Оверлей, подмешанный позже, эта
+ * проверка не увидела бы — то есть ровно на новом, непроверенном человеком
+ * тексте единственный машинный контроль честности молча перестал бы работать.
+ *
+ * Поэтому слияние ровно одно и на входе: дальше по коду данных из двух
+ * источников не существует.
+ */
+function mergeOpenLocaleQuestions(pages: readonly QuestionPageData[]): readonly QuestionPageData[] {
+  return pages.map((page) => {
+    const overlay = OPEN_LOCALE_QUESTIONS[page.slug];
+    if (!overlay) return page;
+    return {
+      ...page,
+      meta: { ...page.meta, ...overlay.meta },
+      questions: page.questions.map((question) => {
+        const extra = overlay.copy[question.id];
+        if (!extra) return question;
+        /*
+         * Локаль, объявленная в оверлее, но не объявленная у самого вопроса, —
+         * это не «дописали язык», а расхождение: страница локали собирается
+         * ИЗ ВОПРОСОВ, ОТНОСЯЩИХСЯ К НЕЙ, и обойти это решение текстом нельзя.
+         */
+        for (const locale of Object.keys(extra) as Locale[]) {
+          if (question.locales.includes(locale)) continue;
+          throw new Error(
+            `Questions: оверлей даёт текст ${page.slug}/${question.id}/${locale}, ` +
+              "но у вопроса эта локаль не объявлена в `locales`. Либо локаль относится к вопросу — " +
+              "и тогда её добавляют в `locales` с объяснением в `localeNote`, — либо текст здесь лишний.",
+          );
+        }
+        return { ...question, copy: { ...question.copy, ...extra } };
+      }),
+    };
+  });
+}
+
+export const QUESTION_PAGES: readonly QuestionPageData[] = mergeOpenLocaleQuestions([
   RULES_AND_PRESCRIPTION,
   BUYING_IN_PERSON,
   WHERE_YOU_CAN_USE,
@@ -1743,7 +1788,7 @@ export const QUESTION_PAGES: readonly QuestionPageData[] = [
   // тысячи строк, и дописывать в него ещё сотни значит сделать его местом,
   // куда никто не заглядывает. Контракт у них тот же.
   ...EXTRA_QUESTION_PAGES,
-];
+]);
 
 /** Префикс маршрута кластера. Меняется здесь и нигде больше. */
 export const QUESTION_ROUTE_PREFIX = "questions";

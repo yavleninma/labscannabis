@@ -1,0 +1,44 @@
+[
+  {
+    "family": "Inter",
+    "subset": "latin",
+    "file": "/fonts/inter-latin.woff2",
+    "bytes": 48256,
+    "source": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2"
+  },
+  {
+    "family": "Inter",
+    "subset": "latin-ext",
+    "file": "/fonts/inter-latin-ext.woff2",
+    "bytes": 85068,
+    "source": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa25L7SUc.woff2"
+  },
+  {
+    "family": "Inter",
+    "subset": "cyrillic",
+    "file": "/fonts/inter-cyrillic.woff2",
+    "bytes": 18748,
+    "source": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7SUc.woff2"
+  },
+  {
+    "family": "Inter",
+    "subset": "cyrillic-ext",
+    "file": "/fonts/inter-cyrillic-ext.woff2",
+    "bytes": 25960,
+    "source": "https://fonts.gstatic.com/s/inter/v20/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff2"
+  },
+  {
+    "family": "Noto Sans Thai",
+    "subset": "thai",
+    "file": "/fonts/noto-sans-thai-thai.woff2",
+    "bytes": 26924,
+    "source": "https://fonts.gstatic.com/s/notosansthai/v29/iJWQBXeUZi_OHPqn4wq6hQ2_hbJ1xyN9wd43SofNWcdfKI2hX2g.woff2"
+  },
+  {
+    "family": "Noto Sans Arabic",
+    "subset": "arabic",
+    "file": "/fonts/noto-sans-arabic-arabic.woff2",
+    "bytes": 165960,
+    "source": "https://fonts.gstatic.com/s/notosansarabic/v33/nwpCtLGrOAZMl5nJ_wfgRg3DrWFZWsnVBJ_sS6tlqHHFlj4wv4r4xA.woff2"
+  }
+]

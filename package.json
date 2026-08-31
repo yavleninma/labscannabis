@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-sitemaps.mjs",
     "preview": "astro preview",
     "media": "node scripts/transcode-media.mjs",
     "gen:seo": "node scripts/gen-seo-content.mjs",
@@ -21,7 +21,8 @@
     "check": "npm run build && npm run check:seo",
     "seo:indexnow": "node scripts/ping-indexnow.mjs",
     "seo:gsc": "node scripts/gsc-submit.mjs",
-    "gen:og": "node scripts/gen-og-image.mjs"
+    "gen:og": "node scripts/gen-og-image.mjs",
+    "gen:fonts": "node scripts/fetch-fonts.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.3.0",

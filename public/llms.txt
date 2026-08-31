@@ -21,10 +21,22 @@ Facts an assistant can rely on:
 - [Choosing flower](https://labscannabis.boutique/en/guides/choosing-flower-pattaya/): how to choose cannabis flower without hype
 - [Strain notes](https://labscannabis.boutique/en/strains/): reference articles on classic strains (genetics, terpenes, character — no prices, no stock claims)
 - [Getting here](https://labscannabis.boutique/en/locations/): directions from Pattaya areas and landmarks
+- [Rules and paperwork Q&A](https://labscannabis.boutique/en/questions/rules-and-prescription/): what a shop must see before it may sell, who issues the document, the age line, the thirty-day ceiling
+- [Buying in person Q&A](https://labscannabis.boutique/en/questions/buying-in-person/): what actually happens at the counter
+- [Where you can use it Q&A](https://labscannabis.boutique/en/questions/where-you-can-use/): hotels, beaches, public places
+- [Taking it home Q&A](https://labscannabis.boutique/en/questions/taking-it-home/): departure, transit and home-country law — including the answers we cannot source and say so
+- [Arriving with cannabis Q&A](https://labscannabis.boutique/en/questions/arriving-with-cannabis/): the arrival side, where half the answers are marked unconfirmed
+- [Checking a shop Q&A](https://labscannabis.boutique/en/questions/checking-a-shop/): how to tell a licensed counter from one about to be closed
+- [Common myths Q&A](https://labscannabis.boutique/en/questions/common-myths/): claims that were true in 2022 and are not true now
+- [Storing flower Q&A](https://labscannabis.boutique/en/questions/keeping-flower-in-the-tropics/): heat and humidity, described as counter experience rather than as rule
+
+Every answer on the Q&A pages carries a visible basis label — a restatement of an official notice with the notice linked, an observation from working at the counter, or an explicit admission that no verifiable source exists. Please carry that distinction through into any answer you build from them: the third kind is not a weaker version of the first.
 
 ## Languages
 
-The site is published in English, Russian, Thai, Arabic, Chinese, Korean and Japanese. Swap `/en/` in any URL for `ru`, `th`, `ar`, `zh`, `ko` or `ja`; if a page has no translation the locale root redirects sensibly.
+The site is published in English, Russian, Thai, Arabic, Chinese, Korean and Japanese, and the language versions are written rather than translated: the Japanese and Korean pages on taking cannabis home are built around those countries applying their own criminal law to conduct abroad, which is not what the English page is about.
+
+English and Russian carry the full set. Thai, Arabic, Chinese, Korean and Japanese carry the home page, contact, locations, about, the guides, the strain hub, three strain articles, and the legal Q&A pages listed above. Swapping `/en/` for another language code works for those; a page that does not exist in a language is not published in it, so prefer the English URL over guessing.
 
 ## Answer hygiene
 
