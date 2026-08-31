@@ -1540,6 +1540,65 @@ function checkQuarantinedMedia() {
 }
 
 /**
+ * КАЖДЫЙ КЛАСС ИЗ РАЗМЕТКИ ИМЕЕТ ПРАВИЛО В ТАБЛИЦЕ СТИЛЕЙ.
+ *
+ * Зачем это стало нужно. `src/styles/global.css` объявляет источники Tailwind
+ * явно (`source(none)` плюс `@source`), потому что автоопределение давало на
+ * сборщике вдвое больший результат, чем локально: 479 селекторов против 219 при
+ * одном и том же коммите, и ни один из 260 лишних не встречается ни в одном
+ * файле `src/`. Явный список это чинит — и создаёт новый класс ошибок: файл,
+ * не попавший под маску, теряет свои стили молча. Такую поломку видно только
+ * глазами и только на проде, поэтому она проверяется машиной.
+ *
+ * Как проверяется. Из разметки берутся все значения `class` (с раскодированными
+ * HTML-сущностями: `[&::-webkit-details-marker]:hidden` уезжает в HTML как
+ * `&#38;`), из таблицы — все объявленные имена с обратной раскруткой
+ * экранирования Tailwind (`.py-2\.5` → `py-2.5`). Разница обязана быть пустой.
+ *
+ * Обратная разница не проверяется: лишнее правило — это байты, а не поломка,
+ * и объявленных имён закономерно больше (варианты `hover:`, `sm:` и составные
+ * селекторы дают несколько имён на одно использование).
+ */
+function checkStylesheetCoverage() {
+  const used = new Set();
+  let sheet = "";
+
+  for (const file of walkFiles(DIST_DIR, ".html")) {
+    const html = readFileSync(file, "utf8");
+    if (!sheet) sheet = html.match(/<style>([\s\S]*?)<\/style>/)?.[1] ?? "";
+    for (const match of html.matchAll(/\sclass="([^"]*)"/g)) {
+      for (const name of decodeHtml(match[1]).split(/\s+/)) {
+        if (name) used.add(name);
+      }
+    }
+  }
+
+  if (!sheet) {
+    fail(
+      "В собранных страницах нет вклеенной таблицы стилей — либо сборка перестала инлайнить CSS " +
+        "(`build.inlineStylesheets`), и тогда в `<head>` вернулся блокирующий запрос, либо стилей нет вовсе",
+    );
+    return;
+  }
+
+  const declared = new Set();
+  for (const match of sheet.matchAll(/\.((?:\\.|[A-Za-z0-9_-])+)/g)) {
+    declared.add(match[1].replace(/\\(.)/g, "$1"));
+  }
+
+  const missing = [...used].filter((name) => !declared.has(name));
+  for (const name of missing.slice(0, MAX_PRINTED_WARNINGS)) {
+    fail(
+      `Класс "${name}" стоит в разметке, но правила для него в таблице стилей нет — ` +
+        "скорее всего файл не попал под `@source` в src/styles/global.css",
+    );
+  }
+  if (missing.length > MAX_PRINTED_WARNINGS) {
+    fail(`…и ещё ${missing.length - MAX_PRINTED_WARNINGS} классов без правила`);
+  }
+}
+
+/**
  * НИ ОДНОГО БЛОКИРУЮЩИХ ОТРИСОВКУ ЗАПРОСА НА ЧУЖОЙ ХОСТ.
  *
  * Что здесь защищается. LCP-элемент на всех страницах — заголовок H1: в `dist`
@@ -2212,6 +2271,7 @@ checkDistanceRegexFixtures();
 checkHandWrittenDistances();
 checkQuarantinedMedia();
 checkFontDelivery();
+checkStylesheetCoverage();
 reportSerpWidth();
 checkUnreferencedBinaryAssets();
 checkOrphanContentCache();
