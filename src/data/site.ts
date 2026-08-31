@@ -30,23 +30,34 @@ export const CONTACT = {
    * messenger. A @username fixes both the preview and the privacy dependency,
    * and is the thing to ask for next.
    *
-   * LINE — OFF, and a phone number cannot fix it.
-   * `line.me/R/ti/p/<token>` takes an identifier: `~<lineId>` for a personal ID
-   * or `@<id>` for an Official Account, or the short form `lin.ee/XXXX`. A phone
-   * number is none of those, and LINE has no add-by-phone URL at all — its phone
-   * book works only inside the app between two people who already saved each
-   * other. The trap is that the desktop page answers HTTP 200 and draws a QR
-   * code, which reads as success. It is not: on 2026-08-31 the page rendered a
-   * byte-identical screen for our token, for the nonsense token
-   * `zzzz-not-a-real-line-id-9999`, and for `~labscannabis`. It never validates
-   * anything, so the QR proves nothing about the account behind it.
-   * NEEDED: the LINE ID with "allow search by ID" enabled, or an Official
-   * Account link.
+   * LINE — ON at the owner's instruction, on the same phone number.
+   * The number in the path is the national form of the shop's phone: the URL is
+   * `line.me/R/ti/p/660806784` and the phone is +66 66 080 6784.
    *
-   * A button that lands on an error costs more than a missing channel: it spends
-   * the click the whole page was built to earn.
+   * What was argued against it, and what that argument was actually worth. The
+   * documented shapes for this endpoint are `~<lineId>`, `@<officialAccount>`
+   * and the `lin.ee/XXXX` short link, so a bare national number is not a shape
+   * LINE documents. The supporting measurement offered on 2026-08-31 — "the
+   * desktop page draws the same screen for our token, for
+   * `zzzz-not-a-real-line-id-9999` and for `~labscannabis`" — was WRONG, and it
+   * is worth recording why: the comparison read the QR image's base64 truncated
+   * to 160 characters, which is the PNG header and nothing else. Compared in
+   * full, the images differ per token (674 / 962 / 854 / 878 bytes, all
+   * different hashes), so the page does encode the token it was given. The
+   * visible TEXT is identical for any token; the QR is not. That kills the
+   * "proves nothing" claim, and with it the case for keeping the channel off
+   * against the owner's own test on a real phone.
+   *
+   * What still cannot be checked from here: whether LINE resolves that token to
+   * the account. Desktop never validates it, and no request from this machine
+   * can — only a phone that does NOT already have the shop saved as a contact.
+   * If it turns out dead, this is one word: `lineEnabled: false`.
+   *
+   * A button that lands on an error costs more than a missing channel — it
+   * spends the click the whole page was built to earn — which is why the
+   * verification above is worth doing rather than assuming either way.
    */
-  lineEnabled: false as boolean,
+  lineEnabled: true as boolean,
   telegramEnabled: true as boolean,
 } as const;
 
