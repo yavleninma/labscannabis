@@ -78,7 +78,7 @@ export default defineConfig({
    *
    * Условие выполнено (`scripts/fetch-fonts.mjs`, `src/lib/fonts.ts`): запроса
    * к fonts.googleapis.com в `dist` больше нет ни одного, а `check-seo`
-   * (`checkNoRenderBlockingRequests`) не даёт ему вернуться.
+   * (`checkFontDelivery`) не даёт ему вернуться.
    *
    * ЗАМЕР, сжатый транспорт, страница `/en/`:
    *   внешняя CSS: 11 882 B HTML + 6 843 B CSS = 18 725 B в ДВА запроса;
