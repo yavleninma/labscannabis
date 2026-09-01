@@ -160,6 +160,20 @@ const serviceLinks = getFooterServiceLinks(locale, pathSuffix);
         >
           {ratingLine}
         </a>
+        {/* Ссылка на форму отзыва Google (редирект /review из vercel.json). БЕЗ
+            data-seo-context-link: цель вне структуры локалей, check-seo уронит
+            сборку за контекстную ссылку на неё. */}
+        <a
+          href="/review"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-bold text-emerald-dim hover:underline"
+          data-track="contact_click"
+          data-channel="review"
+          data-placement="footer"
+        >
+          {ui.reviews.leave}
+        </a>
         <OpeningStatus locale={locale} class="inline-flex" />
       </div>
     </div>

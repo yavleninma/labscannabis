@@ -1,0 +1,112 @@
+# Еженедельный смотр прода (W3-09).
+#
+# Сборка проверяет dist ДО деплоя, а этот workflow — то, что labscannabis.boutique
+# реально отдаёт ПОСЛЕ: коды ответа ключевых URL, sitemap, canonical, robots-мету
+# и отсутствие символа цены. История проекта знает релиз, который тихо выбросил
+# 169 URL и прошёл CI зелёным, — эта проверка существует, чтобы такое не прожило
+# дольше недели.
+#
+# Почему отдельный workflow, а не шаг в main.yml: main.yml гоняет проверки по
+# собственной сборке в момент пуша, а прод меняется и без пушей (правки в панели
+# Vercel, домены, редиректы на границе сети). Здесь нет ни checkout, ни npm ci —
+# из репозитория не нужно ничего, только curl наружу; секретов ноль.
+#
+# Падение джобы = письмо от GitHub автору последнего коммита этого файла (для
+# schedule-прогонов). Если коммитит не владелец — включить Watch → Custom →
+# Actions в настройках репозитория, чтобы письма приходили и ему.
+#
+# ВАЖНО: GitHub отключает schedule-workflow после ~60 дней без коммитов в
+# репозитории. При паузе в разработке придёт письмо о деактивации — это не
+# поломка прода, а таймер GitHub; любой коммит включает расписание обратно.
+name: Production monitor
+
+on:
+  schedule:
+    # Понедельник 03:00 UTC = 10:00 в Паттайе.
+    - cron: "0 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    # Явный bash включает pipefail (дефолтный shell Actions — bash -e без него):
+    # иначе отказ curl внутри пайплайна вида `curl … | grep | wc -l` молча даёт 0.
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # Ключевые URL обязаны отдавать 200 сразу, без редиректов: -L не ставим
+      # намеренно — внезапный 301/308 на канонических URL это регрессия
+      # маршрутизации, а не «всё в порядке, просто переехало».
+      - name: Коды ответа ключевых URL
+        run: |
+          bad=0
+          for url in \
+            https://labscannabis.boutique/en/ \
+            https://labscannabis.boutique/ru/ \
+            https://labscannabis.boutique/th/ \
+            https://labscannabis.boutique/ja/ \
+            https://labscannabis.boutique/en/contact/ \
+            https://labscannabis.boutique/en/labs-dispensary-pattaya/ \
+            https://labscannabis.boutique/en/cannabis-near-me-pattaya/ \
+            https://labscannabis.boutique/en/buy-cannabis-pattaya/ \
+            https://labscannabis.boutique/ru/buy-cannabis-pattaya/ \
+            https://labscannabis.boutique/en/guides/legal-cannabis-tourists/
+          do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' "$url" || echo 000)
+            if [ "$code" != "200" ]; then
+              echo "::error::$url -> $code (ожидался 200 без редиректа)"
+              bad=1
+            else
+              echo "ok  $url"
+            fi
+          done
+          exit $bad
+
+      - name: robots.txt объявляет sitemap
+        run: |
+          curl -fsS https://labscannabis.boutique/robots.txt \
+            | grep -F 'Sitemap: https://labscannabis.boutique/sitemap-index.xml'
+
+      # 196 — нижняя граница набора (EXPECTED_INDEXABLE_PAGE_COUNT в
+      # src/lib/index-policy.mjs на момент написания: 200). Рост набора шаг
+      # переживает (>=); сознательное сокращение — понижать число руками вместе
+      # с волной, которая его сократила.
+      - name: Сумма URL по дочерним сайтмапам
+        run: |
+          index=$(curl -fsS https://labscannabis.boutique/sitemap-index.xml)
+          # grep -c с || true сохраняет ноль совпадений как «0», а не как обрыв
+          # шага: иначе диагностика ниже недостижима под bash -e.
+          count=$(echo "$index" | grep -cE 'https://[^<]+\.xml' || true)
+          if [ "$count" -ne 4 ]; then
+            echo "::error::в sitemap-index.xml $count дочерних карт (ожидалось 4)"
+            exit 1
+          fi
+          children=$(echo "$index" | grep -oE 'https://[^<]+\.xml')
+          total=0
+          for child in $children; do
+            n=$(curl -fsS "$child" | grep -o '<loc>' | wc -l)
+            echo "$child: $n URL"
+            total=$((total + n))
+          done
+          echo "итого: $total URL"
+          [ "$total" -ge 196 ] || { echo "::error::в сайтмапах $total URL — меньше нижней границы 196"; exit 1; }
+
+      # canonical сверяем точно (формат стабилен и охраняется check-seo);
+      # robots-мету — подстрокой: точное значение сейчас
+      # «index, follow, max-image-preview:large» и может дополняться.
+      - name: Голова /en/ — canonical, robots, отсутствие цены
+        run: |
+          page=$(curl -fsS https://labscannabis.boutique/en/)
+          echo "$page" | grep -F '<link rel="canonical" href="https://labscannabis.boutique/en/">' \
+            || { echo '::error::canonical на /en/ не равен себе'; exit 1; }
+          echo "$page" | grep -E '<meta name="robots" content="index, follow' \
+            || { echo '::error::meta robots на /en/ потерял index, follow'; exit 1; }
+          if echo "$page" | grep -q '฿'; then
+            echo '::error::на /en/ появился символ ฿ — цена утекла мимо линтера'
+            exit 1
+          fi
+          echo "ok"

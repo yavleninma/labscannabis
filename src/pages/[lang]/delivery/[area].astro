@@ -17,6 +17,10 @@ export function getStaticPaths() {
   const paths: { params: { lang: string; area: string } }[] = [];
   for (const lang of LOCALES) {
     for (const area of AREAS) {
+      // У south-pattaya есть собственная страница района («вы уже на месте»),
+      // и delivery-запрос из него не отличается от общегородского — ещё семь
+      // noindex-страниц под этот слаг растили бы хвост без задачи.
+      if (area.slug === "south-pattaya") continue;
       paths.push({ params: { lang, area: area.slug } });
     }
   }
@@ -52,9 +56,9 @@ const deliveryCopy: Record<
     title: "Cannabis delivery rules: {area}, Pattaya | Labs Cannabis",
     description:
       "Official-source explanation for cannabis delivery searches in {area}: Thailand prohibits electronic sales of cannabis flower. Use Maps for physical directions.",
-    h1: "Cannabis delivery in {area}: online-sale rules",
+    h1: "Cannabis in {area}: visiting in person",
     intro:
-      "If you searched for cannabis delivery in {area}, the important current rule is that this page does not offer online ordering or delivery. Thai Government notices say cannabis flower is controlled and may not be sold through electronic channels or computer networks. Below are the official-source summary and directions to the physical location.",
+      "If you searched for cannabis delivery in {area}, here is what actually works: coming in person. This page does not offer online ordering or delivery — Thai Government notices say cannabis flower is controlled and may not be sold through electronic channels. What it does offer is the route to the door, what to bring, and the rules behind all of it.",
     kicker: "Official rules and directions",
     mapsCta: "Get directions in Maps",
     scopeTitle: "What a visit from {area} looks like",
@@ -100,9 +104,9 @@ const deliveryCopy: Record<
     title: "Правила доставки: {area}, Паттайя | Labs Cannabis",
     description:
       "Разъяснение по официальным источникам для запроса о доставке каннабиса в {areaLocative}: электронная продажа соцветий запрещена. В Maps — маршрут к физической точке.",
-    h1: "Доставка каннабиса в {areaLocative}: правила онлайн-продаж",
+    h1: "Каннабис в {areaLocative}: как доехать и купить лично",
     intro:
-      "Если вы искали доставку каннабиса в {areaLocative}, важно знать: эта страница не предлагает онлайн-заказ или доставку. В уведомлениях правительства Таиланда сказано, что соцветия каннабиса контролируются и не могут продаваться через электронные каналы или компьютерные сети. Ниже — сводка официальных правил и маршрут к физической точке.",
+      "Если вы искали доставку каннабиса в {areaLocative}, вот что работает на самом деле: приехать лично. Эта страница не предлагает онлайн-заказ или доставку — по уведомлениям правительства Таиланда соцветия каннабиса контролируются и не продаются через электронные каналы. Зато здесь есть маршрут к двери, список того, что взять с собой, и правила, которые за этим стоят.",
     kicker: "Официальные правила и маршрут",
     mapsCta: "Построить маршрут в Maps",
     scopeTitle: "Как выглядит визит из {areaFrom}",

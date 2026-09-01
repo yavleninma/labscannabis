@@ -52,6 +52,9 @@ export const CONTACT = {
    * the account. Desktop never validates it, and no request from this machine
    * can — only a phone that does NOT already have the shop saved as a contact.
    * If it turns out dead, this is one word: `lineEnabled: false`.
+   * ВАЖНО: статические `public/llms.txt` и `public/nap.json` перечисляют те же
+   * ссылки Telegram/LINE и эти флаги НЕ читают — при выключении канала их
+   * нужно синхронизировать руками.
    *
    * A button that lands on an error costs more than a missing channel — it
    * spends the click the whole page was built to earn — which is why the

@@ -12,6 +12,7 @@
     "title": "What guests say",
     "subtitle": "{rating}★ · {count} reviews on Google",
     "readAll": "Read all {count} reviews on Google →",
+    "leave": "Leave a review",
     "checkedOn": "checked {date}",
     "translatedNote": "Translated from the original Google review ({lang})",
     "sourceLang": {
@@ -121,6 +122,8 @@
     "weddingCakeStrain": "Wedding Cake strain",
     "zkittlezStrain": "Zkittlez strain",
     "soiBuakhaoRoute": "Directions from Soi Buakhao",
+    "southPattayaRoute": "The shop in South Pattaya",
+    "vapesGuide": "Vapes and the law",
     "jomtienRoute": "Directions from Jomtien",
     "centralPattayaRoute": "Directions from Central Pattaya",
     "routeTerminal21": "Directions from Terminal 21 Pattaya",

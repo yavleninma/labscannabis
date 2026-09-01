@@ -35,6 +35,7 @@ const SUFFIX = {
   prescription: "guides/prescription-pattaya",
   firstVisit: "guides/first-visit-pattaya",
   choosing: "guides/choosing-flower-pattaya",
+  vapes: "guides/vapes-and-cannabis-thailand",
   /**
    * Вопросные темы (кластер `questions/*`, `src/data/question-pages.ts`).
    * Их хаб — этот же хаб: читатель не различает «гид» и «вопросы», а второй
@@ -86,6 +87,12 @@ export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
         label: "How to choose flower",
         blurb:
           "Indica and sativa as shorthand rather than specification, what a lab report actually covers, how well-cured flower looks and feels, and the questions worth asking.",
+      },
+      {
+        suffix: SUFFIX.vapes,
+        label: "Vapes and the law",
+        blurb:
+          "Selling vapes and e-cigarettes is banned in Thailand, and this shop does not stock them. Why the ban exists, why a licensed counter keeps clear of it, and what regime cannabis flower actually runs under.",
       },
       {
         suffix: SUFFIX.qRules,
@@ -208,6 +215,12 @@ export const GUIDES_INDEX_COPY: Record<Locale, GuidesIndexCopy> = {
         label: "Как выбрать цветок",
         blurb:
           "Индика и сатива как сокращение, а не спецификация; что на самом деле охватывает лабораторный отчёт, как выглядит вылежанный цветок и о чём спрашивать.",
+      },
+      {
+        suffix: SUFFIX.vapes,
+        label: "Вейпы и закон",
+        blurb:
+          "Продажа вейпов и электронных сигарет в Таиланде запрещена, и этот магазин их не держит. Почему запрет существует, почему лицензированный прилавок его обходит стороной и по какому режиму на самом деле живут соцветия.",
       },
       {
         suffix: SUFFIX.qRules,

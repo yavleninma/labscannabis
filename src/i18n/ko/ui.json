@@ -12,6 +12,8 @@
     "title": "게스트 리뷰",
     "subtitle": "Google {rating}★ · {count}개",
     "readAll": "Google {count}개 리뷰 →",
+    "leave": "리뷰 남기기",
+
     "checkedOn": "{date} 확인",
     "translatedNote": "Google 원본 리뷰 번역 ({lang})",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "Wedding Cake 품종",
     "zkittlezStrain": "Zkittlez 품종",
     "soiBuakhaoRoute": "소이 부아카오에서 가는 길",
+    "southPattayaRoute": "사우스 파타야 매장",
+
+    "vapesGuide": "전자담배와 법",
+
     "jomtienRoute": "좀티엔에서 가는 길",
     "centralPattayaRoute": "파타야 중심에서 가는 길",
     "routeTerminal21": "터미널 21 파타야에서 오는 길",

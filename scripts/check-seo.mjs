@@ -176,6 +176,20 @@ const REPORT_MODE = process.argv.slice(2).includes("--report");
 const SIMILARITY_REPORT_PAIRS = 10;
 const MAX_PRINTED_WARNINGS = 5;
 
+/**
+ * Гейт похожести основного контента indexable-страниц внутри локали (W2-03).
+ *
+ * Замер 2026-09-01: максимум 0.16 (th) при 196 indexable. Заводские страницы
+ * уже гейтятся на 0.20 в `quality-gate.mjs` (MAX_SIMILARITY); здесь ловятся
+ * пары ручных страниц и «ручная ↔ заводская», которые до сих пор жили только
+ * в отчёте. 0.35 — исторически откалиброванный порог (см. комментарий про
+ * 0.00–0.05 при 0.35 в `src/lib/index-policy.mjs`); до чистки шаблонов
+ * en-страницы areas/* давали 0.81–0.82. Гейтится ТОЛЬКО indexable-подмножество:
+ * среди noindex живут одинаковые 301-заглушки с Жаккаром 1.00, и гейт по всем
+ * страницам уронил бы сборку немедленно и не по делу.
+ */
+const MAX_INDEXABLE_SIMILARITY = 0.35;
+
 const errors = [];
 const warnings = [];
 const uniquenessPages = [];
@@ -966,7 +980,9 @@ function reportDuplication() {
 function reportContentUniqueness() {
   if (uniquenessPages.length === 0) return;
 
-  console.log("Уникальность основного контента (отчёт, сборку не блокирует):");
+  console.log(
+    `Уникальность основного контента (гейт: пара indexable-страниц с Жаккаром > ${MAX_INDEXABLE_SIMILARITY} валит сборку):`,
+  );
   for (const locale of INDEX_LOCALES) {
     const entries = uniquenessPages
       .filter((page) => page.locale === locale)
@@ -980,7 +996,15 @@ function reportContentUniqueness() {
 
     const pairs = topSimilarPairs(entries, SIMILARITY_REPORT_PAIRS);
     const indexable = entries.filter((entry) => entry.indexable).sort((a, b) => a.measure.count - b.measure.count);
-    const worstIndexable = topSimilarPairs(indexable, 1)[0];
+    const indexablePairs = topSimilarPairs(indexable, SIMILARITY_REPORT_PAIRS);
+    const worstIndexable = indexablePairs[0];
+    for (const pair of indexablePairs) {
+      if (pair.score <= MAX_INDEXABLE_SIMILARITY) break; // пары отсортированы по убыванию
+      fail(
+        `${locale}/${pair.a} and ${locale}/${pair.b}: indexable main-content similarity ` +
+          `${pair.score.toFixed(2)} exceeds ${MAX_INDEXABLE_SIMILARITY}`,
+      );
+    }
     const worst = pairs[0];
     const thinnest = indexable[0];
     console.log(
@@ -2295,6 +2319,9 @@ console.log(
   `Контекстная перелинковка: источников на indexable-страницу ${minInlinks}-${maxInlinks} (константа = плоский граф).`,
 );
 
+// reportContentUniqueness() теперь не только печатает отчёт, но и копит errors
+// (гейт MAX_INDEXABLE_SIMILARITY) — вызов ОБЯЗАН стоять до проверки
+// errors.length ниже, иначе гейт молча отключится.
 reportContentUniqueness();
 reportDuplication();
 

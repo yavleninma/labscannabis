@@ -12,6 +12,8 @@
     "title": "ゲストの声",
     "subtitle": "Google {rating}★ · {count}件",
     "readAll": "Google {count}件のレビュー →",
+    "leave": "レビューを書く",
+
     "checkedOn": "{date}確認",
     "translatedNote": "Google元レビューの翻訳（{lang}）",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "Wedding Cake の品種",
     "zkittlezStrain": "Zkittlez の品種",
     "soiBuakhaoRoute": "ソイ・ブアカオからの道順",
+    "southPattayaRoute": "サウスパタヤの店舗",
+
+    "vapesGuide": "電子タバコと法律",
+
     "jomtienRoute": "ジョムティエンからの道順",
     "centralPattayaRoute": "パタヤ中心部からの道順",
     "routeTerminal21": "ターミナル21 パタヤからの行き方",

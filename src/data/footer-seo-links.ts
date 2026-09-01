@@ -61,12 +61,14 @@ const HAND_WRITTEN_LABEL_KEYS: Readonly<Record<string, SeoLinkLabelKey>> = {
   "areas/soi-buakhao": "soiBuakhaoRoute",
   "areas/central-pattaya": "centralPattayaRoute",
   "areas/jomtien": "jomtienRoute",
+  "areas/south-pattaya": "southPattayaRoute",
   "delivery/pattaya": "pattayaDelivery",
   "guides/legal-cannabis-tourists": "legalGuide",
   guides: "guidesHub",
   "guides/prescription-pattaya": "prescriptionGuide",
   "guides/first-visit-pattaya": "firstVisitGuide",
   "guides/choosing-flower-pattaya": "choosingGuide",
+  "guides/vapes-and-cannabis-thailand": "vapesGuide",
   strains: "strainsHub",
   // Подписи страниц сортов приходят из кластера завода — см. слияние ниже.
   about: "aboutUs",
@@ -184,7 +186,11 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
     "guides",
     "guides/legal-cannabis-tourists",
     "guides/prescription-pattaya",
+    // Почти весь текущий поисковый трафик главной — вейп-запросы (GSC, 09.2026);
+    // ссылка ведёт этот интент на страницу-перехватчик вместо тупика в FAQ.
+    "guides/vapes-and-cannabis-thailand",
     "areas/walking-street",
+    "areas/south-pattaya",
     "cheap-weed-pattaya",
     "delivery/pattaya",
     "guides/first-visit-pattaya",
@@ -244,6 +250,7 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   ],
   locations: [
     "labs-dispensary-pattaya",
+    "areas/south-pattaya",
     "areas/walking-street",
     "areas/soi-buakhao",
     "areas/central-pattaya",
@@ -268,6 +275,7 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   guides: [
     "guides/legal-cannabis-tourists",
     "guides/prescription-pattaya",
+    "guides/vapes-and-cannabis-thailand",
     // Дверь в вопросный кластер с хаба знаний. Она нужна не только людям: на
     // th/ar/zh/ko/ja соседи вопросных страниц объявлены внутри кластера и почти
     // все указывают на темы, которых на этих локалях нет, — то есть новая
@@ -302,8 +310,15 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
     "guides/prescription-pattaya",
     "guides/choosing-flower-pattaya",
     "guides/legal-cannabis-tourists",
+    "guides/vapes-and-cannabis-thailand",
     "strains",
     "areas/walking-street",
+  ],
+  "guides/vapes-and-cannabis-thailand": [
+    "guides/legal-cannabis-tourists",
+    "guides/first-visit-pattaya",
+    "guides",
+    "about",
   ],
   "guides/choosing-flower-pattaya": [
     "strains",
@@ -326,6 +341,7 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   // Соседи страниц сортов объявлены в кластере завода
   // (`src/content-factory/clusters/strains.mjs`) и подмешиваются ниже.
   "areas/walking-street": [
+    "areas/south-pattaya",
     "areas/soi-buakhao",
     "areas/central-pattaya",
     "locations",
@@ -334,10 +350,18 @@ const HAND_WRITTEN_RELATED: Readonly<Record<string, readonly string[]>> = {
   ],
   "areas/soi-buakhao": [
     "areas/walking-street",
+    "areas/south-pattaya",
     "areas/central-pattaya",
     "locations",
     "cannabis-near-me-pattaya",
     "guides/legal-cannabis-tourists",
+  ],
+  "areas/south-pattaya": [
+    "areas/walking-street",
+    "areas/soi-buakhao",
+    "locations",
+    "cannabis-near-me-pattaya",
+    "labs-dispensary-pattaya",
   ],
   "areas/central-pattaya": [
     "areas/walking-street",

@@ -85,6 +85,10 @@ export const AREAS: Area[] = [
     slug: "central-pattaya",
     name: { en: "Central Pattaya", ru: "Центр Паттайи", th: "พัทยากลาง", ar: "وسط باتايا", zh: "芭提雅中心", ko: "파타야 중심", ja: "パタヤ中心" },
   },
+  {
+    slug: "south-pattaya",
+    name: { en: "South Pattaya", ru: "Южная Паттайя", th: "พัทยาใต้", ar: "جنوب باتايا", zh: "芭提雅南部", ko: "사우스 파타야", ja: "サウスパタヤ" },
+  },
 ];
 
 export const SEO_PAGES: SeoPage[] = [
@@ -93,8 +97,8 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "buy",
     area: "pattaya",
     titleTemplate: {
-      en: "Buy cannabis in Pattaya | Pattaya 13 Alley shop | Labs Cannabis",
-      ru: "Купить каннабис в Паттайе | магазин на Pattaya 13 Alley",
+      en: "Buy weed & cannabis in Pattaya | LABS, Pattaya 13 Alley",
+      ru: "Купить каннабис (марихуану) в Паттайе | Pattaya 13 Alley",
       th: "ซื้อกัญชา พัทยา | ร้านบนซอยพัทยา 13 | Labs Cannabis",
       ar: "شراء القنب في باتايا | متجر في Pattaya 13 Alley",
       zh: "芭提雅购买大麻 | Pattaya 13 Alley 门店",
@@ -102,8 +106,8 @@ export const SEO_PAGES: SeoPage[] = [
       ja: "パタヤで大麻を買う | Pattaya 13 Alley店舗",
     },
     h1Template: {
-      en: "Buy cannabis in Pattaya at a walk-in shop on Pattaya 13 Alley",
-      ru: "Купить каннабис в Паттайе — магазин на Pattaya 13 Alley",
+      en: "Buy weed in Pattaya at a walk-in cannabis shop on Pattaya 13 Alley",
+      ru: "Купить каннабис (марихуану) в Паттайе — магазин на Pattaya 13 Alley",
       th: "ซื้อกัญชา พัทยา — ร้านบนซอยพัทยา 13",
       ar: "شراء القنب في باتايا — متجر في Pattaya 13 Alley",
       zh: "在芭提雅购买大麻 — Pattaya 13 Alley 实体店",
@@ -111,8 +115,8 @@ export const SEO_PAGES: SeoPage[] = [
       ja: "パタヤで大麻を購入 — Pattaya 13 Alleyの店舗",
     },
     keywords: {
-      en: ["buy cannabis pattaya", "weed shop pattaya", "cannabis dispensary pattaya"],
-      ru: ["купить каннабис паттайя", "магазин каннабис паттайя", "weed shop pattaya"],
+      en: ["buy cannabis pattaya", "weed shop pattaya", "cannabis dispensary pattaya", "marijuana pattaya"],
+      ru: ["купить каннабис паттайя", "магазин каннабис паттайя", "марихуана паттайя", "травка паттайя"],
       th: ["ซื้อกัญชา พัทยา", "ร้านกัญชา พัทยา"],
       ar: ["شراء القنب باتايا", "متجر القنب باتايا"],
       zh: ["芭提雅买大麻", "芭提雅大麻店"],
@@ -125,8 +129,8 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "near-me",
     area: "pattaya",
     titleTemplate: {
-      en: "Cannabis shop near me in Pattaya: map and directions",
-      ru: "Каннабис рядом со мной в Паттайе | Карта и маршрут",
+      en: "Cannabis & weed shop near me in Pattaya: map and directions",
+      ru: "Каннабис-диспенсари рядом со мной в Паттайе | Карта и маршрут",
       th: "ร้านกัญชาใกล้ฉัน พัทยา | แผนที่และเส้นทาง",
       ar: "متجر قنب قريب مني في باتايا",
       zh: "芭提雅附近大麻店 | 地图与路线",
@@ -144,7 +148,7 @@ export const SEO_PAGES: SeoPage[] = [
     },
     keywords: {
       en: ["cannabis near me pattaya", "dispensary near me pattaya", "weed shop near me"],
-      ru: ["каннабис рядом паттайя", "магазин каннабис рядом", "weed near me"],
+      ru: ["каннабис рядом паттайя", "магазин каннабис рядом", "диспенсари рядом паттайя"],
       th: ["กัญชาใกล้ฉัน พัทยา", "ร้านกัญชาใกล้ฉัน"],
       ar: ["قنب قريب مني باتايا", "متجر قنب قريب"],
       zh: ["芭提雅附近大麻", "附近大麻店"],
@@ -161,8 +165,8 @@ export const SEO_PAGES: SeoPage[] = [
     // контролируемой травы в сниппете выдачи — это и есть реклама, а доктрины
     // «эхо поискового запроса» у тайского регулятора не существует.
     titleTemplate: {
-      en: "What changes the price of cannabis in Pattaya | Labs Cannabis",
-      ru: "От чего зависит цена каннабиса в Паттайе | Labs Cannabis",
+      en: "What changes the price of weed in Pattaya | Labs Cannabis",
+      ru: "От чего зависит цена травки в Паттайе | Labs Cannabis",
       th: "อะไรทำให้ราคากัญชาในพัทยาต่างกัน | Labs Cannabis",
       ar: "ما الذي يغيّر سعر القنب في باتايا | Labs Cannabis",
       zh: "芭提雅大麻的价格由什么决定 | Labs Cannabis",
@@ -193,8 +197,8 @@ export const SEO_PAGES: SeoPage[] = [
     intent: "best",
     area: "pattaya",
     titleTemplate: {
-      en: "Cannabis shop information in Pattaya | Maps and directions",
-      ru: "Информация о каннабис-шопе в Паттайе | Maps и маршрут",
+      en: "Cannabis and weed shop information in Pattaya | Maps, directions",
+      ru: "Информация о каннабис-диспенсари в Паттайе | Maps и маршрут",
       th: "ข้อมูลร้านกัญชาในพัทยา | Maps และเส้นทาง",
       ar: "معلومات متجر القنب في باتايا | Maps والاتجاهات",
       zh: "芭提雅大麻店信息 | 地图与路线",
@@ -206,7 +210,7 @@ export const SEO_PAGES: SeoPage[] = [
     // говорят про сравнение, а не про превосходство.
     h1Template: {
       en: "Comparing cannabis shops in Pattaya — a listing you can verify",
-      ru: "Как сравнивать каннабис-шопы в Паттайе — карточка, которую можно проверить",
+      ru: "Как сравнивать каннабис-диспенсари в Паттайе — карточка, которую можно проверить",
       th: "เปรียบเทียบร้านกัญชาในพัทยา — ร้านที่ตรวจสอบได้",
       ar: "كيف تقارن متاجر القنب في باتايا — بطاقة يمكن التحقق منها",
       zh: "如何比较芭提雅的大麻店 — 可以核验的商家页面",
@@ -215,7 +219,7 @@ export const SEO_PAGES: SeoPage[] = [
     },
     keywords: {
       en: ["best cannabis shop pattaya", "best dispensary pattaya", "top weed shop pattaya"],
-      ru: ["лучший шоп каннабис паттайя", "лучший dispensary паттайя"],
+      ru: ["лучший шоп каннабис паттайя", "диспенсари паттайя"],
       th: ["ร้านกัญชาดีที่สุด พัทยา"],
       ar: ["أفضل متجر قنب باتايا"],
       zh: ["芭提雅最佳大麻店"],
@@ -256,38 +260,6 @@ export const SEO_PAGES: SeoPage[] = [
       zh: ["labs dispensary 芭提雅"],
       ko: ["labs dispensary 파타야"],
       ja: ["labs dispensary パタヤ"],
-    },
-  },
-  {
-    slug: "how-to-buy-cannabis-pattaya",
-    intent: "guide",
-    area: "pattaya",
-    titleTemplate: {
-      en: "How to buy cannabis in Pattaya | visitor guide | Labs Cannabis",
-      ru: "Как купить каннабис в Паттайе | гайд для гостей",
-      th: "วิธีซื้อกัญชาในพัทยา | คู่มือนักท่องเที่ยว",
-      ar: "كيفية شراء القنب في باتايا | دليل الزائر",
-      zh: "如何在芭提雅购买大麻 | 访客指南",
-      ko: "파타야에서 대마초 사는 법 | 방문 가이드",
-      ja: "パタヤで大麻を買う方法 | 訪問ガイド",
-    },
-    h1Template: {
-      en: "How to buy cannabis in Pattaya without guessing",
-      ru: "Как купить каннабис в Паттайе без угадывания",
-      th: "วิธีซื้อกัญชาในพัทยาโดยไม่ต้องเดา",
-      ar: "كيفية شراء القنب في باتايا بدون تخمين",
-      zh: "如何在芭提雅购买大麻，不靠猜",
-      ko: "추측 없이 파타야에서 대마초 구매하는 법",
-      ja: "迷わずパタヤで大麻を買う方法",
-    },
-    keywords: {
-      en: ["how to buy cannabis pattaya", "pattaya cannabis guide", "cannabis shop pattaya tourists"],
-      ru: ["как купить каннабис паттайя", "гайд каннабис паттайя"],
-      th: ["วิธีซื้อกัญชา พัทยา", "คู่มือกัญชา พัทยา"],
-      ar: ["كيفية شراء القنب باتايا"],
-      zh: ["芭提雅如何购买大麻"],
-      ko: ["파타야 대마초 구매 방법"],
-      ja: ["パタヤ 大麻 買い方"],
     },
   },
   {

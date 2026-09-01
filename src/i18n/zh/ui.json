@@ -12,6 +12,8 @@
     "title": "客人评价",
     "subtitle": "Google {rating}★ · {count}条评价",
     "readAll": "查看全部{count}条Google评价 →",
+    "leave": "写评价",
+
     "checkedOn": "核对于 {date}",
     "translatedNote": "译自Google原始评价（{lang}）",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "Wedding Cake 品种",
     "zkittlezStrain": "Zkittlez 品种",
     "soiBuakhaoRoute": "从 Soi Buakhao 出发",
+    "southPattayaRoute": "芭提雅南部的门店",
+
+    "vapesGuide": "电子烟与法律",
+
     "jomtienRoute": "从乔木提恩出发",
     "centralPattayaRoute": "从芭提雅中区出发",
     "routeTerminal21": "从Terminal 21 芭堤雅怎么走",

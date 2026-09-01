@@ -64,6 +64,19 @@ const headingId = `contact-rail-${placement}`;
             {ratingLine}
           </a>
         </li>
+        <li>
+          <a
+            href="/review"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex rounded-full border border-border bg-bg-elevated px-3 py-1.5 font-semibold text-emerald-dim hover:border-emerald/40"
+            data-track="contact_click"
+            data-channel="review"
+            data-placement={placement}
+          >
+            {ui.reviews.leave}
+          </a>
+        </li>
         {landmarkLine && (
           <li class="rounded-full border border-border bg-bg-card px-3 py-1.5">{landmarkLine}</li>
         )}

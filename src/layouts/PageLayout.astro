@@ -100,6 +100,15 @@ const SHARE_IMAGE = {
 } as const;
 const shareImageUrl = `${siteUrl}${SHARE_IMAGE.path}`;
 const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.locality}`;
+/**
+ * Слот верификации Bing Webmaster Tools. Кода в репозитории нет и быть не
+ * может — он существует только в аккаунте BWT владельца. Владелец кладёт его в
+ * переменную окружения PUBLIC_BING_MSVALIDATE на Vercel и делает redeploy;
+ * без переменной сборка байт в байт совпадает с текущей. Альтернатива вообще
+ * без кода — «Import from GSC» в самом Bing Webmaster (GSC уже подтверждён
+ * файлом public/google43fb883ce12292c7.html).
+ */
+const bingVerification = String(import.meta.env.PUBLIC_BING_MSVALIDATE ?? "").trim();
 ---
 
 <!doctype html>
@@ -108,6 +117,7 @@ const shareImageAlt = `${GOOGLE.listingName} — ${ADDRESS.street}, ${ADDRESS.lo
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="yandex-verification" content="32513d5b96f72918" />
+    {bingVerification && <meta name="msvalidate.01" content={bingVerification} />}
     <meta name="description" content={pageDesc} />
     {keywords.length > 0 && <meta name="keywords" content={keywords.join(", ")} />}
     <meta name="geo.region" content="TH-20" />

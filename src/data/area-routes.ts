@@ -46,10 +46,170 @@ export interface AreaRoute {
 }
 
 export const AREA_ROUTES: Record<string, Partial<Record<Locale, AreaRoute>>> = {
+  // Единственный район, где страница не «маршрут из точки А», а «вы уже на
+  // месте»: магазин физически стоит в Южной Паттайе, и задача текста —
+  // микронавигация внутри района, а не дорога в него. Структурно страница
+  // сознательно другая, чем у соседей, — это и есть защита от doorway-похожести.
+  "south-pattaya": {
+    en: {
+      landmarkSlug: "walking-street",
+      title: "South Pattaya cannabis shop: LABS on Pattaya 13 Alley",
+      description:
+        "What South Pattaya is, how to recognise the Pattaya Tai corner, and how to find the mouth of Pattaya 13 Alley — the side street where LABS DISPENSARY keeps its door.",
+      h1: "A cannabis shop in South Pattaya: you are already in the right district",
+      kicker: "You are in South Pattaya",
+      intro:
+        "If your hotel booking, your taxi app or the sign on the corner says South Pattaya, the search is over before it starts: this is the district the shop stands in. What is left is not a journey but a piece of orientation — one main road, one numbered alley, one door — and that is what this page does.",
+      routeTitle: "Orientation, not a route",
+      routeIntro:
+        "South Pattaya is not a gated quarter with an entrance; it is the band of streets around South Pattaya Road, signposted as Pattaya Tai. Everything below assumes you are somewhere inside that band and simply need to converge on one alley.",
+      steps: [
+        {
+          title: "Fix on the main road",
+          body:
+            "Whatever corner of the district you are standing in, find South Pattaya Road — Pattaya Tai on the signs. It is the spine of the district: the wide road that runs from the seafront up towards Sukhumvit, with baht buses in both directions. Every step of this orientation starts from it.",
+        },
+        {
+          title: "Find the mouth of the numbered alley",
+          body:
+            "The numbered alleys open off the main road, and their mouths look alike: narrow, easy to walk past, marked with a small blue street sign rather than anything you can see from across the road. Follow the pin rather than the signage — a phone route points at the correct mouth, which saves you reading every blue plate along the stretch.",
+        },
+        {
+          title: "The correct end of Pattaya 13 Alley",
+          body:
+            "Alleys in this district can be entered from two ends, and the ends do not feel alike on foot. The navigation pin leads to the end nearer the shop; if you came in from the other one, keep walking — the alley is short enough that the wrong end costs you minutes of shade, not a detour across the district.",
+        },
+        {
+          title: "The door",
+          body:
+            "The sign to look for reads LABS DISPENSARY, at 32 Pattaya 13 Alley. If you are inside the alley and do not see it, stop and send a message instead of circling — someone at the counter will talk you in from exactly where you stand.",
+        },
+      ],
+      sections: [
+        {
+          h2: "What South Pattaya is, and why the shop is here",
+          body: [
+            "South Pattaya is the stretch between the tourist seafront and the everyday city: close enough to Walking Street that the evening crowd washes through it, far enough that it keeps ordinary shopfronts, food carts and pharmacies. The numbered alleys off Pattaya Tai are its quietest layer — which is exactly where a licensed counter that checks documents belongs, rather than on a strip built for impulse.",
+            "For a visitor this cuts both ways. Nothing about the alley advertises itself from the main road, so you will not stumble on the door by accident; but once you know the alley number, the district is one of the easiest in the city to navigate, because everything hangs off a single spine road.",
+          ],
+        },
+        {
+          h2: "Moving inside the district",
+          body: [
+            "If you are already in South Pattaya, a baht bus along Pattaya Tai covers the long stretch and the walk into the alley covers the rest. Name the alley to the driver, not the shop: the city has several hundred cannabis shops and drivers navigate by numbered sois, not by brands.",
+            "On foot, the practical advice is about sun rather than direction: the main road has stretches without shade, and in the hottest hours the pleasant version of this walk is early, late, or broken by the covered frontages along the way.",
+          ],
+        },
+        {
+          h2: "What happens at the door — and what does not",
+          body: [
+            "The counter works in person and only in person. Nothing on this website or in a chat takes an order, a payment or a reservation — a message can tell you what is on the shelf and whether someone is at the counter, and the rest happens face to face.",
+            "Bring your passport and your prescription in original form. The age line is 20, the check happens on every visit, and a counter that skipped it would not be the licensed kind you crossed the district to find.",
+          ],
+        },
+      ],
+      faqTitle: "South Pattaya: questions",
+      faq: [
+        {
+          q: "Is the shop actually in South Pattaya?",
+          a: "Yes — the address is 32 Pattaya 13 Alley, South Pattaya, and the alley opens off South Pattaya Road (Pattaya Tai). The district name on the sign and the district in the address are the same thing.",
+        },
+        {
+          q: "How far is it from Walking Street?",
+          a: "{walk}. The distance is calculated from the shop pin to the northern entrance of Walking Street; treat the higher time as the honest one.",
+        },
+        {
+          q: "What do I tell a driver inside the district?",
+          a: "Pattaya 13 Alley, plus the Google Maps pin on your screen. The alley number does the work; the shop name will not be recognised.",
+        },
+        {
+          q: "Can I pick something up on the way, or order ahead?",
+          a: "No. Selling cannabis through electronic channels is prohibited in Thailand, so there is no basket, no payment and no reservation here — the purchase itself happens at the counter, with your documents.",
+        },
+      ],
+    },
+    ru: {
+      landmarkSlug: "walking-street",
+      title: "Магазин каннабиса в Южной Паттайе: LABS на Pattaya 13 Alley",
+      description:
+        "Что такое Южная Паттайя, как опознать угол Pattaya Tai и как найти устье переулка Pattaya 13 Alley — того самого, где стоит дверь LABS DISPENSARY.",
+      h1: "Магазин каннабиса в Южной Паттайе — вы уже в нужном районе",
+      kicker: "Вы в Южной Паттайе",
+      intro:
+        "Если в брони отеля, в приложении такси или на уличной табличке написано South Pattaya — поиск закончился, не начавшись: магазин стоит именно в этом районе. Остаётся не дорога, а ориентирование: одна главная улица, один нумерованный переулок, одна дверь. Ровно этим страница и занимается.",
+      routeTitle: "Ориентирование, а не маршрут",
+      routeIntro:
+        "Южная Паттайя — не квартал с воротами, а полоса улиц вокруг South Pattaya Road, на указателях — Pattaya Tai. Всё, что ниже, предполагает, что вы где-то внутри этой полосы и вам нужно просто сойтись к одному переулку.",
+      steps: [
+        {
+          title: "Найдите главную дорогу",
+          body:
+            "В каком бы углу района вы ни стояли, найдите South Pattaya Road — на табличках Pattaya Tai. Это хребет района: широкая дорога от набережной вверх к Сукхумвиту, по которой в обе стороны ходят сонгтео. Всё ориентирование начинается от неё.",
+        },
+        {
+          title: "Найдите устье нумерованного переулка",
+          body:
+            "Нумерованные переулки открываются с главной дороги, и их устья похожи друг на друга: узкие, легко проскочить мимо, помечены маленькой синей табличкой, а не чем-то заметным с другой стороны улицы. Ведите маршрут по пину, а не по вывескам: навигатор укажет на нужное устье и избавит от чтения всех синих табличек подряд.",
+        },
+        {
+          title: "Нужный конец Pattaya 13 Alley",
+          body:
+            "В переулки этого района можно войти с двух концов, и пешком они ощущаются по-разному. Пин навигатора ведёт к концу, ближнему к магазину; если вы зашли с другого — просто идите дальше: переулок короткий, и ошибка концом стоит нескольких минут в тени, а не крюка через район.",
+        },
+        {
+          title: "Дверь",
+          body:
+            "Ищите вывеску LABS DISPENSARY, адрес 32 Pattaya 13 Alley. Если вы уже в переулке и вывески не видите — остановитесь и напишите, вместо того чтобы наматывать круги: от прилавка вас доведут словами ровно с того места, где вы стоите.",
+        },
+      ],
+      sections: [
+        {
+          h2: "Что такое Южная Паттайя и почему магазин именно здесь",
+          body: [
+            "Южная Паттайя — полоса между туристической набережной и обычным городом: достаточно близко к Walking Street, чтобы вечерняя толпа через неё проходила, и достаточно далеко, чтобы здесь остались обычные витрины, макашницы и аптеки. Нумерованные переулки от Pattaya Tai — её самый тихий слой, и лицензированному прилавку, который проверяет документы, место ровно там, а не на полосе, построенной под импульс.",
+            "Для гостя это работает в обе стороны. С главной дороги переулок никак себя не рекламирует, случайно на дверь не наткнуться; зато, зная номер переулка, по району проще всего ориентироваться во всём городе — здесь всё висит на одной хребтовой дороге.",
+          ],
+        },
+        {
+          h2: "Как перемещаться внутри района",
+          body: [
+            "Если вы уже в Южной Паттайе, длинный отрезок закрывает сонгтео вдоль Pattaya Tai, остальное — пешком в переулок. Водителю называйте переулок, а не магазин: каннабис-шопов в городе несколько сотен, водители ориентируются по нумерованным соям, а не по брендам.",
+            "Пешком главный вопрос — не направление, а солнце: на главной дороге есть отрезки без тени, и в самые жаркие часы приятная версия этой прогулки — ранняя, поздняя или разбитая крытыми фасадами по пути.",
+          ],
+        },
+        {
+          h2: "Что происходит у двери — и чего не происходит",
+          body: [
+            "Прилавок работает лично и только лично. Ни сайт, ни переписка не принимают ни заказ, ни оплату, ни бронь: в сообщении расскажут, что сегодня на полке и есть ли кто-то за прилавком, а остальное происходит лицом к лицу.",
+            "Возьмите паспорт и рецепт в оригинале. Возрастная граница — 20 лет, проверка бывает при каждом визите, и прилавок, который бы её пропускал, не был бы тем лицензированным, ради которого вы шли через район.",
+          ],
+        },
+      ],
+      faqTitle: "Южная Паттайя: вопросы",
+      faq: [
+        {
+          q: "Магазин действительно в Южной Паттайе?",
+          a: "Да: адрес — 32 Pattaya 13 Alley, Южная Паттайя, и переулок открывается с South Pattaya Road (Pattaya Tai). Район на табличке и район в адресе — одно и то же место.",
+        },
+        {
+          q: "Сколько отсюда до Walking Street?",
+          a: "{walk}. Расстояние посчитано от пина магазина до северного входа на Walking Street; честным считайте большее время.",
+        },
+        {
+          q: "Что назвать водителю внутри района?",
+          a: "«Pattaya 13 Alley» и пин в Google Maps на экране. Работает номер переулка; название магазина водителю ничего не скажет.",
+        },
+        {
+          q: "Можно ли заказать заранее или забрать по пути?",
+          a: "Нет. Продажа каннабиса через электронные каналы в Таиланде запрещена, поэтому здесь нет ни корзины, ни оплаты, ни брони: сама покупка происходит у прилавка, с документами.",
+        },
+      ],
+    },
+  },
   "walking-street": {
     en: {
       landmarkSlug: "walking-street",
-      title: "Walking Street to LABS DISPENSARY: the walk, corner by corner",
+      title: "Walking Street to LABS cannabis shop: the walk, corner by corner",
       description:
         "The inland walk from the Walking Street arch to 32 Pattaya 13 Alley: where people lose their bearings, what changes after dark, and what to tell a driver.",
       h1: "From Walking Street to the door on Pattaya 13 Alley",
@@ -126,7 +286,7 @@ export const AREA_ROUTES: Record<string, Partial<Record<Locale, AreaRoute>>> = {
     },
     ru: {
       landmarkSlug: "walking-street",
-      title: "От Walking Street до LABS DISPENSARY: маршрут по поворотам",
+      title: "От Walking Street до диспенсари LABS: маршрут по поворотам",
       description:
         "Дорога вглубь от арки Уокинг Стрит (Walking Street) до 32 Pattaya 13 Alley: где обычно теряются и что называть водителю.",
       // Кириллическая форма стоит в H1 и в описании, а латинская остаётся в
@@ -209,7 +369,7 @@ export const AREA_ROUTES: Record<string, Partial<Record<Locale, AreaRoute>>> = {
   "soi-buakhao": {
     en: {
       landmarkSlug: "soi-buakhao",
-      title: "Soi Buakhao to LABS DISPENSARY: the short inland route",
+      title: "Soi Buakhao to LABS cannabis shop: the short inland route",
       description:
         "How to walk or ride from Soi Buakhao to 32 Pattaya 13 Alley in South Pattaya: which end to start from, what the corner looks like, and what to tell a driver.",
       h1: "From Soi Buakhao to Pattaya 13 Alley",
@@ -293,7 +453,7 @@ export const AREA_ROUTES: Record<string, Partial<Record<Locale, AreaRoute>>> = {
     },
     ru: {
       landmarkSlug: "soi-buakhao",
-      title: "От Сой Буакхао до LABS DISPENSARY: короткий маршрут вглубь",
+      title: "От Сой Буакхао до магазина каннабиса LABS: маршрут вглубь",
       description:
         "Как дойти или доехать от Сой Буакхао до 32 Pattaya 13 Alley в Южной Паттайе: с какого конца стартовать, как выглядит перекрёсток и что сказать водителю.",
       h1: "От Сой Буакхао до Pattaya 13 Alley",

@@ -34,14 +34,15 @@ const enRuLocales = EN_RU_INDEX_LOCALES;
  * однозначный коммерческий интент, и она не дублирует соседнюю.
  *
  * Сознательно НЕ возвращены:
- * - `areas/*` сверх четырёх маршрутных (`walking-street`, `soi-buakhao`,
- *   `central-pattaya`, `jomtien`) — для остальных районов авторского маршрута
- *   нет, шаблон их больше не генерирует вовсе, а прежние URL закрыты 301 в
- *   `vercel.json`;
+ * - `areas/*` сверх пяти маршрутных (`walking-street`, `soi-buakhao`,
+ *   `central-pattaya`, `jomtien`, `south-pattaya`) — для остальных районов
+ *   авторского маршрута нет, шаблон их больше не генерирует вовсе, а прежние
+ *   URL закрыты 301 в `vercel.json`;
  * - `cannabis-wholesale-pattaya`, `cannathai-wholesale-cannabis-thailand` — до
  *   подтверждения класса лицензии на опт;
- * - `how-to-buy-cannabis-pattaya` — контента нет ни в `PAGE_COPY`, ни в
- *   `content-cache`; `loadSeoContent` на нём упадёт, и это правильно;
+ * - `how-to-buy-cannabis-pattaya` — слаг удалён из `SEO_PAGES` целиком
+ *   (контента под него так и не появилось), старые URL обслуживают 301 в
+ *   `vercel.json`;
  * - страницы весов (`1g`, `10g`, `30g`, `100g`, `1kg`) — это прайс без цифр;
  *   текста под них в `content-cache` больше нет вовсе: он был удалён вместе с
  *   остальными 18 слагами-сиротами, за которыми не стояло ни одной собранной
@@ -95,6 +96,10 @@ const MANUAL_INDEX_POLICY_RULES = Object.freeze([
   // человек и оно стоит здесь. Сами страницы сортов сюда по-прежнему НЕ
   // вписаны: локали, на которых они indexable, вычисляют ворота качества.
   Object.freeze({ suffix: "guides/choosing-flower-pattaya", locales: allLocales }),
+  // Вейп-перехватчик (W2-07): «мы не продаём вейпы — вот что легально». Только
+  // en+ru: это ответ на англо- и русскоязычный smoke-интент из GSC; тайский
+  // текст без вычитки носителем вредил бы больше, чем его отсутствие.
+  Object.freeze({ suffix: "guides/vapes-and-cannabis-thailand", locales: enRuLocales }),
   Object.freeze({ suffix: "strains", locales: allLocales }),
   // Гео: индексируются ровно те районы, для которых написан авторский маршрут в
   // `AREA_ROUTES`. Район без маршрута шаблон вообще не генерирует — см.
@@ -103,6 +108,9 @@ const MANUAL_INDEX_POLICY_RULES = Object.freeze([
   Object.freeze({ suffix: "areas/soi-buakhao", locales: enRuLocales }),
   Object.freeze({ suffix: "areas/central-pattaya", locales: enRuLocales }),
   Object.freeze({ suffix: "areas/jomtien", locales: enRuLocales }),
+  // Фактический район адреса магазина. Страница не «маршрут в район», а
+  // «вы уже на месте» — см. комментарий в `src/data/area-routes.ts`.
+  Object.freeze({ suffix: "areas/south-pattaya", locales: enRuLocales }),
 ]);
 
 /**
@@ -171,6 +179,8 @@ const ROUTE_LOCALES = new Map([
   ["areas/soi-buakhao", enRuLocales],
   ["areas/central-pattaya", enRuLocales],
   ["areas/jomtien", enRuLocales],
+  ["areas/south-pattaya", enRuLocales],
+  ["guides/vapes-and-cannabis-thailand", enRuLocales],
 ]);
 
 /**
@@ -234,10 +244,14 @@ export const FACTORY_INDEXABLE_PAGE_COUNT =
  * Не «чтобы сборка позеленела».
  * ------------------------------------------------------------------------- */
 
-/** Потолок всего indexable-набора. Текущее значение — 187. */
+/**
+ * Потолок всего indexable-набора. Текущее значение — 200: набор упирается в
+ * потолок вплотную, и это сознательно — следующее добавление страницы обязано
+ * пройти через ручной подъём этой константы в ревью.
+ */
 export const MAX_TOTAL_INDEXABLE = 200;
 
-/** Потолок того, что пропускают ворота завода. Текущее значение — 87. */
+/** Потолок того, что пропускают ворота завода. Текущее значение — 96. */
 export const MAX_FACTORY_ADMITTED = 100;
 
 if (EXPECTED_INDEXABLE_PAGE_COUNT > MAX_TOTAL_INDEXABLE) {

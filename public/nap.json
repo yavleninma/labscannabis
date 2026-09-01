@@ -1,0 +1,29 @@
+{
+  "_comment": "Единый машиночитаемый NAP для выравнивания внешних карточек (W2-13 / O-10). Значения скопированы из src/data/site.ts руками — файл статический, генератора нет намеренно (CI запрещает пишущие шаги в сборке). Часы НЕ публикуются, пока владелец их не подтвердил (hoursVerified=false). При выключении канала в site.ts (lineEnabled/telegramEnabled) этот файл и llms.txt синхронизируются руками.",
+  "name": "LABS DISPENSARY",
+  "alternateName": "Labs Cannabis",
+  "url": "https://labscannabis.boutique",
+  "address": {
+    "streetAddress": "32 Pattaya 13 Alley",
+    "district": "South Pattaya",
+    "addressLocality": "Pattaya",
+    "addressRegion": "Chon Buri",
+    "postalCode": "20150",
+    "addressCountry": "TH"
+  },
+  "geo": {
+    "latitude": 12.9233467,
+    "longitude": 100.8771557
+  },
+  "telephone": "+66660806784",
+  "telephoneDisplay": "+66 66 080 6784",
+  "googleMaps": {
+    "listingUrl": "https://www.google.com/maps?cid=4889555016312011855",
+    "placeId": "ChIJLTR5b56XAjERT7wBoWEw20M"
+  },
+  "channels": {
+    "whatsapp": "https://wa.me/66660806784",
+    "telegram": "https://t.me/+66660806784",
+    "line": "https://line.me/R/ti/p/660806784"
+  }
+}

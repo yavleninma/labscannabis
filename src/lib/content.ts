@@ -129,9 +129,9 @@ const COMPLIANCE_FAQ: Record<Locale, { q: string; a: string }[]> = {
 const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
   "buy-cannabis-pattaya": {
     en: {
-      h1: "Buy cannabis in Pattaya at a walk-in shop on Pattaya 13 Alley",
+      h1: "Buy weed in Pattaya at a walk-in cannabis shop on Pattaya 13 Alley",
       intro:
-        "Labs Cannabis is a physical shop at 32 Pattaya 13 Alley in South Pattaya — {walkingStreet}. Adults 20+ who hold a Thai prescription can ask what is on the shelf today and how to find the door before setting off. Availability is confirmed in WhatsApp and at the counter, never through a public basket.",
+        "Labs Cannabis is a physical weed shop at 32 Pattaya 13 Alley in South Pattaya — {walkingStreet}. Adults 20+ who hold a Thai prescription can ask what is on the shelf today and how to find the door before setting off. Availability is confirmed in WhatsApp and at the counter, never through a public basket.",
       sections: [
         {
           h2: "Ask what is on the shelf today",
@@ -153,13 +153,17 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
           q: "How far is the shop from Walking Street?",
           a: "The shop is on Pattaya 13 Alley in South Pattaya: {walkingStreet}. That is measured from the shop pin; open Google Maps for the live route.",
         },
+        {
+          q: "Is weed or marijuana the same thing as cannabis here?",
+          a: "Yes. Weed and marijuana are everyday names for the same cannabis flower — a controlled herb in Thailand, sold in store to adults 20 and over who hold a prescription issued in Thailand.",
+        },
       ],
       closing: "Message Labs Cannabis on WhatsApp about what is on the shelf today, then walk in at 32 Pattaya 13 Alley.",
     },
     ru: {
-      h1: "Купить каннабис в Паттайе — магазин на Pattaya 13 Alley",
+      h1: "Купить каннабис (марихуану) в Паттайе — магазин на Pattaya 13 Alley",
       intro:
-        "Labs Cannabis — физический магазин по адресу 32 Pattaya 13 Alley в Южной Паттайе: {walkingStreet}. Взрослые 20+ с тайским рецептом могут заранее спросить, что сегодня на полке и как найти дверь. Наличие подтверждается в WhatsApp и у прилавка, а не через публичную корзину.",
+        "Labs Cannabis — магазин каннабиса (марихуаны) по адресу 32 Pattaya 13 Alley в Южной Паттайе: {walkingStreet}. Взрослые 20+ с тайским рецептом могут заранее спросить, что сегодня на полке и как найти дверь. Наличие подтверждается в WhatsApp и у прилавка, а не через публичную корзину.",
       sections: [
         {
           h2: "Спросите, что стоит на полке сегодня",
@@ -180,6 +184,10 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
         {
           q: "Как далеко от Walking Street?",
           a: "Магазин на Pattaya 13 Alley в Южной Паттайе: {walkingStreet}. Значение посчитано от пина магазина; живой маршрут — в Google Maps.",
+        },
+        {
+          q: "«Травка», «марихуана» и «каннабис» — это одно и то же?",
+          a: "Да. «Травкой» и марихуаной в быту называют те же соцветия каннабиса — контролируемую траву в Таиланде: их отпускают в магазине, лично, взрослым от 20 лет по рецепту, выданному в Таиланде.",
         },
       ],
       closing: "Напишите в WhatsApp, что сегодня на полке, затем заходите на 32 Pattaya 13 Alley.",
@@ -252,7 +260,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     en: {
       h1: "Cannabis shop near you in Pattaya",
       intro:
-        "If you searched for the Labs location in Pattaya, use the live LABS DISPENSARY Google Maps listing for the current pin and route to 32 Pattaya 13 Alley.",
+        "If you searched for a weed shop or the Labs location in Pattaya, use the live LABS DISPENSARY Google Maps listing for the route to 32 Pattaya 13 Alley.",
       sections: [
         {
           h2: "Verify the public listing",
@@ -277,7 +285,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     ru: {
       h1: "Каннабис-шоп рядом с вами в Паттайе",
       intro:
-        "Если вы ищете локацию Labs в Паттайе, откройте актуальную карточку LABS DISPENSARY в Google Maps и маршрут к адресу 32 Pattaya 13 Alley.",
+        "Если вы ищете диспенсари Labs в Паттайе, откройте актуальную карточку LABS DISPENSARY в Google Maps и маршрут к адресу 32 Pattaya 13 Alley.",
       sections: [
         {
           h2: "Проверьте публичную карточку",
@@ -358,7 +366,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     en: {
       h1: "What changes the price of cannabis in Pattaya",
       intro:
-        "Thai law treats a published cannabis price as advertising, so Labs Cannabis does not list one on this site — and neither should any dispensary that intends to keep its licence. What can be explained honestly is why one gram costs more than another, so you walk in knowing what you are looking at. What is on the shelf today is a question for WhatsApp +66 66 080 6784.",
+        "Thai law treats a published price for cannabis — weed — as advertising, so Labs Cannabis does not list one on this site. Neither should any dispensary that intends to keep its licence. What can be explained honestly is why one gram costs more than another, so you walk in knowing what you are looking at. What is on the shelf today is a question for WhatsApp +66 66 080 6784.",
       sections: [
         {
           h2: "Why one gram costs more than another",
@@ -377,7 +385,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     ru: {
       h1: "От чего зависит цена каннабиса в Паттайе",
       intro:
-        "В Таиланде опубликованная цена на каннабис считается рекламой, поэтому Labs Cannabis не публикует её на сайте — как и любой магазин каннабиса, который собирается сохранить лицензию. Зато можно честно объяснить, из-за чего один грамм дороже другого, чтобы вы пришли подготовленными. Что сегодня на витрине — вопрос для WhatsApp +66 66 080 6784.",
+        "В Таиланде опубликованная цена на каннабис — «травку», марихуану — считается рекламой, поэтому Labs Cannabis не публикует её на сайте. Как и любой магазин каннабиса, который собирается сохранить лицензию. Зато можно честно объяснить, из-за чего один грамм дороже другого, чтобы вы пришли подготовленными. Что сегодня на витрине — вопрос для WhatsApp +66 66 080 6784.",
       sections: [
         {
           h2: "Из-за чего один грамм дороже другого",
@@ -493,7 +501,7 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
     en: {
       h1: "Comparing cannabis shops in Pattaya — a listing you can verify",
       intro:
-        "Guests comparing cannabis shops in Pattaya usually want a verifiable Google listing, a walk-in address and a direct chat. Labs Cannabis has all three at 32 Pattaya 13 Alley in South Pattaya. Open the live LABS DISPENSARY listing for the current rating, photos and hours — those change, and Google is the source of truth.",
+        "Guests comparing cannabis and weed shops in Pattaya usually want a verifiable Google listing, a walk-in address and a direct chat. Labs Cannabis has all three at 32 Pattaya 13 Alley in South Pattaya. Open the live LABS DISPENSARY listing for the current rating, photos and hours — those change, and Google is the source of truth.",
       sections: [
         {
           h2: "What “best” means on this page",
@@ -515,9 +523,9 @@ const PAGE_COPY: Record<string, Record<Locale, Omit<SeoContent, "source">>> = {
       closing: "Open the Google listing, then message WhatsApp if 32 Pattaya 13 Alley looks like the right stop.",
     },
     ru: {
-      h1: "Как сравнивать каннабис-шопы в Паттайе — карточка, которую можно проверить",
+      h1: "Как сравнивать каннабис-диспенсари в Паттайе — карточка, которую можно проверить",
       intro:
-        "Сравнивая шопы в Паттайе, гости обычно хотят проверяемую карточку Google, адрес и прямой чат. У Labs Cannabis есть всё три: 32 Pattaya 13 Alley, Южная Паттайя. Актуальные оценка, фото и часы — в живой карточке LABS DISPENSARY: они меняются, и источник правды именно Google.",
+        "Сравнивая диспенсари в Паттайе, гости обычно хотят проверяемую карточку Google, адрес и прямой чат. У Labs Cannabis есть всё три: 32 Pattaya 13 Alley, Южная Паттайя. Актуальные оценка, фото и часы — в живой карточке LABS DISPENSARY: они меняются, и источник правды именно Google.",
       sections: [
         {
           h2: "Что здесь значит «лучший»",

@@ -12,6 +12,8 @@
     "title": "آراء الزوار",
     "subtitle": "{rating}★ · {count} تقييم Google",
     "readAll": "كل {count} تقييم على Google →",
+    "leave": "اكتب مراجعة",
+
     "checkedOn": "روجعت في {date}",
     "translatedNote": "ترجمة من تقييم Google الأصلي ({lang})",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "صنف Wedding Cake",
     "zkittlezStrain": "صنف Zkittlez",
     "soiBuakhaoRoute": "الطريق من سوي بواخاو",
+    "southPattayaRoute": "المتجر في جنوب باتايا",
+
+    "vapesGuide": "السجائر الإلكترونية والقانون",
+
     "jomtienRoute": "الطريق من جومتين",
     "centralPattayaRoute": "الطريق من وسط باتايا",
     "routeTerminal21": "الطريق من تيرمينال 21 باتايا",

@@ -63,7 +63,7 @@ export const LEGAL_GUIDE_COPY: Record<Locale, LegalGuideCopy> = {
   en: {
     title: "Thailand cannabis rules for tourists 2026 | Pattaya guide",
     description:
-      "What Thailand's 2025 notices (B.E. 2568) say about cannabis flower, Thai prescriptions and the 30-day limit, and what the 2026 ministerial regulation changed.",
+      "Is weed legal in Thailand in 2026? What the 2025 notices (B.E. 2568) say about cannabis flower, Thai prescriptions and the 30-day limit, and what the 2026 ministerial regulation changed.",
     h1: "Thailand cannabis rules for tourists in 2026",
     intro:
       "This page summarizes the official Thai notices that made cannabis flower a controlled herb in June 2025, the ministerial regulation that tightened licensing in April 2026, and then explains what those rules look like from the visitor's side of the counter in Pattaya. Everything is labelled: a block marked as an official source restates the notices and nothing more, a block marked as practical caution is experience and common sense, not a legal conclusion. This guide is not legal advice and does not confirm that any individual purchase is lawful.",
@@ -218,7 +218,7 @@ export const LEGAL_GUIDE_COPY: Record<Locale, LegalGuideCopy> = {
   ru: {
     title: "Каннабис в Таиланде: правила для туристов 2026 | Паттайя",
     description:
-      "Что говорят уведомления Таиланда 2025 года (พ.ศ. 2568): тайский рецепт, лимит 30 дней, запрет онлайн-продаж — и что изменило постановление 2026 года.",
+      "Легален ли каннабис (травка) в Таиланде в 2026? Что говорят уведомления 2025 года (พ.ศ. 2568): тайский рецепт, лимит 30 дней, запрет онлайн-продаж — и что изменило постановление 2026 года.",
     h1: "Правила каннабиса в Таиланде для туристов в 2026 году",
     intro:
       "Здесь изложены официальные уведомления Таиланда, сделавшие соцветия каннабиса контролируемой травой в июне 2025 года, министерское постановление, ужесточившее лицензирование в апреле 2026 года, а затем — как эти правила выглядят со стороны посетителя у прилавка в Паттайе. Всё размечено: блок с пометкой «официальный источник» пересказывает уведомления и ничего сверх них, блок с пометкой «практическая осторожность» — это опыт и здравый смысл, а не юридический вывод. Это не юридическая консультация и не подтверждение законности конкретной покупки.",

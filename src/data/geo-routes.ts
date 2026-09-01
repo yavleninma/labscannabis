@@ -167,7 +167,7 @@ export const GEO_ROUTE_EXCLUSIONS: readonly GeoRouteExclusion[] = Object.freeze(
 export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> = {
   "terminal-21": {
     en: {
-      title: "Terminal 21 Pattaya to Pattaya 13 Alley: the route",
+      title: "Terminal 21 Pattaya to LABS cannabis shop, Pattaya 13 Alley",
       description:
         "Getting from Terminal 21 in North Pattaya to 32 Pattaya 13 Alley: which street to board on, why the one outside the mall doors runs the wrong way, and what the roundabout does to the trip after dark.",
       h1: "Terminal 21 to Pattaya 13 Alley: catching the loop at its start",
@@ -210,7 +210,7 @@ export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> =
       ],
     },
     ru: {
-      title: "От Terminal 21 до Pattaya 13 Alley: как доехать",
+      title: "От Terminal 21 до магазина каннабиса на Pattaya 13 Alley",
       description:
         "Дорога от Terminal 21 в Северной Паттайе до 32 Pattaya 13 Alley: на какой улице садиться, почему машина у дверей молла везёт не туда и что делает с поездкой круг рядом с моллом.",
       h1: "От Terminal 21 до Pattaya 13 Alley: поймать кольцо в начале хода",
@@ -256,7 +256,7 @@ export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> =
 
   "central-marina": {
     en: {
-      title: "Central Marina to Pattaya 13 Alley: how to get there",
+      title: "Central Marina to the cannabis dispensary on Pattaya 13 Alley",
       description:
         "The route from Central Marina to 32 Pattaya 13 Alley: why the street the complex opens onto is the wrong one, what slows the walk in the evening, and how not to confuse it with the other Central.",
       h1: "Central Marina to our alley: one block decides the whole ride",
@@ -302,7 +302,7 @@ export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> =
       ],
     },
     ru: {
-      title: "От Central Marina до Pattaya 13 Alley: как добраться",
+      title: "От Central Marina до каннабис-шопа LABS на Pattaya 13 Alley",
       description:
         "Дорога от Central Marina до 32 Pattaya 13 Alley: почему улица, на которую выходит комплекс, — не та, что тормозит вечером и как не перепутать его со вторым Central.",
       h1: "От Central Marina до нашего переулка: один квартал решает поездку",
@@ -454,7 +454,7 @@ export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> =
 
   "pattaya-railway-station": {
     en: {
-      title: "Pattaya Railway Station to Pattaya 13 Alley: directions",
+      title: "Pattaya Railway Station to LABS cannabis shop: directions",
       description:
         "Arriving by train: why the station has no waiting shared transport, which way the town is from the platform, and what a timetable this thin does to the plan.",
       h1: "From Pattaya Railway Station when the timetable sets the plan",
@@ -500,7 +500,7 @@ export const GEO_ROUTES: Record<string, Partial<Record<Locale, GeoRouteCopy>>> =
       ],
     },
     ru: {
-      title: "От ж/д станции Паттайя до Pattaya 13 Alley: дорога",
+      title: "От ж/д станции Паттайя до магазина каннабиса LABS: дорога",
       description:
         "Приезд поездом: почему у станции не стоят попутные машины, в какой стороне город от платформы и что меняет настолько редкое расписание.",
       h1: "От ж/д станции Паттайя, когда план диктует расписание",

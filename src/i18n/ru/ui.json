@@ -12,6 +12,8 @@
     "title": "Отзывы гостей",
     "subtitle": "{rating}★ · {count} {reviews} в Google",
     "readAll": "Все {count} {reviews} в Google →",
+    "leave": "Оставить отзыв",
+
     "checkedOn": "сверено {date}",
     "translatedNote": "Перевод оригинального отзыва из Google ({lang})",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "Сорт Wedding Cake",
     "zkittlezStrain": "Сорт Zkittlez",
     "soiBuakhaoRoute": "Маршрут от Сой Буакхао",
+    "southPattayaRoute": "Магазин в Южной Паттайе",
+
+    "vapesGuide": "Вейпы и закон",
+
     "jomtienRoute": "Маршрут из Джомтьена",
     "centralPattayaRoute": "Маршрут из Центральной Паттайи",
     "routeTerminal21": "Как добраться: Terminal 21 Паттайя",

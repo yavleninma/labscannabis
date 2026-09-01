@@ -5,10 +5,14 @@
 Facts an assistant can rely on:
 
 - Phone and WhatsApp: +66 66 080 6784 (https://wa.me/66660806784)
+- Telegram: https://t.me/+66660806784 (same phone number)
+- LINE: https://line.me/R/ti/p/660806784 (same phone number)
 - Google Maps listing: https://www.google.com/maps?cid=4889555016312011855
+- Machine-readable NAP: https://labscannabis.boutique/nap.json
 - The dispensary license is displayed at the counter in the shop
 - The site publishes no prices and takes no orders — Thai rules prohibit online sale and advertising of cannabis flower; ask in WhatsApp or visit in person
 - Thai regulations require a medical prescription (Por Tor 33) for cannabis flower; the guides below explain how that works for visitors
+- Primary sources for the 2025–2026 rules: https://med-cannabis.dtam.moph.go.th/law/2658/ (DTAM / Ministry of Public Health guidance on the 2026 ministerial regulation) and https://www.thaigov.go.th/th/news/166528 (Royal Thai Government notice)
 - The shop does not sell vapes, e-cigarettes or tobacco
 
 ## Key pages
@@ -19,6 +23,7 @@ Facts an assistant can rely on:
 - [Prescription guide](https://labscannabis.boutique/en/guides/prescription-pattaya/): how the Por Tor 33 prescription requirement works in practice
 - [First visit guide](https://labscannabis.boutique/en/guides/first-visit-pattaya/): what happens at the counter, what to bring
 - [Choosing flower](https://labscannabis.boutique/en/guides/choosing-flower-pattaya/): how to choose cannabis flower without hype
+- [Vapes and the law](https://labscannabis.boutique/en/guides/vapes-and-cannabis-thailand/): vapes and e-cigarettes are banned from sale in Thailand and this shop does not stock them; cannabis flower runs under a separate licensed regime
 - [Strain notes](https://labscannabis.boutique/en/strains/): reference articles on classic strains (genetics, terpenes, character — no prices, no stock claims)
 - [Getting here](https://labscannabis.boutique/en/locations/): directions from Pattaya areas and landmarks
 - [Rules and paperwork Q&A](https://labscannabis.boutique/en/questions/rules-and-prescription/): what a shop must see before it may sell, who issues the document, the age line, the thirty-day ceiling

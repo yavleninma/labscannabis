@@ -1,0 +1,30 @@
+---
+import GuideArticle from "@/components/GuideArticle.astro";
+import { type Locale } from "@/lib/i18n";
+import { VAPES_GUIDE } from "@/data/guide-vapes";
+import RetiredCommercialPage from "@/components/RetiredCommercialPage.astro";
+import { getAvailableLocales } from "@/lib/index-policy.mjs";
+
+/**
+ * Вейп-перехватчик (W2-07): страница для смок-интента, который по данным
+ * Search Console составляет почти весь текущий поисковый трафик домена.
+ *
+ * Написан на en+ru; локали без вычитанного носителем текста страницу не
+ * получают — тот же механизм, что у `choosing-flower-pattaya.astro`: список
+ * локалей берётся из `getAvailableLocales()` (источник — `ROUTE_LOCALES` в
+ * `index-policy.mjs`), поэтому здесь собираются ровно en и ru.
+ */
+export function getStaticPaths() {
+  return getAvailableLocales("guides/vapes-and-cannabis-thailand").map((lang) => ({ params: { lang } }));
+}
+
+const locale = Astro.params.lang as Locale;
+const copy = VAPES_GUIDE[locale];
+const pathSuffix = "guides/vapes-and-cannabis-thailand";
+---
+
+{copy ? (
+  <GuideArticle locale={locale} pathSuffix={pathSuffix} copy={copy} placement="guides" intent="visit" />
+) : (
+  <RetiredCommercialPage locale={locale} pathSuffix={pathSuffix} />
+)}

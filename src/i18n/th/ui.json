@@ -12,6 +12,8 @@
     "title": "รีวิวจากลูกค้า",
     "subtitle": "{rating}★ · {count} รีวิว Google",
     "readAll": "อ่าน {count} รีวิว Google →",
+    "leave": "เขียนรีวิว",
+
     "checkedOn": "ตรวจสอบเมื่อ {date}",
     "translatedNote": "แปลจากรีวิว Google ต้นฉบับ ({lang})",
     "sourceLang": {
@@ -121,6 +123,10 @@
     "weddingCakeStrain": "สายพันธุ์ Wedding Cake",
     "zkittlezStrain": "สายพันธุ์ Zkittlez",
     "soiBuakhaoRoute": "เส้นทางจากซอยบัวขาว",
+    "southPattayaRoute": "ร้านในพัทยาใต้",
+
+    "vapesGuide": "บุหรี่ไฟฟ้ากับกฎหมาย",
+
     "jomtienRoute": "เส้นทางจากจอมเทียน",
     "centralPattayaRoute": "เส้นทางจากพัทยากลาง",
     "routeTerminal21": "เส้นทางจาก เทอร์มินอล 21 พัทยา",

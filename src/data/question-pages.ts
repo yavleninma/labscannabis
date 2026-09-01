@@ -195,7 +195,7 @@ const RULES_AND_PRESCRIPTION: QuestionPageData = {
       h1: "Prescription and eligibility questions visitors ask",
       kicker: "Rules and paperwork",
       lead:
-        "These arrive at the counter before anything else does. Each answer is labelled with what it rests on — a restatement of an official notice, an observation from working under those notices, or an admission that we have no source we can show you. None of it is legal advice, and none of it confirms that any particular person may buy.",
+        "Is weed legal here at all, and what paperwork makes a purchase lawful? These arrive at the counter before anything else does. Each answer is labelled with what it rests on — a restatement of an official notice, an observation from working under those notices, or an admission that we have no source we can show you. None of it is legal advice, and none of it confirms that any particular person may buy.",
       caution:
         "Notices, guidance and enforcement change, and a page is only as current as its last edit. Follow the source links below and read them yourself before you plan anything around an answer on this page.",
     },
@@ -206,12 +206,36 @@ const RULES_AND_PRESCRIPTION: QuestionPageData = {
       h1: "Рецепт и допуск к покупке: что спрашивают приезжие",
       kicker: "Правила и документы",
       lead:
-        "Эти вопросы задают у прилавка раньше всех остальных. Над каждым ответом стоит его основание: пересказ официального уведомления, наблюдение из работы по этим уведомлениям или признание, что показать источник мы не можем. Это не юридическая консультация и не подтверждение, что конкретному человеку продадут.",
+        "Легальна ли здесь трава вообще — этот вопрос задают у прилавка раньше всех остальных. Над каждым ответом стоит его основание: пересказ официального уведомления, наблюдение из работы по этим уведомлениям или признание, что показать источник мы не можем. Это не юридическая консультация и не подтверждение, что конкретному человеку продадут.",
       caution:
         "Уведомления, разъяснения и практика применения меняются, а страница свежа ровно настолько, насколько свежа её последняя правка. Откройте источники по ссылкам ниже и прочитайте их сами, прежде чем строить планы вокруг ответа отсюда.",
     },
   },
   questions: [
+    {
+      id: "weed-legal-2026",
+      basis: "official",
+      sources: ["thaiGovernment", "ministerialRegulation2026"],
+      locales: ["en", "ru"],
+      localeNote:
+        "Формулировка «is weed legal» — эхо англо- и русскоязычной выдачи; на остальных локалях легальность уже закрывают need-prescription и страницы правил, поэтому текст живёт ровно там, где живёт запрос.",
+      copy: {
+        en: {
+          q: "Is weed legal in Pattaya in 2026?",
+          a: [
+            "Legal to sell and to buy — under conditions, not as a free-for-all. Going by the notices linked at the foot of this page, cannabis flower is a controlled herb: it may be sold at licensed premises, in person, to adults 20 and over, against a prescription issued in Thailand. The ministerial regulation of April 2026 narrowed which premises can hold that licence.",
+            "What “legal” does not mean: no online sale or delivery, no advertised prices, and no counter that may skip the paperwork. Pattaya applies the same national rule as the rest of Thailand — there is no city-level exemption, and a shop offering a way around the conditions is the one to walk away from.",
+          ],
+        },
+        ru: {
+          q: "Легален ли каннабис (weed) в Паттайе в 2026 году?",
+          a: [
+            "Легален для продажи и покупки — но на условиях, а не как свободный товар. По уведомлениям, на которые ведут ссылки внизу страницы, соцветия каннабиса — контролируемая трава: продавать их можно только в лицензированных помещениях, лично, взрослым от 20 лет и по рецепту, выданному в Таиланде. Министерское постановление апреля 2026 года сузило круг помещений, которым доступна такая лицензия.",
+            "Чего «легально» не означает: онлайн-продажи и доставки, рекламы цен и прилавка, где закроют глаза на документы. В Паттайе действует то же общенациональное правило, что и во всём Таиланде: городских исключений нет, а точка, предлагающая обойти условия, — ровно то место, откуда стоит уйти.",
+          ],
+        },
+      },
+    },
     {
       id: "need-prescription",
       basis: "official",
